@@ -9,15 +9,22 @@
   name="viewport"
   content="width=device-width, initial-scale=1.0">
 
+<meta
+  name="description"
+  content="AI-Assisted Spaghetti Bridge Design and 3D Simulation by Kwon Taegeun">
+
 <title>
 AI-Assisted Spaghetti Bridge | KTG Portfolio
 </title>
+
 
 <style>
 
 :root {
 
   --main:#183D3D;
+  --main-light:#245553;
+
   --background:#F3F0E8;
   --section:#EAE7DF;
 
@@ -57,18 +64,20 @@ html {
 body {
 
   font-family:
-  -apple-system,
-  BlinkMacSystemFont,
-  "Pretendard",
-  "Noto Sans KR",
-  "Segoe UI",
-  sans-serif;
+    -apple-system,
+    BlinkMacSystemFont,
+    "Pretendard",
+    "Noto Sans KR",
+    "Segoe UI",
+    sans-serif;
 
   background:var(--background);
 
   color:var(--text);
 
   line-height:1.7;
+
+  -webkit-font-smoothing:antialiased;
 
 }
 
@@ -214,6 +223,79 @@ h2 {
 
 
 /* =========================================================
+BUTTONS
+========================================================= */
+
+.buttons {
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:10px;
+
+  margin-top:34px;
+
+}
+
+
+.button {
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:13px 20px;
+
+  border-radius:100px;
+
+  background:var(--white);
+
+  color:var(--main);
+
+  font-size:13px;
+
+  font-weight:900;
+
+  transition:
+    transform .2s ease,
+    opacity .2s ease;
+
+}
+
+
+.button:hover {
+
+  transform:translateY(-2px);
+
+  opacity:.9;
+
+}
+
+
+.button.outline {
+
+  background:transparent;
+
+  color:var(--white);
+
+  border:1px solid #5A7872;
+
+}
+
+
+.button.dark {
+
+  background:var(--main);
+
+  color:var(--white);
+
+}
+
+
+/* =========================================================
 HERO
 ========================================================= */
 
@@ -284,6 +366,15 @@ HERO
 }
 
 
+.hero .tag {
+
+  border-color:#55736D;
+
+  color:#D3E0DD;
+
+}
+
+
 .hero-data {
 
   border-left:1px solid #54736D;
@@ -298,6 +389,13 @@ HERO
   padding:20px 0;
 
   border-bottom:1px solid #54736D;
+
+}
+
+
+.hero-data-row:last-child {
+
+  border-bottom:0;
 
 }
 
@@ -551,6 +649,15 @@ WORKFLOW
 }
 
 
+.lab-toolbar span {
+
+  color:#AFC0BC;
+
+  font-size:12px;
+
+}
+
+
 .lab-screen {
 
   min-height:360px;
@@ -677,6 +784,32 @@ WORKFLOW
   display:block;
 
   font-size:42px;
+
+}
+
+
+.lab-action {
+
+  margin-top:28px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:20px;
+
+}
+
+
+.lab-action p {
+
+  max-width:620px;
+
+  color:#AFC0BC;
+
+  font-size:13px;
 
 }
 
@@ -933,6 +1066,15 @@ MOBILE
 
   }
 
+
+  .lab-action {
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+  }
+
 }
 
 
@@ -955,6 +1097,10 @@ MOBILE
 
 <body>
 
+
+<!-- =====================================================
+HEADER
+===================================================== -->
 
 <header>
 
@@ -1033,6 +1179,30 @@ HERO
       <span class="tag">
         Iterative Design
       </span>
+
+    </div>
+
+
+    <div class="buttons">
+
+      <a
+        class="button"
+        href="spaghetti-3d-lab.html"
+        target="_blank"
+        rel="noopener">
+
+        Open 3D Lab ↗
+
+      </a>
+
+
+      <a
+        class="button outline"
+        href="../index.html">
+
+        Back to Portfolio
+
+      </a>
 
     </div>
 
@@ -1124,12 +1294,13 @@ PROBLEM
   </p>
 
 
-  <p class="lead"
-     style="margin-top:30px;">
+  <p
+    class="lead"
+    style="margin-top:30px;">
 
     단순히 가장 복잡한 구조를 만드는 것이 아니라
     압축부재의 좌굴, 인장부재의 연속성,
-    접합부 수와 실제 제작성을 함께 고려해야 했습니다.
+    접합부 수와 실제 제작성을 함께 고려했습니다.
 
   </p>
 
@@ -1170,7 +1341,7 @@ CONSTRAINTS
       </strong>
 
       <p>
-        두 지지점 사이를 연결하는 전체 지간
+        두 지지점 사이를 연결하는 설계 지간
       </p>
 
     </article>
@@ -1204,7 +1375,7 @@ CONSTRAINTS
       </strong>
 
       <p>
-        모든 구조부재는 스파게티 2가닥 제한
+        각 구조부재에 적용한 스파게티 2가닥 조건
       </p>
 
     </article>
@@ -1221,7 +1392,7 @@ CONSTRAINTS
       </strong>
 
       <p>
-        평면이 아닌 공간 트러스로 횡방향 안정 고려
+        공간 트러스 형태로 구조 거동 검토
       </p>
 
     </article>
@@ -1235,7 +1406,7 @@ CONSTRAINTS
 
 
 <!-- =====================================================
-WORKFLOW
+AI WORKFLOW
 ===================================================== -->
 
 <section class="problem">
@@ -1270,7 +1441,9 @@ WORKFLOW
 
     <article class="workflow-card">
 
-      <span>01</span>
+      <span>
+        01
+      </span>
 
       <h3>
         Define
@@ -1285,7 +1458,9 @@ WORKFLOW
 
     <article class="workflow-card">
 
-      <span>02</span>
+      <span>
+        02
+      </span>
 
       <h3>
         Generate
@@ -1300,7 +1475,9 @@ WORKFLOW
 
     <article class="workflow-card">
 
-      <span>03</span>
+      <span>
+        03
+      </span>
 
       <h3>
         Challenge
@@ -1315,7 +1492,9 @@ WORKFLOW
 
     <article class="workflow-card">
 
-      <span>04</span>
+      <span>
+        04
+      </span>
 
       <h3>
         Model
@@ -1330,14 +1509,16 @@ WORKFLOW
 
     <article class="workflow-card">
 
-      <span>05</span>
+      <span>
+        05
+      </span>
 
       <h3>
         Iterate
       </h3>
 
       <p>
-        해석결과와 실제 제작조건을 비교해 수정
+        계산결과와 실제 제작조건을 비교해 수정
       </p>
 
     </article>
@@ -1358,7 +1539,7 @@ WORKFLOW
 
 
   <div class="number">
-    04 / 3D LAB
+    04 / INTERACTIVE 3D LAB
   </div>
 
 
@@ -1370,10 +1551,9 @@ WORKFLOW
 
   <p class="lead">
 
-    교량을 눈으로만 확인하는 대신
-    절점과 부재를 직접 수정하고
-    하중을 적용해 결과를 확인할 수 있는
-    인터랙티브 3D 환경으로 구현했습니다.
+    최종 결과물을 이미지로만 저장하지 않고,
+    절점과 부재를 확인하고 하중 해석을 수행할 수 있는
+    별도의 인터랙티브 3D 환경으로 구현했습니다.
 
   </p>
 
@@ -1389,10 +1569,11 @@ WORKFLOW
       </strong>
 
       <span>
-        Load Analysis
+        Interactive Result
       </span>
 
     </div>
+
 
 
     <div class="lab-screen">
@@ -1416,6 +1597,33 @@ WORKFLOW
     </div>
 
 
+
+    <div class="lab-action">
+
+
+      <p>
+
+        아래 버튼을 누르면
+        프로젝트에서 실제로 사용한 3D 교량 환경이
+        새 창에서 실행됩니다.
+
+      </p>
+
+
+      <a
+        class="button"
+        href="spaghetti-3d-lab.html"
+        target="_blank"
+        rel="noopener">
+
+        Open Original 3D Lab ↗
+
+      </a>
+
+
+    </div>
+
+
   </div>
 
 
@@ -1424,7 +1632,7 @@ WORKFLOW
 
 
 <!-- =====================================================
-MODEL
+STRUCTURAL MODEL
 ===================================================== -->
 
 <section>
@@ -1444,8 +1652,8 @@ MODEL
   <p class="lead">
 
     중앙 집중하중을 양쪽 경사 트러스로 전달하고,
-    경사부가 바깥으로 벌어지려는 수평력을
-    하부 인장재가 내부에서 닫는 구조로 모델링했습니다.
+    경사부가 바깥으로 벌어지려는 힘을
+    하부 인장재가 내부에서 닫는 구조를 검토했습니다.
 
   </p>
 
@@ -1456,14 +1664,16 @@ MODEL
 
     <article class="workflow-card">
 
-      <span>LOAD</span>
+      <span>
+        LOAD
+      </span>
 
       <h3>
         Central Point
       </h3>
 
       <p>
-        교량 중앙에 집중하중 적용
+        교량 중앙 집중하중
       </p>
 
     </article>
@@ -1471,14 +1681,16 @@ MODEL
 
     <article class="workflow-card">
 
-      <span>TRANSFER</span>
+      <span>
+        TRANSFER
+      </span>
 
       <h3>
         Inclined Truss
       </h3>
 
       <p>
-        하중을 좌우 경사부의 축력으로 전달
+        하중을 좌우 경사부로 전달
       </p>
 
     </article>
@@ -1486,14 +1698,16 @@ MODEL
 
     <article class="workflow-card">
 
-      <span>STABILITY</span>
+      <span>
+        STABILITY
+      </span>
 
       <h3>
         3D Section
       </h3>
 
       <p>
-        삼각 공간단면으로 좌굴과 횡방향 안정 고려
+        삼각 공간단면으로 구조 안정성 검토
       </p>
 
     </article>
@@ -1501,14 +1715,16 @@ MODEL
 
     <article class="workflow-card">
 
-      <span>TENSION</span>
+      <span>
+        TENSION
+      </span>
 
       <h3>
         Bottom Tie
       </h3>
 
       <p>
-        양 지점의 수평력 성분을 인장재로 연결
+        수평력 성분을 하부 인장재로 연결
       </p>
 
     </article>
@@ -1516,14 +1732,16 @@ MODEL
 
     <article class="workflow-card">
 
-      <span>SUPPORT</span>
+      <span>
+        SUPPORT
+      </span>
 
       <h3>
         End Supports
       </h3>
 
       <p>
-        양쪽 책상 지지점으로 수직반력 전달
+        양쪽 지지점으로 반력 전달
       </p>
 
     </article>
@@ -1556,9 +1774,9 @@ CALCULATION
 
   <p class="lead">
 
-    아래 값은 실제 완성 교량의 성능을 보증하는 값이 아니라
-    설정한 재료특성과 이상적인 절점 조건에서 계산한
-    초기 모델의 검토 결과입니다.
+    아래 값은 실제 완성 교량의 성능을 보증하는 값이 아니라,
+    설정한 재료특성과 이상적인 절점 조건을 사용한
+    초기 모델의 계산 결과입니다.
 
   </p>
 
@@ -1578,7 +1796,7 @@ CALCULATION
       </strong>
 
       <p>
-        3kg 시험하중 + 추정 자중 + 가정 접착제
+        시험하중과 모델의 추정 자중 등을 포함한 값
       </p>
 
     </article>
@@ -1595,7 +1813,7 @@ CALCULATION
       </strong>
 
       <p>
-        선형 탄성 해석의 최대 수직변위
+        선형 탄성 해석에서 계산한 최대 수직변위
       </p>
 
     </article>
@@ -1612,7 +1830,7 @@ CALCULATION
       </strong>
 
       <p>
-        2가닥 약축 기준 계산 부재 여유
+        모델에서 사용한 2가닥 약축 기준 계산값
       </p>
 
     </article>
@@ -1629,7 +1847,7 @@ CALCULATION
       </strong>
 
       <p>
-        대칭조건에서 각 받침의 계산 수직반력
+        중앙 대칭하중 조건에서 계산한 받침 반력
       </p>
 
     </article>
@@ -1643,7 +1861,7 @@ CALCULATION
 
 
 <!-- =====================================================
-LIMITATIONS
+MODEL vs REALITY
 ===================================================== -->
 
 <section class="limit">
@@ -1677,8 +1895,8 @@ LIMITATIONS
 
         이상화된 구조에서 하중이 어떤 경로로 전달되는지,
         어떤 부재의 축력이 커지는지,
-        형상을 바꿨을 때 계산결과가 어떻게 달라지는지
-        비교할 수 있습니다.
+        형상을 바꿨을 때 계산결과가 어떻게 달라지는지를
+        비교하는 데 사용했습니다.
 
       </p>
 
@@ -1700,7 +1918,7 @@ LIMITATIONS
         접착제 박리, 연결부 파괴,
         스파게티 재료 편차, 조립오차,
         비틀림과 실제 좌굴은
-        이상적인 계산모델만으로 완전히 검증할 수 없습니다.
+        이상적인 계산모델만으로 완전히 확인할 수 없습니다.
 
       </p>
 
@@ -1715,7 +1933,7 @@ LIMITATIONS
 
 
 <!-- =====================================================
-WHAT I LEARNED
+LEARNING
 ===================================================== -->
 
 <section class="learning">
@@ -1736,13 +1954,30 @@ WHAT I LEARNED
 
     이 프로젝트에서 가장 중요했던 것은
     AI가 정답을 대신 결정하게 하는 것이 아니라,
+
     <strong>
-      설계 아이디어를 만들고 → 서로 비판하고 →
-      모델로 검증하고 → 실제 조건과 다시 비교하는
+      설계 아이디어를 만들고 → 비판하고 →
+      모델로 검토하고 → 실제 조건과 다시 비교하는
     </strong>
+
     반복 과정에 AI를 활용하는 것이었습니다.
 
   </p>
+
+
+  <div class="buttons">
+
+    <a
+      class="button"
+      href="spaghetti-3d-lab.html"
+      target="_blank"
+      rel="noopener">
+
+      Experience the 3D Lab ↗
+
+    </a>
+
+  </div>
 
 
 </section>
