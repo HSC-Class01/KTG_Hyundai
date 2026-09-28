@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+<title>
+AI-Assisted Spaghetti Bridge | KTG Portfolio
+</title>
+
+<style>
+
+:root {
+
+  --main:#183D3D;
+  --background:#F3F0E8;
+  --section:#EAE7DF;
+
+  --text:#141716;
+  --muted:#6F716D;
+
+  --line:#D4D0C6;
+
+  --white:#FFFFFF;
+  --soft:#A9C9C3;
+
+  --orange:#D58A32;
+
+  --dark:#101918;
+
+}
+
+
+* {
+
+  box-sizing:border-box;
+
+  margin:0;
+
+  padding:0;
+
+}
+
+
+html {
+
+  scroll-behavior:smooth;
+
+}
+
+
+body {
+
+  font-family:
+  -apple-system,
+  BlinkMacSystemFont,
+  "Pretendard",
+  "Noto Sans KR",
+  "Segoe UI",
+  sans-serif;
+
+  background:var(--background);
+
+  color:var(--text);
+
+  line-height:1.7;
+
+}
+
+
+a {
+
+  color:inherit;
+
+  text-decoration:none;
+
+}
+
+
+/* =========================================================
+HEADER
+========================================================= */
+
+header {
+
+  position:sticky;
+
+  top:0;
+
+  z-index:100;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  padding:18px 7%;
+
+  background:rgba(243,240,232,.94);
+
+  backdrop-filter:blur(12px);
+
+  border-bottom:1px solid var(--line);
+
+}
+
+
+.logo {
+
+  font-size:13px;
+
+  font-weight:900;
+
+  letter-spacing:.13em;
+
+}
+
+
+.back {
+
+  color:var(--main);
+
+  font-size:13px;
+
+  font-weight:800;
+
+}
+
+
+/* =========================================================
+COMMON
+========================================================= */
+
+section {
+
+  padding:100px 8%;
+
+}
+
+
+.number {
+
+  color:var(--main);
+
+  font-size:11px;
+
+  font-weight:900;
+
+  letter-spacing:.17em;
+
+  margin-bottom:14px;
+
+}
+
+
+h2 {
+
+  font-size:clamp(40px,5vw,68px);
+
+  line-height:1.03;
+
+  letter-spacing:-.05em;
+
+  margin-bottom:35px;
+
+}
+
+
+.lead {
+
+  max-width:800px;
+
+  color:var(--muted);
+
+  font-size:17px;
+
+  line-height:1.85;
+
+}
+
+
+.tags {
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:8px;
+
+  margin-top:28px;
+
+}
+
+
+.tag {
+
+  padding:7px 12px;
+
+  border:1px solid var(--line);
+
+  border-radius:100px;
+
+  font-size:11px;
+
+  font-weight:800;
+
+}
+
+
+/* =========================================================
+HERO
+========================================================= */
+
+.hero {
+
+  min-height:87vh;
+
+  display:grid;
+
+  grid-template-columns:1.15fr .85fr;
+
+  gap:65px;
+
+  align-items:center;
+
+  background:var(--main);
+
+  color:white;
+
+}
+
+
+.eyebrow {
+
+  color:var(--soft);
+
+  font-size:12px;
+
+  font-weight:900;
+
+  letter-spacing:.18em;
+
+  margin-bottom:22px;
+
+}
+
+
+.hero h1 {
+
+  font-size:clamp(58px,8vw,108px);
+
+  line-height:.9;
+
+  letter-spacing:-.065em;
+
+}
+
+
+.hero h1 span {
+
+  color:var(--orange);
+
+}
+
+
+.hero-text {
+
+  max-width:680px;
+
+  margin-top:28px;
+
+  color:#D3E0DD;
+
+  font-size:17px;
+
+  line-height:1.85;
+
+}
+
+
+.hero-data {
+
+  border-left:1px solid #54736D;
+
+  padding-left:45px;
+
+}
+
+
+.hero-data-row {
+
+  padding:20px 0;
+
+  border-bottom:1px solid #54736D;
+
+}
+
+
+.hero-data-row small {
+
+  color:var(--soft);
+
+  font-size:10px;
+
+  font-weight:900;
+
+  letter-spacing:.11em;
+
+}
+
+
+.hero-data-row strong {
+
+  display:block;
+
+  margin-top:5px;
+
+  font-size:29px;
+
+  letter-spacing:-.04em;
+
+}
+
+
+/* =========================================================
+PROBLEM
+========================================================= */
+
+.problem {
+
+  background:var(--section);
+
+}
+
+
+.question {
+
+  max-width:1000px;
+
+  font-size:clamp(29px,4vw,48px);
+
+  font-weight:800;
+
+  line-height:1.3;
+
+  letter-spacing:-.04em;
+
+}
+
+
+.question strong {
+
+  color:var(--main);
+
+}
+
+
+/* =========================================================
+CONSTRAINTS
+========================================================= */
+
+.constraint-grid {
+
+  display:grid;
+
+  grid-template-columns:repeat(4,1fr);
+
+  gap:15px;
+
+  margin-top:45px;
+
+}
+
+
+.constraint {
+
+  min-height:190px;
+
+  padding:25px;
+
+  border:1px solid var(--line);
+
+}
+
+
+.constraint small {
+
+  color:var(--main);
+
+  font-size:10px;
+
+  font-weight:900;
+
+  letter-spacing:.12em;
+
+}
+
+
+.constraint strong {
+
+  display:block;
+
+  margin-top:25px;
+
+  font-size:31px;
+
+  line-height:1;
+
+  letter-spacing:-.045em;
+
+}
+
+
+.constraint p {
+
+  color:var(--muted);
+
+  margin-top:12px;
+
+  font-size:12px;
+
+}
+
+
+/* =========================================================
+WORKFLOW
+========================================================= */
+
+.workflow {
+
+  display:grid;
+
+  grid-template-columns:repeat(5,1fr);
+
+  gap:10px;
+
+  margin-top:45px;
+
+}
+
+
+.workflow-card {
+
+  padding:22px;
+
+  min-height:190px;
+
+  border:1px solid var(--line);
+
+}
+
+
+.workflow-card span {
+
+  color:var(--main);
+
+  font-size:11px;
+
+  font-weight:900;
+
+}
+
+
+.workflow-card h3 {
+
+  margin-top:42px;
+
+  font-size:19px;
+
+  line-height:1.2;
+
+}
+
+
+.workflow-card p {
+
+  margin-top:8px;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+}
+
+
+/* =========================================================
+3D LAB
+========================================================= */
+
+.lab {
+
+  background:var(--dark);
+
+  color:white;
+
+}
+
+
+.lab .number {
+
+  color:var(--soft);
+
+}
+
+
+.lab .lead {
+
+  color:#AFC0BC;
+
+}
+
+
+.lab-window {
+
+  margin-top:45px;
+
+  padding:28px;
+
+  border:1px solid #314541;
+
+  background:#151F1E;
+
+}
+
+
+.lab-toolbar {
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:20px;
+
+  padding-bottom:18px;
+
+  border-bottom:1px solid #314541;
+
+}
+
+
+.lab-toolbar strong {
+
+  color:var(--orange);
+
+}
+
+
+.lab-screen {
+
+  min-height:360px;
+
+  position:relative;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  margin-top:20px;
+
+  overflow:hidden;
+
+  border:1px solid #314541;
+
+  background:
+    linear-gradient(
+      145deg,
+      #111918,
+      #1C2926
+    );
+
+}
+
+
+.bridge {
+
+  width:80%;
+
+  max-width:760px;
+
+  height:200px;
+
+  position:relative;
+
+}
+
+
+.bridge-line {
+
+  position:absolute;
+
+  left:10%;
+
+  right:10%;
+
+  bottom:35px;
+
+  height:3px;
+
+  background:#78AE97;
+
+}
+
+
+.bridge-left {
+
+  position:absolute;
+
+  width:44%;
+
+  height:3px;
+
+  left:10%;
+
+  bottom:35px;
+
+  transform-origin:left;
+
+  transform:rotate(-27deg);
+
+  background:var(--orange);
+
+}
+
+
+.bridge-right {
+
+  position:absolute;
+
+  width:44%;
+
+  height:3px;
+
+  right:10%;
+
+  bottom:35px;
+
+  transform-origin:right;
+
+  transform:rotate(27deg);
+
+  background:var(--orange);
+
+}
+
+
+.load {
+
+  position:absolute;
+
+  left:50%;
+
+  top:43px;
+
+  transform:translateX(-50%);
+
+  color:#F5C66D;
+
+  font-weight:900;
+
+  text-align:center;
+
+}
+
+
+.load::after {
+
+  content:"↓";
+
+  display:block;
+
+  font-size:42px;
+
+}
+
+
+/* =========================================================
+RESULTS
+========================================================= */
+
+.result-grid {
+
+  display:grid;
+
+  grid-template-columns:repeat(4,1fr);
+
+  gap:15px;
+
+  margin-top:45px;
+
+}
+
+
+.result {
+
+  min-height:210px;
+
+  padding:25px;
+
+  border:1px solid var(--line);
+
+  background:white;
+
+}
+
+
+.result small {
+
+  color:var(--main);
+
+  font-size:10px;
+
+  font-weight:900;
+
+  letter-spacing:.12em;
+
+}
+
+
+.result strong {
+
+  display:block;
+
+  margin-top:26px;
+
+  font-size:32px;
+
+  line-height:1;
+
+}
+
+
+.result p {
+
+  margin-top:14px;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+}
+
+
+/* =========================================================
+LIMITATION
+========================================================= */
+
+.limit {
+
+  background:var(--section);
+
+}
+
+
+.limit-grid {
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:22px;
+
+  margin-top:45px;
+
+}
+
+
+.limit-card {
+
+  padding:32px;
+
+  border:1px solid var(--line);
+
+}
+
+
+.limit-card small {
+
+  color:var(--main);
+
+  font-size:10px;
+
+  font-weight:900;
+
+  letter-spacing:.11em;
+
+}
+
+
+.limit-card h3 {
+
+  margin-top:12px;
+
+  font-size:26px;
+
+}
+
+
+.limit-card p {
+
+  margin-top:15px;
+
+  color:var(--muted);
+
+}
+
+
+/* =========================================================
+LEARNING
+========================================================= */
+
+.learning {
+
+  background:var(--main);
+
+  color:white;
+
+}
+
+
+.learning .number {
+
+  color:var(--soft);
+
+}
+
+
+.learning p {
+
+  max-width:920px;
+
+  font-size:clamp(22px,3vw,36px);
+
+  line-height:1.5;
+
+  letter-spacing:-.035em;
+
+}
+
+
+.learning strong {
+
+  color:var(--soft);
+
+}
+
+
+/* =========================================================
+FOOTER
+========================================================= */
+
+footer {
+
+  padding:65px 8%;
+
+  background:var(--dark);
+
+  color:#AFC0BC;
+
+  font-size:13px;
+
+}
+
+
+/* =========================================================
+MOBILE
+========================================================= */
+
+@media(max-width:900px) {
+
+  section {
+
+    padding:78px 7%;
+
+  }
+
+
+  .hero {
+
+    grid-template-columns:1fr;
+
+    min-height:auto;
+
+    padding-top:95px;
+
+  }
+
+
+  .hero-data {
+
+    padding-left:0;
+
+    padding-top:30px;
+
+    border-left:0;
+
+    border-top:1px solid #54736D;
+
+  }
+
+
+  .constraint-grid {
+
+    grid-template-columns:1fr 1fr;
+
+  }
+
+
+  .workflow {
+
+    grid-template-columns:1fr;
+
+  }
+
+
+  .result-grid {
+
+    grid-template-columns:1fr 1fr;
+
+  }
+
+
+  .limit-grid {
+
+    grid-template-columns:1fr;
+
+  }
+
+}
+
+
+@media(max-width:550px) {
+
+  .constraint-grid,
+  .result-grid {
+
+    grid-template-columns:1fr;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<header>
+
+  <div class="logo">
+    KTG / ACTIVITY 01
+  </div>
+
+  <a
+    class="back"
+    href="../index.html">
+
+    ← Portfolio
+
+  </a>
+
+</header>
+
+
+
+<!-- =====================================================
+HERO
+===================================================== -->
+
+<section class="hero">
+
+
+  <div>
+
+
+    <div class="eyebrow">
+      AI × STRUCTURAL DESIGN
+    </div>
+
+
+    <h1>
+
+      SPAGHETTI<br>
+      BRIDGE<span>.</span>
+
+    </h1>
+
+
+    <p class="hero-text">
+
+      하나의 AI가 모든 문제를 가장 잘 해결한다고 가정하지 않고,
+      여러 AI 모델의 특성과 강점을 역할에 따라 활용하여
+      교량의 구조를 구상하고 검토했습니다.
+
+      <br><br>
+
+      아이디어에서 끝내지 않고
+      설계조건을 반영한 인터랙티브 3D 실험환경을 만들어
+      구조형상과 하중전달을 반복해서 검토했습니다.
+
+    </p>
+
+
+    <div class="tags">
+
+      <span class="tag">
+        Multi-AI Workflow
+      </span>
+
+      <span class="tag">
+        Structural Design
+      </span>
+
+      <span class="tag">
+        3D Modeling
+      </span>
+
+      <span class="tag">
+        Load Analysis
+      </span>
+
+      <span class="tag">
+        Iterative Design
+      </span>
+
+    </div>
+
+
+  </div>
+
+
+
+  <div class="hero-data">
+
+
+    <div class="hero-data-row">
+
+      <small>
+        SPAN
+      </small>
+
+      <strong>
+        108 cm
+      </strong>
+
+    </div>
+
+
+    <div class="hero-data-row">
+
+      <small>
+        DESIGN LOAD
+      </small>
+
+      <strong>
+        3.0 kg
+      </strong>
+
+    </div>
+
+
+    <div class="hero-data-row">
+
+      <small>
+        MEMBER RULE
+      </small>
+
+      <strong>
+        2 strands
+      </strong>
+
+    </div>
+
+
+    <div class="hero-data-row">
+
+      <small>
+        DESIGN TYPE
+      </small>
+
+      <strong>
+        3D Tied Truss
+      </strong>
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+PROBLEM
+===================================================== -->
+
+<section class="problem">
+
+
+  <div class="number">
+    01 / PROBLEM
+  </div>
+
+
+  <p class="question">
+
+    제한된 스파게티 부재로
+    <strong>108cm 지간에서 3kg의 중앙 집중하중</strong>을
+    어떻게 효율적으로 전달할 것인가?
+
+  </p>
+
+
+  <p class="lead"
+     style="margin-top:30px;">
+
+    단순히 가장 복잡한 구조를 만드는 것이 아니라
+    압축부재의 좌굴, 인장부재의 연속성,
+    접합부 수와 실제 제작성을 함께 고려해야 했습니다.
+
+  </p>
+
+
+</section>
+
+
+
+<!-- =====================================================
+CONSTRAINTS
+===================================================== -->
+
+<section>
+
+
+  <div class="number">
+    02 / DESIGN CONSTRAINTS
+  </div>
+
+
+  <h2>
+    Design Under<br>
+    Constraints
+  </h2>
+
+
+  <div class="constraint-grid">
+
+
+    <article class="constraint">
+
+      <small>
+        SPAN
+      </small>
+
+      <strong>
+        108cm
+      </strong>
+
+      <p>
+        두 지지점 사이를 연결하는 전체 지간
+      </p>
+
+    </article>
+
+
+    <article class="constraint">
+
+      <small>
+        LOAD
+      </small>
+
+      <strong>
+        3kg
+      </strong>
+
+      <p>
+        중앙 한 점에 작용하는 시험하중
+      </p>
+
+    </article>
+
+
+    <article class="constraint">
+
+      <small>
+        MEMBER
+      </small>
+
+      <strong>
+        2
+      </strong>
+
+      <p>
+        모든 구조부재는 스파게티 2가닥 제한
+      </p>
+
+    </article>
+
+
+    <article class="constraint">
+
+      <small>
+        SPACE
+      </small>
+
+      <strong>
+        3D
+      </strong>
+
+      <p>
+        평면이 아닌 공간 트러스로 횡방향 안정 고려
+      </p>
+
+    </article>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+WORKFLOW
+===================================================== -->
+
+<section class="problem">
+
+
+  <div class="number">
+    03 / AI WORKFLOW
+  </div>
+
+
+  <h2>
+    One AI Was<br>
+    Not the Answer.
+  </h2>
+
+
+  <p class="lead">
+
+    하나의 AI가 모든 단계에서 가장 좋은 결과를 낸다고
+    가정하지 않았습니다.
+
+    아이디어 구상, 구조적 논리 검토,
+    코딩과 시각화 등 문제를 나누고
+    각 단계에 적합한 AI의 특성을 활용하는 방식으로 접근했습니다.
+
+  </p>
+
+
+
+  <div class="workflow">
+
+
+    <article class="workflow-card">
+
+      <span>01</span>
+
+      <h3>
+        Define
+      </h3>
+
+      <p>
+        지간·하중·부재제한 등 설계조건 정의
+      </p>
+
+    </article>
+
+
+    <article class="workflow-card">
+
+      <span>02</span>
+
+      <h3>
+        Generate
+      </h3>
+
+      <p>
+        다양한 구조형상과 하중전달 아이디어 비교
+      </p>
+
+    </article>
+
+
+    <article class="workflow-card">
+
+      <span>03</span>
+
+      <h3>
+        Challenge
+      </h3>
+
+      <p>
+        좌굴·접합·제작성 관점에서 아이디어 비판
+      </p>
+
+    </article>
+
+
+    <article class="workflow-card">
+
+      <span>04</span>
+
+      <h3>
+        Model
+      </h3>
+
+      <p>
+        구조를 3D 절점·부재 모델로 변환
+      </p>
+
+    </article>
+
+
+    <article class="workflow-card">
+
+      <span>05</span>
+
+      <h3>
+        Iterate
+      </h3>
+
+      <p>
+        해석결과와 실제 제작조건을 비교해 수정
+      </p>
+
+    </article>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+3D LAB
+===================================================== -->
+
+<section class="lab">
+
+
+  <div class="number">
+    04 / 3D LAB
+  </div>
+
+
+  <h2>
+    Virtual<br>
+    Engineering Lab
+  </h2>
+
+
+  <p class="lead">
+
+    교량을 눈으로만 확인하는 대신
+    절점과 부재를 직접 수정하고
+    하중을 적용해 결과를 확인할 수 있는
+    인터랙티브 3D 환경으로 구현했습니다.
+
+  </p>
+
+
+
+  <div class="lab-window">
+
+
+    <div class="lab-toolbar">
+
+      <strong>
+        108cm Spaghetti Bridge
+      </strong>
+
+      <span>
+        Load Analysis
+      </span>
+
+    </div>
+
+
+    <div class="lab-screen">
+
+
+      <div class="bridge">
+
+        <div class="bridge-line"></div>
+
+        <div class="bridge-left"></div>
+
+        <div class="bridge-right"></div>
+
+        <div class="load">
+          3kg
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+MODEL
+===================================================== -->
+
+<section>
+
+
+  <div class="number">
+    05 / STRUCTURAL MODEL
+  </div>
+
+
+  <h2>
+    3D Tied<br>
+    Truss Concept
+  </h2>
+
+
+  <p class="lead">
+
+    중앙 집중하중을 양쪽 경사 트러스로 전달하고,
+    경사부가 바깥으로 벌어지려는 수평력을
+    하부 인장재가 내부에서 닫는 구조로 모델링했습니다.
+
+  </p>
+
+
+
+  <div class="workflow">
+
+
+    <article class="workflow-card">
+
+      <span>LOAD</span>
+
+      <h3>
+        Central Point
+      </h3>
+
+      <p>
+        교량 중앙에 집중하중 적용
+      </p>
+
+    </article>
+
+
+    <article class="workflow-card">
+
+      <span>TRANSFER</span>
+
+      <h3>
+        Inclined Truss
+      </h3>
+
+      <p>
+        하중을 좌우 경사부의 축력으로 전달
+      </p>
+
+    </article>
+
+
+    <article class="workflow-card">
+
+      <span>STABILITY</span>
+
+      <h3>
+        3D Section
+      </h3>
+
+      <p>
+        삼각 공간단면으로 좌굴과 횡방향 안정 고려
+      </p>
+
+    </article>
+
+
+    <article class="workflow-card">
+
+      <span>TENSION</span>
+
+      <h3>
+        Bottom Tie
+      </h3>
+
+      <p>
+        양 지점의 수평력 성분을 인장재로 연결
+      </p>
+
+    </article>
+
+
+    <article class="workflow-card">
+
+      <span>SUPPORT</span>
+
+      <h3>
+        End Supports
+      </h3>
+
+      <p>
+        양쪽 책상 지지점으로 수직반력 전달
+      </p>
+
+    </article>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+CALCULATION
+===================================================== -->
+
+<section class="problem">
+
+
+  <div class="number">
+    06 / INITIAL MODEL
+  </div>
+
+
+  <h2>
+    Calculation<br>
+    Snapshot
+  </h2>
+
+
+  <p class="lead">
+
+    아래 값은 실제 완성 교량의 성능을 보증하는 값이 아니라
+    설정한 재료특성과 이상적인 절점 조건에서 계산한
+    초기 모델의 검토 결과입니다.
+
+  </p>
+
+
+
+  <div class="result-grid">
+
+
+    <article class="result">
+
+      <small>
+        TOTAL MODEL LOAD
+      </small>
+
+      <strong>
+        3.202kg
+      </strong>
+
+      <p>
+        3kg 시험하중 + 추정 자중 + 가정 접착제
+      </p>
+
+    </article>
+
+
+    <article class="result">
+
+      <small>
+        VERTICAL DISPLACEMENT
+      </small>
+
+      <strong>
+        1.12mm
+      </strong>
+
+      <p>
+        선형 탄성 해석의 최대 수직변위
+      </p>
+
+    </article>
+
+
+    <article class="result">
+
+      <small>
+        MEMBER MARGIN
+      </small>
+
+      <strong>
+        1.85×
+      </strong>
+
+      <p>
+        2가닥 약축 기준 계산 부재 여유
+      </p>
+
+    </article>
+
+
+    <article class="result">
+
+      <small>
+        VERTICAL REACTION
+      </small>
+
+      <strong>
+        7.85N
+      </strong>
+
+      <p>
+        대칭조건에서 각 받침의 계산 수직반력
+      </p>
+
+    </article>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+LIMITATIONS
+===================================================== -->
+
+<section class="limit">
+
+
+  <div class="number">
+    07 / MODEL vs REALITY
+  </div>
+
+
+  <h2>
+    Simulation Is<br>
+    Not Reality.
+  </h2>
+
+
+  <div class="limit-grid">
+
+
+    <article class="limit-card">
+
+      <small>
+        MODEL
+      </small>
+
+      <h3>
+        What the model can show
+      </h3>
+
+      <p>
+
+        이상화된 구조에서 하중이 어떤 경로로 전달되는지,
+        어떤 부재의 축력이 커지는지,
+        형상을 바꿨을 때 계산결과가 어떻게 달라지는지
+        비교할 수 있습니다.
+
+      </p>
+
+    </article>
+
+
+    <article class="limit-card">
+
+      <small>
+        REAL STRUCTURE
+      </small>
+
+      <h3>
+        What still needs testing
+      </h3>
+
+      <p>
+
+        접착제 박리, 연결부 파괴,
+        스파게티 재료 편차, 조립오차,
+        비틀림과 실제 좌굴은
+        이상적인 계산모델만으로 완전히 검증할 수 없습니다.
+
+      </p>
+
+    </article>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+WHAT I LEARNED
+===================================================== -->
+
+<section class="learning">
+
+
+  <div class="number">
+    08 / WHAT I LEARNED
+  </div>
+
+
+  <h2>
+    AI as an<br>
+    Engineering Tool
+  </h2>
+
+
+  <p>
+
+    이 프로젝트에서 가장 중요했던 것은
+    AI가 정답을 대신 결정하게 하는 것이 아니라,
+    <strong>
+      설계 아이디어를 만들고 → 서로 비판하고 →
+      모델로 검증하고 → 실제 조건과 다시 비교하는
+    </strong>
+    반복 과정에 AI를 활용하는 것이었습니다.
+
+  </p>
+
+
+</section>
+
+
+
+<footer>
+
+  KTG Portfolio · Activity 01 · AI-Assisted Spaghetti Bridge
+
+</footer>
+
+
+</body>
+
+</html>
