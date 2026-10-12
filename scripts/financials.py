@@ -53,7 +53,27 @@ FIELDS = {
                            ("투자활동현금흐름", "투자활동으로인한현금흐름")),
     "financing_cashflow": (("CF",), ("ifrs-full_CashFlowsFromUsedInFinancingActivities", "ifrs_CashFlowsFromUsedInFinancingActivities"),
                            ("재무활동현금흐름", "재무활동으로인한현금흐름")),
+    # 교수님 가이드(재무제표·재무비율 실무가이드)에 맞춰 추가한 계정
+    "pretax_income": (("IS", "CIS"), ("ifrs-full_ProfitLossBeforeTax", "ifrs_ProfitLossBeforeTax"),
+                      ("법인세비용차감전순이익", "법인세비용차감전순이익(손실)", "법인세차감전순이익", "법인세비용차감전순손익")),
+    "income_tax": (("IS", "CIS"), ("ifrs-full_IncomeTaxExpenseContinuingOperations", "ifrs_IncomeTaxExpenseContinuingOperations"),
+                   ("법인세비용", "법인세비용(수익)", "법인세수익(비용)")),
+    "inventories": (("BS",), ("ifrs-full_Inventories", "ifrs_Inventories"), ("재고자산",)),
+    "ppe": (("BS",), ("ifrs-full_PropertyPlantAndEquipment", "ifrs_PropertyPlantAndEquipment"), ("유형자산",)),
+    "trade_payables": (("BS",), (), ("매입채무",)),
+    "equity_owners": (("BS",), ("ifrs-full_EquityAttributableToOwnersOfParent", "ifrs_EquityAttributableToOwnersOfParent"),
+                      ("지배기업의소유주에게귀속되는자본", "지배기업소유주지분", "지배기업의소유주지분", "지배기업소유지분")),
+    "capex_ppe": (("CF",), ("ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+                            "ifrs_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities"), ("유형자산의취득",)),
+    "capex_intangible": (("CF",), ("ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+                                   "ifrs_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities"), ("무형자산의취득",)),
 }
+# 재무제표 본문에 없어서 공시 원문 주석(현금흐름표 조정 항목)에서 읽는 값 (notes.py)
+NOTE_FIELDS = ["dep_amort", "interest_expense"]
+# 부호와 상관없이 크기만 쓰는 비용·지출 계정
+ABS_FIELDS = {"capex_ppe", "capex_intangible"}
+# 없어도 경고하지 않는 계정 (회사마다 없을 수 있음)
+OPTIONAL_FIELDS = {"net_income_owners", "net_income_nci", "capex_intangible", "inventories", "trade_payables"}
 LABELS = {
     "revenue": "매출액", "cost_of_sales": "매출원가", "gross_profit": "매출총이익", "sga": "판매비와관리비",
     "operating_profit": "영업이익", "net_income": "당기순이익", "net_income_owners": "지배주주 순이익",
@@ -63,11 +83,15 @@ LABELS = {
     "contract_liabilities": "초과청구공사", "customer_advances": "공사및분양선수금", "short_term_borrowings": "단기차입금",
     "current_portion_ltd": "유동성장기부채", "bonds": "사채", "long_term_borrowings": "장기차입금",
     "operating_cashflow": "영업활동현금흐름", "investing_cashflow": "투자활동현금흐름", "financing_cashflow": "재무활동현금흐름",
+    "pretax_income": "법인세비용차감전순이익", "income_tax": "법인세비용", "inventories": "재고자산", "ppe": "유형자산",
+    "trade_payables": "매입채무", "equity_owners": "지배주주지분", "capex_ppe": "유형자산의 취득",
+    "capex_intangible": "무형자산의 취득", "dep_amort": "감가상각비", "interest_expense": "이자비용",
 }
 IS_FIELDS = [k for k, v in FIELDS.items() if "IS" in v[0] or "CIS" in v[0]]
 CF_FIELDS = [k for k, v in FIELDS.items() if v[0] == ("CF",)]
 BS_FIELDS = [k for k, v in FIELDS.items() if v[0] == ("BS",)]
-FLOW_FIELDS = IS_FIELDS + CF_FIELDS
+FLOW_FIELDS = IS_FIELDS + CF_FIELDS + NOTE_FIELDS     # 기간 동안 쌓이는 값 (분기 = 누적끼리 차감)
+ALL_FIELDS = list(FIELDS) + NOTE_FIELDS
 # 여러 계정을 더해 만드는 값 (하나라도 없으면 비워 둡니다)
 DERIVED = {
     "receivables_total": ("trade_receivables", "contract_assets"),
@@ -75,13 +99,34 @@ DERIVED = {
     "borrowings_total": ("short_term_borrowings", "current_portion_ltd", "bonds", "long_term_borrowings"),
     "advances_total": ("contract_liabilities", "customer_advances"),
 }
-RATIO_LABELS = {
-    "revenue_growth_pct": "매출증가율(%)", "qoq_growth_pct": "직전 분기 대비(%)",
-    "gross_margin_pct": "매출총이익률(%)", "cost_ratio_pct": "원가율(%)", "sga_ratio_pct": "판관비율(%)",
-    "operating_margin_pct": "영업이익률(%)", "net_margin_pct": "순이익률(%)",
-    "debt_to_equity_pct": "부채비율(%)", "current_ratio_pct": "유동비율(%)", "equity_ratio_pct": "자기자본비율(%)",
-    "roa_pct": "ROA(%)", "roe_pct": "ROE(%)", "receivables_to_revenue_pct": "받을 돈/매출(%)",
+# 가이드 정의를 따르는 계산 값 (add_derived 참고)
+DERIVED_LABELS = {
+    "receivables_total": "받을 돈(매출채권+미청구공사)", "cash_and_deposits": "현금및현금성자산+단기금융상품",
+    "borrowings_total": "이자부차입금", "advances_total": "미리 받은 돈(초과청구공사+선수금)",
+    "net_debt": "순차입금", "capex": "CAPEX", "fcf": "FCF", "ebitda": "EBITDA", "quick_assets": "당좌자산",
+    "nci_equity": "비지배지분",
 }
+RATIO_LABELS = {
+    # 성장성
+    "revenue_growth_pct": "매출증가율(%)", "qoq_growth_pct": "직전 분기 대비(%)",
+    # 수익성
+    "gross_margin_pct": "매출총이익률(%)", "operating_margin_pct": "영업이익률(%)", "net_margin_pct": "순이익률(%)",
+    "ebitda_margin_pct": "EBITDA 마진(%)", "roa_pct": "ROA(%)", "roe_pct": "ROE(%)", "roe_owners_pct": "지배주주 ROE(%)",
+    "roic_pct": "ROIC(%)",
+    # 유동성·안정성
+    "current_ratio_pct": "유동비율(%)", "quick_ratio_pct": "당좌비율(%)", "debt_to_equity_pct": "부채비율(%)",
+    "equity_ratio_pct": "자기자본비율(%)", "borrowing_dependency_pct": "차입금의존도(%)",
+    "interest_coverage_x": "이자보상배율(배)", "net_debt_to_ebitda_x": "순차입금/EBITDA(배)",
+    # 활동성·현금흐름
+    "asset_turnover_x": "총자산회전율(회)", "dso_days": "DSO(일)", "dio_days": "DIO(일)", "dpo_days": "DPO(일)",
+    "ccc_days": "CCC(일)", "cfo_to_ni_x": "CFO/순이익(배)",
+    # 건설업 참고
+    "cost_ratio_pct": "원가율(%)", "sga_ratio_pct": "판관비율(%)", "receivables_to_revenue_pct": "받을 돈/매출(%)",
+    "borrowing_rate_pct": "차입 이자율(%)",
+    # 시장가치 (연말 주가 기준, 연간 표만)
+    "per_x": "PER(배)", "pbr_x": "PBR(배)", "ev_ebitda_x": "EV/EBITDA(배)", "fcf_yield_pct": "FCF 수익률(%)",
+}
+DEFAULT_TAX_RATE = 0.242   # 실효세율을 계산할 수 없을 때만 쓰는 값 (법인세 22% + 지방소득세)
 
 
 # ---------------------------------------------------------------------------
@@ -176,10 +221,12 @@ def extract(records, month, which="current"):
                 break
         if not cols:
             continue
+        if value is not None and field in ABS_FIELDS:
+            value = abs(value)
         out["values"][field] = value
         if value is not None:
             out["evidence"][field] = {"account_id": evidence[0], "account_name": evidence[1], "column": used}
-        elif which == "current" and field not in ("net_income_owners", "net_income_nci"):
+        elif which == "current" and field not in OPTIONAL_FIELDS:
             out["issues"].append(issue)
     return out
 
@@ -203,14 +250,22 @@ def merge(period, values, source, overwrite=False):
 
 
 def add_derived(values):
+    """여러 계정을 묶은 값. 정의는 교수님 가이드(재무제표·재무비율 실무가이드)를 따릅니다."""
     out = dict(values)
     for name, parts in DERIVED.items():
         parts_v = [values.get(p) for p in parts]
         out[name] = None if any(v is None for v in parts_v) else sum(parts_v)
-    if out.get("cash_and_deposits") is not None and out.get("borrowings_total") is not None:
-        out["net_cash"] = out["cash_and_deposits"] - out["borrowings_total"]
-    else:
-        out["net_cash"] = None
+    # 순차입금 = 이자부차입금 − 현금및현금성자산 (음수면 순현금)
+    out["net_debt"] = _sub(out.get("borrowings_total"), values.get("cash"))
+    # CAPEX = 유형자산 취득 + 무형자산 취득 (현금 기준) · FCF = 영업활동현금흐름 − CAPEX
+    capex_parts = [values.get(k) for k in ("capex_ppe", "capex_intangible") if values.get(k) is not None]
+    out["capex"] = sum(abs(x) for x in capex_parts) if values.get("capex_ppe") is not None else None
+    out["fcf"] = _sub(values.get("operating_cashflow"), out["capex"])
+    # EBITDA = 영업이익 + 감가상각비(유형·사용권·투자부동산) + 무형자산상각비
+    out["ebitda"] = None if values.get("operating_profit") is None or values.get("dep_amort") is None \
+        else values["operating_profit"] + values["dep_amort"]
+    out["quick_assets"] = _sub(values.get("current_assets"), values.get("inventories"))
+    out["nci_equity"] = _sub(values.get("equity"), values.get("equity_owners"))
     return out
 
 
@@ -218,6 +273,20 @@ def ratio(n, d):
     if n is None or d is None or d <= 0:
         return None
     return n / d * 100
+
+
+def multiple(n, d):
+    """배수(배). 분모가 0 이하이면 계산하지 않습니다."""
+    if n is None or d is None or d <= 0:
+        return None
+    return n / d
+
+
+def days(balance_avg, flow):
+    """회전일수 = 평균 잔액 ÷ 연간 금액 × 365."""
+    if balance_avg is None or flow is None or flow <= 0:
+        return None
+    return balance_avg / flow * 365
 
 
 def growth(now, before):
@@ -264,7 +333,7 @@ def build_tables(periods):
         if h1:
             halves.append(_row(f"{y} 상반기", y, 6, "H1", h1, meta(y, 6), derived=False))
         if fy and h1:
-            h2 = {f: (_sub(fy.get(f), h1.get(f)) if f in FLOW_FIELDS else fy.get(f)) for f in FIELDS}
+            h2 = {f: (_sub(fy.get(f), h1.get(f)) if f in FLOW_FIELDS else fy.get(f)) for f in ALL_FIELDS}
             if any(h2.get(f) is not None for f in FLOW_FIELDS):
                 halves.append(_row(f"{y} 하반기", y, 12, "H2", h2, meta(y, 12), derived=True,
                                    notes=amended_note((y, 12), (y, 6))))
@@ -275,7 +344,7 @@ def build_tables(periods):
             if q == 1:
                 qv = dict(cur)
             elif prev:
-                qv = {f: (_sub(cur.get(f), prev.get(f)) if f in FLOW_FIELDS else cur.get(f)) for f in FIELDS}
+                qv = {f: (_sub(cur.get(f), prev.get(f)) if f in FLOW_FIELDS else cur.get(f)) for f in ALL_FIELDS}
             else:
                 continue   # 앞 누적 기간이 없으면 개별 분기 실적을 계산할 수 없습니다
             if not any(qv.get(f) is not None for f in FLOW_FIELDS):
@@ -297,36 +366,80 @@ def _row(label, year, month, kind, values, period, derived, notes=()):
             "warnings": list(period.get("warnings", [])) + list(notes), "ratios": {}}
 
 
+def effective_tax_rate(v):
+    """실효세율 = 법인세비용 ÷ 법인세비용차감전순이익. 0~50% 밖이거나 계산할 수 없으면 None."""
+    pre, tax = v.get("pretax_income"), v.get("income_tax")
+    if pre is None or tax is None or pre <= 0:
+        return None
+    rate = tax / pre
+    return rate if 0 <= rate <= 0.5 else None
+
+
 def _ratios(rows, kind):
+    """기간마다 재무비율을 계산합니다.
+    평균 잔액(기초·기말)이 필요한 ROA·ROE·ROIC·회전율·회전일수는 연간 표에서만 계산합니다(가이드: 분자·분모 기간 맞춤)."""
     index = {(r["year"], r["kind"]): r for r in rows}
+    rates = sorted(t for t in (effective_tax_rate(r["values"]) for r in rows) if t is not None)
+    typical_tax = rates[len(rates) // 2] if rates else DEFAULT_TAX_RATE
     prev_row = None
     for r in rows:
         v = r["values"]
         same_last_year = index.get((r["year"] - 1, r["kind"]))
         pv = same_last_year["values"] if same_last_year else {}
         rev = v.get("revenue")
-        ratios = {
+        ratios = {k: None for k in RATIO_LABELS}
+        ratios.update({
             "revenue_growth_pct": growth(rev, pv.get("revenue")),
             "gross_margin_pct": ratio(v.get("gross_profit"), rev),
             "cost_ratio_pct": ratio(v.get("cost_of_sales"), rev),
             "sga_ratio_pct": ratio(v.get("sga"), rev),
             "operating_margin_pct": ratio(v.get("operating_profit"), rev),
             "net_margin_pct": ratio(v.get("net_income"), rev),
+            "ebitda_margin_pct": ratio(v.get("ebitda"), rev),
             "debt_to_equity_pct": ratio(v.get("liabilities"), v.get("equity")),
             "current_ratio_pct": ratio(v.get("current_assets"), v.get("current_liabilities")),
+            "quick_ratio_pct": ratio(v.get("quick_assets"), v.get("current_liabilities")),
             "equity_ratio_pct": ratio(v.get("equity"), v.get("assets")),
+            "borrowing_dependency_pct": ratio(v.get("borrowings_total"), v.get("assets")),
+            "interest_coverage_x": multiple(v.get("operating_profit"), v.get("interest_expense")),
+            "cfo_to_ni_x": multiple(v.get("operating_cashflow"), v.get("net_income")),
             "receivables_to_revenue_pct": ratio(v.get("receivables_total"), rev) if kind == "annual" else None,
-            "roa_pct": None, "roe_pct": None, "qoq_growth_pct": None,
-        }
+        })
+        if kind == "annual":
+            ebitda = v.get("ebitda")
+            if ebitda is not None and ebitda > 0 and v.get("net_debt") is not None:
+                ratios["net_debt_to_ebitda_x"] = v["net_debt"] / ebitda
         if kind == "annual" and same_last_year:
-            avg_a = _avg(v.get("assets"), pv.get("assets"))
-            avg_e = _avg(v.get("equity"), pv.get("equity"))
-            ratios["roa_pct"] = ratio(v.get("net_income"), avg_a)
-            ratios["roe_pct"] = ratio(v.get("net_income"), avg_e)
+            avg = {k: _avg(v.get(k), pv.get(k)) for k in ("assets", "equity", "equity_owners", "trade_receivables",
+                                                          "inventories", "trade_payables", "borrowings_total")}
+            ratios["roa_pct"] = ratio(v.get("net_income"), avg["assets"])
+            ratios["roe_pct"] = ratio(v.get("net_income"), avg["equity"])
+            ratios["roe_owners_pct"] = ratio(v.get("net_income_owners"), avg["equity_owners"])
+            ratios["asset_turnover_x"] = multiple(rev, avg["assets"])
+            ratios["dso_days"] = days(avg["trade_receivables"], rev)
+            ratios["dio_days"] = days(avg["inventories"], v.get("cost_of_sales"))
+            ratios["dpo_days"] = days(avg["trade_payables"], v.get("cost_of_sales"))
+            if None not in (ratios["dso_days"], ratios["dio_days"], ratios["dpo_days"]):
+                ratios["ccc_days"] = ratios["dso_days"] + ratios["dio_days"] - ratios["dpo_days"]
+            ratios["borrowing_rate_pct"] = ratio(v.get("interest_expense"), avg["borrowings_total"])
+            # ROIC = NOPAT ÷ 평균 투하자본. NOPAT = 영업이익 × (1 − 실효세율), 투하자본 = 자본총계 + 순차입금
+            ic_now, ic_before = _sub_add(v), _sub_add(pv)
+            avg_ic = _avg(ic_now, ic_before)
+            op = v.get("operating_profit")
+            if op is not None and avg_ic is not None and avg_ic > 0:
+                rate = effective_tax_rate(v)
+                ratios["roic_pct"] = op * (1 - (rate if rate is not None else typical_tax)) / avg_ic * 100
         if kind == "quarter" and prev_row is not None and _next_quarter(prev_row) == (r["year"], r["kind"]):
             ratios["qoq_growth_pct"] = growth(rev, prev_row["values"].get("revenue"))
         r["ratios"] = ratios
         prev_row = r
+
+
+def _sub_add(v):
+    """투하자본 = 자본총계 + 순차입금 (= 자본총계 + 이자부차입금 − 현금및현금성자산)."""
+    if v.get("equity") is None or v.get("net_debt") is None:
+        return None
+    return v["equity"] + v["net_debt"]
 
 
 def _avg(a, b):

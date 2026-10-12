@@ -18,6 +18,8 @@ import dart_agent as agent  # noqa: E402
 import dashboard  # noqa: E402
 import financials as fin  # noqa: E402
 import legacy  # noqa: E402
+import market  # noqa: E402
+import notes  # noqa: E402
 
 
 def api_row(sj, account_id, name, **amounts):
@@ -247,9 +249,29 @@ class RealData(unittest.TestCase):
                 if row["values"].get(field) is not None:
                     self.assertGreater(row["values"][field], 0, f"{row['label']} {field}")
 
+    def test_six_steps_in_guide_order(self):
+        steps = self.ctx["analysis"]["steps"]
+        self.assertEqual([s["id"] for s in steps], ["growth", "profit", "cash", "debt", "returns", "valuation"])
+        for s in steps:
+            self.assertTrue(s["answer"])
+            self.assertIn(s["verdict"][0], ("good", "warn", "crit", "info"))
+        self.assertEqual(len(self.ctx["analysis"]["combos"]), 8)
+
+    def test_ebitda_and_interest_from_notes(self):
+        if self.ctx["archives"] < self.ctx["filing_count"]:
+            self.skipTest("공시 원문 ZIP을 아직 다 받지 않았습니다(첫 실행 전)")
+        recent = [r for r in self.ctx["annual"] if r["year"] >= 2015]
+        self.assertTrue(recent)
+        for r in recent:
+            v = r["values"]
+            self.assertIsNotNone(v.get("ebitda"), r["label"])
+            self.assertGreater(v["dep_amort"], 0)
+            self.assertLess(v["dep_amort"], v["revenue"] * 0.05)   # 건설사 감가상각비는 매출의 몇 % 미만
+
     def test_dashboard_and_readme_render(self):
         page = dashboard.render(self.ctx)
-        for anchor in ('id="annual"', 'id="half"', 'id="quarter"', 'id="peers"', 'id="fig-revenue"'):
+        for anchor in ('id="annual"', 'id="half"', 'id="quarter"', 'id="peers"', 'id="fig-revenue"', 'id="debt"',
+                       'id="returns"', 'id="valuation"', 'id="combos"'):
             self.assertIn(anchor, page)
         self.assertLess(page.index('id="quarter"'), page.index('id="peers"'))   # 동종업계 표는 맨 아래
         self.assertNotIn("None", page.split("<script>")[0].replace("NoneType", ""))
@@ -260,9 +282,118 @@ class RealData(unittest.TestCase):
             self.assertTrue(dashboard.update_readme(readme, self.ctx))
             text = readme.read_text(encoding="utf-8")
             self.assertNotIn("old", text)
-            self.assertIn("| 관점 | 판정 | 근거 |", text)
+            self.assertIn("| 단계 | 판정 | 한 줄 답 |", text)
             self.assertIn("시평 순위", text)
             self.assertFalse(dashboard.update_readme(readme, self.ctx))   # 두 번째는 바뀌는 것이 없음
+
+
+class GuideRatios(unittest.TestCase):
+    """교수님 가이드(재무제표·재무비율 실무가이드)의 정의대로 계산하는지 확인합니다."""
+
+    def make(self):
+        periods = {}
+        for year, k in ((2024, 1.0), (2025, 1.2)):
+            periods[(year, 12)] = period(
+                year, 12, revenue=int(1000 * k), cost_of_sales=int(900 * k), gross_profit=int(100 * k), sga=int(40 * k),
+                operating_profit=int(60 * k), net_income=int(40 * k), net_income_owners=int(36 * k),
+                pretax_income=int(50 * k), income_tax=int(12 * k), assets=int(2000 * k), liabilities=int(1200 * k),
+                equity=int(800 * k), equity_owners=int(700 * k), current_assets=int(1500 * k), current_liabilities=int(1000 * k),
+                cash=int(300 * k), inventories=int(100 * k), trade_receivables=int(200 * k), trade_payables=int(150 * k),
+                short_term_borrowings=int(100 * k), current_portion_ltd=int(50 * k), bonds=int(100 * k),
+                long_term_borrowings=int(150 * k), operating_cashflow=int(30 * k), investing_cashflow=int(-20 * k),
+                financing_cashflow=int(10 * k), capex_ppe=int(15 * k), capex_intangible=int(5 * k),
+                dep_amort=int(20 * k), interest_expense=int(10 * k))
+        return periods
+
+    def test_derived_values(self):
+        annual, _, _ = fin.build_tables(self.make())
+        v = annual[0]["values"]
+        self.assertEqual(v["borrowings_total"], 400)
+        self.assertEqual(v["net_debt"], 100)            # 이자부차입금 400 − 현금 300
+        self.assertEqual(v["capex"], 20)
+        self.assertEqual(v["fcf"], 10)                  # 영업현금흐름 30 − CAPEX 20
+        self.assertEqual(v["ebitda"], 80)               # 영업이익 60 + 감가상각비 20
+        self.assertEqual(v["quick_assets"], 1400)
+        self.assertEqual(v["nci_equity"], 100)
+
+    def test_ratios(self):
+        annual, _, _ = fin.build_tables(self.make())
+        r0, r1 = annual[0]["ratios"], annual[1]["ratios"]
+        self.assertAlmostEqual(r0["ebitda_margin_pct"], 8.0)
+        self.assertAlmostEqual(r0["quick_ratio_pct"], 140.0)
+        self.assertAlmostEqual(r0["borrowing_dependency_pct"], 20.0)
+        self.assertAlmostEqual(r0["interest_coverage_x"], 6.0)
+        self.assertAlmostEqual(r0["net_debt_to_ebitda_x"], 1.25)
+        self.assertAlmostEqual(r0["cfo_to_ni_x"], 0.75)
+        self.assertIsNone(r0["roic_pct"])               # 첫해는 평균 투하자본이 없음
+        # 2025년: 평균 매출채권 220, 매출 1200 → DSO = 220 / 1200 × 365
+        self.assertAlmostEqual(r1["dso_days"], 220 / 1200 * 365)
+        self.assertAlmostEqual(r1["dio_days"], 110 / 1080 * 365)
+        self.assertAlmostEqual(r1["dpo_days"], 165 / 1080 * 365)
+        self.assertAlmostEqual(r1["ccc_days"], r1["dso_days"] + r1["dio_days"] - r1["dpo_days"])
+        self.assertAlmostEqual(r1["asset_turnover_x"], 1200 / 2200)
+        # ROIC = 영업이익 × (1 − 실효세율) ÷ 평균(자본 + 순차입금)
+        tax = 14 / 60
+        ic = ((800 + 100) + (960 + 120)) / 2
+        self.assertAlmostEqual(r1["roic_pct"], 72 * (1 - tax) / ic * 100)
+        self.assertAlmostEqual(r1["roe_owners_pct"], 43 / 770 * 100)
+
+    def test_cfo_to_ni_needs_positive_income(self):
+        periods = self.make()
+        periods[(2025, 12)]["values"]["net_income"] = -5
+        annual, _, _ = fin.build_tables(periods)
+        self.assertIsNone(annual[1]["ratios"]["cfo_to_ni_x"])
+
+    def test_market_valuation(self):
+        values = {"equity_owners": 1000, "net_debt": 200, "nci_equity": 50}
+        val = market.valuation(10, {"common": 90, "preferred": 10}, values, ebitda=125, net_income_owners=100, fcf=-20)
+        self.assertEqual(val["market_cap"], 1000)       # 10원 × 100주
+        self.assertAlmostEqual(val["per_x"], 10)
+        self.assertAlmostEqual(val["pbr_x"], 1)
+        self.assertAlmostEqual(val["ev_ebitda_x"], (1000 + 200 + 50) / 125)
+        self.assertAlmostEqual(val["fcf_yield_pct"], -2)
+        self.assertNotIn("per_x", market.valuation(10, {"common": 100}, values, net_income_owners=-5))
+        self.assertEqual(market.valuation(None, {"common": 100}, values), {})
+
+    def test_month_close_and_shares(self):
+        prices = {"202512": 30000.0, "202510": 28000.0}
+        self.assertEqual(market.month_close(prices, 2025, 12), (30000.0, "2025.12"))
+        self.assertEqual(market.month_close(prices, 2025, 11), (28000.0, "2025.10"))
+        doc = {"list": [{"se": "보통주", "istc_totqy": "111,355,765"}, {"se": "우선주", "istc_totqy": "232,586"},
+                        {"se": "합계", "istc_totqy": "111,588,351"}]}
+        self.assertEqual(market.parse_shares(doc), {"common": 111355765, "preferred": 232586})
+
+
+NOTE_XML = """<DOCUMENT><DOCUMENT-NAME>사업보고서</DOCUMENT-NAME>
+<TITLE>3. 연결재무제표 주석</TITLE>
+<P>34. 현금흐름표 (1) 당기 및 전기 중 영업으로부터 창출된 현금은 다음과 같습니다. (단위:백만원)</P>
+<TABLE><TR><TD>과목</TD><TD>당기</TD><TD>전기</TD></TR>
+<TR><TD>유형자산감가상각비</TD><TD>100</TD><TD>90</TD></TR>
+<TR><TD>사용권자산상각비</TD><TD>50</TD><TD>40</TD></TR>
+<TR><TD>무형자산상각비</TD><TD>10</TD><TD>8</TD></TR>
+<TR><TD>이자비용</TD><TD>30</TD><TD>25</TD></TR></TABLE>
+<TITLE>5. 재무제표 주석</TITLE>
+<P>33. 현금흐름표 영업으로부터 창출된 현금 (단위:백만원)</P>
+<TABLE><TR><TD>감가상각비</TD><TD>7</TD><TD>6</TD></TR><TR><TD>이자비용</TD><TD>3</TD><TD>2</TD></TR></TABLE>
+</DOCUMENT>"""
+
+
+class NoteParsing(unittest.TestCase):
+    def test_consolidated_cash_flow_note(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "20990101000001.zip"
+            with zipfile.ZipFile(path, "w") as zf:
+                zf.writestr("20990101000001.xml", NOTE_XML.encode("utf-8"))
+            got = notes.parse(path, "20990101000001")
+        self.assertEqual(got["current"]["dep_amort"], 160 * 1_000_000)   # 별도 주석(7)이 아니라 연결 주석
+        self.assertEqual(got["current"]["interest_expense"], 30 * 1_000_000)
+        self.assertEqual(got["prior"]["dep_amort"], 138 * 1_000_000)
+
+    def test_new_label_style(self):
+        self.assertEqual(notes._row_key("감가상각비에 대한 조정"), "dep_ppe")
+        self.assertEqual(notes._row_key("사용권자산감가상각비 조정"), "dep_rou")
+        self.assertEqual(notes._row_key("무형자산상각비에 대한 조정"), "amort")
+        self.assertIsNone(notes._row_key("대손상각비"))
 
 
 class Packaging(unittest.TestCase):

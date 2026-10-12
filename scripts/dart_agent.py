@@ -33,11 +33,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import financials as fin  # noqa: E402
+import market  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "config"
 DATA = ROOT / "data" / "financials"
 RAW = DATA / "raw"
+MARKET = RAW / "market"
 KST = timezone(timedelta(hours=9))
 BASE_URL = "https://opendart.fss.or.kr/api/"
 API_FIRST_YEAR = 2015          # OpenDART 재무제표 API 제공 시작 연도
@@ -279,8 +281,73 @@ def collect(cfg, today, budget_minutes):
             if doc.get("status") == "000":
                 write_json(RAW / "peers" / f"{peer['stock_code']}_{year}.json", doc)
                 break
+
+    # 시장가치 계산용: 주식수(OpenDART)와 월말 주가(네이버 금융 → 실패 시 Yahoo Finance)
+    collect_market(dart, cfg, codes, latest, today, status)
     status["api_calls"] = dart.calls
     return status
+
+
+def collect_market(dart, cfg, codes, latest, today, status):
+    """주식수와 주가를 받아 data/financials/raw/market/ 에 저장합니다. 실패해도 계속 진행합니다."""
+    MARKET.mkdir(parents=True, exist_ok=True)
+
+    def shares_of(corp_code, year, reprt_code):
+        doc = dart.json("stockTotqySttus.json", {"corp_code": corp_code, "bsns_year": str(year), "reprt_code": reprt_code})
+        return market.parse_shares(doc)
+
+    # 회사: 2015년 이후 사업보고서마다 + 가장 최근 보고서
+    own = cfg["stock_code"]
+    saved = load_json(MARKET / f"{own}_shares.json", {}) or {}
+    wanted = [(str(y), y, fin.REPORT_CODES[12]) for (y, m) in sorted(latest) if m == 12 and y >= market.SHARES_FIRST_YEAR]
+    if latest:
+        (ly, lm) = max(latest)
+        wanted.append(("latest", ly, fin.REPORT_CODES[lm]))
+    for key, year, code in wanted:
+        if key in saved and key != "latest" and str(year) != str(today.year - 1) and not saved[key].get("missing"):
+            continue
+        if saved.get(key, {}).get("missing") and year < today.year - 2:
+            continue
+        try:
+            got = shares_of(cfg["corp_code"], year, code)
+        except ApiError as exc:
+            status["errors"].append(f"주식수 {year}: {exc}")
+            continue
+        # 자료가 없는 연도도 표시해 두어 매달 다시 묻지 않습니다.
+        saved[key] = {**got, "period": f"{year}.{fin.CODE_MONTH[code]:02d}"} if got else {"period": f"{year}", "missing": True}
+    write_json(MARKET / f"{own}_shares.json", saved)
+
+    # 동종기업: 저장된 최근 사업보고서 연도의 주식수
+    for peer in cfg.get("peers", []):
+        info = codes.get(peer["stock_code"])
+        files = sorted((RAW / "peers").glob(f"{peer['stock_code']}_*.json"))
+        if not info or not files:
+            continue
+        year = files[-1].stem.split("_")[1]
+        path = MARKET / f"{peer['stock_code']}_shares.json"
+        saved = load_json(path, {}) or {}
+        if year in saved:
+            continue
+        try:
+            got = shares_of(info["corp_code"], year, fin.REPORT_CODES[12])
+        except ApiError as exc:
+            status["errors"].append(f"{peer['name']} 주식수: {exc}")
+            continue
+        if got:
+            saved[year] = {**got, "period": f"{year}.12"}
+            write_json(path, saved)
+
+    # 주가 (월말 종가)
+    for code in [own] + [p["stock_code"] for p in cfg.get("peers", [])]:
+        start = date(cfg["first_year"], 1, 1) if code == own else date(today.year - 2, 1, 1)
+        prices, source, errs = market.fetch_prices(code, start, today)
+        path = MARKET / f"{code}_prices.json"
+        if prices:
+            old = (load_json(path, {}) or {}).get("monthly", {})
+            merged = dict(sorted({**old, **prices}.items()))
+            write_json(path, {"source": source, "fetched": today.isoformat(), "monthly": merged})
+        else:
+            status["errors"].append(f"주가({code}) 받기 실패: {', '.join(errs)} · 저장된 주가로 계산합니다.")
 
 
 # ---------------------------------------------------------------------------
@@ -371,15 +438,50 @@ def peer_rows(cfg):
             row["ratios"] = {"operating_margin_pct": fin.ratio(v.get("operating_profit"), v.get("revenue")),
                              "net_margin_pct": fin.ratio(v.get("net_income"), v.get("revenue")),
                              "debt_to_equity_pct": fin.ratio(v.get("liabilities"), v.get("equity")),
-                             "current_ratio_pct": fin.ratio(v.get("current_assets"), v.get("current_liabilities"))}
+                             "current_ratio_pct": fin.ratio(v.get("current_assets"), v.get("current_liabilities")),
+                             "roe_pct": fin.ratio(v.get("net_income"), v.get("equity"))}
+            row.update(peer_market(peer["stock_code"], row["year"], v))
         rows.append(row)
     return rows
 
 
-CSV_AMOUNTS = ["revenue", "cost_of_sales", "gross_profit", "sga", "operating_profit", "net_income", "net_income_owners",
-               "assets", "liabilities", "equity", "current_assets", "current_liabilities", "operating_cashflow",
-               "investing_cashflow", "financing_cashflow", "cash_and_deposits", "borrowings_total", "net_cash",
-               "receivables_total", "advances_total"]
+def peer_market(stock_code, year, values):
+    """현재 주가 × 주식수로 PER·PBR (최근 사업보고서 숫자 기준)."""
+    prices = (load_json(MARKET / f"{stock_code}_prices.json", {}) or {}).get("monthly", {})
+    shares = (load_json(MARKET / f"{stock_code}_shares.json", {}) or {}).get(str(year))
+    if not prices or not shares:
+        return {"market": {}}
+    month = max(prices)
+    val = market.valuation(prices[month], shares, values, net_income_owners=values.get("net_income_owners"))
+    val["as_of"] = f"{month[:4]}.{month[4:]}"
+    return {"market": val}
+
+
+def current_valuation(quarters, annual, prices, shares):
+    """가장 최근 주가 기준 시장가치 (최근 4개 분기 이익·현금흐름, 최근 분기말 재무상태)."""
+    monthly = prices.get("monthly", {}) if prices else {}
+    sh = shares.get("latest") or (shares.get(str(annual[-1]["year"])) if annual else None)
+    if not monthly or not sh or not quarters:
+        return {}
+    month = max(monthly)
+    bal = next((q for q in reversed(quarters) if q["values"].get("assets") is not None), None)
+    if bal is None:
+        return {}
+    ttm = {k: fin.ttm(quarters, k)[0] for k in ("net_income_owners", "ebitda", "fcf", "net_income")}
+    val = market.valuation(monthly[month], sh, bal["values"], ebitda=ttm["ebitda"],
+                           net_income_owners=ttm["net_income_owners"], fcf=ttm["fcf"])
+    if val:
+        val.update(as_of=f"{month[:4]}.{month[4:]}", source=prices.get("source", ""), fetched=prices.get("fetched", ""),
+                   balance_label=f"{bal['year']}년 {bal['month']}월 말", shares_period=sh.get("period", ""), ttm=ttm)
+    return val
+
+
+CSV_AMOUNTS = ["revenue", "cost_of_sales", "gross_profit", "sga", "operating_profit", "ebitda", "dep_amort",
+               "interest_expense", "pretax_income", "income_tax", "net_income", "net_income_owners",
+               "assets", "current_assets", "cash", "short_term_deposits", "trade_receivables", "contract_assets",
+               "inventories", "ppe", "liabilities", "current_liabilities", "trade_payables", "borrowings_total", "net_debt",
+               "equity", "equity_owners", "operating_cashflow", "investing_cashflow", "financing_cashflow", "capex", "fcf",
+               "receivables_total", "advances_total", "price_close", "market_cap"]
 
 
 def write_csv(path, rows):
@@ -401,16 +503,26 @@ def make_context(cfg, today, status, log=None):
     """저장된 원자료로 표·비율·자동 해설을 계산합니다. 파일은 쓰지 않습니다. 반환: (ctx, periods)"""
     import analysis
     import legacy
+    import notes
     periods, latest = assemble(cfg)
     legacy_report = legacy.fill(periods, latest, RAW, cfg)
+    notes_report = notes.fill(periods, latest, RAW, cfg["first_year"])
     finalize_warnings(periods)
     annual, halves, quarters = fin.build_tables(periods)
+    prices = (load_json(MARKET / f"{cfg['stock_code']}_prices.json", {}) or {})
+    shares = load_json(MARKET / f"{cfg['stock_code']}_shares.json", {}) or {}
+    market.apply_annual(annual, prices.get("monthly", {}), shares)
     latest_filing = max(latest.values(), key=lambda f: f["rcept_no"]) if latest else None
     ctx = {"company": cfg, "today": today.isoformat(), "next_run": fin.next_run_date(today).isoformat(),
            "annual": annual, "halves": halves, "quarters": quarters, "peers": peer_rows(cfg), "status": status,
            "log": log if log is not None else load_json(DATA / "update_log.json", []),
-           "latest_filing": latest_filing, "filing_count": len(latest), "legacy": legacy_report,
-           "archives": sum(1 for f in latest.values() if (RAW / f"{f['rcept_no']}.zip").exists())}
+           "latest_filing": latest_filing, "filing_count": len(latest), "legacy": legacy_report, "notes": notes_report,
+           "archives": sum(1 for f in latest.values() if (RAW / f"{f['rcept_no']}.zip").exists()),
+           "valuation": current_valuation(quarters, annual, prices, shares)}
+    peer_years = [p["year"] for p in ctx["peers"] if p.get("year")]
+    base = next((r for r in annual if peer_years and r["year"] == max(peer_years)), annual[-1] if annual else None)
+    ctx["own_market"] = peer_market(cfg["stock_code"], base["year"], base["values"])["market"] if base else {}
+    ctx["prices"] = prices.get("monthly", {})
     ctx["analysis"] = analysis.analyze(ctx)
     return ctx, periods
 

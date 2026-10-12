@@ -28,7 +28,7 @@ EXTRA_NAMES = {
     "financing_cashflow": ("재무활동현금흐름", "재무활동으로인한현금흐름", "재무활동으로부터의현금흐름"),
 }
 SKIP_FIELDS = {"net_income_owners", "net_income_nci"}   # 같은 이름의 행이 여러 번 나와 원문에서는 읽지 않습니다
-EXPENSE_FIELDS = {"cost_of_sales", "sga"}   # 일부 원문은 비용을 (괄호) 음수로 적습니다. 비용은 양수로 맞춥니다.
+EXPENSE_FIELDS = {"cost_of_sales", "sga"} | fin.ABS_FIELDS   # 일부 원문은 비용·지출을 (괄호) 음수로 적습니다. 양수로 맞춥니다.
 STATEMENT_FIELDS = {"BS": fin.BS_FIELDS, "IS": fin.IS_FIELDS, "CF": fin.CF_FIELDS}
 
 DATE = r"(\d{4})\s*[.년]\s*(\d{1,2})\s*[.월]\s*(\d{1,2})\s*일?"

@@ -9,9 +9,13 @@
    "gross_profit": 268062435110,
    "sga": 101062843097,
    "operating_profit": 160835579987,
+   "pretax_income": 168528743125,
+   "income_tax": 41840272044,
    "net_income": 126688471081,
    "operating_cashflow": 603846868065,
    "investing_cashflow": -78743835822,
+   "capex_ppe": 16036533556,
+   "capex_intangible": 6403574778,
    "financing_cashflow": -171487280477
   },
   "sources": {
@@ -20,9 +24,13 @@
    "gross_profit": "document-prior",
    "sga": "document-prior",
    "operating_profit": "document-prior",
+   "pretax_income": "document-prior",
+   "income_tax": "document-prior",
    "net_income": "document-prior",
    "operating_cashflow": "document-prior",
    "investing_cashflow": "document-prior",
+   "capex_ppe": "document-prior",
+   "capex_intangible": "document-prior",
    "financing_cashflow": "document-prior"
   },
   "receipt": "20100517001199",
@@ -42,9 +50,13 @@
    "gross_profit": 600928667687,
    "sga": 213067008961,
    "operating_profit": 414371906159,
+   "pretax_income": 504662522410,
+   "income_tax": 135191062413,
    "net_income": 369471459997,
    "operating_cashflow": 727139521565,
    "investing_cashflow": -195381025732,
+   "capex_ppe": 40895885857,
+   "capex_intangible": 956853120,
    "financing_cashflow": -92602086358
   },
   "sources": {
@@ -53,9 +65,13 @@
    "gross_profit": "document-prior",
    "sga": "document-prior",
    "operating_profit": "document-prior",
+   "pretax_income": "document-prior",
+   "income_tax": "document-prior",
    "net_income": "document-prior",
    "operating_cashflow": "document-prior",
    "investing_cashflow": "document-prior",
+   "capex_ppe": "document-prior",
+   "capex_intangible": "document-prior",
    "financing_cashflow": "document-prior"
   },
   "receipt": "20100816001099",
@@ -75,9 +91,13 @@
    "gross_profit": 940717339271,
    "sga": 318123112273,
    "operating_profit": 648627759630,
+   "pretax_income": 696964229506,
+   "income_tax": 185194941470,
    "net_income": 511769288036,
    "operating_cashflow": 312122535315,
    "investing_cashflow": -251265208911,
+   "capex_ppe": 59396602535,
+   "capex_intangible": 2088027741,
    "financing_cashflow": -99986742391
   },
   "sources": {
@@ -86,9 +106,13 @@
    "gross_profit": "document-prior",
    "sga": "document-prior",
    "operating_profit": "document-prior",
+   "pretax_income": "document-prior",
+   "income_tax": "document-prior",
    "net_income": "document-prior",
    "operating_cashflow": "document-prior",
    "investing_cashflow": "document-prior",
+   "capex_ppe": "document-prior",
+   "capex_intangible": "document-prior",
    "financing_cashflow": "document-prior"
   },
   "receipt": "20101115001602",
@@ -107,6 +131,8 @@
    "cash": 1740630343510,
    "short_term_deposits": 92433157774,
    "contract_assets": 1988597727288,
+   "inventories": 1334317323131,
+   "ppe": 1097146299142,
    "assets": 10996413112910,
    "current_liabilities": 5692071905696,
    "contract_liabilities": 938919091273,
@@ -117,22 +143,32 @@
    "liabilities": 7058031609307,
    "equity": 3938381503603,
    "trade_receivables": 870524155307,
+   "trade_payables": 1985468729721,
    "customer_advances": 1526150186513,
+   "equity_owners": 3827806170476,
    "revenue": 11377879702196,
    "cost_of_sales": 10051000001211,
    "gross_profit": 1326879700985,
    "sga": 538305605719,
    "operating_profit": 722643733162,
+   "pretax_income": 750248896649,
+   "income_tax": 203217600432,
    "net_income": 547031296217,
    "operating_cashflow": 679751162440,
    "investing_cashflow": -238100922343,
-   "financing_cashflow": -75301069896
+   "capex_ppe": 84748744189,
+   "capex_intangible": 2516099460,
+   "financing_cashflow": -75301069896,
+   "dep_amort": 73511000000,
+   "interest_expense": 41699000000
   },
   "sources": {
    "current_assets": "document-prior",
    "cash": "document-prior",
    "short_term_deposits": "document-prior",
    "contract_assets": "document-prior",
+   "inventories": "document-prior",
+   "ppe": "document-prior",
    "assets": "document-prior",
    "current_liabilities": "document-prior",
    "contract_liabilities": "document-prior",
@@ -143,16 +179,24 @@
    "liabilities": "document-prior",
    "equity": "document-prior",
    "trade_receivables": "document-prior",
+   "trade_payables": "document-prior",
    "customer_advances": "document-prior",
+   "equity_owners": "document-prior",
    "revenue": "document-prior",
    "cost_of_sales": "document-prior",
    "gross_profit": "document-prior",
    "sga": "document-prior",
    "operating_profit": "document-prior",
+   "pretax_income": "document-prior",
+   "income_tax": "document-prior",
    "net_income": "document-prior",
    "operating_cashflow": "document-prior",
    "investing_cashflow": "document-prior",
-   "financing_cashflow": "document-prior"
+   "capex_ppe": "document-prior",
+   "capex_intangible": "document-prior",
+   "financing_cashflow": "document-prior",
+   "dep_amort": "note-prior",
+   "interest_expense": "note-prior"
   },
   "receipt": "20110331002986",
   "report_name": "사업보고서 (2010.12)",
@@ -170,6 +214,8 @@
    "cash": 1665159077185,
    "short_term_deposits": 86170015160,
    "contract_assets": 2364853293801,
+   "inventories": 1367338742676,
+   "ppe": 1085868720793,
    "assets": 11122634950655,
    "current_liabilities": 5805508811790,
    "contract_liabilities": 952617355853,
@@ -184,9 +230,13 @@
    "gross_profit": 248674217152,
    "sga": 97800587700,
    "operating_profit": 142634155150,
+   "pretax_income": 149084776138,
+   "income_tax": 21539708951,
    "net_income": 127545067187,
    "operating_cashflow": -36784534648,
    "investing_cashflow": -4663849647,
+   "capex_ppe": 9087311722,
+   "capex_intangible": 484591067,
    "financing_cashflow": -34478312539
   },
   "sources": {
@@ -194,6 +244,8 @@
    "cash": "document",
    "short_term_deposits": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
    "contract_liabilities": "document",
@@ -208,9 +260,13 @@
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "financing_cashflow": "document"
   },
   "receipt": "20110530001072",
@@ -230,8 +286,11 @@
    "short_term_deposits": 48508927336,
    "trade_receivables": 725821580957,
    "contract_assets": 2827193463853,
+   "inventories": 1259357395346,
+   "ppe": 1108770575241,
    "assets": 11202937222954,
    "current_liabilities": 5588030566788,
+   "trade_payables": 1495354262358,
    "customer_advances": 2010448089139,
    "contract_liabilities": 1039752707925,
    "short_term_borrowings": 305295577670,
@@ -239,15 +298,20 @@
    "bonds": 697665459623,
    "long_term_borrowings": 161071907420,
    "liabilities": 7150332798088,
+   "equity_owners": 3928970818236,
    "equity": 4052604424866,
    "revenue": 5155505661139,
    "cost_of_sales": 4603668801145,
    "gross_profit": 551836859994,
    "sga": 210386759353,
    "operating_profit": 330615647980,
+   "pretax_income": 396756909693,
+   "income_tax": 86219663247,
    "net_income": 310537246446,
    "operating_cashflow": -564021182642,
    "investing_cashflow": 53130799702,
+   "capex_ppe": 20983938622,
+   "capex_intangible": 4599065137,
    "financing_cashflow": 197062511958
   },
   "sources": {
@@ -256,8 +320,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -265,15 +332,20 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "financing_cashflow": "document"
   },
   "receipt": "20110829000609",
@@ -293,8 +365,11 @@
    "short_term_deposits": 49825840688,
    "trade_receivables": 762708828643,
    "contract_assets": 3138284523122,
+   "inventories": 1234849827063,
+   "ppe": 1093863822385,
    "assets": 11515317200631,
    "current_liabilities": 5429684689462,
+   "trade_payables": 1685210993910,
    "customer_advances": 1847506471675,
    "contract_liabilities": 932360727684,
    "short_term_borrowings": 286276910542,
@@ -302,15 +377,20 @@
    "bonds": 897071056200,
    "long_term_borrowings": 250723167401,
    "liabilities": 7263108463382,
+   "equity_owners": 4108897627521,
    "equity": 4252208737249,
    "revenue": 8117242444497,
    "cost_of_sales": 7207932119043,
    "gross_profit": 909310325454,
    "sga": 313103264158,
    "operating_profit": 601392485203,
+   "pretax_income": 695150363357,
+   "income_tax": 146387514046,
    "net_income": 548762849311,
    "operating_cashflow": -840868804611,
    "investing_cashflow": 16527365002,
+   "capex_ppe": 38719637613,
+   "capex_intangible": 6910845319,
    "financing_cashflow": 448465431508
   },
   "sources": {
@@ -319,8 +399,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -328,15 +411,20 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "financing_cashflow": "document"
   },
   "receipt": "20111129000857",
@@ -356,8 +444,11 @@
    "short_term_deposits": 86911531691,
    "trade_receivables": 986992068164,
    "contract_assets": 2420614730129,
+   "inventories": 1282738298820,
+   "ppe": 1120325070244,
    "assets": 11871889261429,
    "current_liabilities": 5772908827246,
+   "trade_payables": 2206488315140,
    "customer_advances": 1590476058886,
    "contract_liabilities": 789900640755,
    "short_term_borrowings": 169671584044,
@@ -365,16 +456,23 @@
    "bonds": 897322581943,
    "long_term_borrowings": 181196848726,
    "liabilities": 7508415007267,
+   "equity_owners": 4203074542475,
    "equity": 4363474254162,
    "revenue": 11920166872424,
    "cost_of_sales": 10751855575837,
    "gross_profit": 1168311296587,
    "sga": 432715100226,
    "operating_profit": 754006972813,
+   "pretax_income": 850657303519,
+   "income_tax": 165517974677,
    "net_income": 685139328842,
    "operating_cashflow": -155752179761,
    "investing_cashflow": -68725220889,
-   "financing_cashflow": 345076982649
+   "capex_ppe": 68130319573,
+   "capex_intangible": 7329982291,
+   "financing_cashflow": 345076982649,
+   "dep_amort": 76499000000,
+   "interest_expense": 42676000000
   },
   "sources": {
    "current_assets": "document",
@@ -382,8 +480,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -391,16 +492,23 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
-   "financing_cashflow": "document"
+   "capex_ppe": "document",
+   "capex_intangible": "document",
+   "financing_cashflow": "document",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20120330002259",
   "report_name": "[첨부추가]사업보고서 (2011.12)",
@@ -419,8 +527,11 @@
    "short_term_deposits": 198932000000,
    "trade_receivables": 1341116000000,
    "contract_assets": 2506375000000,
+   "inventories": 1411587000000,
+   "ppe": 1168769000000,
    "assets": 12258832000000,
    "current_liabilities": 5885210000000,
+   "trade_payables": 1868519000000,
    "customer_advances": 1883120000000,
    "contract_liabilities": 747616000000,
    "short_term_borrowings": 244970000000,
@@ -428,14 +539,19 @@
    "bonds": 997178000000,
    "long_term_borrowings": 212726000000,
    "liabilities": 7785728000000,
+   "equity_owners": 4306664000000,
    "equity": 4473104000000,
    "revenue": 2705571000000,
    "cost_of_sales": 2461555000000,
    "gross_profit": 244016000000,
    "sga": 97446000000,
    "operating_profit": 153188000000,
+   "pretax_income": 161492000000,
+   "income_tax": 36693000000,
    "operating_cashflow": -476792000000,
    "investing_cashflow": -142197000000,
+   "capex_ppe": 11066000000,
+   "capex_intangible": 1564000000,
    "financing_cashflow": 180904000000,
    "net_income": 124799000000
   },
@@ -445,8 +561,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -454,14 +573,19 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "financing_cashflow": "document",
    "net_income": "document-prior"
   },
@@ -483,8 +607,11 @@
    "short_term_deposits": 193698000000,
    "trade_receivables": 1461501000000,
    "contract_assets": 2557341000000,
+   "inventories": 1275840000000,
+   "ppe": 1134839000000,
    "assets": 12236813000000,
    "current_liabilities": 5934033000000,
+   "trade_payables": 1691980000000,
    "customer_advances": 1896456000000,
    "contract_liabilities": 684277000000,
    "short_term_borrowings": 493399000000,
@@ -492,14 +619,19 @@
    "bonds": 797716000000,
    "long_term_borrowings": 266339000000,
    "liabilities": 7691213000000,
+   "equity_owners": 4367634000000,
    "equity": 4545600000000,
    "revenue": 5886916000000,
    "cost_of_sales": 5368215000000,
    "gross_profit": 518701000000,
    "sga": 214662000000,
    "operating_profit": 320018000000,
+   "pretax_income": 325196000000,
+   "income_tax": 81960000000,
    "operating_cashflow": -794558000000,
    "investing_cashflow": -180381000000,
+   "capex_ppe": 26308000000,
+   "capex_intangible": 3263000000,
    "financing_cashflow": 338825000000,
    "net_income": 243236000000
   },
@@ -509,8 +641,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -518,14 +653,19 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "financing_cashflow": "document",
    "net_income": "document-prior"
   },
@@ -547,8 +687,11 @@
    "short_term_deposits": 204668000000,
    "trade_receivables": 1139789000000,
    "contract_assets": 2859361000000,
+   "inventories": 1255339000000,
+   "ppe": 1114323000000,
    "assets": 12582347000000,
    "current_liabilities": 6200196000000,
+   "trade_payables": 1853807000000,
    "customer_advances": 1908163000000,
    "contract_liabilities": 693226000000,
    "short_term_borrowings": 358595000000,
@@ -556,14 +699,19 @@
    "bonds": 797916000000,
    "long_term_borrowings": 193815000000,
    "liabilities": 7877624000000,
+   "equity_owners": 4512567000000,
    "equity": 4704723000000,
    "revenue": 9206197000000,
    "cost_of_sales": 8327999000000,
    "gross_profit": 878198000000,
    "sga": 354432000000,
    "operating_profit": 538849000000,
+   "pretax_income": 544426000000,
+   "income_tax": 128943000000,
    "operating_cashflow": -266904000000,
    "investing_cashflow": -211226000000,
+   "capex_ppe": 42362000000,
+   "capex_intangible": 5698000000,
    "financing_cashflow": 243330000000,
    "net_income": 415483000000
   },
@@ -573,8 +721,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -582,14 +733,19 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "financing_cashflow": "document",
    "net_income": "document-prior"
   },
@@ -611,8 +767,11 @@
    "short_term_deposits": 106619000000,
    "trade_receivables": 1410161000000,
    "contract_assets": 2830547000000,
+   "inventories": 1128456000000,
+   "ppe": 1144030000000,
    "assets": 12746829000000,
    "current_liabilities": 6149756000000,
+   "trade_payables": 2204102000000,
    "customer_advances": 1533432000000,
    "contract_liabilities": 706489000000,
    "short_term_borrowings": 185900000000,
@@ -620,16 +779,23 @@
    "bonds": 847563000000,
    "long_term_borrowings": 223380000000,
    "liabilities": 7990893000000,
+   "equity_owners": 4548542000000,
    "equity": 4755936000000,
    "revenue": 13324821000000,
    "cost_of_sales": 12075949000000,
    "gross_profit": 1248872000000,
    "sga": 488464000000,
    "operating_profit": 760408000000,
+   "pretax_income": 737010000000,
+   "income_tax": 170050000000,
    "net_income": 566960000000,
    "operating_cashflow": 28135000000,
    "investing_cashflow": -208077000000,
-   "financing_cashflow": 185506000000
+   "capex_ppe": 97084000000,
+   "capex_intangible": 7070000000,
+   "financing_cashflow": 185506000000,
+   "dep_amort": 85803000000,
+   "interest_expense": 61046000000
   },
   "sources": {
    "current_assets": "document",
@@ -637,8 +803,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -646,16 +815,23 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
-   "financing_cashflow": "document"
+   "capex_ppe": "document",
+   "capex_intangible": "document",
+   "financing_cashflow": "document",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20130329002403",
   "report_name": "사업보고서 (2012.12)",
@@ -674,8 +850,11 @@
    "short_term_deposits": 383318000000,
    "trade_receivables": 1276563000000,
    "contract_assets": 3179513000000,
+   "inventories": 1083912000000,
+   "ppe": 1142633000000,
    "assets": 12832763000000,
    "current_liabilities": 5886640000000,
+   "trade_payables": 1849142000000,
    "customer_advances": 1901535000000,
    "contract_liabilities": 498525000000,
    "short_term_borrowings": 114427000000,
@@ -683,15 +862,20 @@
    "bonds": 847758000000,
    "long_term_borrowings": 475307000000,
    "liabilities": 8009786000000,
+   "equity_owners": 4597085000000,
    "equity": 4822977000000,
    "revenue": 2861221000000,
    "cost_of_sales": 2590228000000,
    "gross_profit": 270993000000,
    "sga": 92356000000,
    "operating_profit": 178637000000,
+   "pretax_income": 190429000000,
+   "income_tax": 40741000000,
    "net_income": 149688000000,
    "operating_cashflow": -330283000000,
    "investing_cashflow": -302100000000,
+   "capex_ppe": 24115000000,
+   "capex_intangible": 2665000000,
    "financing_cashflow": 146034000000
   },
   "sources": {
@@ -700,8 +884,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -709,15 +896,20 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "financing_cashflow": "document"
   },
   "receipt": "20130515001174",
@@ -737,8 +929,11 @@
    "short_term_deposits": 424949000000,
    "trade_receivables": 1260878000000,
    "contract_assets": 3668507000000,
+   "inventories": 1167354000000,
+   "ppe": 1088703000000,
    "assets": 13589858000000,
    "current_liabilities": 6397744000000,
+   "trade_payables": 2149493000000,
    "customer_advances": 1969362000000,
    "contract_liabilities": 738690000000,
    "short_term_borrowings": 206479000000,
@@ -746,15 +941,20 @@
    "bonds": 947337000000,
    "long_term_borrowings": 444450000000,
    "liabilities": 8642770000000,
+   "equity_owners": 4713519000000,
    "equity": 4947088000000,
    "revenue": 6331918000000,
    "cost_of_sales": 5752685000000,
    "gross_profit": 579233000000,
    "sga": 199944000000,
    "operating_profit": 379289000000,
+   "pretax_income": 369140000000,
+   "income_tax": 89511000000,
    "net_income": 279629000000,
    "operating_cashflow": -204258000000,
    "investing_cashflow": -318675000000,
+   "capex_ppe": 69457000000,
+   "capex_intangible": 4256000000,
    "financing_cashflow": 193320000000
   },
   "sources": {
@@ -763,8 +963,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -772,15 +975,20 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "financing_cashflow": "document"
   },
   "receipt": "20130814001009",
@@ -800,8 +1008,11 @@
    "short_term_deposits": 309571000000,
    "trade_receivables": 1306416000000,
    "contract_assets": 4029994000000,
+   "inventories": 1126391000000,
+   "ppe": 1632144000000,
    "assets": 14140177000000,
    "current_liabilities": 6221896000000,
+   "trade_payables": 2074354000000,
    "customer_advances": 1723592000000,
    "contract_liabilities": 791753000000,
    "short_term_borrowings": 253682000000,
@@ -809,15 +1020,20 @@
    "bonds": 847675000000,
    "long_term_borrowings": 1034322000000,
    "liabilities": 8981814000000,
+   "equity_owners": 4859166000000,
    "equity": 5158363000000,
    "revenue": 9866837000000,
    "cost_of_sales": 8978504000000,
    "gross_profit": 888333000000,
    "sga": 302991000000,
    "operating_profit": 585342000000,
+   "pretax_income": 609697000000,
+   "income_tax": 160888000000,
    "net_income": 448809000000,
    "operating_cashflow": -806886000000,
    "investing_cashflow": -209199000000,
+   "capex_ppe": 135619000000,
+   "capex_intangible": 4968000000,
    "financing_cashflow": 464738000000
   },
   "sources": {
@@ -826,8 +1042,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -835,15 +1054,20 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "financing_cashflow": "document"
   },
   "receipt": "20131114001109",
@@ -883,7 +1107,17 @@
    "long_term_borrowings": 601358000000,
    "operating_cashflow": 117468000000,
    "investing_cashflow": -221228000000,
-   "financing_cashflow": 134544000000
+   "financing_cashflow": 134544000000,
+   "pretax_income": 673199000000,
+   "income_tax": 173810000000,
+   "inventories": 1285689000000,
+   "ppe": 1638221000000,
+   "trade_payables": 2418312000000,
+   "equity_owners": 4822604000000,
+   "capex_ppe": 163977000000,
+   "capex_intangible": 5809000000,
+   "dep_amort": 93267000000,
+   "interest_expense": 70007000000
   },
   "sources": {
    "revenue": "document",
@@ -911,7 +1145,17 @@
    "long_term_borrowings": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
-   "financing_cashflow": "document"
+   "financing_cashflow": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
+   "inventories": "document",
+   "ppe": "document",
+   "trade_payables": "document",
+   "equity_owners": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20170622000230",
   "report_name": "[기재정정]사업보고서 (2013.12)",
@@ -931,8 +1175,11 @@
    "short_term_deposits": 246962000000,
    "trade_receivables": 1414994000000,
    "contract_assets": 4206924000000,
+   "inventories": 1244046000000,
+   "ppe": 1648984000000,
    "assets": 14892973000000,
    "current_liabilities": 6581783000000,
+   "trade_payables": 2357495000000,
    "customer_advances": 1760121000000,
    "contract_liabilities": 838231000000,
    "short_term_borrowings": 172363000000,
@@ -940,16 +1187,23 @@
    "bonds": 1246695000000,
    "long_term_borrowings": 762053000000,
    "liabilities": 9619036000000,
+   "equity_owners": 4941812000000,
    "equity": 5273937000000,
    "revenue": 3290554000000,
    "cost_of_sales": 2997440000000,
    "gross_profit": 293114000000,
    "sga": 105460000000,
    "operating_profit": 187654000000,
+   "pretax_income": 164838000000,
+   "income_tax": 45929000000,
    "net_income": 118909000000,
    "operating_cashflow": -396396000000,
    "investing_cashflow": -9794000000,
-   "financing_cashflow": 237949000000
+   "capex_ppe": 36508000000,
+   "capex_intangible": 1946000000,
+   "financing_cashflow": 237949000000,
+   "dep_amort": 26879000000,
+   "interest_expense": 23263000000
   },
   "sources": {
    "current_assets": "document",
@@ -957,8 +1211,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -966,16 +1223,23 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
-   "financing_cashflow": "document"
+   "capex_ppe": "document",
+   "capex_intangible": "document",
+   "financing_cashflow": "document",
+   "dep_amort": "note-prior",
+   "interest_expense": "note-prior"
   },
   "receipt": "20140515001627",
   "report_name": "분기보고서 (2014.03)",
@@ -994,8 +1258,11 @@
    "short_term_deposits": 189157000000,
    "trade_receivables": 2131305000000,
    "contract_assets": 4488118000000,
+   "inventories": 1449864000000,
+   "ppe": 1704255000000,
    "assets": 17150945000000,
    "current_liabilities": 7260221000000,
+   "trade_payables": 2639773000000,
    "customer_advances": 1846162000000,
    "contract_liabilities": 973734000000,
    "short_term_borrowings": 240740000000,
@@ -1003,16 +1270,23 @@
    "bonds": 1147017000000,
    "long_term_borrowings": 994644000000,
    "liabilities": 10536374000000,
+   "equity_owners": 5186102000000,
    "equity": 6614571000000,
    "revenue": 7993442000000,
    "cost_of_sales": 7232241000000,
    "gross_profit": 761201000000,
    "sga": 293979000000,
    "operating_profit": 467222000000,
+   "pretax_income": 371663000000,
+   "income_tax": 95828000000,
    "net_income": 275835000000,
    "operating_cashflow": -654717000000,
    "investing_cashflow": 365249000000,
-   "financing_cashflow": -40687000000
+   "capex_ppe": 76812000000,
+   "capex_intangible": 3627000000,
+   "financing_cashflow": -40687000000,
+   "dep_amort": 67458000000,
+   "interest_expense": 50742000000
   },
   "sources": {
    "current_assets": "document",
@@ -1020,8 +1294,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -1029,16 +1306,23 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
-   "financing_cashflow": "document"
+   "capex_ppe": "document",
+   "capex_intangible": "document",
+   "financing_cashflow": "document",
+   "dep_amort": "note-prior",
+   "interest_expense": "note-prior"
   },
   "receipt": "20140814001591",
   "report_name": "반기보고서 (2014.06)",
@@ -1057,8 +1341,11 @@
    "short_term_deposits": 228875000000,
    "trade_receivables": 1892651000000,
    "contract_assets": 4757765000000,
+   "inventories": 1434073000000,
+   "ppe": 1744074000000,
    "assets": 17856414000000,
    "current_liabilities": 7758476000000,
+   "trade_payables": 2628455000000,
    "customer_advances": 2285004000000,
    "contract_liabilities": 939274000000,
    "short_term_borrowings": 286431000000,
@@ -1066,16 +1353,23 @@
    "bonds": 1445956000000,
    "long_term_borrowings": 635632000000,
    "liabilities": 11071635000000,
+   "equity_owners": 5311711000000,
    "equity": 6784779000000,
    "revenue": 12252608000000,
    "cost_of_sales": 11130138000000,
    "gross_profit": 1122470000000,
    "sga": 424549000000,
    "operating_profit": 697921000000,
+   "pretax_income": 570282000000,
+   "income_tax": 159343000000,
    "net_income": 410939000000,
    "operating_cashflow": -113123000000,
    "investing_cashflow": 326592000000,
-   "financing_cashflow": 98973000000
+   "capex_ppe": 141383000000,
+   "capex_intangible": 5346000000,
+   "financing_cashflow": 98973000000,
+   "dep_amort": 109442000000,
+   "interest_expense": 78462000000
   },
   "sources": {
    "current_assets": "document",
@@ -1083,8 +1377,11 @@
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -1092,16 +1389,23 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
+   "equity_owners": "document",
    "equity": "document",
    "revenue": "document",
    "cost_of_sales": "document",
    "gross_profit": "document",
    "sga": "document",
    "operating_profit": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
    "net_income": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
-   "financing_cashflow": "document"
+   "capex_ppe": "document",
+   "capex_intangible": "document",
+   "financing_cashflow": "document",
+   "dep_amort": "note-prior",
+   "interest_expense": "note-prior"
   },
   "receipt": "20141114001469",
   "report_name": "분기보고서 (2014.09)",
@@ -1140,7 +1444,17 @@
    "long_term_borrowings": 614570000000,
    "operating_cashflow": 426038000000,
    "investing_cashflow": 324555000000,
-   "financing_cashflow": -80221000000
+   "financing_cashflow": -80221000000,
+   "pretax_income": 673017000000,
+   "income_tax": 193677000000,
+   "inventories": 1336864000000,
+   "ppe": 1710644000000,
+   "trade_payables": 2916720000000,
+   "equity_owners": 5291515000000,
+   "capex_ppe": 188053000000,
+   "capex_intangible": 8381000000,
+   "dep_amort": 154059000000,
+   "interest_expense": 105527000000
   },
   "sources": {
    "revenue": "document",
@@ -1168,7 +1482,17 @@
    "long_term_borrowings": "document",
    "operating_cashflow": "document",
    "investing_cashflow": "document",
-   "financing_cashflow": "document"
+   "financing_cashflow": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
+   "inventories": "document",
+   "ppe": "document",
+   "trade_payables": "document",
+   "equity_owners": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20170622000233",
   "report_name": "[기재정정]사업보고서 (2014.12)",
@@ -1194,13 +1518,20 @@
    "operating_cashflow": -327092000000,
    "investing_cashflow": -81924000000,
    "financing_cashflow": 228482000000,
+   "pretax_income": 157734000000,
+   "income_tax": 46049000000,
+   "capex_ppe": 29606000000,
+   "capex_intangible": 2049000000,
    "current_assets": 13591705000000,
    "cash": 2369140000000,
    "short_term_deposits": 321371000000,
    "trade_receivables": 1874006000000,
    "contract_assets": 5135535000000,
+   "inventories": 1313761000000,
+   "ppe": 1703706000000,
    "assets": 18451590000000,
    "current_liabilities": 8001407000000,
+   "trade_payables": 2819055000000,
    "customer_advances": 2305010000000,
    "contract_liabilities": 1065918000000,
    "short_term_borrowings": 290607000000,
@@ -1208,7 +1539,10 @@
    "bonds": 1695304000000,
    "long_term_borrowings": 509276000000,
    "liabilities": 11515833000000,
-   "equity": 6935757000000
+   "equity_owners": 5449901000000,
+   "equity": 6935757000000,
+   "dep_amort": 44976000000,
+   "interest_expense": 26811000000
   },
   "sources": {
    "revenue": "document",
@@ -1222,13 +1556,20 @@
    "operating_cashflow": "document",
    "investing_cashflow": "document",
    "financing_cashflow": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "current_assets": "document",
    "cash": "document",
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -1236,7 +1577,10 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
-   "equity": "document"
+   "equity_owners": "document",
+   "equity": "document",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20150515002676",
   "report_name": "분기보고서 (2015.03)",
@@ -1262,13 +1606,20 @@
    "operating_cashflow": -302614000000,
    "investing_cashflow": -243352000000,
    "financing_cashflow": 360896000000,
+   "pretax_income": 373844000000,
+   "income_tax": 118052000000,
+   "capex_ppe": 69371000000,
+   "capex_intangible": 4366000000,
    "current_assets": 14208921000000,
    "cash": 2363598000000,
    "short_term_deposits": 459260000000,
    "trade_receivables": 1946313000000,
    "contract_assets": 5561444000000,
+   "inventories": 1153235000000,
+   "ppe": 1707281000000,
    "assets": 19190461000000,
    "current_liabilities": 8314329000000,
+   "trade_payables": 2878951000000,
    "customer_advances": 2438861000000,
    "contract_liabilities": 1127721000000,
    "short_term_borrowings": 438548000000,
@@ -1276,7 +1627,10 @@
    "bonds": 1944860000000,
    "long_term_borrowings": 478177000000,
    "liabilities": 12103499000000,
-   "equity": 7086962000000
+   "equity_owners": 5554686000000,
+   "equity": 7086962000000,
+   "dep_amort": 91231000000,
+   "interest_expense": 53190000000
   },
   "sources": {
    "revenue": "document",
@@ -1290,13 +1644,20 @@
    "operating_cashflow": "document",
    "investing_cashflow": "document",
    "financing_cashflow": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "current_assets": "document",
    "cash": "document",
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -1304,7 +1665,10 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
-   "equity": "document"
+   "equity_owners": "document",
+   "equity": "document",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20150817001536",
   "report_name": "반기보고서 (2015.06)",
@@ -1330,13 +1694,20 @@
    "operating_cashflow": 110123000000,
    "investing_cashflow": -809823000000,
    "financing_cashflow": 297681000000,
+   "pretax_income": 596618000000,
+   "income_tax": 177802000000,
+   "capex_ppe": 156276000000,
+   "capex_intangible": 7127000000,
    "current_assets": 14583044000000,
    "cash": 2150565000000,
    "short_term_deposits": 820775000000,
    "trade_receivables": 1907982000000,
    "contract_assets": 5409197000000,
+   "inventories": 1219549000000,
+   "ppe": 1767046000000,
    "assets": 19739234000000,
    "current_liabilities": 8683289000000,
+   "trade_payables": 2748495000000,
    "customer_advances": 2528742000000,
    "contract_liabilities": 1233054000000,
    "short_term_borrowings": 438122000000,
@@ -1344,7 +1715,10 @@
    "bonds": 1845293000000,
    "long_term_borrowings": 466572000000,
    "liabilities": 12462530000000,
-   "equity": 7276704000000
+   "equity_owners": 5701764000000,
+   "equity": 7276704000000,
+   "dep_amort": 133937000000,
+   "interest_expense": 79684000000
   },
   "sources": {
    "revenue": "document",
@@ -1358,13 +1732,20 @@
    "operating_cashflow": "document",
    "investing_cashflow": "document",
    "financing_cashflow": "document",
+   "pretax_income": "document",
+   "income_tax": "document",
+   "capex_ppe": "document",
+   "capex_intangible": "document",
    "current_assets": "document",
    "cash": "document",
    "short_term_deposits": "document",
    "trade_receivables": "document",
    "contract_assets": "document",
+   "inventories": "document",
+   "ppe": "document",
    "assets": "document",
    "current_liabilities": "document",
+   "trade_payables": "document",
    "customer_advances": "document",
    "contract_liabilities": "document",
    "short_term_borrowings": "document",
@@ -1372,7 +1753,10 @@
    "bonds": "document",
    "long_term_borrowings": "document",
    "liabilities": "document",
-   "equity": "document"
+   "equity_owners": "document",
+   "equity": "document",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20151116001747",
   "report_name": "분기보고서 (2015.09)",
@@ -1412,7 +1796,17 @@
    "long_term_borrowings": 459873000000,
    "operating_cashflow": 596001000000,
    "investing_cashflow": -1173812000000,
-   "financing_cashflow": 30709000000
+   "financing_cashflow": 30709000000,
+   "pretax_income": 898137000000,
+   "income_tax": 234359000000,
+   "inventories": 1328564000000,
+   "ppe": 1754185000000,
+   "trade_payables": 2864954000000,
+   "equity_owners": 5720294000000,
+   "capex_ppe": 186517000000,
+   "capex_intangible": 9793000000,
+   "dep_amort": 195824000000,
+   "interest_expense": 103081000000
   },
   "sources": {
    "revenue": "api",
@@ -1440,7 +1834,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20170622000235",
   "report_name": "[기재정정]사업보고서 (2015.12)",
@@ -1576,6 +1980,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs_TradeAndOtherCurrentPayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -1609,7 +2053,17 @@
    "long_term_borrowings": 401962000000,
    "operating_cashflow": -199446000000,
    "investing_cashflow": 205572000000,
-   "financing_cashflow": 56223000000
+   "financing_cashflow": 56223000000,
+   "pretax_income": 120657000000,
+   "income_tax": 33721000000,
+   "inventories": 1154719000000,
+   "ppe": 1770758000000,
+   "trade_payables": 2673446000000,
+   "equity_owners": 5853969000000,
+   "capex_ppe": 49500000000,
+   "capex_intangible": 1387000000,
+   "dep_amort": 44641000000,
+   "interest_expense": 25498000000
   },
   "sources": {
    "revenue": "api",
@@ -1637,7 +2091,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20160516003560",
   "report_name": "분기보고서 (2016.03)",
@@ -1773,6 +2237,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs_TradeAndOtherCurrentPayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -1806,7 +2310,17 @@
    "long_term_borrowings": 398693000000,
    "operating_cashflow": 239457000000,
    "investing_cashflow": 123070000000,
-   "financing_cashflow": 46679000000
+   "financing_cashflow": 46679000000,
+   "pretax_income": 369559000000,
+   "income_tax": 114846000000,
+   "inventories": 1339284000000,
+   "ppe": 1538054000000,
+   "trade_payables": 2884630000000,
+   "equity_owners": 6006117000000,
+   "capex_ppe": 106865000000,
+   "capex_intangible": 3374000000,
+   "dep_amort": 91088000000,
+   "interest_expense": 46255000000
   },
   "sources": {
    "revenue": "api",
@@ -1834,7 +2348,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20160816002090",
   "report_name": "반기보고서 (2016.06)",
@@ -1970,6 +2494,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs_TradeAndOtherCurrentPayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -2003,7 +2567,17 @@
    "long_term_borrowings": 387497000000,
    "operating_cashflow": 421522000000,
    "investing_cashflow": -55211000000,
-   "financing_cashflow": -21986000000
+   "financing_cashflow": -21986000000,
+   "pretax_income": 538057000000,
+   "income_tax": 147737000000,
+   "inventories": 1223721000000,
+   "ppe": 1518212000000,
+   "trade_payables": 2605597000000,
+   "equity_owners": 5979430000000,
+   "capex_ppe": 138988000000,
+   "capex_intangible": 4336000000,
+   "dep_amort": 138838000000,
+   "interest_expense": 70983000000
   },
   "sources": {
    "revenue": "api",
@@ -2031,7 +2605,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20161114002302",
   "report_name": "분기보고서 (2016.09)",
@@ -2167,6 +2751,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs_TradeAndOtherCurrentPayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -2200,7 +2824,17 @@
    "long_term_borrowings": 431693000000,
    "operating_cashflow": 1086520000000,
    "investing_cashflow": -775201000000,
-   "financing_cashflow": -176854000000
+   "financing_cashflow": -176854000000,
+   "pretax_income": 981478000000,
+   "income_tax": 249765000000,
+   "inventories": 1199362000000,
+   "ppe": 1498089000000,
+   "trade_payables": 2666981000000,
+   "equity_owners": 6329025000000,
+   "capex_ppe": 178651000000,
+   "capex_intangible": 8590000000,
+   "dep_amort": 191201000000,
+   "interest_expense": 87061000000
   },
   "sources": {
    "revenue": "api",
@@ -2228,7 +2862,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20170622000239",
   "report_name": "[기재정정]사업보고서 (2016.12)",
@@ -2364,6 +3008,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs_TradeAndOtherCurrentPayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -2397,7 +3081,17 @@
    "long_term_borrowings": 381609000000,
    "operating_cashflow": 225135000000,
    "investing_cashflow": -96794000000,
-   "financing_cashflow": -65663000000
+   "financing_cashflow": -65663000000,
+   "pretax_income": 46813000000,
+   "income_tax": 2908000000,
+   "inventories": 1150608000000,
+   "ppe": 1492402000000,
+   "trade_payables": 2492166000000,
+   "equity_owners": 6185878000000,
+   "capex_ppe": 10107000000,
+   "capex_intangible": 112000000,
+   "dep_amort": 48489000000,
+   "interest_expense": 18457000000
   },
   "sources": {
    "revenue": "api",
@@ -2425,7 +3119,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20170515004898",
   "report_name": "분기보고서 (2017.03)",
@@ -2561,6 +3265,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs_TradeAndOtherCurrentPayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -2594,7 +3338,17 @@
    "long_term_borrowings": 370047000000,
    "operating_cashflow": 472101000000,
    "investing_cashflow": -302069000000,
-   "financing_cashflow": -188992000000
+   "financing_cashflow": -188992000000,
+   "pretax_income": 368630000000,
+   "income_tax": 109241000000,
+   "inventories": 1089039000000,
+   "ppe": 1464541000000,
+   "trade_payables": 2435645000000,
+   "equity_owners": 6392858000000,
+   "capex_ppe": 21038000000,
+   "capex_intangible": 1698000000,
+   "dep_amort": 97370000000,
+   "interest_expense": 36277000000
   },
   "sources": {
    "revenue": "api",
@@ -2622,7 +3376,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20170811001073",
   "report_name": "반기보고서 (2017.06)",
@@ -2758,6 +3522,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs_TradeAndOtherCurrentPayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -2791,7 +3595,17 @@
    "long_term_borrowings": 359664000000,
    "operating_cashflow": -61777000000,
    "investing_cashflow": 64403000000,
-   "financing_cashflow": -219020000000
+   "financing_cashflow": -219020000000,
+   "pretax_income": 540682000000,
+   "income_tax": 170172000000,
+   "inventories": 1905055000000,
+   "ppe": 1426283000000,
+   "trade_payables": 2494377000000,
+   "equity_owners": 6484289000000,
+   "capex_ppe": 30173000000,
+   "capex_intangible": 2820000000,
+   "dep_amort": 145443000000,
+   "interest_expense": 56979000000
   },
   "sources": {
    "revenue": "api",
@@ -2819,7 +3633,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20171114002702",
   "report_name": "분기보고서 (2017.09)",
@@ -2955,6 +3779,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -2988,7 +3852,17 @@
    "long_term_borrowings": 348102000000,
    "operating_cashflow": 514404000000,
    "investing_cashflow": -16252000000,
-   "financing_cashflow": -380936000000
+   "financing_cashflow": -380936000000,
+   "pretax_income": 554829000000,
+   "income_tax": 183265000000,
+   "inventories": 2105517000000,
+   "ppe": 1398791000000,
+   "trade_payables": 2347746000000,
+   "equity_owners": 6467646000000,
+   "capex_ppe": 49766000000,
+   "capex_intangible": 3692000000,
+   "dep_amort": 194561000000,
+   "interest_expense": 76816000000
   },
   "sources": {
    "revenue": "api",
@@ -3016,7 +3890,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20180402004254",
   "report_name": "사업보고서 (2017.12)",
@@ -3152,6 +4036,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -3185,7 +4109,17 @@
    "long_term_borrowings": 348171000000,
    "operating_cashflow": 112431000000,
    "investing_cashflow": -101899000000,
-   "financing_cashflow": 227534000000
+   "financing_cashflow": 227534000000,
+   "pretax_income": 211786000000,
+   "income_tax": 71635000000,
+   "inventories": 2243607000000,
+   "ppe": 1385794000000,
+   "trade_payables": 2348355000000,
+   "equity_owners": 6190330000000,
+   "capex_ppe": 24290000000,
+   "capex_intangible": 108000000,
+   "dep_amort": 48176000000,
+   "interest_expense": 21430000000
   },
   "sources": {
    "revenue": "api",
@@ -3213,7 +4147,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20180515002542",
   "report_name": "분기보고서 (2018.03)",
@@ -3349,6 +4293,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -3382,7 +4366,17 @@
    "long_term_borrowings": 336609000000,
    "operating_cashflow": 188143000000,
    "investing_cashflow": 29965000000,
-   "financing_cashflow": -5054000000
+   "financing_cashflow": -5054000000,
+   "pretax_income": 522823000000,
+   "income_tax": 181022000000,
+   "inventories": 2187310000000,
+   "ppe": 1391640000000,
+   "trade_payables": 2200674000000,
+   "equity_owners": 6377907000000,
+   "capex_ppe": 41423000000,
+   "capex_intangible": 996000000,
+   "dep_amort": 92000000000,
+   "interest_expense": 47680000000
   },
   "sources": {
    "revenue": "api",
@@ -3410,7 +4404,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20180814002125",
   "report_name": "반기보고서 (2018.06)",
@@ -3546,6 +4550,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -3579,7 +4623,17 @@
    "long_term_borrowings": 469927000000,
    "operating_cashflow": 281185000000,
    "investing_cashflow": -198625000000,
-   "financing_cashflow": 121127000000
+   "financing_cashflow": 121127000000,
+   "pretax_income": 708259000000,
+   "income_tax": 239808000000,
+   "inventories": 2065555000000,
+   "ppe": 1383592000000,
+   "trade_payables": 2370577000000,
+   "equity_owners": 6379320000000,
+   "capex_ppe": 94389000000,
+   "capex_intangible": 1113000000,
+   "dep_amort": 133679000000,
+   "interest_expense": 69134000000
   },
   "sources": {
    "revenue": "api",
@@ -3607,7 +4661,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20181114001954",
   "report_name": "분기보고서 (2018.09)",
@@ -3743,6 +4807,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -3776,7 +4880,17 @@
    "long_term_borrowings": 458363000000,
    "operating_cashflow": 249524000000,
    "investing_cashflow": -92043000000,
-   "financing_cashflow": -37290000000
+   "financing_cashflow": -37290000000,
+   "pretax_income": 897862000000,
+   "income_tax": 362559000000,
+   "inventories": 1947052000000,
+   "ppe": 1436574000000,
+   "trade_payables": 2256754000000,
+   "equity_owners": 6274094000000,
+   "capex_ppe": 191903000000,
+   "capex_intangible": 2752000000,
+   "dep_amort": 175573000000,
+   "interest_expense": 91114000000
   },
   "sources": {
    "revenue": "api",
@@ -3804,7 +4918,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20190401004695",
   "report_name": "사업보고서 (2018.12)",
@@ -3940,6 +5064,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -3973,7 +5137,17 @@
    "long_term_borrowings": 491730000000,
    "operating_cashflow": -22798000000,
    "investing_cashflow": 379997000000,
-   "financing_cashflow": 117995000000
+   "financing_cashflow": 117995000000,
+   "pretax_income": 209467000000,
+   "income_tax": 53481000000,
+   "inventories": 1858814000000,
+   "ppe": 1435419000000,
+   "trade_payables": 2139728000000,
+   "equity_owners": 6410214000000,
+   "capex_ppe": 29362000000,
+   "capex_intangible": 1538000000,
+   "dep_amort": 46719000000,
+   "interest_expense": 20590000000
   },
   "sources": {
    "revenue": "api",
@@ -4001,7 +5175,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20190515002208",
   "report_name": "분기보고서 (2019.03)",
@@ -4137,6 +5321,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -4170,7 +5394,17 @@
    "long_term_borrowings": 486067000000,
    "operating_cashflow": 739945000000,
    "investing_cashflow": 279306000000,
-   "financing_cashflow": 22551000000
+   "financing_cashflow": 22551000000,
+   "pretax_income": 462929000000,
+   "income_tax": 114747000000,
+   "inventories": 1804761000000,
+   "ppe": 1470222000000,
+   "trade_payables": 2158495000000,
+   "equity_owners": 6580409000000,
+   "capex_ppe": 54030000000,
+   "capex_intangible": 4100000000,
+   "dep_amort": 89764000000,
+   "interest_expense": 42027000000
   },
   "sources": {
    "revenue": "api",
@@ -4198,7 +5432,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20190814002741",
   "report_name": "반기보고서 (2019.06)",
@@ -4334,6 +5578,46 @@
     "account_id": "ifrs_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -4367,7 +5651,17 @@
    "long_term_borrowings": 364714000000,
    "operating_cashflow": 390918000000,
    "investing_cashflow": 20269000000,
-   "financing_cashflow": -107296000000
+   "financing_cashflow": -107296000000,
+   "pretax_income": 751642000000,
+   "income_tax": 185228000000,
+   "inventories": 1783001000000,
+   "ppe": 1469622000000,
+   "trade_payables": 1900062000000,
+   "equity_owners": 6796882000000,
+   "capex_ppe": 76325000000,
+   "capex_intangible": 10135000000,
+   "dep_amort": 131327000000,
+   "interest_expense": 62623000000
   },
   "sources": {
    "revenue": "api",
@@ -4395,7 +5689,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20191114001760",
   "report_name": "분기보고서 (2019.09)",
@@ -4531,6 +5835,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -4564,7 +5908,17 @@
    "long_term_borrowings": 503417000000,
    "operating_cashflow": 478916000000,
    "investing_cashflow": -151156000000,
-   "financing_cashflow": 15264000000
+   "financing_cashflow": 15264000000,
+   "pretax_income": 798931000000,
+   "income_tax": 225600000000,
+   "inventories": 1723425000000,
+   "ppe": 1419749000000,
+   "trade_payables": 1696586000000,
+   "equity_owners": 6662556000000,
+   "capex_ppe": 109938000000,
+   "capex_intangible": 14991000000,
+   "dep_amort": 185805000000,
+   "interest_expense": 84754000000
   },
   "sources": {
    "revenue": "api",
@@ -4592,7 +5946,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20200330004026",
   "report_name": "사업보고서 (2019.12)",
@@ -4728,6 +6092,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -4761,7 +6165,17 @@
    "long_term_borrowings": 503483000000,
    "operating_cashflow": 1070372000000,
    "investing_cashflow": -13174000000,
-   "financing_cashflow": 204202000000
+   "financing_cashflow": 204202000000,
+   "pretax_income": 287067000000,
+   "income_tax": 90527000000,
+   "inventories": 1597460000000,
+   "ppe": 1415384000000,
+   "trade_payables": 1963585000000,
+   "equity_owners": 6748668000000,
+   "capex_ppe": 30471000000,
+   "capex_intangible": 4374000000,
+   "dep_amort": 47616000000,
+   "interest_expense": 21213000000
   },
   "sources": {
    "revenue": "api",
@@ -4789,7 +6203,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20200515001715",
   "report_name": "분기보고서 (2020.03)",
@@ -4925,6 +6349,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -4958,7 +6422,17 @@
    "long_term_borrowings": 428490000000,
    "operating_cashflow": 964590000000,
    "investing_cashflow": -151889000000,
-   "financing_cashflow": -16883000000
+   "financing_cashflow": -16883000000,
+   "pretax_income": 395422000000,
+   "income_tax": 129455000000,
+   "inventories": 1437033000000,
+   "ppe": 1000371000000,
+   "trade_payables": 1841883000000,
+   "equity_owners": 6755180000000,
+   "capex_ppe": 43518000000,
+   "capex_intangible": 8359000000,
+   "dep_amort": 96094000000,
+   "interest_expense": 43618000000
   },
   "sources": {
    "revenue": "api",
@@ -4986,7 +6460,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20200814001996",
   "report_name": "반기보고서 (2020.06)",
@@ -5122,6 +6606,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -5155,7 +6679,17 @@
    "long_term_borrowings": 408104000000,
    "operating_cashflow": 1002826000000,
    "investing_cashflow": -347752000000,
-   "financing_cashflow": 196492000000
+   "financing_cashflow": 196492000000,
+   "pretax_income": 511175000000,
+   "income_tax": -161366000000,
+   "inventories": 2220000000,
+   "ppe": 973443000000,
+   "trade_payables": 1634373000000,
+   "equity_owners": 6759293000000,
+   "capex_ppe": 61912000000,
+   "capex_intangible": 10760000000,
+   "dep_amort": 141231000000,
+   "interest_expense": 61080000000
   },
   "sources": {
    "revenue": "api",
@@ -5183,7 +6717,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20201116001448",
   "report_name": "분기보고서 (2020.09)",
@@ -5319,6 +6863,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -5352,7 +6936,17 @@
    "long_term_borrowings": 266197000000,
    "operating_cashflow": 1729721000000,
    "investing_cashflow": -1219172000000,
-   "financing_cashflow": 95488000000
+   "financing_cashflow": 95488000000,
+   "pretax_income": 395574000000,
+   "income_tax": 167877000000,
+   "inventories": 1125479000000,
+   "ppe": 967470000000,
+   "trade_payables": 1674607000000,
+   "equity_owners": 6631752000000,
+   "capex_ppe": 73375000000,
+   "capex_intangible": 17107000000,
+   "dep_amort": 175653000000,
+   "interest_expense": 78126000000
   },
   "sources": {
    "revenue": "api",
@@ -5380,7 +6974,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20210317001019",
   "report_name": "사업보고서 (2020.12)",
@@ -5516,6 +7120,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -5549,7 +7193,17 @@
    "long_term_borrowings": 230262000000,
    "operating_cashflow": 477649000000,
    "investing_cashflow": -349756000000,
-   "financing_cashflow": -335409000000
+   "financing_cashflow": -335409000000,
+   "pretax_income": 274432000000,
+   "income_tax": 79998000000,
+   "inventories": 993707000000,
+   "ppe": 957521000000,
+   "trade_payables": 1793508000000,
+   "equity_owners": 6759129000000,
+   "capex_ppe": 16916000000,
+   "capex_intangible": 15441000000,
+   "dep_amort": 43496000000,
+   "interest_expense": 15089000000
   },
   "sources": {
    "revenue": "api",
@@ -5577,7 +7231,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20210517001151",
   "report_name": "분기보고서 (2021.03)",
@@ -5713,6 +7377,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -5746,7 +7450,17 @@
    "long_term_borrowings": 222531000000,
    "operating_cashflow": 190556000000,
    "investing_cashflow": 160735000000,
-   "financing_cashflow": -183477000000
+   "financing_cashflow": -183477000000,
+   "pretax_income": 406648000000,
+   "income_tax": 127280000000,
+   "inventories": 859738000000,
+   "ppe": 969658000000,
+   "trade_payables": 1983834000000,
+   "equity_owners": 6797587000000,
+   "capex_ppe": 64036000000,
+   "capex_intangible": 18453000000,
+   "dep_amort": 89401000000,
+   "interest_expense": 29640000000
   },
   "sources": {
    "revenue": "api",
@@ -5774,7 +7488,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20210817002181",
   "report_name": "반기보고서 (2021.06)",
@@ -5910,6 +7634,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -5943,7 +7707,17 @@
    "long_term_borrowings": 149143000000,
    "operating_cashflow": 615800000000,
    "investing_cashflow": -41734000000,
-   "financing_cashflow": -505860000000
+   "financing_cashflow": -505860000000,
+   "pretax_income": 619635000000,
+   "income_tax": 191891000000,
+   "inventories": 768908000000,
+   "ppe": 977618000000,
+   "trade_payables": 1844270000000,
+   "equity_owners": 6979686000000,
+   "capex_ppe": 74046000000,
+   "capex_intangible": 20386000000,
+   "dep_amort": 122095000000,
+   "interest_expense": 44159000000
   },
   "sources": {
    "revenue": "api",
@@ -5971,7 +7745,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20211115001832",
   "report_name": "분기보고서 (2021.09)",
@@ -6107,6 +7891,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -6140,7 +7964,17 @@
    "long_term_borrowings": 163871000000,
    "operating_cashflow": 1009401000000,
    "investing_cashflow": -798316000000,
-   "financing_cashflow": -492604000000
+   "financing_cashflow": -492604000000,
+   "pretax_income": 854101000000,
+   "income_tax": 299724000000,
+   "inventories": 718247000000,
+   "ppe": 1012128000000,
+   "trade_payables": 2166796000000,
+   "equity_owners": 7216737000000,
+   "capex_ppe": 97600000000,
+   "capex_intangible": 24549000000,
+   "dep_amort": 175899000000,
+   "interest_expense": 58036000000
   },
   "sources": {
    "revenue": "api",
@@ -6168,7 +8002,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20220325001068",
   "report_name": "[기재정정]사업보고서 (2021.12)",
@@ -6304,6 +8148,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -6337,7 +8221,17 @@
    "long_term_borrowings": 259785000000,
    "operating_cashflow": 37042000000,
    "investing_cashflow": 617679000000,
-   "financing_cashflow": -246332000000
+   "financing_cashflow": -246332000000,
+   "pretax_income": 233322000000,
+   "income_tax": 50214000000,
+   "inventories": 694441000000,
+   "ppe": 1016926000000,
+   "trade_payables": 1936735000000,
+   "equity_owners": 7323258000000,
+   "capex_ppe": 24147000000,
+   "capex_intangible": 2393000000,
+   "dep_amort": 41426000000,
+   "interest_expense": 12563000000
   },
   "sources": {
    "revenue": "api",
@@ -6365,7 +8259,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20220516002639",
   "report_name": "분기보고서 (2022.03)",
@@ -6501,6 +8405,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -6534,7 +8478,17 @@
    "long_term_borrowings": 244974000000,
    "operating_cashflow": -314983000000,
    "investing_cashflow": 953589000000,
-   "financing_cashflow": -521415000000
+   "financing_cashflow": -521415000000,
+   "pretax_income": 555050000000,
+   "income_tax": -146998000000,
+   "inventories": 738453000000,
+   "ppe": 1046163000000,
+   "trade_payables": 2497635000000,
+   "equity_owners": 7623045000000,
+   "capex_ppe": 43784000000,
+   "capex_intangible": 3498000000,
+   "dep_amort": 89118000000,
+   "interest_expense": 22639000000
   },
   "sources": {
    "revenue": "api",
@@ -6562,7 +8516,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20220816002063",
   "report_name": "반기보고서 (2022.06)",
@@ -6698,6 +8662,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -6731,7 +8735,17 @@
    "long_term_borrowings": 198952000000,
    "operating_cashflow": -45200000000,
    "investing_cashflow": 1028347000000,
-   "financing_cashflow": -633238000000
+   "financing_cashflow": -633238000000,
+   "pretax_income": 904137000000,
+   "income_tax": 261287000000,
+   "inventories": 861153000000,
+   "ppe": 1098012000000,
+   "trade_payables": 2522604000000,
+   "equity_owners": 8092825000000,
+   "capex_ppe": 101784000000,
+   "capex_intangible": 11238000000,
+   "dep_amort": 136014000000,
+   "interest_expense": 33017000000
   },
   "sources": {
    "revenue": "api",
@@ -6759,7 +8773,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20221114002493",
   "report_name": "분기보고서 (2022.09)",
@@ -6895,6 +8919,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -6928,7 +8992,17 @@
    "long_term_borrowings": 193531000000,
    "operating_cashflow": -143474000000,
    "investing_cashflow": 1853258000000,
-   "financing_cashflow": -658184000000
+   "financing_cashflow": -658184000000,
+   "pretax_income": 753815000000,
+   "income_tax": 282939000000,
+   "inventories": 855394000000,
+   "ppe": 1048810000000,
+   "trade_payables": 2598796000000,
+   "equity_owners": 7686677000000,
+   "capex_ppe": 148404000000,
+   "capex_intangible": 18392000000,
+   "dep_amort": 186440000000,
+   "interest_expense": 43727000000
   },
   "sources": {
    "revenue": "api",
@@ -6956,7 +9030,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20230315001104",
   "report_name": "사업보고서 (2022.12)",
@@ -7092,6 +9176,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -7125,7 +9249,17 @@
    "long_term_borrowings": 250162000000,
    "operating_cashflow": -512010000000,
    "investing_cashflow": 32405000000,
-   "financing_cashflow": -14670000000
+   "financing_cashflow": -14670000000,
+   "pretax_income": 226659000000,
+   "income_tax": 76107000000,
+   "inventories": 848384000000,
+   "ppe": 1119695000000,
+   "trade_payables": 3023787000000,
+   "equity_owners": 7866157000000,
+   "capex_ppe": 71819000000,
+   "capex_intangible": 5492000000,
+   "dep_amort": 50130000000,
+   "interest_expense": 12016000000
   },
   "sources": {
    "revenue": "api",
@@ -7153,7 +9287,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20230515001656",
   "report_name": "분기보고서 (2023.03)",
@@ -7289,6 +9433,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -7322,7 +9506,17 @@
    "long_term_borrowings": 590181000000,
    "operating_cashflow": -969813000000,
    "investing_cashflow": 254232000000,
-   "financing_cashflow": 289752000000
+   "financing_cashflow": 289752000000,
+   "pretax_income": 466789000000,
+   "income_tax": 103878000000,
+   "inventories": 837080000000,
+   "ppe": 1146601000000,
+   "trade_payables": 3516290000000,
+   "equity_owners": 8026742000000,
+   "capex_ppe": 111767000000,
+   "capex_intangible": 6809000000,
+   "dep_amort": 103167000000,
+   "interest_expense": 26186000000
   },
   "sources": {
    "revenue": "api",
@@ -7350,7 +9544,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20230811002236",
   "report_name": "반기보고서 (2023.06)",
@@ -7486,6 +9690,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "dart_ShortTermTradePayables",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업소유주지분",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -7519,7 +9763,17 @@
    "long_term_borrowings": 569825000000,
    "operating_cashflow": -1507080000000,
    "investing_cashflow": 392895000000,
-   "financing_cashflow": 329336000000
+   "financing_cashflow": 329336000000,
+   "pretax_income": 743457000000,
+   "income_tax": 199221000000,
+   "inventories": 811919000000,
+   "ppe": 1162931000000,
+   "trade_payables": 4021162000000,
+   "equity_owners": 8230788000000,
+   "capex_ppe": 148387000000,
+   "capex_intangible": 9074000000,
+   "dep_amort": 162342000000,
+   "interest_expense": 44227000000
   },
   "sources": {
    "revenue": "api",
@@ -7547,7 +9801,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20231114002527",
   "report_name": "분기보고서 (2023.09)",
@@ -7683,6 +9947,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세차감전순이익",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "-표준계정코드 미사용-",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -7716,7 +10020,17 @@
    "long_term_borrowings": 563609000000,
    "operating_cashflow": -714716000000,
    "investing_cashflow": 562566000000,
-   "financing_cashflow": 365989000000
+   "financing_cashflow": 365989000000,
+   "pretax_income": 939545000000,
+   "income_tax": 285264000000,
+   "inventories": 815625000000,
+   "ppe": 1204520000000,
+   "trade_payables": 3959030000000,
+   "equity_owners": 8136651000000,
+   "capex_ppe": 222144000000,
+   "capex_intangible": 14896000000,
+   "dep_amort": 202987000000,
+   "interest_expense": 64062000000
   },
   "sources": {
    "revenue": "api",
@@ -7744,7 +10058,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20240329003141",
   "report_name": "[기재정정]사업보고서 (2023.12)",
@@ -7880,6 +10204,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "투자활동으로 분류된 유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "투자활동으로 분류된 무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -7913,7 +10277,17 @@
    "long_term_borrowings": 651338000000,
    "operating_cashflow": -1152470000000,
    "investing_cashflow": -206201000000,
-   "financing_cashflow": 332354000000
+   "financing_cashflow": 332354000000,
+   "pretax_income": 302796000000,
+   "income_tax": 94433000000,
+   "inventories": 791857000000,
+   "ppe": 1256821000000,
+   "trade_payables": 4233900000000,
+   "equity_owners": 8274298000000,
+   "capex_ppe": 70248000000,
+   "capex_intangible": 6658000000,
+   "dep_amort": 51847000000,
+   "interest_expense": 26624000000
   },
   "sources": {
    "revenue": "api",
@@ -7941,7 +10315,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20240516002107",
   "report_name": "분기보고서 (2024.03)",
@@ -8077,6 +10461,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "투자활동으로 분류된 유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "투자활동으로 분류된 무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -8110,7 +10534,17 @@
    "long_term_borrowings": 406843000000,
    "operating_cashflow": -1343817000000,
    "investing_cashflow": -36651000000,
-   "financing_cashflow": 169384000000
+   "financing_cashflow": 169384000000,
+   "pretax_income": 550613000000,
+   "income_tax": 196133000000,
+   "inventories": 793150000000,
+   "ppe": 1260532000000,
+   "trade_payables": 4752156000000,
+   "equity_owners": 8487587000000,
+   "capex_ppe": 101357000000,
+   "capex_intangible": 10116000000,
+   "dep_amort": 107827000000,
+   "interest_expense": 54150000000
   },
   "sources": {
    "revenue": "api",
@@ -8138,7 +10572,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20240814002457",
   "report_name": "반기보고서 (2024.06)",
@@ -8274,6 +10718,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "투자활동으로 분류된 유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "투자활동으로 분류된 무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -8307,7 +10791,17 @@
    "long_term_borrowings": 402071000000,
    "operating_cashflow": -707365000000,
    "investing_cashflow": 70186000000,
-   "financing_cashflow": 119913000000
+   "financing_cashflow": 119913000000,
+   "pretax_income": 635625000000,
+   "income_tax": 241039000000,
+   "inventories": 813778000000,
+   "ppe": 1266975000000,
+   "trade_payables": 4394721000000,
+   "equity_owners": 8436285000000,
+   "capex_ppe": 142228000000,
+   "capex_intangible": 22187000000,
+   "dep_amort": 164229000000,
+   "interest_expense": 81068000000
   },
   "sources": {
    "revenue": "api",
@@ -8335,7 +10829,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20241114002820",
   "report_name": "분기보고서 (2024.09)",
@@ -8471,6 +10975,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "투자활동으로 분류된 유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "투자활동으로 분류된 무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -8504,7 +11048,17 @@
    "long_term_borrowings": 598212000000,
    "operating_cashflow": -118800000000,
    "investing_cashflow": 211699000000,
-   "financing_cashflow": 733741000000
+   "financing_cashflow": 733741000000,
+   "pretax_income": -985717000000,
+   "income_tax": -219496000000,
+   "inventories": 776511000000,
+   "ppe": 1289154000000,
+   "trade_payables": 4038662000000,
+   "equity_owners": 8025410000000,
+   "capex_ppe": 178853000000,
+   "capex_intangible": 20491000000,
+   "dep_amort": 221974000000,
+   "interest_expense": 100546000000
   },
   "sources": {
    "revenue": "api",
@@ -8532,7 +11086,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20251017000151",
   "report_name": "[기재정정]사업보고서 (2024.12)",
@@ -8668,6 +11232,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -8701,7 +11305,16 @@
    "long_term_borrowings": 444687000000,
    "operating_cashflow": -1209151000000,
    "investing_cashflow": -37029000000,
-   "financing_cashflow": -46269000000
+   "financing_cashflow": -46269000000,
+   "pretax_income": 205285000000,
+   "income_tax": 38543000000,
+   "inventories": 785654000000,
+   "ppe": 1205213000000,
+   "equity_owners": 8092436000000,
+   "capex_ppe": 15714000000,
+   "capex_intangible": 2854000000,
+   "dep_amort": 41496000000,
+   "interest_expense": 30322000000
   },
   "sources": {
    "revenue": "api",
@@ -8729,7 +11342,16 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20250515001248",
   "report_name": "분기보고서 (2025.03)",
@@ -8865,6 +11487,41 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -8898,7 +11555,17 @@
    "long_term_borrowings": 434489000000,
    "operating_cashflow": -1889152000000,
    "investing_cashflow": 43721000000,
-   "financing_cashflow": -12955000000
+   "financing_cashflow": -12955000000,
+   "pretax_income": 405427000000,
+   "income_tax": 80101000000,
+   "inventories": 763258000000,
+   "ppe": 1200223000000,
+   "trade_payables": 4289220000000,
+   "equity_owners": 7989519000000,
+   "capex_ppe": 36842000000,
+   "capex_intangible": 6859000000,
+   "dep_amort": 99701000000,
+   "interest_expense": 58799000000
   },
   "sources": {
    "revenue": "api",
@@ -8926,7 +11593,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20250814002545",
   "report_name": "반기보고서 (2025.06)",
@@ -9062,6 +11739,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -9095,7 +11812,17 @@
    "long_term_borrowings": 782103000000,
    "operating_cashflow": -2395721000000,
    "investing_cashflow": 26988000000,
-   "financing_cashflow": 491230000000
+   "financing_cashflow": 491230000000,
+   "pretax_income": 489379000000,
+   "income_tax": 96227000000,
+   "inventories": 574026000000,
+   "ppe": 1215656000000,
+   "trade_payables": 4412366000000,
+   "equity_owners": 8108623000000,
+   "capex_ppe": 66515000000,
+   "capex_intangible": 9114000000,
+   "dep_amort": 149512000000,
+   "interest_expense": 90111000000
   },
   "sources": {
    "revenue": "api",
@@ -9123,7 +11850,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20251114001296",
   "report_name": "분기보고서 (2025.09)",
@@ -9259,6 +11996,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -9292,7 +12069,17 @@
    "long_term_borrowings": 579678000000,
    "operating_cashflow": -748259000000,
    "investing_cashflow": 25227000000,
-   "financing_cashflow": 434213000000
+   "financing_cashflow": 434213000000,
+   "pretax_income": 646825000000,
+   "income_tax": 87757000000,
+   "inventories": 747044000000,
+   "ppe": 1225081000000,
+   "trade_payables": 3966463000000,
+   "equity_owners": 8264726000000,
+   "capex_ppe": 107202000000,
+   "capex_intangible": 8660000000,
+   "dep_amort": 200916000000,
+   "interest_expense": 122101000000
   },
   "sources": {
    "revenue": "api",
@@ -9320,7 +12107,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20260318001395",
   "report_name": "사업보고서 (2025.12)",
@@ -9456,6 +12253,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -9489,7 +12326,17 @@
    "long_term_borrowings": 506755000000,
    "operating_cashflow": -1599624000000,
    "investing_cashflow": -206601000000,
-   "financing_cashflow": 277293000000
+   "financing_cashflow": 277293000000,
+   "pretax_income": 273505000000,
+   "income_tax": 66752000000,
+   "inventories": 736918000000,
+   "ppe": 1719329000000,
+   "trade_payables": 3714521000000,
+   "equity_owners": 9133499000000,
+   "capex_ppe": 49415000000,
+   "capex_intangible": 957000000,
+   "dep_amort": 56133000000,
+   "interest_expense": 43517000000
   },
   "sources": {
    "revenue": "api",
@@ -9517,7 +12364,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20260515002899",
   "report_name": "분기보고서 (2026.03)",
@@ -9653,6 +12510,46 @@
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
     "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "무형자산의 취득",
+    "column": "thstrm_amount"
    }
   }
  },
@@ -9686,7 +12583,17 @@
    "long_term_borrowings": 446358000000,
    "operating_cashflow": -1677087000000,
    "investing_cashflow": -113205000000,
-   "financing_cashflow": 403558000000
+   "financing_cashflow": 403558000000,
+   "pretax_income": 513880000000,
+   "income_tax": 150139000000,
+   "inventories": 927083000000,
+   "ppe": 1824501000000,
+   "trade_payables": 3880094000000,
+   "equity_owners": 9271918000000,
+   "capex_ppe": 176450000000,
+   "capex_intangible": 4522000000,
+   "dep_amort": 105032000000,
+   "interest_expense": 93068000000
   },
   "sources": {
    "revenue": "api",
@@ -9714,7 +12621,17 @@
    "long_term_borrowings": "api",
    "operating_cashflow": "api",
    "investing_cashflow": "api",
-   "financing_cashflow": "api"
+   "financing_cashflow": "api",
+   "pretax_income": "api",
+   "income_tax": "api",
+   "inventories": "api",
+   "ppe": "api",
+   "trade_payables": "api",
+   "equity_owners": "api",
+   "capex_ppe": "api",
+   "capex_intangible": "api",
+   "dep_amort": "note",
+   "interest_expense": "note"
   },
   "receipt": "20260814003360",
   "report_name": "반기보고서 (2026.06)",
@@ -9849,6 +12766,46 @@
    "financing_cashflow": {
     "account_id": "ifrs-full_CashFlowsFromUsedInFinancingActivities",
     "account_name": "재무활동으로 인한 현금흐름",
+    "column": "thstrm_amount"
+   },
+   "pretax_income": {
+    "account_id": "ifrs-full_ProfitLossBeforeTax",
+    "account_name": "법인세비용차감전순이익(손실)",
+    "column": "thstrm_add_amount"
+   },
+   "income_tax": {
+    "account_id": "ifrs-full_IncomeTaxExpenseContinuingOperations",
+    "account_name": "법인세비용(수익)",
+    "column": "thstrm_add_amount"
+   },
+   "inventories": {
+    "account_id": "ifrs-full_Inventories",
+    "account_name": "재고자산",
+    "column": "thstrm_amount"
+   },
+   "ppe": {
+    "account_id": "ifrs-full_PropertyPlantAndEquipment",
+    "account_name": "유형자산",
+    "column": "thstrm_amount"
+   },
+   "trade_payables": {
+    "account_id": "ifrs-full_TradeAndOtherCurrentPayablesToTradeSuppliers",
+    "account_name": "매입채무",
+    "column": "thstrm_amount"
+   },
+   "equity_owners": {
+    "account_id": "ifrs-full_EquityAttributableToOwnersOfParent",
+    "account_name": "지배기업의 소유주에게 귀속되는 자본",
+    "column": "thstrm_amount"
+   },
+   "capex_ppe": {
+    "account_id": "ifrs-full_PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities",
+    "account_name": "유형자산의 취득",
+    "column": "thstrm_amount"
+   },
+   "capex_intangible": {
+    "account_id": "ifrs-full_PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities",
+    "account_name": "무형자산의 취득",
     "column": "thstrm_amount"
    }
   }

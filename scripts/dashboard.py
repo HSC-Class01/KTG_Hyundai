@@ -192,6 +192,64 @@ def line_chart(xlabels, values, *, color, ticks_fmt, tips, labels=None, refs=(),
             f'<div class="pa">{_grid(lo, hi, ticks)}{"".join(marks)}{"".join(slots)}</div>{_xa(xlabels)}</div>')
 
 
+def multi_line_chart(xlabels, series, *, ticks_fmt, tips, refs=(), height=210, end_fmt=None):
+    """같은 단위의 꺾은선 여러 개. series: [{'name', 'values', 'color', 'dash'}]. 끝점 오른쪽에 값을 적습니다."""
+    n = len(xlabels)
+    vals = [x for sr in series for x in sr["values"] if x is not None]
+    if not vals:
+        return '<p class="chart-note">표시할 숫자가 없습니다.</p>'
+    lo, hi, ticks = axis(vals, include=[r[0] for r in refs])
+    span = hi - lo
+
+    def yp(v):
+        return (v - lo) / span * 100
+
+    lines, marks = [], []
+    for sr in series:
+        segs, cur = [], []
+        for i, v in enumerate(sr["values"]):
+            if v is None:
+                if cur:
+                    segs.append(cur)
+                cur = []
+                continue
+            cur.append((i, v))
+        if cur:
+            segs.append(cur)
+        dash = ' stroke-dasharray="5 4"' if sr.get("dash") else ""
+        for seg in segs:
+            if len(seg) == 1:
+                i, v = seg[0]
+                marks.append(f'<i class="dt" style="left:{(i + 0.5) / n * 100:.3f}%;bottom:{yp(v):.3f}%;--c:var({sr["color"]})"></i>')
+                continue
+            pts = " ".join(f"{(i + 0.5) / n * 1000:.1f},{(1 - (v - lo) / span) * 1000:.1f}" for i, v in seg)
+            lines.append(f'<polyline points="{pts}" style="stroke:var({sr["color"]})"{dash}/>')
+    out = [f'<svg viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">{"".join(lines)}</svg>']
+    for value, text, side in refs:
+        out.append(f'<i class="rl" style="bottom:{yp(value):.3f}%"></i>')
+        if text:
+            out.append(f'<span class="rlab {side}" style="bottom:{yp(value):.3f}%">{esc(text)}</span>')
+    ends = []
+    for sr in series:
+        idx = [i for i, v in enumerate(sr["values"]) if v is not None]
+        if idx:
+            i = idx[-1]
+            ends.append([yp(sr["values"][i]) / 100 * height, i, sr["values"][i], sr])
+    ends.sort(key=lambda e: e[0])
+    for k in range(1, len(ends)):     # 끝 값 글자가 겹치지 않게 14px 이상 띄웁니다
+        ends[k][0] = max(ends[k][0], ends[k - 1][0] + 14)
+    for ypx, i, v, sr in ends:
+        out.append(f'<i class="dt" style="left:{(i + 0.5) / n * 100:.3f}%;bottom:{yp(v):.3f}%;--c:var({sr["color"]})"></i>')
+        out.append(f'<b class="el" style="bottom:{ypx:.1f}px;--c:var({sr["color"]})">{esc((end_fmt or ticks_fmt)(v))}</b>')
+    slots = []
+    for i in range(n):
+        title, rows, note = tips(i)
+        slots.append(f'<div class="slot" style="left:{i / n * 100:.4f}%;width:{100 / n:.4f}%"'
+                     f'{tip_attr(title, rows, note)}></div>')
+    return (f'<div class="plot lc ml" style="--h:{height}px;--n:{n}">{_y_axis(lo, hi, ticks, ticks_fmt)}'
+            f'<div class="pa">{_grid(lo, hi, ticks)}{"".join(marks)}{"".join(out)}{"".join(slots)}</div>{_xa(xlabels)}</div>')
+
+
 def sparkline(values, color="--data", zero=False):
     vals = [v for v in values if v is not None]
     if len(vals) < 2:
@@ -249,7 +307,7 @@ def figure(fid, title, sub, body, *, legend_html="", note=None, table_html=None,
 
 def chip(verdict):
     tone, word = verdict
-    icon = {"good": "✓", "warn": "!", "crit": "✕"}[tone]
+    icon = {"good": "✓", "warn": "!", "crit": "✕", "info": "i"}[tone]
     return f'<span class="chip {tone}"><i class="ic" aria-hidden="true">{icon}</i>{esc(word)}</span>'
 
 
@@ -298,62 +356,90 @@ def balance_rows(v):
 # ---------------------------------------------------------------------------
 # 4. 화면 위쪽: 판정 카드
 # ---------------------------------------------------------------------------
-def kpis(v, vd):
+def kpis(v, vd, ctx):
+    """가이드 6단계마다 카드 하나: 판정 · 대표 숫자 · 비교 · 추세선."""
     first, last = v.annual[0], v.annual[-1]
     y0, yl = first["year"], last["year"]
     tiles = []
 
-    # 성장성
+    # 1 매출 성장
     rev0, revl = first["values"]["revenue"], last["values"]["revenue"]
-    ttm_rev = v.ttm("revenue")
-    tiles.append(("성장성 · 매출액", vd["growth"], an.jo(revl), "조 원", f"{yl}년 연간",
-                  f"{y0}년 {an.jo(rev0)}조 원의 **{revl / rev0:.2f}배** · 연평균 {an.pct(vd['cagr'])}%",
-                  f"최근 4개 분기 합계 {an.jo(ttm_rev)}조 원" if ttm_rev else "",
-                  sparkline(v.series("revenue")), "1년 동안 공사·분양으로 번 돈"))
-
-    # 수익성
-    m0, ml = first["ratios"]["operating_margin_pct"], last["ratios"]["operating_margin_pct"]
-    m_now = vd["margin_now"]
-    basis = "최근 4개 분기" if v.ttm("revenue") else f"{yl}년 연간"
-    lq = v.quarters[-1] if v.quarters else None
-    now = (f"{short_q(lq)} {an.pct(lq['ratios'].get('operating_margin_pct'))}%" if lq else "")
-    spark_vals = [x for x in rolling_ttm(v.quarters, "operating_profit", "revenue")]
-    tiles.append(("수익성 · 영업이익률", vd["profit"], an.pct(m_now), "%", basis,
-                  f"{y0}년 {an.pct(m0)}% → {yl}년 {an.pct(ml)}%", now,
-                  sparkline(spark_vals, zero=True), "매출 100원당 본업으로 남긴 돈 (선: 최근 4개 분기 기준)"))
-
-    # 현금흐름
-    cfl = last["values"].get("operating_cashflow")
-    h1 = next((h for h in reversed(v.halves) if h["kind"] == "H1"), None)
+    ttm_rev, prev_rev = v.ttm("revenue"), v.ttm_prev("revenue")
     now = ""
-    if h1 and h1["year"] > yl and h1["values"].get("operating_cashflow") is not None:
-        now = f"{h1['year']}년 상반기 {an.jo(h1['values']['operating_cashflow'], 2)}조 원"
-    tiles.append(("현금흐름 · 영업활동현금흐름", vd["cash"], an.jo(cfl, 2), "조 원", f"{yl}년 연간",
-                  f"**{vd['streak']}년 연속 마이너스**" if vd["streak"] else "플러스 유지", now,
-                  sparkline(v.series("operating_cashflow"), zero=True), "본업으로 실제 들어오고 나간 현금"))
+    if ttm_rev:
+        now = f"최근 4개 분기 {an.jo(ttm_rev)}조 원" + (f" ({an.signed(fin.growth(ttm_rev, prev_rev))}%)" if prev_rev else "")
+    tiles.append((1, "매출 성장", "growth", vd["growth"], an.jo(revl), "조 원", f"{yl}년 연간 매출액",
+                  f"{y0}년의 **{revl / rev0:.2f}배** · 연평균 {an.pct(vd['cagr'])}%", now,
+                  sparkline(v.series("revenue")), "외형이 실제 사업 성장으로 커지고 있는가"))
 
-    # 안정성
+    # 2 이익률
+    m0, ml = first["ratios"]["operating_margin_pct"], last["ratios"]["operating_margin_pct"]
+    gm = fin.ratio(v.ttm("gross_profit"), v.ttm("revenue"))
+    nm = fin.ratio(v.ttm("net_income"), v.ttm("revenue"))
+    tiles.append((2, "이익률", "profit", vd["profit"], an.pct(vd["margin_now"]), "%", "최근 4개 분기 영업이익률",
+                  f"{y0}년 {an.pct(m0)}% → {yl}년 {an.pct(ml)}%",
+                  f"매출총이익률 {an.pct(gm)}% · 순이익률 {an.pct(nm)}%" if gm is not None else "",
+                  sparkline(rolling_ttm(v.quarters, "operating_profit", "revenue"), zero=True),
+                  "성장이 영업이익과 순이익으로 남고 있는가"))
+
+    # 3 현금흐름
+    cfl = last["values"].get("operating_cashflow")
+    span = [t for t in v.years if t > yl - 5]
+    sc = [v.a(t, "operating_cashflow") for t in span]
+    sn = [v.a(t, "net_income") for t in span]
+    now = ""
+    if len(span) == 5 and None not in sc and None not in sn and sum(sn) > 0:
+        now = f"5년 누적 CFO/순이익 {an.pct(sum(sc) / sum(sn), 2)}배"
+    fcf = last["values"].get("fcf")
+    if fcf is not None:
+        now += (" · " if now else "") + f"FCF {an.jo(fcf, 2)}조 원"
+    tiles.append((3, "현금흐름", "cash", vd["cash"], an.jo(cfl, 2), "조 원", f"{yl}년 영업활동현금흐름",
+                  f"**{vd['streak']}년 연속 마이너스**" if vd["streak"] else "플러스 유지", now,
+                  sparkline(v.series("operating_cashflow"), zero=True), "회계상 이익이 현금으로 회수되고 있는가"))
+
+    # 4 차입 부담
+    cov, nde, nd = vd["coverage"], vd["nd_ebitda"], vd["net_debt"]
     bal = vd["balance_row"]
-    debt = bal["ratios"].get("debt_to_equity_pct")
-    debts = [(t, v.a(t, "debt_to_equity_pct")) for t in v.years if v.a(t, "debt_to_equity_pct") is not None]
-    low = min(debts, key=lambda x: x[1]) if debts else None
-    when = f"{bal['year']}년 {bal['month']}월 말" if bal["kind"] != "annual" else f"{bal['year']}년 말"
-    delta = (f"{low[0]}년 말 {an.pct(low[1], 0)}%(최저)에서 **{an.signed(round(debt) - round(low[1]), 0)}%p**"
-             if low and debt is not None else "")
-    cur = bal["ratios"].get("current_ratio_pct")
-    tiles.append(("안정성 · 부채비율", vd["stability"], an.pct(debt, 0), "%", when, delta,
-                  f"유동비율 {an.pct(cur, 0)}%" if cur is not None else "",
-                  sparkline([q["ratios"].get("debt_to_equity_pct") for q in balance_rows(v)]),
-                  "자기 돈 100원당 남의 돈 (선: 분기말 기준)"))
+    if nd is None:
+        delta = ""
+    elif nd > 0:
+        delta = f"순차입금 {an.jo(nd, 2)}조 원" + (f" · EBITDA의 **{nde:.1f}배**" if nde is not None else "")
+    else:
+        delta = f"**순현금 {an.jo(-nd, 2)}조 원**"
+    tiles.append((4, "차입 부담", "debt", vd["debt"], an.pct(cov), "배", "최근 4개 분기 이자보상배율",
+                  delta, f"{an.when_label(bal)} 부채비율 {an.pct(bal['ratios'].get('debt_to_equity_pct'), 0)}%",
+                  sparkline(v.series("interest_coverage_x"), zero=True), "현금창출력으로 이자와 원금을 감당할 수 있는가"))
+
+    # 5 투자수익률
+    roic, ry = vd["roic"], vd["roic_year"]
+    tiles.append((5, "투자수익률", "returns", vd["returns"], an.pct(roic), "%", f"{ry}년 ROIC" if ry else "ROIC",
+                  (f"ROE {an.pct(v.a(ry, 'roe_pct'))}% · ROA {an.pct(v.a(ry, 'roa_pct'))}%" if ry else ""),
+                  (f"세후 차입 이자율 {an.pct(vd['after_tax_rate'])}% · 단순 기준 {an.HURDLE_ROIC:.0f}%"
+                   if vd["after_tax_rate"] is not None else f"단순 기준 {an.HURDLE_ROIC:.0f}%"),
+                  sparkline(v.series("roic_pct"), zero=True), "투입한 자본이 자본비용보다 높은 수익을 만드는가"))
+
+    # 6 주가 수준
+    val = ctx.get("valuation") or {}
+    if val.get("market_cap"):
+        delta = " · ".join(x for x in (f"PER **{val['per_x']:.1f}배**" if val.get("per_x") else "",
+                                       f"EV/EBITDA {val['ev_ebitda_x']:.1f}배" if val.get("ev_ebitda_x") else "") if x)
+        tiles.append((6, "주가 수준", "valuation", vd["valuation"], f"{val['pbr_x']:.2f}" if val.get("pbr_x") else "–", "배",
+                      f"PBR · {val['as_of']} 월말 주가 기준", delta,
+                      f"주가 {val['price']:,.0f}원 · 시가총액 {an.jo(val['market_cap'], 2)}조 원",
+                      sparkline(v.series("pbr_x")), "현재 가격이 성장과 위험을 어느 정도 반영하고 있는가"))
+    else:
+        tiles.append((6, "주가 수준", "valuation", vd["valuation"], "–", "", "PBR · PER · EV/EBITDA",
+                      "주가를 받으면 계산합니다", "다음 자동 실행(매월 1일) 때 채워집니다", "",
+                      "현재 가격이 성장과 위험을 어느 정도 반영하고 있는가"))
 
     out = []
-    for label, verdict, value, unit, basis, delta, now, spark, term in tiles:
+    for no, label, sid, verdict, value, unit, basis, delta, now, spark, question_text in tiles:
         now_html = f'<p class="kpi-now">{rich(now)}</p>' if now else ""
-        out.append(f'<article class="kpi"><div class="kpi-top"><h3 class="kpi-label">{esc(label)}</h3>{chip(verdict)}</div>'
-                   f'<p class="kpi-basis">{esc(basis)}</p>'
+        out.append(f'<article class="kpi"><div class="kpi-top"><h3 class="kpi-label"><a href="#{sid}"><span class="no">{no}</span>{esc(label)}</a></h3>'
+                   f'{chip(verdict)}</div><p class="kpi-basis">{esc(basis)}</p>'
                    f'<p class="kpi-value">{esc(value)}<small>{esc(unit)}</small></p>'
-                   f'<p class="kpi-delta">{rich(delta)}</p>{now_html}{spark}<p class="kpi-term">{esc(term)}</p></article>')
-    return f'<div class="kpis">{"".join(out)}</div>'
+                   f'<p class="kpi-delta">{rich(delta)}</p>{now_html}{spark}<p class="kpi-term">{esc(question_text)}</p></article>')
+    return f'<div class="kpis six">{"".join(out)}</div>'
 
 
 # ---------------------------------------------------------------------------
@@ -615,10 +701,94 @@ def signal_table(signals):
             f'≈ 거의 없음(±500억 원 미만)</caption><thead>{head}</thead><tbody>{"".join(rows)}</tbody></table></div>')
 
 
-def stability_figs(v):
+def _tips_multi(v, years, series, unit, title_fmt="{t}년"):
+    def tips(i):
+        t = years[i]
+        rows = [[sr["name"], ("–" if sr["values"][i] is None else f"{an.pct(sr['values'][i])}{unit}"), f"var({sr['color']})"]
+                for sr in series]
+        return title_fmt.format(t=t), rows, None
+    return tips
+
+
+def margins_fig(v):
+    years = v.years
+    series = [{"name": "매출총이익률", "values": v.series("gross_margin_pct"), "color": "--s3"},
+              {"name": "영업이익률", "values": v.series("operating_margin_pct"), "color": "--s1"},
+              {"name": "EBITDA 마진", "values": v.series("ebitda_margin_pct"), "color": "--s4"},
+              {"name": "순이익률", "values": v.series("net_margin_pct"), "color": "--s2"}]
+    chart = multi_line_chart([year_label(t) for t in years], series, ticks_fmt=tick_plain, tips=_tips_multi(v, years, series, "%"),
+                             refs=[(0, "", "left")], end_fmt=lambda x: f"{an.pct(x)}%")
+    table = data_table(["연도"] + [sr["name"] + "(%)" for sr in series],
+                       [[str(t)] + [(an.pct(sr["values"][i]), sr["values"][i]) for sr in series] for i, t in enumerate(years)])
+    return figure("fig-margins", "이익률 네 가지", "매출 대비 % · 매출총이익률 = (매출 − 원가) ÷ 매출 · EBITDA = 영업이익 + 감가상각비",
+                  chart, legend_html=legend([(sr["name"], sr["color"], "line") for sr in series]), table_html=table, wide=True,
+                  note="가이드: 매출총이익률이 함께 떨어지면 가격·원가, 총이익률은 그대로인데 영업이익률만 떨어지면 판관비를 먼저 봅니다.")
+
+
+def fcf_fig(v):
+    years = v.years
+    fcf, cfo, capex = v.series("fcf"), v.series("operating_cashflow"), v.series("capex")
+    labels = {}
+    idx = [i for i, x in enumerate(fcf) if x is not None]
+    if idx:
+        labels[(0, idx[-1])] = an.jo(fcf[idx[-1]], 2)
+
+    def tips(i):
+        rows = [["FCF", an.won(fcf[i]) + " 원", "var(--s2)"], ["영업활동현금흐름", an.won(cfo[i]) + " 원", None],
+                ["CAPEX(유형·무형자산 취득)", an.won(capex[i]) + " 원", None]]
+        return f"{years[i]}년", rows, "FCF = 영업활동현금흐름 − CAPEX"
+
+    chart = column_chart([year_label(t) for t in years], [{"values": in_jo(fcf), "color": "--s2"}], ticks_fmt=tick_jo, tips=tips,
+                         labels=labels, neg_zone=True)
+    table = data_table(["연도", "영업활동현금흐름(억 원)", "CAPEX(억 원)", "FCF(억 원)"],
+                       [[str(t), (eok(cfo[i]), cfo[i]), (eok(capex[i]), capex[i]), (eok(fcf[i]), fcf[i])] for i, t in enumerate(years)])
+    return figure("fig-fcf", "투자 후 남는 현금 (FCF)", "연간 · FCF = 영업활동현금흐름 − CAPEX · 단위: 조 원", chart, table_html=table,
+                  note="건설사는 설비투자가 작아서 FCF는 대부분 공사대금이 얼마나 들어왔는지(영업현금흐름)로 정해집니다.")
+
+
+def debt_figs(v):
     years = v.years
     xl = [year_label(t) for t in years]
-    debt, cur = v.series("debt_to_equity_pct"), v.series("current_ratio_pct")
+    cov = v.series("interest_coverage_x")
+
+    def ctips(i):
+        t = years[i]
+        rows = [["이자보상배율", "–" if cov[i] is None else f"{an.pct(cov[i])}배", "var(--data)"],
+                ["영업이익", an.won(v.a(t, "operating_profit")) + " 원", None], ["이자비용", an.won(v.a(t, "interest_expense")) + " 원", None]]
+        return f"{t}년", rows, None
+
+    idx = [i for i, x in enumerate(cov) if x is not None]
+    labels = {i: f"{an.pct(cov[i])}배" for i in {idx[0], idx[-1], min(idx, key=lambda i: cov[i])}} if idx else {}
+    f1 = figure("fig-coverage", "이자보상배율", "영업이익 ÷ 이자비용 · 단위: 배 · 1배 미만이면 이익으로 이자도 못 냄",
+                line_chart(xl, cov, color="--data", ticks_fmt=tick_plain, tips=ctips, labels=labels,
+                           refs=[(1, "1배", "left"), (3, "3배", "left")]),
+                table_html=data_table(["연도", "이자보상배율(배)", "영업이익(억 원)", "이자비용(억 원)"],
+                                      [[str(t), (an.pct(cov[i]), cov[i]),
+                                        (eok(v.a(t, "operating_profit")), v.a(t, "operating_profit")),
+                                        (eok(v.a(t, "interest_expense")), None)] for i, t in enumerate(years)]),
+                note="이자비용은 공시 주석(현금흐름표 조정 항목)에서 읽었습니다.")
+    nd = v.series("net_debt")
+    nlabels = {}
+    idx = [i for i, x in enumerate(nd) if x is not None]
+    if idx:
+        nlabels[(0, idx[-1])] = an.jo(nd[idx[-1]], 2)
+
+    def ntips(i):
+        t = years[i]
+        nde = v.a(t, "net_debt_to_ebitda_x")
+        rows = [["순차입금", an.won(nd[i]) + " 원", "var(--s3)"], ["이자부차입금", an.won(v.a(t, "borrowings_total")) + " 원", None],
+                ["현금및현금성자산", an.won(v.a(t, "cash")) + " 원", None]]
+        return f"{t}년 말", rows, (f"순차입금/EBITDA {an.pct(nde)}배" if nde is not None else None)
+
+    f2 = figure("fig-netdebt", "순차입금", "연말 · 이자부차입금 − 현금및현금성자산 · 0 아래 = 순현금 · 단위: 조 원",
+                column_chart(xl, [{"values": in_jo(nd), "color": "--s3"}], ticks_fmt=tick_jo, tips=ntips, labels=nlabels),
+                table_html=data_table(["연도", "이자부차입금(억 원)", "현금및현금성자산(억 원)", "순차입금(억 원)", "순차입금/EBITDA(배)"],
+                                      [[str(t), (eok(v.a(t, "borrowings_total")), None), (eok(v.a(t, "cash")), None),
+                                        (eok(nd[i]), nd[i]),
+                                        (an.pct(v.a(t, "net_debt_to_ebitda_x")),
+                                         v.a(t, "net_debt_to_ebitda_x"))] for i, t in enumerate(years)]),
+                note="이자부차입금 = 단기차입금 + 유동성장기부채 + 사채 + 장기차입금 (리스부채 제외).")
+    debt = v.series("debt_to_equity_pct")
 
     def pick_labels(vals):
         idx = [i for i, x in enumerate(vals) if x is not None]
@@ -628,55 +798,131 @@ def stability_figs(v):
         lo_i = min(idx, key=lambda i: vals[i])
         return {i: f"{an.pct(vals[i], 0)}%" for i in {idx[0], hi_i, lo_i, idx[-1]}}
 
-    def tips_for(name, vals, extra):
-        def tips(i):
-            t = years[i]
-            return f"{t}년 말", [[name, f"{an.pct(vals[i])}%", "var(--data)"]] + extra(t), None
-        return tips
+    def dtips(i):
+        t = years[i]
+        return f"{t}년 말", [["부채비율", f"{an.pct(debt[i])}%", "var(--data)"], ["부채", an.won(v.a(t, "liabilities")) + " 원", None],
+                            ["자본", an.won(v.a(t, "equity")) + " 원", None]], None
 
-    debt_chart = line_chart(xl, debt, color="--data", ticks_fmt=tick_plain, labels=pick_labels(debt),
-                            refs=[(100, "100%: 빚 = 자기 돈", "right"), (200, "200%: 흔히 쓰는 경계선", "left")],
-                            tips=tips_for("부채비율", debt, lambda t: [["부채", an.won(v.a(t, "liabilities")) + " 원", None],
-                                                                   ["자본", an.won(v.a(t, "equity")) + " 원", None]]))
-    cur_chart = line_chart(xl, cur, color="--data", ticks_fmt=tick_plain, labels=pick_labels(cur),
-                           refs=[(100, "100%: 1년 내 갚을 돈 = 1년 내 현금화 자산", "right")],
-                           tips=tips_for("유동비율", cur, lambda t: [["유동자산", an.won(v.a(t, "current_assets")) + " 원", None],
-                                                                  ["유동부채", an.won(v.a(t, "current_liabilities")) + " 원", None]]))
-    f1 = figure("fig-debt", "부채비율", "연말 · 부채 ÷ 자본 × 100 · 단위: % · 낮을수록 안정적", debt_chart,
+    f3 = figure("fig-debt", "부채비율", "연말 · 부채 ÷ 자본 × 100 · 단위: %",
+                line_chart(xl, debt, color="--data", ticks_fmt=tick_plain, tips=dtips, labels=pick_labels(debt),
+                           refs=[(100, "100%", "left"), (200, "200%", "left")]),
                 table_html=data_table(["연도", "부채비율(%)", "부채(억 원)", "자본(억 원)"],
                                       [[str(t), (an.pct(debt[i]), debt[i]), (eok(v.a(t, "liabilities")), None),
                                         (eok(v.a(t, "equity")), None)] for i, t in enumerate(years)]))
-    f2 = figure("fig-current", "유동비율", "연말 · 유동자산 ÷ 유동부채 × 100 · 단위: % · 높을수록 안정적", cur_chart,
-                table_html=data_table(["연도", "유동비율(%)", "유동자산(억 원)", "유동부채(억 원)"],
-                                      [[str(t), (an.pct(cur[i]), cur[i]), (eok(v.a(t, "current_assets")), None),
-                                        (eok(v.a(t, "current_liabilities")), None)] for i, t in enumerate(years)]))
-    cash, borrow = v.series("cash_and_deposits"), v.series("borrowings_total")
-    labels = {(0, len(years) - 1): an.jo(cash[-1], 2), (1, len(years) - 1): an.jo(borrow[-1], 2)}
+    series = [{"name": "유동비율", "values": v.series("current_ratio_pct"), "color": "--s3"},
+              {"name": "당좌비율", "values": v.series("quick_ratio_pct"), "color": "--s1"}]
+    f4 = figure("fig-liquidity", "유동비율 · 당좌비율", "연말 · 단위: % · 당좌비율은 재고자산을 뺀 보수적인 지급능력",
+                multi_line_chart(xl, series, ticks_fmt=tick_plain, tips=_tips_multi(v, years, series, "%", "{t}년 말"),
+                                 refs=[(100, "100%", "left")], end_fmt=lambda x: f"{an.pct(x, 0)}%"),
+                legend_html=legend([(sr["name"], sr["color"], "line") for sr in series]),
+                table_html=data_table(["연도", "유동비율(%)", "당좌비율(%)"],
+                                      [[str(t)] + [(an.pct(sr["values"][i]), sr["values"][i]) for sr in series] for i, t in enumerate(years)]))
+    return f1, f2, f3, f4
 
-    def ctips(i):
-        t = years[i]
-        rows = [["현금성자산", an.won(cash[i]) + " 원", "var(--s2)"], ["차입금", an.won(borrow[i]) + " 원", "var(--s3)"]]
-        return f"{t}년 말", rows, f"순현금(현금성자산 − 차입금) {an.won(v.a(t, 'net_cash'))} 원"
 
-    cb_chart = column_chart(xl, [{"values": in_jo(cash), "color": "--s2"}, {"values": in_jo(borrow), "color": "--s3"}],
-                            ticks_fmt=tick_jo, tips=ctips, labels=labels)
-    t3 = data_table(["연도", "현금성자산(억 원)", "차입금(억 원)", "순현금(억 원)"],
-                    [[str(t), (eok(cash[i]), cash[i]), (eok(borrow[i]), borrow[i]),
-                      (eok(v.a(t, "net_cash")), v.a(t, "net_cash"))] for i, t in enumerate(years)])
-    note = "두 막대의 차이가 순현금입니다."
-    recent = [i for i, t in enumerate(years) if t >= 2022 and None not in (cash[i], borrow[i])]
-    if len(recent) >= 2:
-        i0, i1 = recent[0], recent[-1]
-        cr = [cash[i] for i in recent]
-        note += (f" {years[i0]}년 이후 현금성자산은 {an.jo(min(cr))}~{an.jo(max(cr))}조 원 사이였지만, "
-                 f"차입금은 {an.jo(borrow[i0], 2)}조 → {an.jo(borrow[i1], 2)}조 원으로 "
-                 f"{'늘어' if borrow[i1] > borrow[i0] else '줄어'} 순현금이 {an.jo(v.a(years[i0], 'net_cash'), 2)}조 → "
-                 f"{an.jo(v.a(years[i1], 'net_cash'), 2)}조 원이 됐습니다.")
-    f3 = figure("fig-netcash", "가진 현금 vs 빌린 돈",
-                "연말 · 현금성자산 = 현금및현금성자산 + 단기금융상품 · 차입금 = 단기·장기차입금 + 유동성장기부채 + 사채 · 단위: 조 원",
-                cb_chart, legend_html=legend([("현금성자산", "--s2", "box"), ("차입금", "--s3", "box")]),
-                table_html=t3, wide=True, note=note)
-    return f1, f2, f3
+def returns_fig(v, vd):
+    years = v.years
+    rate = v.series("borrowing_rate_pct")
+    tax = [fin.effective_tax_rate(v.by_year[t]["values"]) for t in years]
+    after = [None if r is None else r * (1 - (tx if tx is not None else fin.DEFAULT_TAX_RATE)) for r, tx in zip(rate, tax)]
+    series = [{"name": "ROIC", "values": v.series("roic_pct"), "color": "--s3"},
+              {"name": "ROE", "values": v.series("roe_pct"), "color": "--s1"},
+              {"name": "ROA", "values": v.series("roa_pct"), "color": "--s2"},
+              {"name": "세후 차입 이자율", "values": after, "color": "--ref", "dash": True}]
+    chart = multi_line_chart([year_label(t) for t in years], series, ticks_fmt=tick_plain, tips=_tips_multi(v, years, series, "%"),
+                             refs=[(0, "", "left"), (an.HURDLE_ROIC, f"단순 기준 {an.HURDLE_ROIC:.0f}%", "left")],
+                             end_fmt=lambda x: f"{an.pct(x)}%")
+    table = data_table(["연도"] + [sr["name"] + "(%)" for sr in series] + ["지배주주 ROE(%)"],
+                       [[str(t)] + [(an.pct(sr["values"][i]), sr["values"][i]) for sr in series]
+                        + [(an.pct(v.a(t, "roe_owners_pct")), v.a(t, "roe_owners_pct"))] for i, t in enumerate(years)])
+    leg = legend([(sr["name"], sr["color"], "dash" if sr.get("dash") else "line") for sr in series])
+    return figure("fig-returns", "ROIC · ROE · ROA", "연간 · 단위: % · ROIC = 영업이익 × (1 − 실효세율) ÷ 평균 투하자본(자본총계 + 순차입금)",
+                  chart, legend_html=leg, table_html=table, wide=True,
+                  note="ROE·ROA는 연결 당기순이익 ÷ 평균 자본·자산. 첫해는 평균을 구할 수 없어 비어 있습니다.")
+
+
+def valuation_block(v, ctx):
+    val = ctx.get("valuation") or {}
+    if not val.get("market_cap"):
+        return ('<div class="card empty"><h3>주가 자료 대기 중</h3><p>주가는 GitHub Actions가 매월 실행될 때 네이버 금융(실패하면 Yahoo Finance)에서 '
+                '월말 종가를 받아 옵니다. 받는 즉시 PER·PBR·EV/EBITDA·FCF 수익률이 이 자리에 채워집니다.</p></div>')
+    tiles = [("주가", f"{val['price']:,.0f}", "원", f"{val['as_of']} 월말 종가"),
+             ("시가총액", an.jo(val["market_cap"], 2), "조 원", f"발행주식 {val['shares']:,}주 (보통주+우선주)"),
+             ("PER", "–" if val.get("per_x") is None else f"{val['per_x']:.1f}", "배", "시가총액 ÷ 최근 4개 분기 지배주주 순이익"),
+             ("PBR", "–" if val.get("pbr_x") is None else f"{val['pbr_x']:.2f}", "배", f"시가총액 ÷ {val.get('balance_label', '')} 지배주주지분"),
+             ("EV/EBITDA", "–" if val.get("ev_ebitda_x") is None else f"{val['ev_ebitda_x']:.1f}", "배",
+              "(시가총액 + 순차입금 + 비지배지분) ÷ 최근 4개 분기 EBITDA"),
+             ("FCF 수익률", "–" if val.get("fcf_yield_pct") is None else an.pct(val["fcf_yield_pct"]), "%",
+              "최근 4개 분기 FCF ÷ 시가총액")]
+    cells = "".join(f'<div class="vt"><p class="vt-l">{esc(a)}</p><p class="vt-v">{esc(b)}<small>{esc(c)}</small></p>'
+                    f'<p class="vt-d">{esc(d)}</p></div>' for a, b, c, d in tiles)
+    figs = []
+    monthly = ctx.get("prices") or {}
+    months = sorted(monthly)[-60:]
+    if len(months) >= 6:
+        xl = [f'<span>{"’" + m[2:4] if m[4:] == "01" or i == 0 else "&nbsp;"}</span>' for i, m in enumerate(months)]
+        vals = [monthly[m] / 1000 for m in months]
+
+        def ptips(i):
+            m = months[i]
+            return f"{m[:4]}년 {int(m[4:])}월 말", [["종가", f"{monthly[m]:,.0f}원", "var(--data)"]], None
+
+        hi_i = max(range(len(vals)), key=lambda i: vals[i])
+        lo_i = min(range(len(vals)), key=lambda i: vals[i])
+        figs.append(figure("fig-price", "월말 주가", f"최근 {len(months)}개월 · 보통주 종가 · 단위: 천 원 ({val.get('source', '')})",
+                           line_chart(xl, vals, color="--data", ticks_fmt=tick_plain, tips=ptips,
+                                      labels={hi_i: f"{vals[hi_i]:.1f}", lo_i: f"{vals[lo_i]:.1f}", len(vals) - 1: f"{vals[-1]:.1f}"},
+                                      height=180)))
+    years = [t for t in v.years if v.a(t, "pbr_x") is not None]
+    if len(years) >= 2:
+        pbr = [v.a(t, "pbr_x") for t in years]
+        per = [v.a(t, "per_x") for t in years]
+
+        def vtips(i):
+            t = years[i]
+            rows = [["PBR", f"{pbr[i]:.2f}배", "var(--s3)"], ["PER", "–" if per[i] is None else f"{per[i]:.1f}배", None],
+                    ["연말 주가", f"{v.a(t, 'price_close'):,.0f}원", None]]
+            return f"{t}년 말", rows, None
+
+        figs.append(figure("fig-pbr", "연말 PBR", "연말 주가 기준 · 단위: 배 · 1배 = 장부상 순자산과 같은 값",
+                           line_chart([year_label(t) for t in years], pbr, color="--s3", ticks_fmt=tick_plain, tips=vtips,
+                                      labels={0: f"{pbr[0]:.2f}", len(pbr) - 1: f"{pbr[-1]:.2f}"}, refs=[(1, "1배", "right")], height=180),
+                           table_html=data_table(["연도", "연말 주가(원)", "시가총액(억 원)", "PER(배)", "PBR(배)", "EV/EBITDA(배)"],
+                                                 [[str(t), (f"{v.a(t, 'price_close'):,.0f}", None), (eok(v.a(t, "market_cap")), None),
+                                                   ("–" if v.a(t, "per_x") is None else f"{v.a(t, 'per_x'):.1f}", v.a(t, "per_x")),
+                                                   (f"{v.a(t, 'pbr_x'):.2f}", v.a(t, "pbr_x")),
+                                                   ("–" if v.a(t, "ev_ebitda_x") is None else f"{v.a(t, 'ev_ebitda_x'):.1f}", v.a(t, "ev_ebitda_x"))]
+                                                  for t in years])))
+    grid = f'<div class="grid-2">{"".join(figs)}</div>' if figs else ""
+    return f'<div class="vtiles">{cells}</div>{grid}'
+
+
+def combos_section(a):
+    rows = []
+    for c in a.get("combos", []):
+        if c["hit"] is True:
+            res = '<span class="chip warn"><i class="ic" aria-hidden="true">!</i>해당</span>'
+        elif c["hit"] is False:
+            res = '<span class="res no">해당 없음</span>'
+        else:
+            res = '<span class="res na">판단 불가</span>'
+        years = ", ".join(str(y) for y in c["years"][-6:]) or "–"
+        tr = '<tr class="hit">' if c["hit"] else "<tr>"
+        rows.append(f'{tr}<th scope="row">{esc(c["name"])}</th><td class="left">{res}'
+                    f'<span class="det">{esc(c["detail"])}</span></td><td class="left wrap">{esc(c["meaning"])}</td>'
+                    f'<td class="left wrap">{esc(c["check"])}</td><td class="left">{esc(years)}</td></tr>')
+    basis = a["combos"][0]["basis"] if a.get("combos") else ""
+    head = ('<tr><th scope="col" class="corner">지표 조합</th><th scope="col" class="left">' + esc(basis) + ' 결과</th>'
+            '<th scope="col" class="left">가능한 해석 (가이드)</th><th scope="col" class="left">우선 확인할 내용 (가이드)</th>'
+            '<th scope="col" class="left">해당했던 해</th></tr>')
+    hits = [c for c in a.get("combos", []) if c["hit"]]
+    lead = (f"가이드 5장의 여덟 가지 조합을 최근 두 해({basis})로 자동 점검했습니다. 이번에 해당하는 조합은 "
+            + (", ".join(f"**{c['name']}**" for c in hits) if hits else "없습니다") + ("입니다." if hits else "."))
+    return (f'<section id="combos" aria-labelledby="h-combos">'
+            + section_head("combos", "Signals", "지표 조합 점검", "숫자 두 개를 같이 보면 보이는 신호", lead,
+                           "‘해당했던 해’는 2010년 이후 연도별로 같은 조합이 나타난 해입니다. 해당한다고 바로 문제라는 뜻은 아니고, 오른쪽 내용을 확인하라는 신호입니다.")
+            + f'<div class="table-scroll combo" tabindex="0"><table><caption class="sr">지표 조합 점검</caption><thead>{head}</thead>'
+              f'<tbody>{"".join(rows)}</tbody></table></div></section>')
 
 
 def acts_html(items):
@@ -693,38 +939,67 @@ def acts_html(items):
 
 def question(q, body):
     more = "".join(f"<p>{rich(p)}</p>" for p in q["more"])
-    return (f'<section id="{q["id"]}" aria-labelledby="h-{q["id"]}"><div class="sec-head">{eyebrow(q["en"], q["ko"])}'
-            f'<h2 id="h-{q["id"]}">{esc(q["q"])}</h2><p class="answer">{rich(q["answer"])}</p><p>{rich(q["lead"])}</p></div>'
-            f'{body}' + (f'<div class="explain">{more}</div>' if more else "") + "</section>")
+    step = f'<span class="step-no">STEP {q["no"]}</span>' if q.get("no") else ""
+    verdict = chip(q["verdict"]) if q.get("verdict") else ""
+    return (f'<section id="{q["id"]}" aria-labelledby="h-{q["id"]}"><div class="sec-head"><div class="sec-top">{step}{eyebrow(q["en"], q["ko"])}{verdict}</div>'
+            f'<h2 id="h-{q["id"]}">{esc(q["q"])}</h2><p class="answer">{rich(q["answer"])}</p>'
+            + (f'<p>{rich(q["lead"])}</p>' if q.get("lead") else "") + f'</div>{body}'
+            + (f'<div class="explain">{more}</div>' if more else "") + "</section>")
 
 
 # ---------------------------------------------------------------------------
 # 7. 화면 아래쪽: Annual · Half-year · Quarterly 표
 # ---------------------------------------------------------------------------
-AMOUNT_GROUPS = [
-    ("손익", [("revenue", "매출액"), ("cost_of_sales", "매출원가"), ("gross_profit", "매출총이익"), ("sga", "판관비"),
-             ("operating_profit", "영업이익"), ("net_income", "당기순이익"), ("net_income_owners", "지배주주 순이익")]),
-    ("재무상태 · 기말 잔액", [("assets", "자산총계"), ("liabilities", "부채총계"), ("equity", "자본총계"),
-                        ("current_assets", "유동자산"), ("current_liabilities", "유동부채"),
-                        ("cash_and_deposits", "현금성자산"), ("borrowings_total", "차입금"), ("net_cash", "순현금"),
-                        ("receivables_total", "받을 돈"), ("advances_total", "미리 받은 돈")]),
-    ("현금흐름", [("operating_cashflow", "영업활동"), ("investing_cashflow", "투자활동"), ("financing_cashflow", "재무활동")]),
+# (그룹 이름, 단위 설명, [(키, 표시 이름, 형식)]) · 형식: amt=억 원, won=원, pct=%, x=배, x2=배(소수 둘째 자리), d=일
+# 교수님 가이드의 분류(손익·재무상태·현금흐름 / 수익성·유동성·안정성·활동성·성장성·시장가치)를 따릅니다.
+TABLE_GROUPS = [
+    ("손익", "억 원", [("revenue", "매출액", "amt"), ("cost_of_sales", "매출원가", "amt"), ("gross_profit", "매출총이익", "amt"),
+                     ("sga", "판관비", "amt"), ("operating_profit", "영업이익", "amt"), ("ebitda", "EBITDA", "amt"),
+                     ("pretax_income", "세전이익", "amt"), ("net_income", "당기순이익", "amt"),
+                     ("net_income_owners", "지배주주 순이익", "amt")]),
+    ("재무상태 · 기말", "억 원", [("assets", "자산총계", "amt"), ("current_assets", "유동자산", "amt"),
+                           ("cash", "현금및현금성자산", "amt"), ("trade_receivables", "매출채권", "amt"),
+                           ("contract_assets", "미청구공사", "amt"), ("inventories", "재고자산", "amt"), ("ppe", "유형자산", "amt"),
+                           ("liabilities", "부채총계", "amt"), ("current_liabilities", "유동부채", "amt"),
+                           ("borrowings_total", "이자부차입금", "amt"), ("net_debt", "순차입금", "amt"),
+                           ("equity", "자본총계", "amt"), ("equity_owners", "지배주주지분", "amt")]),
+    ("현금흐름", "억 원", [("operating_cashflow", "영업활동", "amt"), ("investing_cashflow", "투자활동", "amt"),
+                       ("financing_cashflow", "재무활동", "amt"), ("capex", "CAPEX", "amt"), ("fcf", "FCF", "amt")]),
+    ("수익성", "%", [("gross_margin_pct", "매출총이익률", "pct"), ("operating_margin_pct", "영업이익률", "pct"),
+                    ("net_margin_pct", "순이익률", "pct"), ("ebitda_margin_pct", "EBITDA 마진", "pct"), ("roa_pct", "ROA", "pct"),
+                    ("roe_pct", "ROE", "pct"), ("roe_owners_pct", "지배주주 ROE", "pct"), ("roic_pct", "ROIC", "pct")]),
+    ("유동성·안정성", "", [("current_ratio_pct", "유동비율|%", "pct"), ("quick_ratio_pct", "당좌비율|%", "pct"),
+                       ("debt_to_equity_pct", "부채비율|%", "pct"), ("equity_ratio_pct", "자기자본비율|%", "pct"),
+                       ("borrowing_dependency_pct", "차입금의존도|%", "pct"), ("interest_coverage_x", "이자보상배율|배", "x"),
+                       ("net_debt_to_ebitda_x", "순차입금/EBITDA|배", "x")]),
+    ("활동성·성장성", "", [("revenue_growth_pct", "매출증가율|%", "pct"), ("qoq_growth_pct", "직전 분기 대비|%", "pct"),
+                       ("asset_turnover_x", "총자산회전율|회", "x2"), ("dso_days", "DSO|일", "d"), ("dio_days", "DIO|일", "d"),
+                       ("dpo_days", "DPO|일", "d"), ("ccc_days", "CCC|일", "d"), ("cfo_to_ni_x", "CFO/순이익|배", "x")]),
+    ("시장가치 · 연말 주가", "", [("price_close", "연말 주가|원", "won"), ("market_cap", "시가총액|억 원", "amt"),
+                            ("per_x", "PER|배", "x"), ("pbr_x", "PBR|배", "x2"), ("ev_ebitda_x", "EV/EBITDA|배", "x"),
+                            ("fcf_yield_pct", "FCF 수익률|%", "pct")]),
+    ("건설업 참고", "%", [("cost_ratio_pct", "원가율", "pct"), ("sga_ratio_pct", "판관비율", "pct"),
+                       ("receivables_to_revenue_pct", "받을 돈/매출", "pct"), ("borrowing_rate_pct", "차입 이자율", "pct")]),
 ]
-RATIO_GROUP = ("재무비율 (%)", [("revenue_growth_pct", "매출증가율"), ("qoq_growth_pct", "직전 분기 대비"),
-                             ("cost_ratio_pct", "원가율"), ("sga_ratio_pct", "판관비율"),
-                             ("operating_margin_pct", "영업이익률"), ("net_margin_pct", "순이익률"),
-                             ("debt_to_equity_pct", "부채비율"), ("current_ratio_pct", "유동비율"),
-                             ("equity_ratio_pct", "자기자본비율"), ("roa_pct", "ROA"), ("roe_pct", "ROE"),
-                             ("receivables_to_revenue_pct", "받을 돈/매출")])
-GROWTH_NAMES = {"annual": "매출증가율 (전년 대비)", "half": "매출증가율 (전년 같은 반기 대비)",
-                "quarter": "매출증가율 (전년 같은 분기 대비)"}
+GROWTH_NAMES = {"annual": "매출증가율|% · 전년 대비", "half": "매출증가율|% · 전년 같은 반기 대비",
+                "quarter": "매출증가율|% · 전년 같은 분기 대비"}
 SOURCE_BADGES = {"document": ("원문", "공시 원문 표(XBRL)에서 읽은 숫자"),
                  "document-prior": ("원문", "다음 보고서 원문의 비교 열에서 읽은 숫자"),
                  "api-prior": ("비교", "다음 해 보고서(API)의 비교 열 숫자")}
-CELL_HINTS = {"revenue_growth_pct": "", "net_income_owners": "비지배지분 몫을 뺀 순이익",
-              "receivables_total": "매출채권 + 미청구공사", "advances_total": "초과청구공사 + 공사및분양선수금",
-              "cash_and_deposits": "현금및현금성자산 + 단기금융상품",
-              "borrowings_total": "단기차입금 + 유동성장기부채 + 사채 + 장기차입금", "net_cash": "현금성자산 − 차입금"}
+CELL_HINTS = {"net_income_owners": "비지배지분 몫을 뺀 순이익", "contract_assets": "공사는 했지만 아직 청구하지 못한 금액",
+              "borrowings_total": "단기차입금 + 유동성장기부채 + 사채 + 장기차입금", "net_debt": "이자부차입금 − 현금및현금성자산",
+              "ebitda": "영업이익 + 감가상각비(유형·사용권·투자부동산) + 무형자산상각비", "capex": "유형자산 취득 + 무형자산 취득",
+              "fcf": "영업활동현금흐름 − CAPEX", "roic_pct": "영업이익 × (1 − 실효세율) ÷ 평균(자본총계 + 순차입금)",
+              "quick_ratio_pct": "(유동자산 − 재고자산) ÷ 유동부채", "borrowing_dependency_pct": "이자부차입금 ÷ 자산총계",
+              "interest_coverage_x": "영업이익 ÷ 이자비용", "net_debt_to_ebitda_x": "순차입금 ÷ EBITDA",
+              "asset_turnover_x": "매출액 ÷ 평균 자산총계", "dso_days": "평균 매출채권 ÷ 매출액 × 365",
+              "dio_days": "평균 재고자산 ÷ 매출원가 × 365", "dpo_days": "평균 매입채무 ÷ 매출원가 × 365",
+              "ccc_days": "DSO + DIO − DPO", "cfo_to_ni_x": "영업활동현금흐름 ÷ 당기순이익 (순이익이 0 이하이면 계산 안 함)",
+              "per_x": "연말 시가총액 ÷ 지배주주 순이익", "pbr_x": "연말 시가총액 ÷ 지배주주지분",
+              "ev_ebitda_x": "(시가총액 + 순차입금 + 비지배지분) ÷ EBITDA", "fcf_yield_pct": "FCF ÷ 시가총액",
+              "borrowing_rate_pct": "이자비용 ÷ 평균 이자부차입금", "roe_owners_pct": "지배주주 순이익 ÷ 평균 지배주주지분"}
+SOURCE_NOTE_TEXTS = {"일부 숫자는 다음 해 보고서(API)의 비교 열", "공시 원문 표에서 읽은 숫자",
+                     "일부 숫자는 다음 보고서 원문의 비교 열"}
 
 
 def row_badges(r):
@@ -732,63 +1007,80 @@ def row_badges(r):
     if r["derived"]:
         out.append('<span class="bd" title="누적 보고서끼리 빼서 계산한 기간">계산</span>')
     seen = set()
-    for s in r["sources"]:
-        if s in SOURCE_BADGES and SOURCE_BADGES[s][0] not in seen:
-            seen.add(SOURCE_BADGES[s][0])
-            out.append(f'<span class="bd" title="{esc(SOURCE_BADGES[s][1])}">{SOURCE_BADGES[s][0]}</span>')
+    for src in r["sources"]:
+        if src in SOURCE_BADGES and SOURCE_BADGES[src][0] not in seen:
+            seen.add(SOURCE_BADGES[src][0])
+            out.append(f'<span class="bd" title="{esc(SOURCE_BADGES[src][1])}">{SOURCE_BADGES[src][0]}</span>')
     notes = [w for w in r["warnings"] if w not in SOURCE_NOTE_TEXTS]
     if notes:
         out.append(f'<span class="bd warn" title="{esc(" / ".join(notes))}">주의</span>')
     return "".join(out)
 
 
-SOURCE_NOTE_TEXTS = {"일부 숫자는 다음 해 보고서(API)의 비교 열", "공시 원문 표에서 읽은 숫자",
-                     "일부 숫자는 다음 보고서 원문의 비교 열"}
+def fmt_cell(val, typ):
+    if val is None:
+        return "–"
+    if typ == "amt":
+        return eok(val)
+    if typ == "won":
+        return an._m(f"{val:,.0f}")
+    if typ == "pct":
+        return an.pct(val)
+    if typ == "x":
+        return an._m(f"{val:,.1f}")
+    if typ == "x2":
+        return an._m(f"{val:,.2f}")
+    if typ == "d":
+        return an._m(f"{val:,.0f}")
+    return str(val)
 
 
 def big_table(tid, rows, kind, caption):
-    """기간 하나가 한 줄. 최신 기간이 맨 위. 금액 = 억 원, 비율 = %."""
+    """기간 하나가 한 줄. 최신 기간이 맨 위. 비어 있는 열은 빼고, 열 묶음별로 골라 볼 수 있습니다."""
     rows = list(reversed(rows))
+
+    def get(r, k):
+        return r["values"].get(k) if k in r["values"] else r["ratios"].get(k)
+
     groups = []
-    for name, cols in AMOUNT_GROUPS:
-        cols = [(k, lab, "amt") for k, lab in cols if any(r["values"].get(k) is not None for r in rows)]
+    for gi, (name, unit, cols) in enumerate(TABLE_GROUPS):
+        cols = [(k, GROWTH_NAMES[kind] if k == "revenue_growth_pct" else lab, typ) for k, lab, typ in cols
+                if any(get(r, k) is not None for r in rows)]
         if cols:
-            groups.append((name + " · 억 원", cols))
-    name, cols = RATIO_GROUP
-    rc = []
-    for k, lab in cols:
-        if any(r["ratios"].get(k) is not None for r in rows):
-            rc.append((k, GROWTH_NAMES[kind] if k == "revenue_growth_pct" else lab, "pct"))
-    if rc:
-        groups.append((name, rc))
+            groups.append((gi, name + (f" · {unit}" if unit else ""), cols))
     head1 = ['<th scope="col" rowspan="2" class="corner">기간</th>']
     head2 = []
-    for gname, cols in groups:
-        head1.append(f'<th scope="colgroup" colspan="{len(cols)}" class="gs">{esc(gname)}</th>')
+    for gi, gname, cols in groups:
+        head1.append(f'<th scope="colgroup" colspan="{len(cols)}" class="gs" data-g="{gi}">{esc(gname)}</th>')
         for j, (k, lab, _) in enumerate(cols):
             hint = CELL_HINTS.get(k)
             title = f' title="{esc(hint)}"' if hint else ""
-            gs = ' class="gs"' if j == 0 else ""
-            head2.append(f'<th scope="col"{title}{gs}>{esc(lab)}</th>')
+            gs = " gs" if j == 0 else ""
+            name, _, unit = lab.partition("|")
+            label = f"{esc(name)}<small>{esc(unit)}</small>" if unit else esc(name)
+            head2.append(f'<th scope="col"{title} class="c{gs}" data-g="{gi}">{label}</th>')
     body = []
     for r in rows:
         link = (f'<a href="{DART_VIEW}{esc(r["receipt"])}" target="_blank" rel="noopener" '
                 f'title="{esc((r["report_name"] or "").strip())} 원문 보기">{esc(r["label"])}</a>'
                 if r.get("receipt") else esc(r["label"]))
         cells = [f'<th scope="row"><span class="pl">{link}</span>{row_badges(r)}</th>']
-        for gname, cols in groups:
+        for gi, _, cols in groups:
             for j, (k, _, typ) in enumerate(cols):
-                val = r["values"].get(k) if typ == "amt" else r["ratios"].get(k)
-                text = eok(val) if typ == "amt" else an.pct(val)
+                val = get(r, k)
                 cls = ["gs"] if j == 0 else []
                 if val is None:
                     cls.append("na")
                 elif val < 0:
                     cls.append("neg")
                 c = f' class="{" ".join(cls)}"' if cls else ""
-                cells.append(f"<td{c}>{text}</td>")
+                cells.append(f'<td{c} data-g="{gi}">{fmt_cell(val, typ)}</td>')
         body.append("<tr>" + "".join(cells) + "</tr>")
-    return (f'<div class="table-scroll big tall" tabindex="0" id="{tid}-table"><table><caption class="sr">{esc(caption)}</caption>'
+    chips = "".join(f'<button type="button" data-g="{gi}" aria-pressed="false">{esc(TABLE_GROUPS[gi][0])}</button>'
+                    for gi, _, _ in groups)
+    toggles = (f'<div class="gtoggle" role="group" aria-label="열 묶음 고르기" hidden>'
+               f'<button type="button" data-g="" aria-pressed="true">전체</button>{chips}</div>')
+    return (f'{toggles}<div class="table-scroll big tall" tabindex="0" id="{tid}-table"><table><caption class="sr">{esc(caption)}</caption>'
             f'<thead><tr class="g">{"".join(head1)}</tr><tr class="c">{"".join(head2)}</tr></thead>'
             f'<tbody>{"".join(body)}</tbody></table></div>')
 
@@ -814,19 +1106,32 @@ CAVEATS = [
     "누적 보고서 중 하나가 정정됐으면 정정 효과가 그 분기에 섞일 수 있어 표에 ‘주의’로 표시했습니다.",
     "2010~2014년(분·반기는 2015년까지)은 OpenDART 재무제표 API가 없어 공시 원문의 XBRL 재무제표 표에서 읽었습니다. "
     "2010년 숫자는 K-IFRS를 처음 적용한 2011년 보고서의 비교 열이고, 2010년 분·반기말 재무상태표는 공시에 없습니다.",
+    "감가상각비·이자비용은 재무제표 본문에 없어 연결재무제표 주석(현금흐름표 조정 항목)에서 읽었습니다. "
+    "2010~2013년 분·반기 주석에는 이 표가 없어 그 기간의 EBITDA·이자보상배율은 비어 있습니다.",
     "지배주주 순이익은 원문 표에서 같은 이름의 줄이 여러 번 나와 2010~2014년은 비워 두었습니다.",
+    "주가는 네이버 금융(실패하면 Yahoo Finance) 월말 종가, 주식수는 OpenDART ‘주식의 총수 현황’(2015년부터)입니다. "
+    "우선주도 보통주 주가로 계산해 시가총액이 조금 다를 수 있습니다.",
     "판정(성장·주의 등)은 화면 아래 판정 기준의 단순 규칙입니다. 투자 판단의 근거로 쓰기에는 정보가 부족합니다.",
     "동종기업은 사업 구성이 달라(삼성물산의 상사·바이오 등) 연결 전체 숫자를 그대로 비교하면 차이가 과장될 수 있습니다.",
 ]
 METHOD = [
-    "매출증가율 = (이번 기간 매출 − 1년 전 같은 기간 매출) ÷ 1년 전 같은 기간 매출 × 100",
-    "원가율·판관비율·영업이익률·순이익률 = 각 금액 ÷ 매출 × 100",
-    "부채비율 = 부채 ÷ 자본 × 100 · 유동비율 = 유동자산 ÷ 유동부채 × 100 · 자기자본비율 = 자본 ÷ 자산 × 100",
-    "ROA·ROE = 연간 순이익 ÷ (전년 말과 올해 말의 평균 자산·자본) × 100 (연간 표에만 표시)",
-    "받을 돈 = 매출채권 + 미청구공사 · 미리 받은 돈 = 초과청구공사 + 공사및분양선수금",
-    "현금성자산 = 현금및현금성자산 + 단기금융상품 · 차입금 = 단기차입금 + 유동성장기부채 + 사채 + 장기차입금",
+    "정의는 교수님 자료 ‘재무제표·재무비율 실무가이드’를 따랐습니다. ROA·ROE·ROIC·회전율처럼 손익과 잔액을 함께 쓰는 지표는 "
+    "전년 말과 올해 말의 평균 잔액을 쓰고, 그래서 연간 표에만 표시합니다.",
+    "수익성: 매출총이익률·영업이익률·순이익률·EBITDA 마진 = 각 이익 ÷ 매출 · ROA = 순이익 ÷ 평균 자산 · ROE = 순이익 ÷ 평균 자본 · "
+    "ROIC = 영업이익 × (1 − 실효세율) ÷ 평균 투하자본(자본총계 + 순차입금)",
+    "유동성·안정성: 유동비율 = 유동자산 ÷ 유동부채 · 당좌비율 = (유동자산 − 재고자산) ÷ 유동부채 · 부채비율 = 부채 ÷ 자본 · "
+    "자기자본비율 = 자본 ÷ 자산 · 차입금의존도 = 이자부차입금 ÷ 자산 · 이자보상배율 = 영업이익 ÷ 이자비용 · 순차입금/EBITDA",
+    "활동성·성장성: 총자산회전율 = 매출 ÷ 평균 자산 · DSO = 평균 매출채권 ÷ 매출 × 365 · DIO = 평균 재고자산 ÷ 매출원가 × 365 · "
+    "DPO = 평균 매입채무 ÷ 매출원가 × 365(외상매입액 대신 매출원가) · CCC = DSO + DIO − DPO · 매출증가율 · CFO/순이익",
+    "현금흐름: CAPEX = 유형자산 취득 + 무형자산 취득 · FCF = 영업활동현금흐름 − CAPEX · "
+    "순차입금 = 이자부차입금(단기차입금 + 유동성장기부채 + 사채 + 장기차입금) − 현금및현금성자산",
+    "EBITDA = 영업이익 + 감가상각비(유형자산·사용권자산·투자부동산·운휴자산) + 무형자산상각비",
+    "시장가치: 시가총액 = 월말 보통주 종가 × 발행주식수(보통주+우선주) · PER = 시가총액 ÷ 지배주주 순이익 · PBR = 시가총액 ÷ 지배주주지분 · "
+    "EV/EBITDA = (시가총액 + 순차입금 + 비지배지분) ÷ EBITDA · FCF 수익률 = FCF ÷ 시가총액",
+    "건설업 참고: 받을 돈 = 매출채권 + 미청구공사 · 미리 받은 돈 = 초과청구공사 + 공사및분양선수금 · 차입 이자율 = 이자비용 ÷ 평균 이자부차입금",
     "금액은 표에서 억 원(반올림), CSV에서는 원 단위 그대로입니다. 분모가 0 이하이거나 숫자가 없으면 ‘–’입니다.",
 ]
+STATUS_ICON = {"ok": ("✓", "반영"), "part": ("△", "일부")}
 
 
 def notes_section(ctx, a):
@@ -855,7 +1160,9 @@ def notes_section(ctx, a):
     lf = ctx.get("latest_filing")
     dart_links = [("OpenDART 재무제표 API 설명", "https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS003&apiId=2019020"),
                   ("OpenDART 공시검색 API 설명", "https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS001&apiId=2019001"),
-                  ("OpenDART 공시서류 원본 API 설명", "https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS001&apiId=2019003")]
+                  ("OpenDART 공시서류 원본 API 설명", "https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS001&apiId=2019003"),
+                  ("OpenDART 주식의 총수 현황 API 설명", "https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS002&apiId=2020002"),
+                  ("네이버 금융 현대건설 시세", f"https://finance.naver.com/item/sise.naver?code={ctx['company']['stock_code']}")]
     if lf:
         dart_links.insert(0, (f"가장 최근 반영 보고서: {lf['report_nm'].strip()}", DART_VIEW + lf["rcept_no"]))
     links = "".join(f'<li><a href="{esc(u)}" target="_blank" rel="noopener">{esc(n)} ↗</a></li>' for n, u in dart_links)
@@ -864,8 +1171,20 @@ def notes_section(ctx, a):
     if rank.get("source_url"):
         news += (f'<li><a href="{esc(rank["source_url"])}" target="_blank" rel="noopener">'
                  f'{esc(rank["source_name"])} (시공능력평가 순위) ↗</a></li>')
+    nr = ctx.get("notes") or {}
+    if nr.get("found"):
+        check.append(f"감가상각비·이자비용: 보고서 {nr['parsed']}건 중 {nr['found']}건의 연결 주석에서 읽음"
+                     + (f", {len(nr['from_prior'])}개 기간은 다음 보고서의 비교 열로 보충" if nr.get("from_prior") else ""))
+    val = ctx.get("valuation") or {}
+    if val.get("as_of"):
+        check.append(f"주가: {val.get('source', '')}에서 {val.get('fetched', '')}에 받은 월말 종가 (최근 {val['as_of']})")
+    rows = "".join(f'<tr><th scope="row">{esc(c["item"])}</th><td class="st {c["status"]}"><span aria-hidden="true">{STATUS_ICON[c["status"]][0]}</span>'
+                   f'{STATUS_ICON[c["status"]][1]}</td><td class="left wrap">{esc(c["how"])}</td></tr>' for c in a.get("checklist", []))
+    checklist = (f'<div class="table-scroll ck"><table><caption>교수님 가이드 6장 ‘실무 검토 체크리스트’에 대한 이 대시보드의 반영 정도</caption>'
+                 f'<thead><tr><th scope="col">검토 항목</th><th scope="col">반영</th><th scope="col" class="left">어떻게</th></tr></thead>'
+                 f'<tbody>{rows}</tbody></table></div>') if rows else ""
     return (f'<section id="notes" aria-labelledby="h-notes">'
-            f'{section_head("notes", "Notes", "자료와 검증", "숫자는 어디서 왔고, 어떻게 계산했나")}'
+            f'{section_head("notes", "Notes", "자료와 검증", "숫자는 어디서 왔고, 어떻게 계산했나")}{checklist}'
             f'<div class="notes"><div class="note-card"><h3>자료 검증</h3><ul>{"".join(f"<li>{esc(c)}</li>" for c in check)}</ul></div>'
             f'<div class="note-card"><h3>계산 방법</h3><ul>{method}</ul></div>'
             f'<div class="note-card"><h3>판정 기준</h3><ul>{rules}</ul></div>'
@@ -891,7 +1210,9 @@ def peer_table_rows(ctx):
                "ratios": {"operating_margin_pct": base["ratios"].get("operating_margin_pct"),
                           "net_margin_pct": base["ratios"].get("net_margin_pct"),
                           "debt_to_equity_pct": base["ratios"].get("debt_to_equity_pct"),
-                          "current_ratio_pct": base["ratios"].get("current_ratio_pct")}}
+                          "current_ratio_pct": base["ratios"].get("current_ratio_pct"),
+                          "roe_pct": fin.ratio(v.get("net_income"), v.get("equity"))},
+               "market": ctx.get("own_market") or {}}
     rows = [(p, False) for p in peers] + ([(own, True)] if own else [])
     rows.sort(key=lambda x: (x[0].get("rank") or 99))
     return rows, year
@@ -922,16 +1243,24 @@ def peer_summary(rows, name):
     return f"{me['year']}년 사업보고서 기준으로 {name}의 " + ", ".join(parts) + "입니다." if parts else ""
 
 
-PEER_COLS = [("revenue", "매출액", "amt"), ("operating_profit", "영업이익", "amt"), ("net_income", "당기순이익", "amt"),
-             ("operating_margin_pct", "영업이익률", "pct"), ("net_margin_pct", "순이익률", "pct"),
-             ("debt_to_equity_pct", "부채비율", "pct"), ("current_ratio_pct", "유동비율", "pct")]
+# (키, 이름, 형식, 어디서) · 어디서: values=재무제표 금액, ratios=비율, market=주가 기준
+PEER_COLS = [("revenue", "매출액", "amt", "values"), ("operating_profit", "영업이익", "amt", "values"),
+             ("net_income", "당기순이익", "amt", "values"), ("operating_margin_pct", "영업이익률", "pct", "ratios"),
+             ("net_margin_pct", "순이익률", "pct", "ratios"), ("roe_pct", "ROE", "pct", "ratios"),
+             ("debt_to_equity_pct", "부채비율", "pct", "ratios"), ("current_ratio_pct", "유동비율", "pct", "ratios"),
+             ("per_x", "PER", "x", "market"), ("pbr_x", "PBR", "x2", "market")]
+PEER_UNITS = {"amt": "억 원", "pct": "%", "x": "배", "x2": "배"}
+
+
+def peer_value(p, key, where):
+    return (p.get(where) or {}).get(key)
 
 
 def peers_section(ctx):
     rows, year = peer_table_rows(ctx)
     rank = ctx["company"].get("rank", {})
     head = ('<tr><th scope="col" class="corner">회사 · 주요 사업</th><th scope="col">시평 순위</th><th scope="col">기준</th>'
-            + "".join(f'<th scope="col">{esc(lab)}<small>{"억 원" if t == "amt" else "%"}</small></th>' for _, lab, t in PEER_COLS)
+            + "".join(f'<th scope="col">{esc(lab)}<small>{PEER_UNITS[t]}</small></th>' for _, lab, t, _ in PEER_COLS)
             + "</tr>")
     body = []
     for p, own in rows:
@@ -942,9 +1271,9 @@ def peers_section(ctx):
                  f'<span class="biz">{esc(p.get("business", ""))}</span></th>',
                  f'<td>{esc(p["rank"]) + "위" if p.get("rank") else "–"}</td>',
                  f'<td>{esc(p["year"]) + "년" if p.get("year") else "수집 전"}</td>']
-        for k, _, t in PEER_COLS:
-            val = p["values"].get(k) if t == "amt" else p["ratios"].get(k)
-            text = eok(val) if t == "amt" else an.pct(val)
+        for k, _, t, where in PEER_COLS:
+            val = peer_value(p, k, where)
+            text = fmt_cell(val, t)
             cls = "na" if val is None else ("neg" if val < 0 else "")
             cells.append(f'<td class="{cls}">{text}</td>' if cls else f"<td>{text}</td>")
         body.append(('<tr class="self">' if own else "<tr>") + "".join(cells) + "</tr>")
@@ -956,8 +1285,12 @@ def peers_section(ctx):
                  f'(동종기업은 가장 최근 사업보고서 1개만 받습니다)</p>')
     basis = (f"순위는 {rank.get('year', '')}년 {rank.get('basis', '시공능력평가')} 기준"
              f"({rank.get('source_name', '')}). " if rank else "")
+    as_of = next((p["market"].get("as_of") for p, _ in rows if (p.get("market") or {}).get("as_of")), None)
     desc = (f"{basis}재무 숫자는 각 회사의 {str(year) + '년 ' if year else ''}사업보고서 연결재무제표를 OpenDART에서 자동으로 받아 "
-            f"현대건설과 같은 방식으로 계산합니다. 회사 이름을 누르면 원문 공시가 열립니다.")
+            f"현대건설과 같은 방식으로 계산합니다. ROE는 기말 자본 기준"
+            + (f", PER·PBR은 {as_of} 월말 주가 × 발행주식수(시가총액) ÷ 사업보고서의 지배주주 순이익·지배주주지분입니다. "
+               if as_of else ", PER·PBR은 주가를 받은 뒤 채워집니다. ")
+            + "회사 이름을 누르면 원문 공시가 열립니다.")
     summary = peer_summary(rows, ctx["company"]["name"])
     return (f'<section id="peers" aria-labelledby="h-peers" class="tbl-sec">'
             f'{section_head("peers", "Peer firms", "국내 동종업계", "국내 대형 건설사와 비교", summary, desc)}'
@@ -975,7 +1308,7 @@ CSS = """
   --ink:#141716; --ink-2:#4a4f4c; --muted:#5f625e; --line:#d4d0c6; --grid:#e5e1d8; --axis:#b3ad9f; --ref:#8d877b;
   --hover:rgba(24,61,61,.07); --below:rgba(196,72,59,.05); --self:#e8f1ed;
   --forest:#183d3d; --forest-ink:#f3f0e8; --forest-soft:#b4d3cd; --forest-line:rgba(180,211,205,.3);
-  --data:#245553; --s1:#008f7a; --s2:#b9770e; --s3:#5965c9; --neg:#c4483b; --neg-wash:rgba(196,72,59,.14); --neg-text:#a8382c;
+  --data:#245553; --s1:#008f7a; --s2:#b9770e; --s3:#5965c9; --s4:#b5487f; --neg:#c4483b; --neg-wash:rgba(196,72,59,.14); --neg-text:#a8382c;
   --cost:#cfc8ba; --sga:#9c9588; --spark:#aaa496;
   --good:#0ca30c; --warn:#fab219; --crit:#d03b3b; --good-bg:rgba(12,163,12,.12); --warn-bg:rgba(250,178,25,.22); --crit-bg:rgba(208,59,59,.13);
   --tip-bg:#141716; --tip-fg:#f3f0e8; --tip-muted:#b9bcb6; --link:#1a6252; --focus:#1a6252;
@@ -987,7 +1320,7 @@ CSS = """
   --ink:#ecede8; --ink-2:#c2c7c3; --muted:#9aa09c; --line:#2c3331; --grid:#252b29; --axis:#4a514d; --ref:#7d8480;
   --hover:rgba(180,211,205,.08); --below:rgba(224,106,92,.08); --self:#1d2a27;
   --forest:#10201f; --forest-ink:#ecede8; --forest-soft:#9fbdb6; --forest-line:rgba(159,189,182,.22);
-  --data:#8fc7ba; --s1:#24a58f; --s2:#c4862a; --s3:#7480dc; --neg:#e06a5c; --neg-wash:rgba(224,106,92,.18); --neg-text:#f08a7c;
+  --data:#8fc7ba; --s1:#24a58f; --s2:#c4862a; --s3:#7480dc; --s4:#d16a9f; --neg:#e06a5c; --neg-wash:rgba(224,106,92,.18); --neg-text:#f08a7c;
   --cost:#3a403d; --sga:#6b726e; --spark:#5d6461;
   --good-bg:rgba(12,163,12,.2); --warn-bg:rgba(250,178,25,.18); --crit-bg:rgba(208,59,59,.22);
   --tip-bg:#eceee9; --tip-fg:#141716; --tip-muted:#4a4f4c; --link:#7cc4b3; --focus:#7cc4b3; color-scheme:dark}}
@@ -996,7 +1329,7 @@ CSS = """
   --ink:#ecede8; --ink-2:#c2c7c3; --muted:#9aa09c; --line:#2c3331; --grid:#252b29; --axis:#4a514d; --ref:#7d8480;
   --hover:rgba(180,211,205,.08); --below:rgba(224,106,92,.08); --self:#1d2a27;
   --forest:#10201f; --forest-ink:#ecede8; --forest-soft:#9fbdb6; --forest-line:rgba(159,189,182,.22);
-  --data:#8fc7ba; --s1:#24a58f; --s2:#c4862a; --s3:#7480dc; --neg:#e06a5c; --neg-wash:rgba(224,106,92,.18); --neg-text:#f08a7c;
+  --data:#8fc7ba; --s1:#24a58f; --s2:#c4862a; --s3:#7480dc; --s4:#d16a9f; --neg:#e06a5c; --neg-wash:rgba(224,106,92,.18); --neg-text:#f08a7c;
   --cost:#3a403d; --sga:#6b726e; --spark:#5d6461;
   --good-bg:rgba(12,163,12,.2); --warn-bg:rgba(250,178,25,.18); --crit-bg:rgba(208,59,59,.22);
   --tip-bg:#eceee9; --tip-fg:#141716; --tip-muted:#4a4f4c; --link:#7cc4b3; --focus:#7cc4b3; color-scheme:dark}
@@ -1127,7 +1460,8 @@ ul.small{font-size:.8rem}
 .y2{display:none}
 .qq,.qy{display:block}
 .qy{font-size:.92em;opacity:.85}
-@container (max-width:440px){.y4{display:none}.y2{display:inline}}
+@container (max-width:560px){.y4{display:none}.y2{display:inline}}
+@container (max-width:430px){.ml .xa>span:nth-child(even){visibility:hidden}}
 .gl,.zl,.rl{position:absolute;left:0;right:0;height:0;border-top:1px solid var(--grid)}
 .zl{border-top-color:var(--axis)}
 .rl{border-top:1px dashed var(--ref)}
@@ -1240,6 +1574,61 @@ details.tv[open] summary::before{transform:rotate(90deg)}
 .pe tr.self td,.pe tr.self th{background:var(--self)}
 .pe tr.self th::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--data)}
 
+/* 6단계 카드 · 단계 표시 */
+.kpis.six{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.kpi-label a{color:inherit;text-decoration:none}
+.kpi-label a:hover{color:var(--ink)}
+.kpi-label .no{display:inline-grid;place-items:center;width:18px;height:18px;margin-right:6px;border-radius:50%;background:var(--data);color:var(--sheet);font:700 .66rem/1 var(--font-mono)}
+.chip.info{--chip-bg:var(--hover);--chip-c:var(--ink-2)}
+.chip.info .ic{font-family:var(--font-mono)}
+.sec-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.sec-top .eyebrow{margin:0}
+.step-no{display:inline-block;padding:3px 8px;border-radius:4px;background:var(--data);color:var(--sheet);font:700 .66rem/1.2 var(--font-mono);letter-spacing:.12em}
+.sw.line{height:3px;border-radius:2px}
+.sw.dash{height:0;border-radius:0;background:none;border-top:2px dashed var(--c)}
+.plot.ml{grid-template-columns:auto minmax(0,1fr) 3.6em}
+.el{position:absolute;left:calc(100% + 8px);transform:translateY(50%);font-size:.7rem;font-weight:700;line-height:1;white-space:nowrap;color:var(--c);font-variant-numeric:tabular-nums;pointer-events:none}
+.lc polyline[stroke-dasharray]{stroke-width:1.6}
+/* 주가 수준 */
+.vtiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:1px;margin:0 0 14px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.vt{background:var(--sheet);padding:12px 14px;min-width:0}
+.vt-l{margin:0;font-size:.76rem;font-weight:600;color:var(--muted)}
+.vt-v{margin:2px 0 0;font-size:1.55rem;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.vt-v small{margin-left:3px;font-size:.78rem;font-weight:600;color:var(--ink-2)}
+.vt-d{margin:3px 0 0;font-size:.72rem;line-height:1.45;color:var(--muted)}
+.card.empty{border-style:dashed}
+.card.empty p{margin:.3em 0 0;color:var(--ink-2);font-size:.9rem}
+/* 지표 조합 점검 */
+.combo td,.combo th{vertical-align:top}
+.combo .det{display:block;margin-top:4px;font-size:.74rem;color:var(--muted);white-space:normal;min-width:13em}
+.combo .res{font-size:.8rem;font-weight:600}
+.combo .res.no,.combo .res.na{color:var(--muted)}
+.combo .res.na{font-weight:500}
+.combo tbody tr.hit th,.combo tbody tr.hit td{background:var(--warn-bg)}
+.combo tbody th{min-width:11em;white-space:normal}
+.combo td.wrap{max-width:none;min-width:13em}
+/* 체크리스트 */
+.ck{margin:0 0 14px}
+.ck th,.ck td{text-align:left}
+.ck td.st{font-weight:700;white-space:nowrap}
+.ck td.st span{display:inline-block;width:1.3em}
+.ck td.st.ok{color:var(--good)}
+.ck td.st.part{color:var(--ink-2)}
+/* 표 열 묶음 고르기 */
+.gtoggle{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+.gtoggle button{font:600 .76rem/1 var(--font-sans);padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--sheet);color:var(--ink-2);cursor:pointer}
+.gtoggle button:hover{background:var(--hover);color:var(--ink)}
+.gtoggle button[aria-pressed="true"]{background:var(--data);border-color:var(--data);color:var(--sheet)}
+.big thead tr.c th small{display:block;font-size:.66rem;font-weight:500;color:var(--muted)}
+.big[data-show="0"] [data-g]:not([data-g="0"]){display:none}
+.big[data-show="1"] [data-g]:not([data-g="1"]){display:none}
+.big[data-show="2"] [data-g]:not([data-g="2"]){display:none}
+.big[data-show="3"] [data-g]:not([data-g="3"]){display:none}
+.big[data-show="4"] [data-g]:not([data-g="4"]){display:none}
+.big[data-show="5"] [data-g]:not([data-g="5"]){display:none}
+.big[data-show="6"] [data-g]:not([data-g="6"]){display:none}
+.big[data-show="7"] [data-g]:not([data-g="7"]){display:none}
+
 /* 자료·검증 */
 .notes{columns:3 300px;column-gap:14px}
 .note-card{break-inside:avoid;margin:0 0 14px;background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:16px 18px;min-width:0}
@@ -1314,6 +1703,17 @@ JS = """
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){hide();}});
   window.addEventListener('scroll',function(){if(cur&&document.activeElement!==cur){hide();}},{passive:true});
 })();
+(function(){
+  document.querySelectorAll('.gtoggle').forEach(function(bar){
+    var wrap=bar.nextElementSibling;bar.hidden=false;
+    bar.addEventListener('click',function(e){
+      var b=e.target.closest('button');if(!b){return;}
+      var g=b.getAttribute('data-g');
+      if(g){wrap.setAttribute('data-show',g);}else{wrap.removeAttribute('data-show');}
+      bar.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    });
+  });
+})();
 """
 
 FONT_LINK = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
@@ -1341,7 +1741,7 @@ def render(ctx):
     v = an.View(ctx)
     vd = a["verdicts"]
     notes = a["notes"]
-    qmap = {q["id"]: q for q in a["questions"]}
+    qmap = {q["id"]: q for q in a["steps"]}
     status = ctx["status"]
     q_all, y_all = ctx["quarters"], ctx["annual"]
     lf = ctx.get("latest_filing")
@@ -1356,18 +1756,19 @@ def render(ctx):
     header = (f'<header class="masthead"><div class="wrap"><p class="eyebrow">HSC-Class01 · OpenDART Financial Agent'
               f'<span class="live"><i aria-hidden="true"></i>매월 1일 자동 업데이트</span></p>'
               f'<h1>{esc(title)}</h1><p class="thesis">{rich(a["headline"])}</p><dl class="titleblock">{block_html}</dl></div></header>')
-    toc = [("summary", "요약"), ("now", "이번 달"), ("growth", "성장성"), ("profit", "수익성"), ("cash", "현금흐름"),
-           ("stability", "안정성"), ("story", "흐름"), None, ("annual", "Annual"), ("half", "Half-year"),
-           ("quarter", "Quarterly"), ("notes", "자료"), ("peers", "Peer firms")]
+    toc = [("summary", "요약"), ("now", "이번 달"), ("growth", "1 매출 성장"), ("profit", "2 이익률"), ("cash", "3 현금흐름"),
+           ("debt", "4 차입 부담"), ("returns", "5 투자수익률"), ("valuation", "6 주가 수준"), ("combos", "조합 신호"),
+           ("story", "흐름"), None, ("annual", "Annual"), ("half", "Half-year"), ("quarter", "Quarterly"), ("notes", "자료"),
+           ("peers", "Peer firms")]
     toc_html = "".join('<span class="sep" aria-hidden="true"></span>' if t is None else f'<a href="#{t[0]}">{esc(t[1])}</a>'
                        for t in toc)
 
     sections = []
     sections.append(f'<section id="summary" aria-labelledby="h-summary">'
-                    + section_head("summary", "Summary", "한눈에 보기", "네 가지 질문, 네 가지 판정",
-                                   "성장성·수익성·현금흐름·안정성 네 관점으로 숫자를 봤습니다. 판정은 화면 아래 ‘판정 기준’의 단순 규칙을 따르고, "
-                                   "새 보고서가 나오면 자동으로 다시 매겨집니다.")
-                    + kpis(v, vd) + "</section>")
+                    + section_head("summary", "Summary", "한눈에 보기", "여섯 단계로 본 현대건설",
+                                   "교수님 자료(재무제표·재무비율 실무가이드)의 분석 순서대로 매출 성장 → 이익률 → 현금흐름 → 차입 부담 → "
+                                   "투자수익률 → 주가 수준을 봤습니다. 판정은 화면 아래 ‘판정 기준’의 단순 규칙을 따르고, 새 보고서가 나오면 자동으로 다시 매겨집니다.")
+                    + kpis(v, vd, ctx) + "</section>")
     now_desc = ("매월 1일 OpenDART에서 새 정기보고서(사업·반기·분기)가 나왔는지 확인하고, 있으면 아래 숫자와 문장을 모두 다시 씁니다. "
                 + notes.get("quarters", ""))
     sections.append(f'<section id="now" aria-labelledby="h-now">'
@@ -1376,16 +1777,23 @@ def render(ctx):
     if "growth" in qmap:
         sections.append(question(qmap["growth"], growth_fig(v, notes)))
     if "profit" in qmap:
-        sections.append(question(qmap["profit"], per100_fig(v, notes)))
+        sections.append(question(qmap["profit"], f'<div class="stack">{per100_fig(v, notes)}{margins_fig(v)}</div>'))
     if "cash" in qmap:
         f1, f2 = cash_figs(v, vd, notes)
         signals = (f'<div class="sub-head"><h3>돈은 어디서 와서 어디로 갔나</h3><p>현금흐름표의 세 칸(영업·투자·재무)이 들어왔는지(▲) '
                    f'나갔는지(▼)만 봐도 회사의 상태가 보입니다. 영업 현금이 마이너스인 해는 붉은 바탕으로 표시했습니다.</p></div>'
                    f'{signal_table(a["signals"])}')
-        sections.append(question(qmap["cash"], f'<div class="grid-2">{f1}{f2}</div>').replace("</section>", signals + "</section>"))
-    if "stability" in qmap:
-        f1, f2, f3 = stability_figs(v)
-        sections.append(question(qmap["stability"], f'<div class="stack"><div class="grid-2">{f1}{f2}</div>{f3}</div>'))
+        body = f'<div class="stack"><div class="grid-2">{f1}{f2}</div>{fcf_fig(v)}</div>'
+        sections.append(question(qmap["cash"], body).replace("</section>", signals + "</section>"))
+    if "debt" in qmap:
+        f1, f2, f3, f4 = debt_figs(v)
+        sections.append(question(qmap["debt"], f'<div class="stack"><div class="grid-2">{f1}{f2}</div><div class="grid-2">{f3}{f4}</div></div>'))
+    if "returns" in qmap:
+        sections.append(question(qmap["returns"], returns_fig(v, vd)))
+    if "valuation" in qmap:
+        sections.append(question(qmap["valuation"], valuation_block(v, ctx)))
+    if a.get("combos"):
+        sections.append(combos_section(a))
     if a["acts"]:
         sections.append(f'<section id="story" aria-labelledby="h-story">'
                         + section_head("story", "Timeline", "시기별 흐름", f"{y_all[0]['year']}년부터 지금까지, 다섯 장면",
@@ -1424,7 +1832,7 @@ MARKERS = {
     "summary": ("<!-- AUTO:SUMMARY:START -->", "<!-- AUTO:SUMMARY:END -->"),
     "peers": ("<!-- AUTO:PEERS:START -->", "<!-- AUTO:PEERS:END -->"),
 }
-VERDICT_ICON = {"good": "🟢", "warn": "🟡", "crit": "🔴"}
+VERDICT_ICON = {"good": "🟢", "warn": "🟡", "crit": "🔴", "info": "ℹ️"}
 
 
 def _md_table(headers, rows, align=None):
@@ -1441,25 +1849,19 @@ def readme_summary(ctx):
     if not a.get("verdicts"):
         return "_아직 수집된 숫자가 없습니다. Actions에서 에이전트를 한 번 실행하세요._"
     vd = a["verdicts"]
-    v = an.View(ctx)
-    first, last = v.annual[0], v.annual[-1]
-    bal = vd["balance_row"]
-    when = f"{bal['year']}년 {bal['month']}월 말" if bal["kind"] != "annual" else f"{bal['year']}년 말"
     lines = [f"> 마지막 확인 **{status.get('checked_at', '')[:10]}** · 가장 최근 반영 보고서 **"
              + (f"{lf['report_nm'].strip()}** ({fmt_date(lf['rcept_dt'])} 접수)" if lf else "–**")
              + f" · 다음 자동 확인 **{ctx['next_run']}**", "",
-             a["headline"], ""]
-    rows = [
-        ["성장성", f"{VERDICT_ICON[vd['growth'][0]]} {vd['growth'][1]}",
-         f"연간 매출 {first['year']}년 {an.jo(first['values']['revenue'])}조 → {last['year']}년 {an.jo(last['values']['revenue'])}조 원, 연평균 {an.pct(vd['cagr'])}%"],
-        ["수익성", f"{VERDICT_ICON[vd['profit'][0]]} {vd['profit'][1]}",
-         f"최근 4개 분기 영업이익률 {an.pct(vd['margin_now'])}% ({first['year']}년 {an.pct(vd['margin_first'])}%)"],
-        ["현금흐름", f"{VERDICT_ICON[vd['cash'][0]]} {vd['cash'][1]}",
-         f"연간 영업활동현금흐름 {vd['streak']}년 연속 마이너스" if vd["streak"] else "연간 영업활동현금흐름 플러스"],
-        ["안정성", f"{VERDICT_ICON[vd['stability'][0]]} {vd['stability'][1]}",
-         f"{when} 부채비율 {an.pct(bal['ratios'].get('debt_to_equity_pct'), 0)}%, 유동비율 {an.pct(bal['ratios'].get('current_ratio_pct'), 0)}%"],
-    ]
-    lines.append(_md_table(["관점", "판정", "근거"], rows, ["---", "---", "---"]))
+             a["headline"], "",
+             "교수님 자료(재무제표·재무비율 실무가이드)의 분석 순서대로 본 판정입니다.", ""]
+    rows = []
+    for step in a["steps"]:
+        tone, word = step["verdict"]
+        rows.append([f"{step['no']} {step['ko']}", f"{VERDICT_ICON.get(tone, 'ℹ️')} {word}", an.to_plain(step["answer"])])
+    lines.append(_md_table(["단계", "판정", "한 줄 답"], rows, ["---", "---", "---"]))
+    hits = [c for c in a.get("combos", []) if c["hit"]]
+    if hits:
+        lines += ["", "지표 조합 신호(가이드 5장): " + ", ".join(f"**{c['name']}**({c['detail']})" for c in hits)]
     lq = a.get("latest")
     if lq:
         lines += ["", f"**{lq['title']}**", ""] + [f"- {x}" for x in lq["lines"]]
@@ -1472,9 +1874,17 @@ def readme_summary(ctx):
     for name, r in show:
         rv, rr = r["values"], r["ratios"]
         rows.append([name, eok(rv.get("revenue")), eok(rv.get("operating_profit")), an.pct(rr.get("operating_margin_pct")),
-                     eok(rv.get("net_income")), eok(rv.get("operating_cashflow")), an.pct(rr.get("debt_to_equity_pct"), 0)])
-    lines += ["", "최근 실적 (연결, 금액 단위: 억 원)", "",
-              _md_table(["기간", "매출액", "영업이익", "영업이익률(%)", "당기순이익", "영업활동현금흐름", "부채비율(%)"], rows)]
+                     eok(rv.get("ebitda")), eok(rv.get("net_income")), eok(rv.get("operating_cashflow")), eok(rv.get("fcf")),
+                     an.pct(rr.get("debt_to_equity_pct"), 0), fmt_cell(rr.get("interest_coverage_x"), "x"),
+                     an.pct(rr.get("roe_pct")), an.pct(rr.get("roic_pct"))])
+    lines += ["", "최근 실적 (연결, 금액 단위: 억 원 · ROE·ROIC는 연간만)", "",
+              _md_table(["기간", "매출액", "영업이익", "영업이익률(%)", "EBITDA", "당기순이익", "영업현금흐름", "FCF",
+                         "부채비율(%)", "이자보상배율(배)", "ROE(%)", "ROIC(%)"], rows)]
+    val = ctx.get("valuation") or {}
+    if val.get("market_cap"):
+        lines += ["", f"주가 수준({val['as_of']} 월말 종가 {val['price']:,.0f}원): 시가총액 {an.jo(val['market_cap'], 2)}조 원"
+                  + (f" · PER {val['per_x']:.1f}배" if val.get("per_x") else "") + (f" · PBR {val['pbr_x']:.2f}배" if val.get("pbr_x") else "")
+                  + (f" · EV/EBITDA {val['ev_ebitda_x']:.1f}배" if val.get("ev_ebitda_x") else "")]
     lines += ["", f"전체 표: [연간]({ctx['company']['dashboard_url']}#annual) · [반기]({ctx['company']['dashboard_url']}#half) · "
               f"[분기]({ctx['company']['dashboard_url']}#quarter) · CSV: [annual](data/financials/annual.csv) · "
               f"[half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv)"]
@@ -1489,20 +1899,20 @@ def readme_peers(ctx):
         name = f"**{p['name']}**" if own else p["name"]
         if p.get("receipt"):
             name = f"[{name}]({DART_VIEW}{p['receipt']})"
-        vals = [eok(p["values"].get("revenue")), eok(p["values"].get("operating_profit")),
-                an.pct(p["ratios"].get("operating_margin_pct")), an.pct(p["ratios"].get("debt_to_equity_pct"), 0),
-                an.pct(p["ratios"].get("current_ratio_pct"), 0)]
+        vals = [fmt_cell(peer_value(p, k, w), t) for k, _, t, w in PEER_COLS if k not in ("net_income", "net_margin_pct")]
         rows.append([f"{p['rank']}위" if p.get("rank") else "–", name, p["stock_code"], p.get("business", ""),
                      f"{p['year']}년" if p.get("year") else "수집 전", *vals])
-    head = ["시평 순위", "회사", "종목코드", "주요 사업", "기준", "매출액(억 원)", "영업이익(억 원)", "영업이익률(%)",
-            "부채비율(%)", "유동비율(%)"]
+    head = ["시평 순위", "회사", "종목코드", "주요 사업", "기준"] + [
+        f"{lab}({PEER_UNITS[t]})" for k, lab, t, _ in PEER_COLS if k not in ("net_income", "net_margin_pct")]
     summary = peer_summary(rows_, ctx["company"]["name"])
     out = ([summary, ""] if summary else []) + [
-        _md_table(head, rows, ["---:", "---", "---", "---", "---", "---:", "---:", "---:", "---:", "---:"]), ""]
+        _md_table(head, rows, ["---:", "---", "---", "---", "---"] + ["---:"] * (len(head) - 5)), ""]
     if rank:
         out.append(f"- 순위: {rank.get('year')}년 {rank.get('basis')} ([{rank.get('source_name')}]({rank.get('source_url')}))")
-    out.append("- 재무 숫자: 각 회사의 가장 최근 사업보고서 연결재무제표 (OpenDART, 매월 자동 갱신). "
-               "동종기업 목록은 `config/company.json`에서 바꿀 수 있습니다.")
+    as_of = next((p["market"].get("as_of") for p, _ in rows_ if (p.get("market") or {}).get("as_of")), None)
+    out.append("- 재무 숫자: 각 회사의 가장 최근 사업보고서 연결재무제표 (OpenDART, 매월 자동 갱신). ROE는 기말 자본 기준"
+               + (f", PER·PBR은 {as_of} 월말 주가 기준." if as_of else ", PER·PBR은 주가를 받은 뒤 채워집니다.")
+               + " 동종기업 목록은 `config/company.json`에서 바꿀 수 있습니다.")
     for p, own in rows_:
         if not own and p.get("note"):
             out.append(f"- {p['name']}: {p['note']}")
