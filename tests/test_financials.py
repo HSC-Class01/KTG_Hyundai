@@ -2,6 +2,10 @@ import copy
 import json
 import sys
 import unittest
+from unittest.mock import patch
+from tempfile import TemporaryDirectory
+import io
+import zipfile
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import dart_agent as agent
@@ -49,6 +53,28 @@ class FinancialRules(unittest.TestCase):
         self.assertTrue(agent.legacy_candidates(text.encode(),2010,12))
         r=agent.blank_row(2010,12)
         self.assertIsNone(agent.reviewed_legacy(r)['revenue'])
+    def test_cache_only_archives_financials_are_refreshed(self):
+        doc=json.loads((agent.ROOT/'data/dart10y/financial_2016.json').read_text())
+        receipt=doc['list'][0]['rcept_no']
+        filing={'rcept_no':receipt,'report_nm':'사업보고서 (2016.12)'}
+        zbuf=io.BytesIO()
+        with zipfile.ZipFile(zbuf,'w') as z:z.writestr('document.xml','<DOCUMENT/>')
+        def response(endpoint,params):
+            if endpoint=='document.xml':return zbuf.getvalue()
+            self.assertEqual(params['fs_div'],'CFS')
+            return json.dumps(doc).encode()
+        with TemporaryDirectory() as temp, patch.object(agent,'RAW',Path(temp)), patch.object(agent,'ROOT',Path(temp).parent), patch.object(core,'get_api',side_effect=response) as fetch:
+            first=agent.collect_period(2016,12,filing)
+            original_revenue=first['revenue']
+            for r in doc['list']:
+                if r.get('account_id') in core.FIELDS['revenue'][1]:
+                    r['thstrm_amount']=str(original_revenue+1000)
+            second=agent.collect_period(2016,12,filing)
+            self.assertEqual(second['revenue'],original_revenue+1000)
+            self.assertEqual(first['archive_sha256'],second['archive_sha256'])
+            self.assertEqual(sum(call.args[0]=='document.xml' for call in fetch.call_args_list),1)
+            self.assertEqual(sum(call.args[0]=='fnlttSinglAcntAll.json' for call in fetch.call_args_list),2)
+
     def test_existing_annual_source_balance(self):
         base=agent.ROOT/'data/dart10y'
         for path in sorted(base.glob('financial_*.json')):
