@@ -83,22 +83,38 @@ class ApiError(Exception):
     pass
 
 
+def read_limited(response, limit_seconds):
+    """응답을 조금씩 읽다가 전체 시간이 limit_seconds를 넘으면 멈춥니다(느린 서버에 워크플로가 붙잡히지 않게)."""
+    started = time.monotonic()
+    chunks = []
+    while True:
+        if time.monotonic() - started > limit_seconds:
+            raise TimeoutError("응답이 너무 느림")
+        chunk = response.read(65536)
+        if not chunk:
+            return b"".join(chunks)
+        chunks.append(chunk)
+
+
 class Dart:
-    def __init__(self, key):
+    def __init__(self, key, deadline=None):
         self.key = key
         self.calls = 0
+        self.deadline = deadline          # time.monotonic() 기준 전체 수집 마감 시각
 
     def get(self, endpoint, params, timeout=60):
         url = BASE_URL + endpoint + "?" + urllib.parse.urlencode({"crtfc_key": self.key, **params})
-        for attempt in range(4):
+        for attempt in range(3):
+            if self.deadline and time.monotonic() > self.deadline:
+                raise ApiError(f"{endpoint}: 수집 시간 제한을 넘어 다음 실행으로 넘김")
             try:
                 self.calls += 1
-                with urllib.request.urlopen(url, timeout=timeout) as response:
-                    return response.read()
+                with urllib.request.urlopen(url, timeout=30) as response:
+                    return read_limited(response, timeout)
             except (urllib.error.URLError, TimeoutError, ConnectionError, OSError):
                 # 오류 메시지에 인증키가 들어 있는 주소가 남지 않도록 원인 문자열을 버립니다.
-                if attempt == 3:
-                    raise ApiError(f"{endpoint} 연결 실패(4회 시도)") from None
+                if attempt == 2:
+                    raise ApiError(f"{endpoint} 연결 실패(3회 시도)") from None
                 time.sleep(3 * (attempt + 1))
         raise ApiError(f"{endpoint} 연결 실패")
 
@@ -181,22 +197,23 @@ def collect(cfg, today, budget_minutes):
         status["errors"].append("DART_API_KEY가 없어 새 자료를 받지 못했습니다. 저장소 Settings → Secrets and variables → "
                                 "Actions에 DART_API_KEY를 등록하세요. 저장된 자료로 화면만 다시 만들었습니다.")
         return status
-    dart = Dart(key)
+    dart = Dart(key, deadline=started + budget_minutes * 60)
     RAW.mkdir(parents=True, exist_ok=True)
     corp = cfg["corp_code"]
 
-    # 회사·동종기업 고유번호
+    # 회사·동종기업 고유번호 (저장된 목록에 없는 회사가 있을 때만 큰 목록 파일을 받습니다)
     codes = load_json(RAW / "corp_codes.json", {})
     wanted = {cfg["stock_code"], *[p["stock_code"] for p in cfg.get("peers", [])]}
-    try:
-        fresh = corp_codes(dart, wanted)
-        own = fresh.get(cfg["stock_code"], {}).get("corp_code")
-        if own and own != corp:
-            status["errors"].append(f"고유번호가 설정({corp})과 다릅니다: {own}")
-        codes.update(fresh)
-        write_json(RAW / "corp_codes.json", codes)
-    except ApiError as exc:
-        status["errors"].append(f"회사 고유번호 목록: {exc} · 저장된 목록을 사용합니다.")
+    if not wanted <= set(codes):
+        try:
+            fresh = corp_codes(dart, wanted)
+            own = fresh.get(cfg["stock_code"], {}).get("corp_code")
+            if own and own != corp:
+                status["errors"].append(f"고유번호가 설정({corp})과 다릅니다: {own}")
+            codes.update(fresh)
+            write_json(RAW / "corp_codes.json", codes)
+        except ApiError as exc:
+            status["errors"].append(f"회사 고유번호 목록: {exc} · 저장된 목록을 사용합니다.")
 
     # 공시 목록 (정정 포함)
     previous = load_json(DATA / "filings.json", [])
@@ -240,6 +257,7 @@ def collect(cfg, today, budget_minutes):
 
     # 보고서 원문 보관 (오래 걸리면 다음 실행으로 넘김)
     todo = [f for f in latest.values() if not (RAW / f"{f['rcept_no']}.zip").exists()]
+    archive_budget = budget_minutes * 60 * 0.6   # 전체 시간의 60%까지만 원문 받기에 씁니다
 
     def fetch_archive(filing):
         content = dart.get("document.xml", {"rcept_no": filing["rcept_no"]}, timeout=180)
@@ -252,7 +270,7 @@ def collect(cfg, today, budget_minutes):
     with ThreadPoolExecutor(max_workers=3) as pool:
         futures = {}
         for filing in todo:
-            if time.monotonic() - started > budget_minutes * 60:
+            if time.monotonic() - started > archive_budget:
                 break
             futures[pool.submit(fetch_archive, filing)] = filing
         for future in as_completed(futures):
@@ -339,6 +357,9 @@ def collect_market(dart, cfg, codes, latest, today, status):
 
     # 주가 (월말 종가)
     for code in [own] + [p["stock_code"] for p in cfg.get("peers", [])]:
+        if dart.deadline and time.monotonic() > dart.deadline:
+            status["notes"].append("수집 시간 제한으로 일부 주가는 다음 실행에서 받습니다.")
+            break
         start = date(cfg["first_year"], 1, 1) if code == own else date(today.year - 2, 1, 1)
         prices, source, errs = market.fetch_prices(code, start, today)
         path = MARKET / f"{code}_prices.json"
@@ -599,7 +620,7 @@ def main():
     parser = argparse.ArgumentParser(description="OpenDART 재무분석 에이전트")
     parser.add_argument("--offline", action="store_true", help="수집 없이 저장된 자료로 화면만 다시 만듭니다")
     parser.add_argument("--build-site", action="store_true", help="GitHub Pages(Actions 배포)용 _site 폴더를 만듭니다")
-    parser.add_argument("--budget-minutes", type=float, default=25, help="원문 다운로드에 쓸 최대 시간(분)")
+    parser.add_argument("--budget-minutes", type=float, default=20, help="수집 전체에 쓸 최대 시간(분)")
     parser.add_argument("--today", help="기준일 YYYY-MM-DD (테스트용)")
     args = parser.parse_args()
     if args.build_site:

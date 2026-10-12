@@ -8,6 +8,7 @@
 """
 import json
 import re
+import time
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -18,9 +19,18 @@ SHARES_FIRST_YEAR = 2015
 
 
 def _get(url, timeout=30):
+    """전체 응답 시간이 timeout초를 넘으면 포기합니다."""
     req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read()
+    started = time.monotonic()
+    chunks = []
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        while True:
+            if time.monotonic() - started > timeout:
+                raise TimeoutError("응답이 너무 느림")
+            chunk = resp.read(65536)
+            if not chunk:
+                return b"".join(chunks)
+            chunks.append(chunk)
 
 
 def naver_monthly(code, start, end):
