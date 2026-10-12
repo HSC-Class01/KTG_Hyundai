@@ -1,0 +1,54 @@
+{
+ "name": "현대건설",
+ "name_en": "Hyundai E&C",
+ "stock_code": "000720",
+ "corp_code": "00164478",
+ "business": "건축·주택·토목·플랜트·원자력",
+ "first_year": 2010,
+ "dashboard_url": "https://hsc-class01.github.io/KTG_Hyundai/dashboard/",
+ "repo_url": "https://github.com/HSC-Class01/KTG_Hyundai",
+ "rank": {
+  "year": 2026,
+  "own": 2,
+  "basis": "국토교통부 시공능력평가(토목건축공사업)",
+  "source_name": "이데일리, 2026.07.30",
+  "source_url": "https://v.daum.net/v/20260730110336152"
+ },
+ "peers": [
+  {
+   "name": "삼성물산",
+   "stock_code": "028260",
+   "rank": 1,
+   "business": "건축·토목·플랜트, 상사·패션·리조트·바이오",
+   "note": "건설 외 사업 비중이 커서 연결 전체 숫자를 그대로 비교하면 안 됩니다"
+  },
+  {
+   "name": "GS건설",
+   "stock_code": "006360",
+   "rank": 3,
+   "business": "주택·건축·인프라·플랜트",
+   "note": "주택 비중이 높아 분양 경기 영향을 크게 받습니다"
+  },
+  {
+   "name": "대우건설",
+   "stock_code": "047040",
+   "rank": 5,
+   "business": "주택·건축·토목·플랜트",
+   "note": "해외 플랜트·원전 등 대형 프로젝트 비중"
+  },
+  {
+   "name": "DL이앤씨",
+   "stock_code": "375500",
+   "rank": 6,
+   "business": "주택·토목·플랜트",
+   "note": "2021년 분할 신설 법인이라 이전 연도 비교에 주의"
+  },
+  {
+   "name": "IPARK현대산업개발",
+   "stock_code": "294870",
+   "rank": 10,
+   "business": "주택·개발사업(디벨로퍼)",
+   "note": "2026년 HDC현대산업개발에서 회사 이름을 바꿨습니다"
+  }
+ ]
+}

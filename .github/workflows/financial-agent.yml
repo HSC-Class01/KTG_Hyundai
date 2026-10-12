@@ -1,0 +1,112 @@
+# 현대건설 OpenDART 재무분석 에이전트
+# - 매월 1일 09:17(한국시간)에 실행합니다. GitHub 예약 실행은 UTC 기준이라 '17 0 1 * *' 입니다.
+# - Actions 탭의 Run workflow 버튼으로 언제든 직접 실행할 수 있습니다.
+# - 에이전트 코드(scripts, config, tests)나 이 파일을 고쳐서 main에 올려도 실행됩니다.
+# - OpenDART 인증키는 저장소 Secret 'DART_API_KEY'로만 전달합니다. 키가 없으면 저장된 자료로 화면만 다시 만들고
+#   경고만 남깁니다(실패로 끝나지 않음).
+name: Financial Agent
+
+on:
+  schedule:
+    - cron: '17 0 1 * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'config/**'
+      - 'tests/**'
+      - '.github/workflows/financial-agent.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: financial-agent
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Collect, analyze, publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      pages: ${{ steps.pages.outputs.mode }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Show Python version
+        run: python3 --version
+
+      - name: Test calculation rules
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Collect OpenDART filings and rebuild dashboard
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: python3 -u scripts/dart_agent.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data/financials dashboard README.md
+          if git diff --cached --quiet; then
+            echo "바뀐 내용이 없습니다."
+            exit 0
+          fi
+          git commit -m "Monthly OpenDART update $(TZ=Asia/Seoul date +%Y-%m-%d)"
+          for attempt in 1 2 3; do
+            # 실행 중에 다른 커밋이 올라왔으면 그 위로 옮긴 뒤 올립니다.
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::error::main에 겹치는 수정이 있어 자동으로 합치지 못했습니다. 다시 실행해 주세요."
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "::error::3번 시도했지만 push하지 못했습니다."
+          exit 1
+
+      - name: Check GitHub Pages mode
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mode=$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq .build_type 2>/dev/null || echo "none")
+          echo "mode=${mode}" >> "$GITHUB_OUTPUT"
+          case "$mode" in
+            workflow) echo "GitHub Pages: Actions 배포 방식 → 이 워크플로가 게시합니다." ;;
+            legacy)   echo "GitHub Pages: 브랜치 배포 방식 → 방금 커밋으로 GitHub가 자동 게시합니다." ;;
+            *)        echo "::notice::GitHub Pages가 꺼져 있습니다. Settings → Pages에서 켜면 대시보드가 게시됩니다." ;;
+          esac
+
+      - name: Assemble site for Pages
+        if: steps.pages.outputs.mode == 'workflow'
+        run: python3 scripts/dart_agent.py --build-site
+
+      - name: Upload Pages artifact
+        if: steps.pages.outputs.mode == 'workflow'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: update
+    if: needs.update.outputs.pages == 'workflow'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5

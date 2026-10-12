@@ -2,114 +2,172 @@
 
 # 현대건설 OpenDART 재무분석 에이전트
 
-현대건설(000720)의 공시를 **2010년부터** 보존하고, 주요 연결재무수치와 비율을 계산하는 Python 에이전트입니다. 독립 보고서를 최대 3개씩 병렬 수집하고 기간순으로 정렬합니다. 사업·반기·1/3분기 보고서를 수집하며 GitHub Actions가 **매월 1일 오전 9시 17분(한국시간)** 실행합니다. 실행 지연은 가능하며, 실패하면 Actions에서 원인을 확인할 수 있습니다.
+금융감독원 전자공시(DART)에서 **현대건설(000720)** 의 사업·반기·분기보고서를 **2010년부터** 모아 주요 재무 숫자와 재무비율을 계산하고, 그래프·표·해설이 있는 대시보드를 만드는 Python 에이전트입니다. GitHub Actions가 **매월 1일 오전 9시 17분(한국시간)** 에 자동으로 실행해, 새 보고서가 나왔으면 숫자와 분석 문장까지 다시 씁니다.
 
-- [대시보드](https://hsc-class01.github.io/KTG_Hyundai/dashboard/): 상단 그래프·핵심 지표·자동 요약, 하단 Annual / Half-year / Quarterly 각각의 전체 표와 CSV, 마지막 Peer Firms 표
-- [포트폴리오](https://hsc-class01.github.io/KTG_Hyundai/): 기존 토목 프로젝트
-- [수집·배포 실행 이력](https://github.com/HSC-Class01/KTG_Hyundai/actions/workflows/financial-dashboard.yml)
-- [기존 2016~2025 분석보고서](reports/hyundai-10y-report.html): 별도 보존된 연간 스냅샷
+- **대시보드**: https://hsc-class01.github.io/KTG_Hyundai/dashboard/
+- **자동 실행 기록**: [Actions → Financial Agent](https://github.com/HSC-Class01/KTG_Hyundai/actions/workflows/financial-agent.yml)
+- **데이터(CSV)**: [연간](data/financials/annual.csv) · [반기](data/financials/half_year.csv) · [분기](data/financials/quarterly.csv)
 
-## 범위와 확인이 필요한 부분
+## 이번 달 요약 (자동 작성)
 
-| 항목 | 구현 |
+아래 내용은 에이전트가 매월 새 숫자로 다시 씁니다.
+
+<!-- AUTO:SUMMARY:START -->
+> 마지막 확인 **2026-10-12** · 가장 최근 반영 보고서 **반기보고서 (2026.06)** (2026.08.14 접수) · 다음 자동 확인 **2026-11-01**
+
+연간 매출은 2010년 11.4조 원에서 2025년 31.1조 원으로 **2.73배**가 됐습니다. 하지만 100원어치 공사를 해서 남기는 돈은 **6.4원에서 2.1원**으로 줄었고, 본업에서 들어오는 현금은 **4년 연속 마이너스**입니다.
+
+| 관점 | 판정 | 근거 |
+| --- | --- | --- |
+| 성장성 | 🟢 성장 | 연간 매출 2010년 11.4조 → 2025년 31.1조 원, 연평균 6.9% |
+| 수익성 | 🟡 약해짐 | 최근 4개 분기 영업이익률 2.3% (2010년 6.4%) |
+| 현금흐름 | 🔴 경고 | 연간 영업활동현금흐름 4년 연속 마이너스 |
+| 안정성 | 🟡 주의 | 2026년 6월 말 부채비율 155%, 유동비율 148% |
+
+**가장 최근 분기: 2026년 2분기(4~6월)**
+
+- 2026년 2분기(4~6월) 매출은 **6.84조 원**으로 1년 전보다 11.4% 줄었고, 직전 분기보다 8.9% 늘었습니다.
+- 영업이익은 **2,618억 원**(영업이익률 3.8%)으로 1년 전 같은 분기(2,170억 원)보다 많습니다.
+- 상반기 누적 영업활동현금흐름은 **−1조 6,771억 원**입니다. 이익은 흑자인데 현금은 빠져나갔습니다.
+- 6월 말 부채비율 **155%**, 유동비율 148%, 받을 돈(매출채권+미청구공사) 11.72조 원입니다.
+
+최근 실적 (연결, 금액 단위: 억 원)
+
+| 기간 | 매출액 | 영업이익 | 영업이익률(%) | 당기순이익 | 영업활동현금흐름 | 부채비율(%) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 2021년 | 180,655 | 7,535 | 4.2 | 5,544 | 10,094 | 108 |
+| 2022년 | 212,391 | 5,749 | 2.7 | 4,709 | −1,435 | 111 |
+| 2023년 | 296,514 | 7,854 | 2.6 | 6,543 | −7,147 | 127 |
+| 2024년 | 326,703 | −12,634 | −3.9 | −7,662 | −1,188 | 179 |
+| 2025년 | 310,629 | 6,530 | 2.1 | 5,591 | −7,483 | 175 |
+| 2026년 상반기 | 131,236 | 4,427 | 3.4 | 3,637 | −16,771 | 155 |
+
+전체 표: [연간](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#annual) · [반기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#half) · [분기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#quarter) · CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv)
+<!-- AUTO:SUMMARY:END -->
+
+## 에이전트가 하는 일
+
+```mermaid
+flowchart LR
+  A["OpenDART<br/>공시 목록 · 재무제표 API · 공시 원문"] --> B["dart_agent.py<br/>매월 1일 자동 실행"]
+  B --> C["data/financials/raw<br/>원문 ZIP · API 응답 보관"]
+  C --> D["financials.py · legacy.py<br/>연간 · 반기 · 분기 정리<br/>재무비율 계산"]
+  D --> E["analysis.py<br/>판정 · 해설 문장"]
+  E --> F["dashboard/index.html<br/>README 요약 · CSV"]
+```
+
+1. **수집**: 2010년 이후 정기보고서(사업·반기·1분기·3분기) 목록을 받고, 기간마다 가장 최근 보고서(정정 공시 포함)를 고릅니다. 보고서 원문 ZIP과 재무제표 API 응답을 `data/financials/raw/`에 보관합니다.
+2. **정리**: 누적 보고서로 **Annual(연간) · Half-year(반기) · Quarterly(분기)** 표를 만듭니다. 2분기 = 반기 − 1분기, 4분기 = 연간 − 3분기 누적처럼 빼서 계산합니다.
+3. **분석**: 매출증가율·원가율·영업이익률·부채비율·유동비율·ROE 등을 계산하고, 성장성·수익성·현금흐름·안정성을 정해진 규칙으로 판정해 해설 문장을 씁니다.
+4. **게시**: 대시보드, 이 README의 요약과 동종업계 표, CSV를 갱신하고 저장소에 커밋합니다. GitHub Pages가 바뀐 화면을 게시합니다.
+
+새 보고서가 없는 달에는 숫자는 그대로 두고 확인 기록만 남깁니다.
+
+## 처음 설정하기 (API 키 입력)
+
+1. **OpenDART 인증키 발급**: [OpenDART](https://opendart.fss.or.kr/) 회원가입 → 인증키 신청/관리 → 40자리 인증키를 받습니다.
+2. **키를 GitHub에 저장**: 저장소 **Settings → Secrets and variables → Actions → New repository secret**
+   - Name: `DART_API_KEY`
+   - Secret: 발급받은 40자리 인증키
+   - 키는 코드나 파일에 쓰지 않습니다. 워크플로가 실행될 때만 환경변수로 전달됩니다.
+3. **GitHub Pages**: **Settings → Pages**. Source가 *Deploy from a branch (main / root)* 이든 *GitHub Actions* 든 그대로 동작합니다. 워크플로가 설정을 확인해서 알맞게 게시합니다.
+4. **About에 대시보드 링크 걸기**: 저장소 첫 화면 오른쪽 **About** 옆 ⚙️(톱니) → **Website**에 `https://hsc-class01.github.io/KTG_Hyundai/dashboard/` 입력 → **Save changes**.
+5. **첫 실행**: **Actions → Financial Agent → Run workflow → Run workflow**. 3~5분 뒤 대시보드에 반영됩니다.
+
+> 키가 없거나 OpenDART가 응답하지 않아도 워크플로는 실패로 끝나지 않습니다. 저장된 숫자로 화면을 다시 만들고, 무엇이 문제였는지 대시보드의 **업데이트 상태**, `data/financials/status.json`, Actions 실행 요약에 남깁니다.
+
+## 자동 업데이트
+
+| 언제 | 무엇을 |
 |---|---|
-| 공시 수집 | 2010년~현재 사업·반기·분기 보고서 목록, 최신 보고서 원문 ZIP 보존 |
-| 재무수치 | 연결 CFS, 매출·영업이익·순이익·자산·부채·자본·유동자산·유동부채·영업CF |
-| 비율 | 전년 동기간 매출증감률·영업/순이익률·부채/유동비율·ROA·ROE |
-| 정정 | 전체 공시 이력에서 기간별 최신 접수번호 선택, 모든 2015년 이후 재무 API 매월 재조회 |
-| 주기 | 매월 1일 09:17 KST, 수동 실행 가능, 에이전트 코드 변경 시 실행 |
-| 저장·출처 | 공시 원문 ZIP·API 원본 JSON·선택 계정 근거·접수번호·SHA256·CSV |
-| 배포 | 같은 워크플로에서 Pages artifact 업로드와 배포 수행 |
-| 2010~2014 | 재무 API 미제공: 원문 후보를 추출하되 **검증된 항목만** 수치로 반영 |
-| 교수님 첨부 항목·배지 | 첨부 미제공 상태: 기존 주요 항목과 자체 SVG 배지 사용 |
+| 매월 1일 09:17 (KST) | `cron: '17 0 1 * *'` (UTC 00:17). GitHub 사정으로 몇 분~수십 분 늦을 수 있습니다. |
+| 직접 실행 | Actions → Financial Agent → Run workflow |
+| 코드를 고쳐서 push할 때 | `scripts/`, `config/`, `tests/`, 워크플로 파일이 바뀌면 자동 실행 |
 
-**2010년부터 공시를 수집하는 것과 모든 재무수치가 확정된 것은 다릅니다.** OpenDART 전체 재무제표 API는 2015년 이후부터 제공합니다. 2010~2014는 원문 XML/HTML 표에서 후보 계정·표 머리글·주변 설명을 뽑아 검증 자료를 만듭니다. 연결 여부·금액 단위·당기/전기·누적기간·회계기준을 확인하지 않은 값은 `—`로 남깁니다. 미공시·계정 미확인·0원을 구분합니다.
+- 실행 순서: 계산 규칙 테스트 → OpenDART 수집 → 표·해설·대시보드 생성 → 커밋 → GitHub Pages 게시
+- 공개 저장소의 예약 실행은 60일 동안 저장소 활동이 없으면 GitHub가 멈춥니다. 에이전트는 매달 확인 기록(`status.json`)을 커밋하므로 활동이 이어집니다.
+- 분기보고서는 분기 종료 후 45일, 사업보고서는 90일 안에 공시됩니다. 그래서 대시보드에는 보통 1~2개월 전 분기까지 반영됩니다.
 
-## API 키와 GitHub 설정
+## 데이터 범위와 계산 기준
 
-1. [OpenDART](https://opendart.fss.or.kr/)에서 인증키를 발급합니다.
-2. 저장소 **Settings → Secrets and variables → Actions → New repository secret**에서 이름 `DART_API_KEY`, 값에 인증키를 넣습니다. 이미 등록한 경우 그대로 사용합니다. 코드·HTML·ZIP에는 키를 넣지 않습니다.
-3. **Settings → Pages → Build and deployment → Source: GitHub Actions**를 선택합니다. 기존 포트폴리오도 함께 배포합니다.
-4. **Actions → Hyundai Financial Dashboard → Run workflow → main**에서 최초 수집을 실행합니다. 기존 키가 유효하면 에이전트 코드 push로도 실행됩니다.
-5. 저장소 오른쪽 **About → 톱니 → Website**에 `https://hsc-class01.github.io/KTG_Hyundai/dashboard/`를 입력합니다.
+| 기간 | 숫자를 가져온 곳 |
+|---|---|
+| 2015년 이후 연간, 2016년 이후 분·반기 | OpenDART 단일회사 전체 재무제표 API (연결재무제표) |
+| 2013~2014년 연간, 2015년 분·반기 손익·현금흐름 | 다음 해 보고서 API의 비교 숫자 + 공시 원문 |
+| 2010~2015년 | 공시 원문(XML)에 들어 있는 XBRL 재무제표 표. 표 제목의 기간·단위로 열을 판단 |
 
-워크플로에는 `contents: write`, `pages: write`, `id-token: write`가 있습니다. 조직 정책이 이 권한을 제한하면 저장소/조직 관리자가 허용해야 합니다. 공개 저장소의 예약 실행은 60일 동안 저장소 활동이 없으면 중단될 수 있습니다. 매 실행 확인일을 commit하지만 GitHub의 예약 비활성화 상태도 Actions에서 확인하세요.
+- **원문 추출 정확도**: 2015~2016년 보고서는 API와 원문을 모두 읽어 같은 숫자가 나오는지 비교합니다(대시보드 ‘자료와 검증’에 결과 표시).
+- **Annual**: 1~12월 실적, 12월 말 재무상태 · **Half-year**: 상반기(1~6월)와 하반기(연간 − 상반기) · **Quarterly**: 각 분기 3개월 실적
+- **재무비율**: 매출증가율(1년 전 같은 기간 대비), 원가율·판관비율·영업이익률·순이익률(÷ 매출), 부채비율(부채 ÷ 자본), 유동비율(유동자산 ÷ 유동부채), 자기자본비율, ROA·ROE(연간, 평균 자산·자본 기준), 받을 돈/매출
+- **건설업 지표**: 받을 돈(매출채권 + 미청구공사), 미리 받은 돈(초과청구공사 + 공사및분양선수금), 현금성자산, 차입금, 순현금
+- 모든 숫자는 연결재무제표 기준이고, 당기순이익은 비지배지분 몫을 포함합니다. 숫자가 없거나 분모가 0 이하이면 0으로 채우지 않고 비워 둡니다.
 
-## 계산 기준
-
-- Annual: 12개월 실적. Half-year: 1~6월 누적 실적. Quarterly: 각 3개월 실적.
-- 반기·3분기 손익의 `thstrm_amount`는 3개월, `thstrm_add_amount`는 누적입니다. 반기 표에는 후자를 사용합니다. 누적필드가 없다고 3개월 값을 반기 누적으로 대신하지 않습니다.
-- CF `thstrm_amount`는 해당 보고기간 누적이며, BS는 기말 잔액입니다.
-- Q1=3개월, Q2=H1−Q1, Q3=9개월−H1, Q4=FY−9개월. 앞 누적값이 없으면 차감값을 비웁니다. 서로 다른 정정·비교기준일 수 있어 원문 확인이 필요합니다.
-- 매출증감률: `(당기−전년 동기간) / 전년 동기간 ×100`.
-- 이익률: `이익 / 매출 ×100`. 부채비율: `부채 / 자본 ×100`. 유동비율: `유동자산 / 유동부채 ×100`.
-- 연간·반기 ROA/ROE: 해당 기간 연결순이익 / 전년말·당기말 총자산/총자본 단순평균 ×100. 반기는 연율화하지 않습니다. 개별분기 ROA/ROE는 제공하지 않습니다.
-- 순이익은 비지배지분을 포함한 연결 전체 기준입니다. 지배주주 순이익 기준 ROE와 다릅니다.
-- 분모 0 이하·값 누락·계정 금액 충돌은 공란으로 처리합니다. 표는 억원, 그래프는 조원, 계산·CSV 원자료는 원 기준입니다.
-- 자산=부채+자본을 허용 오차 내에서 검증합니다. 원문 최신 접수번호와 API의 재무 접수번호가 다르면 각각 기록합니다.
-
-## 파일 구조와 로컬 실행
+## 파일 구조
 
 ```text
-scripts/dart_agent.py                 수집·표준화·비율·출력·사이트 조립
-scripts/dart_10y.py                   기존 계정 매칭과 10개년 보고서
-config/peers.json                     동종기업 목록
-config/historical_verified.json      원문 검증 후 등록할 과거 수치 (선택)
-data/financials/filings.json          정정 포함 공시 목록
-data/financials/raw/                 최신 보고서 원문 ZIP, 원본 API JSON, 과거 후보
-data/financials/periods.json          누적 기간별 수치·계정 근거·검증 결과
-data/financials/dashboard.json       대시보드 입력
-data/financials/*.csv                Annual / Half-year / Quarterly
-dashboard/template.html              화면 템플릿
-dashboard/index.html                 데이터 포함 생성 화면
-.github/workflows/financial-dashboard.yml  월간 수집·배포
-tests/test_financials.py              누적·개별분기·결측·정정·계정 검증
+scripts/dart_agent.py      에이전트 본체: 수집 → 정리 → 화면 생성 (실행 파일)
+scripts/financials.py      계정 매칭, 연간·반기·분기 계산, 재무비율
+scripts/legacy.py          2010~2015년 공시 원문 표에서 숫자 읽기
+scripts/analysis.py        판정 규칙과 자동 해설 문장
+scripts/dashboard.py       대시보드 HTML과 README 자동 구역
+scripts/package_project.py 제출용 ZIP 만들기
+config/company.json        분석 대상 회사, 동종기업, 시공능력평가 순위
+data/financials/           annual.csv · half_year.csv · quarterly.csv · dashboard.json · status.json
+data/financials/raw/       공시 원문 ZIP, 재무제표 API 응답(JSON)
+dashboard/index.html       자동 생성되는 대시보드
+tests/test_financials.py   계산 규칙 테스트
+.github/workflows/financial-agent.yml  매월 1일 자동 실행
 ```
 
-Python 3.11 이상을 사용합니다.
+다른 회사로 바꾸려면 `config/company.json`의 회사 이름·종목코드·고유번호와 동종기업 목록을 바꾸면 됩니다.
+
+## 내 컴퓨터에서 실행
+
+Python 3.10 이상, 추가 설치 없음(표준 라이브러리만 사용).
 
 ```bash
-python -m pip install -r requirements.txt
-# 키는 환경변수 DART_API_KEY로 전달 (파일에 저장하지 않음)
-python scripts/dart_agent.py
-python -m unittest discover -s tests -v
-# 키 없이 보존된 데이터로 화면 다시 생성
+# 저장된 자료로 화면만 다시 만들기 (키 필요 없음)
 python scripts/dart_agent.py --offline
-python scripts/dart_agent.py --build-site
-python -m http.server 8000 --directory _site
+
+# OpenDART에서 새 자료 받기 (키는 환경변수로만 전달)
+export DART_API_KEY=발급받은키          # Windows PowerShell: $env:DART_API_KEY = "발급받은키"
+python scripts/dart_agent.py
+
+# 테스트
+python -m unittest discover -s tests -v
+
+# 결과 보기
+python -m http.server 8000      # → http://localhost:8000/dashboard/
 ```
 
-Windows PowerShell 키 입력: `$env:DART_API_KEY = Read-Host 'OpenDART API key'`. Linux/macOS Bash: `read -s DART_API_KEY; export DART_API_KEY`. 실행 후 환경변수를 지워도 다음 GitHub 실행에는 저장소 Secret을 사용합니다.
+## 제출용 ZIP (숨김 파일 없음)
 
-과거 수기검증값은 `config/historical_verified.json`에 다음 구조의 배열로 등록합니다. 정확한 최신 접수번호와 일치할 때만 반영하므로 정정 후에는 재검증해야 합니다.
-
-```json
-[
-  {
-    "year": 2010,
-    "month": 12,
-    "receipt": "실제14자리접수번호",
-    "basis": "CFS",
-    "reviewed_by": "검토자",
-    "evidence": {"table": "연결재무제표 표명", "unit": "원", "column": "당기", "note": "원문 위치·회계기준 확인"},
-    "values_krw": {}
-  }
-]
+```bash
+python scripts/package_project.py     # → dist/KTG_Hyundai_agent.zip
 ```
 
-## ZIP 제출과 숨김 파일
+- ZIP 안에는 점(.)으로 시작하는 파일·폴더(`.git`, `.github`, `.gitignore` 등)가 하나도 없습니다.
+- 워크플로 파일은 ZIP의 `workflows/financial-agent.yml`에 들어 있습니다. 새 저장소에 올릴 때는 GitHub 웹에서 **Add file → Create new file** → 파일 이름에 `.github/workflows/financial-agent.yml` 입력 → 내용 붙여넣기 → Commit 하면 됩니다. 자세한 순서는 [SETUP.md](SETUP.md)에 있습니다.
+- 용량이 큰 공시 원문 ZIP은 제출 ZIP에서 빼고, 첫 실행 때 에이전트가 다시 받습니다.
 
-`python scripts/package_project.py`로 제출용 ZIP을 만듭니다. `.git`, `.github`, `.nojekyll`, 캐시를 포함한 **모든 점으로 시작하는 경로를 ZIP에서 제외**합니다. GitHub Actions 필수 워크플로는 ZIP의 `workflows/financial-dashboard.yml`과 `workflows/hyundai-10y.yml`로 제공합니다. 복원 방법은 `SETUP.md`에 있습니다. 용량이 큰 공시 원문 ZIP은 제출 ZIP에서 제외하며 GitHub 저장소에 보존합니다. 로컬 수집을 실행하면 누락된 원문을 다시 다운로드합니다. 실제 저장소에는 `.github/workflows` 경로가 필요합니다. ZIP을 웹에 올리는 것만으로 예약 실행이 설치되지는 않습니다.
+## 국내 동종업계 (Peer firms)
 
-## 국내 Peer Firms
+<!-- AUTO:PEERS:START -->
+| 시평 순위 | 회사 | 종목코드 | 주요 사업 | 기준 | 매출액(억 원) | 영업이익(억 원) | 영업이익률(%) | 부채비율(%) | 유동비율(%) |
+| ---: | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
+| 1위 | 삼성물산 | 028260 | 건축·토목·플랜트, 상사·패션·리조트·바이오 | 수집 전 | – | – | – | – | – |
+| 2위 | [**현대건설**](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260318001395) | 000720 | 건축·주택·토목·플랜트·원자력 | 2025년 | 310,629 | 6,530 | 2.1 | 175 | 148 |
+| 3위 | GS건설 | 006360 | 주택·건축·인프라·플랜트 | 수집 전 | – | – | – | – | – |
+| 5위 | 대우건설 | 047040 | 주택·건축·토목·플랜트 | 수집 전 | – | – | – | – | – |
+| 6위 | DL이앤씨 | 375500 | 주택·토목·플랜트 | 수집 전 | – | – | – | – | – |
+| 10위 | IPARK현대산업개발 | 294870 | 주택·개발사업(디벨로퍼) | 수집 전 | – | – | – | – | – |
 
-| 기업 | 종목코드 | 비교 사업 | 주의 |
-|---|---|---|---|
-| [GS건설](https://www.gsenc.com/) | 006360 | 주택·건축·토목·플랜트 | 해외 프로젝트·자회사 구성 차이 |
-| [DL이앤씨](https://www.dlenc.co.kr/) | 375500 | 주택·토목·플랜트 | 2021년 분할 신설, 과거 DL과 단순 연결 불가 |
-| [대우건설](https://www.daewooenc.com/) | 047040 | 주택·건축·토목·플랜트 | 해외 비중·수익 인식 차이 |
-| [삼성물산](https://www.samsungcnt.com/) | 028260 | 건설부문 중심 | 비건설·바이오 포함, 연결 전체 직접 비교 주의 |
-
-Peer 재무수치 자동 비교까지 구현한 것은 아니며 사업구조 기반의 비교 후보 목록입니다.
-
-자료 출처: [전체 재무제표 API](https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS003&apiId=2019020), [공시검색 API](https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS001&apiId=2019001), [공시 원문 API](https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS001&apiId=2019003), [Pages 워크플로 가이드](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+- 순위: 2026년 국토교통부 시공능력평가(토목건축공사업) ([이데일리, 2026.07.30](https://v.daum.net/v/20260730110336152))
+- 재무 숫자: 각 회사의 가장 최근 사업보고서 연결재무제표 (OpenDART, 매월 자동 갱신). 동종기업 목록은 `config/company.json`에서 바꿀 수 있습니다.
+- 삼성물산: 건설 외 사업 비중이 커서 연결 전체 숫자를 그대로 비교하면 안 됩니다
+- GS건설: 주택 비중이 높아 분양 경기 영향을 크게 받습니다
+- 대우건설: 해외 플랜트·원전 등 대형 프로젝트 비중
+- DL이앤씨: 2021년 분할 신설 법인이라 이전 연도 비교에 주의
+- IPARK현대산업개발: 2026년 HDC현대산업개발에서 회사 이름을 바꿨습니다
+- 삼성물산, GS건설, 대우건설, DL이앤씨, IPARK현대산업개발: 다음 자동 실행 때 숫자를 채웁니다.
+<!-- AUTO:PEERS:END -->

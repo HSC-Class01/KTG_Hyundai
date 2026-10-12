@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
 _site/
+dist/
 *.zip
 !data/financials/raw/*.zip
