@@ -1,3 +1,5 @@
+> 최신 월간 자동 수집·기간별 대시보드는 [새 대시보드](https://hsc-class01.github.io/KTG_Hyundai/dashboard/)와 [저장소 README](../README.md)를 확인하세요. 아래는 기존 10개년 연간 스냅샷 안내입니다.
+
 # 현대건설 10개년 재무제표 자동 분석
 
 ## 과제 범위

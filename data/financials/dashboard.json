@@ -1,0 +1,4276 @@
+{
+  "company": "현대건설",
+  "stock_code": "000720",
+  "corp_code": "00164478",
+  "updated_at": "20261012",
+  "annual": [
+    {
+      "year": 2010,
+      "month": 12,
+      "period": "2010-FY",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2011,
+      "month": 12,
+      "period": "2011-FY",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2012,
+      "month": 12,
+      "period": "2012-FY",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2013,
+      "month": 12,
+      "period": "2013-FY",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2014,
+      "month": 12,
+      "period": "2014-FY",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2015,
+      "month": 12,
+      "period": "2015-FY",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2016,
+      "month": 12,
+      "period": "2016-FY",
+      "basis": "CFS",
+      "receipt": "20170622000239",
+      "report_name": "사업보고서 (2016.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 18825015000000,
+      "operating_profit": 1158959000000,
+      "net_income": 731713000000,
+      "assets": 19873443000000,
+      "liabilities": 11748798000000,
+      "equity": 8124645000000,
+      "current_assets": 14937924000000,
+      "current_liabilities": 8749576000000,
+      "operating_cashflow": 1086520000000,
+      "financial_receipts": [
+        "20170622000239"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": 6.156483806254603,
+        "net_margin_pct": 3.8869185496000935,
+        "debt_to_equity_pct": 144.60690897879232,
+        "current_ratio_pct": 170.7274043907956,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2017,
+      "month": 12,
+      "period": "2017-FY",
+      "basis": "CFS",
+      "receipt": "20180402004254",
+      "report_name": "사업보고서 (2017.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs_ProfitLoss",
+          "account_name": "당기순이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 16887090000000,
+      "operating_profit": 986105000000,
+      "net_income": 371564000000,
+      "assets": 18431902000000,
+      "liabilities": 9958964000000,
+      "equity": 8472938000000,
+      "current_assets": 13249840000000,
+      "current_liabilities": 7219038000000,
+      "operating_cashflow": 514404000000,
+      "financial_receipts": [
+        "20180402004254"
+      ],
+      "ratios": {
+        "revenue_growth_pct": -10.294414108036568,
+        "operating_margin_pct": 5.839401578365485,
+        "net_margin_pct": 2.2002843592353685,
+        "debt_to_equity_pct": 117.53849727213866,
+        "current_ratio_pct": 183.54024455890107,
+        "roa_pct": 1.9400112438616595,
+        "roe_pct": 4.477326608338093
+      }
+    },
+    {
+      "year": 2018,
+      "month": 12,
+      "period": "2018-FY",
+      "basis": "CFS",
+      "receipt": "20190401004695",
+      "report_name": "사업보고서 (2018.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 16730894000000,
+      "operating_profit": 839989000000,
+      "net_income": 535303000000,
+      "assets": 18054609000000,
+      "liabilities": 9762753000000,
+      "equity": 8291856000000,
+      "current_assets": 13336768000000,
+      "current_liabilities": 6860875000000,
+      "operating_cashflow": 249524000000,
+      "financial_receipts": [
+        "20190401004695"
+      ],
+      "ratios": {
+        "revenue_growth_pct": -0.9249432554691187,
+        "operating_margin_pct": 5.020586467166668,
+        "net_margin_pct": 3.1994883238158107,
+        "debt_to_equity_pct": 117.73905624989145,
+        "current_ratio_pct": 194.38873321551551,
+        "roa_pct": 2.9342515100991706,
+        "roe_pct": 6.386037311284588
+      }
+    },
+    {
+      "year": 2019,
+      "month": 12,
+      "period": "2019-FY",
+      "basis": "CFS",
+      "receipt": "20200330004026",
+      "report_name": "사업보고서 (2019.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 17278792000000,
+      "operating_profit": 859667000000,
+      "net_income": 573331000000,
+      "assets": 18226972000000,
+      "liabilities": 9511990000000,
+      "equity": 8714982000000,
+      "current_assets": 13171993000000,
+      "current_liabilities": 6770867000000,
+      "operating_cashflow": 478916000000,
+      "financial_receipts": [
+        "20200330004026"
+      ],
+      "ratios": {
+        "revenue_growth_pct": 3.2747682221882464,
+        "operating_margin_pct": 4.975272576925517,
+        "net_margin_pct": 3.3181196926266607,
+        "debt_to_equity_pct": 109.14526272113929,
+        "current_ratio_pct": 194.53923699874773,
+        "roa_pct": 3.1604521313445515,
+        "roe_pct": 6.742358573651375
+      }
+    },
+    {
+      "year": 2020,
+      "month": 12,
+      "period": "2020-FY",
+      "basis": "CFS",
+      "receipt": "20210317001019",
+      "report_name": "사업보고서 (2020.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 16970859000000,
+      "operating_profit": 548972000000,
+      "net_income": 227697000000,
+      "assets": 17939274000000,
+      "liabilities": 9172896000000,
+      "equity": 8766378000000,
+      "current_assets": 13398943000000,
+      "current_liabilities": 6467725000000,
+      "operating_cashflow": 1729721000000,
+      "financial_receipts": [
+        "20210317001019"
+      ],
+      "ratios": {
+        "revenue_growth_pct": -1.7821442610108391,
+        "operating_margin_pct": 3.234792063265625,
+        "net_margin_pct": 1.3416940179633807,
+        "debt_to_equity_pct": 104.63724014638657,
+        "current_ratio_pct": 207.16624469964322,
+        "roa_pct": 1.2591685628638372,
+        "roe_pct": 2.605026153571576
+      }
+    },
+    {
+      "year": 2021,
+      "month": 12,
+      "period": "2021-FY",
+      "basis": "CFS",
+      "receipt": "20220325001068",
+      "report_name": "사업보고서 (2021.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 18065534000000,
+      "operating_profit": 753504000000,
+      "net_income": 554377000000,
+      "assets": 19637264000000,
+      "liabilities": 10207973000000,
+      "equity": 9429291000000,
+      "current_assets": 14526404000000,
+      "current_liabilities": 7613217000000,
+      "operating_cashflow": 1009401000000,
+      "financial_receipts": [
+        "20220325001068"
+      ],
+      "ratios": {
+        "revenue_growth_pct": 6.450321695560608,
+        "operating_margin_pct": 4.170947839128365,
+        "net_margin_pct": 3.068699768299127,
+        "debt_to_equity_pct": 108.25811824027916,
+        "current_ratio_pct": 190.80506965715017,
+        "roa_pct": 2.9506550071217315,
+        "roe_pct": 6.093504998359775
+      }
+    },
+    {
+      "year": 2022,
+      "month": 12,
+      "period": "2022-FY",
+      "basis": "CFS",
+      "receipt": "20230315001104",
+      "report_name": "사업보고서 (2022.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 21239082000000,
+      "operating_profit": 574902000000,
+      "net_income": 470876000000,
+      "assets": 20911708000000,
+      "liabilities": 10987431000000,
+      "equity": 9924277000000,
+      "current_assets": 15516744000000,
+      "current_liabilities": 8757397000000,
+      "operating_cashflow": -143474000000,
+      "financial_receipts": [
+        "20230315001104"
+      ],
+      "ratios": {
+        "revenue_growth_pct": 17.56686516988648,
+        "operating_margin_pct": 2.7068119045823167,
+        "net_margin_pct": 2.2170261407719978,
+        "debt_to_equity_pct": 110.71265947131464,
+        "current_ratio_pct": 177.1844304877351,
+        "roa_pct": 2.3225052413165987,
+        "roe_pct": 4.866038138290572
+      }
+    },
+    {
+      "year": 2023,
+      "month": 12,
+      "period": "2023-FY",
+      "basis": "CFS",
+      "receipt": "20240329003141",
+      "report_name": "사업보고서 (2023.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "수익(매출액)",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "순자산",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 29651357000000,
+      "operating_profit": 785430000000,
+      "net_income": 654281000000,
+      "assets": 23714495000000,
+      "liabilities": 13258980000000,
+      "equity": 10455515000000,
+      "current_assets": 18613430000000,
+      "current_liabilities": 10356647000000,
+      "operating_cashflow": -714716000000,
+      "financial_receipts": [
+        "20240329003141"
+      ],
+      "ratios": {
+        "revenue_growth_pct": 39.607526351656816,
+        "operating_margin_pct": 2.6488838268009114,
+        "net_margin_pct": 2.206580292429787,
+        "debt_to_equity_pct": 126.81326553498322,
+        "current_ratio_pct": 179.7244803264995,
+        "roa_pct": 2.93227277256817,
+        "roe_pct": 6.420880056086932
+      }
+    },
+    {
+      "year": 2024,
+      "month": 12,
+      "period": "2024-FY",
+      "basis": "CFS",
+      "receipt": "20251017000151",
+      "report_name": "사업보고서 (2024.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "수익(매출액)",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 32670268000000,
+      "operating_profit": -1263420000000,
+      "net_income": -766221000000,
+      "assets": 27005385000000,
+      "liabilities": 17335972000000,
+      "equity": 9669413000000,
+      "current_assets": 21100663000000,
+      "current_liabilities": 14663775000000,
+      "operating_cashflow": -118800000000,
+      "financial_receipts": [
+        "20251017000151"
+      ],
+      "ratios": {
+        "revenue_growth_pct": 10.181358647430537,
+        "operating_margin_pct": -3.8671859073822104,
+        "net_margin_pct": -2.3453159306804583,
+        "debt_to_equity_pct": 179.28670540807389,
+        "current_ratio_pct": 143.89652732669452,
+        "roa_pct": -3.021383331348576,
+        "roe_pct": -7.614645876000152
+      }
+    },
+    {
+      "year": 2025,
+      "month": 12,
+      "period": "2025-FY",
+      "basis": "CFS",
+      "receipt": "20260318001395",
+      "report_name": "사업보고서 (2025.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "수익(매출액)",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": 31062912000000,
+      "operating_profit": 653006000000,
+      "net_income": 559068000000,
+      "assets": 27791708000000,
+      "liabilities": 17678843000000,
+      "equity": 10112865000000,
+      "current_assets": 21958006000000,
+      "current_liabilities": 14842910000000,
+      "operating_cashflow": -748259000000,
+      "financial_receipts": [
+        "20260318001395"
+      ],
+      "ratios": {
+        "revenue_growth_pct": -4.91993515327147,
+        "operating_margin_pct": 2.1022047128099257,
+        "net_margin_pct": 1.7997926272977884,
+        "debt_to_equity_pct": 174.8153762558879,
+        "current_ratio_pct": 147.93599098829003,
+        "roa_pct": 2.040502404023513,
+        "roe_pct": 5.652210529040184
+      }
+    }
+  ],
+  "half_year": [
+    {
+      "year": 2010,
+      "month": 6,
+      "period": "2010-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2011,
+      "month": 6,
+      "period": "2011-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2012,
+      "month": 6,
+      "period": "2012-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2013,
+      "month": 6,
+      "period": "2013-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2014,
+      "month": 6,
+      "period": "2014-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2015,
+      "month": 6,
+      "period": "2015-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2016,
+      "month": 6,
+      "period": "2016-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2017,
+      "month": 6,
+      "period": "2017-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2018,
+      "month": 6,
+      "period": "2018-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2019,
+      "month": 6,
+      "period": "2019-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2020,
+      "month": 6,
+      "period": "2020-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2021,
+      "month": 6,
+      "period": "2021-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2022,
+      "month": 6,
+      "period": "2022-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2023,
+      "month": 6,
+      "period": "2023-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2024,
+      "month": 6,
+      "period": "2024-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2025,
+      "month": 6,
+      "period": "2025-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    },
+    {
+      "year": 2026,
+      "month": 6,
+      "period": "2026-H1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      }
+    }
+  ],
+  "quarterly": [
+    {
+      "year": 2010,
+      "month": 3,
+      "period": "2010-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2010,
+      "month": 6,
+      "period": "2010-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2010,
+      "month": 9,
+      "period": "2010-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2010,
+      "month": 12,
+      "period": "2010-Q4",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2011,
+      "month": 3,
+      "period": "2011-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2011,
+      "month": 6,
+      "period": "2011-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2011,
+      "month": 9,
+      "period": "2011-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2011,
+      "month": 12,
+      "period": "2011-Q4",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2012,
+      "month": 3,
+      "period": "2012-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2012,
+      "month": 6,
+      "period": "2012-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2012,
+      "month": 9,
+      "period": "2012-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2012,
+      "month": 12,
+      "period": "2012-Q4",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2013,
+      "month": 3,
+      "period": "2013-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2013,
+      "month": 6,
+      "period": "2013-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2013,
+      "month": 9,
+      "period": "2013-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2013,
+      "month": 12,
+      "period": "2013-Q4",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2014,
+      "month": 3,
+      "period": "2014-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2014,
+      "month": 6,
+      "period": "2014-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2014,
+      "month": 9,
+      "period": "2014-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2014,
+      "month": 12,
+      "period": "2014-Q4",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2015,
+      "month": 3,
+      "period": "2015-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2015,
+      "month": 6,
+      "period": "2015-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2015,
+      "month": 9,
+      "period": "2015-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2015,
+      "month": 12,
+      "period": "2015-Q4",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2016,
+      "month": 3,
+      "period": "2016-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2016,
+      "month": 6,
+      "period": "2016-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2016,
+      "month": 9,
+      "period": "2016-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2016,
+      "month": 12,
+      "period": "2016-Q4",
+      "basis": "CFS",
+      "receipt": "20170622000239",
+      "report_name": "사업보고서 (2016.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 19873443000000,
+      "liabilities": 11748798000000,
+      "equity": 8124645000000,
+      "current_assets": 14937924000000,
+      "current_liabilities": 8749576000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20170622000239"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 144.60690897879232,
+        "current_ratio_pct": 170.7274043907956,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2017,
+      "month": 3,
+      "period": "2017-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2017,
+      "month": 6,
+      "period": "2017-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2017,
+      "month": 9,
+      "period": "2017-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2017,
+      "month": 12,
+      "period": "2017-Q4",
+      "basis": "CFS",
+      "receipt": "20180402004254",
+      "report_name": "사업보고서 (2017.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs_ProfitLoss",
+          "account_name": "당기순이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 18431902000000,
+      "liabilities": 9958964000000,
+      "equity": 8472938000000,
+      "current_assets": 13249840000000,
+      "current_liabilities": 7219038000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20180402004254"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 117.53849727213866,
+        "current_ratio_pct": 183.54024455890107,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2018,
+      "month": 3,
+      "period": "2018-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2018,
+      "month": 6,
+      "period": "2018-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2018,
+      "month": 9,
+      "period": "2018-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2018,
+      "month": 12,
+      "period": "2018-Q4",
+      "basis": "CFS",
+      "receipt": "20190401004695",
+      "report_name": "사업보고서 (2018.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 18054609000000,
+      "liabilities": 9762753000000,
+      "equity": 8291856000000,
+      "current_assets": 13336768000000,
+      "current_liabilities": 6860875000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20190401004695"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 117.73905624989145,
+        "current_ratio_pct": 194.38873321551551,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2019,
+      "month": 3,
+      "period": "2019-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2019,
+      "month": 6,
+      "period": "2019-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2019,
+      "month": 9,
+      "period": "2019-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2019,
+      "month": 12,
+      "period": "2019-Q4",
+      "basis": "CFS",
+      "receipt": "20200330004026",
+      "report_name": "사업보고서 (2019.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 18226972000000,
+      "liabilities": 9511990000000,
+      "equity": 8714982000000,
+      "current_assets": 13171993000000,
+      "current_liabilities": 6770867000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20200330004026"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 109.14526272113929,
+        "current_ratio_pct": 194.53923699874773,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2020,
+      "month": 3,
+      "period": "2020-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2020,
+      "month": 6,
+      "period": "2020-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2020,
+      "month": 9,
+      "period": "2020-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2020,
+      "month": 12,
+      "period": "2020-Q4",
+      "basis": "CFS",
+      "receipt": "20210317001019",
+      "report_name": "사업보고서 (2020.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 17939274000000,
+      "liabilities": 9172896000000,
+      "equity": 8766378000000,
+      "current_assets": 13398943000000,
+      "current_liabilities": 6467725000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20210317001019"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 104.63724014638657,
+        "current_ratio_pct": 207.16624469964322,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2021,
+      "month": 3,
+      "period": "2021-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2021,
+      "month": 6,
+      "period": "2021-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2021,
+      "month": 9,
+      "period": "2021-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2021,
+      "month": 12,
+      "period": "2021-Q4",
+      "basis": "CFS",
+      "receipt": "20220325001068",
+      "report_name": "사업보고서 (2021.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 19637264000000,
+      "liabilities": 10207973000000,
+      "equity": 9429291000000,
+      "current_assets": 14526404000000,
+      "current_liabilities": 7613217000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20220325001068"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 108.25811824027916,
+        "current_ratio_pct": 190.80506965715017,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2022,
+      "month": 3,
+      "period": "2022-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2022,
+      "month": 6,
+      "period": "2022-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2022,
+      "month": 9,
+      "period": "2022-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2022,
+      "month": 12,
+      "period": "2022-Q4",
+      "basis": "CFS",
+      "receipt": "20230315001104",
+      "report_name": "사업보고서 (2022.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "매출액",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 20911708000000,
+      "liabilities": 10987431000000,
+      "equity": 9924277000000,
+      "current_assets": 15516744000000,
+      "current_liabilities": 8757397000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20230315001104"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 110.71265947131464,
+        "current_ratio_pct": 177.1844304877351,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2023,
+      "month": 3,
+      "period": "2023-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2023,
+      "month": 6,
+      "period": "2023-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2023,
+      "month": 9,
+      "period": "2023-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2023,
+      "month": 12,
+      "period": "2023-Q4",
+      "basis": "CFS",
+      "receipt": "20240329003141",
+      "report_name": "사업보고서 (2023.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "수익(매출액)",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "순자산",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 23714495000000,
+      "liabilities": 13258980000000,
+      "equity": 10455515000000,
+      "current_assets": 18613430000000,
+      "current_liabilities": 10356647000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20240329003141"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 126.81326553498322,
+        "current_ratio_pct": 179.7244803264995,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2024,
+      "month": 3,
+      "period": "2024-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2024,
+      "month": 6,
+      "period": "2024-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2024,
+      "month": 9,
+      "period": "2024-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2024,
+      "month": 12,
+      "period": "2024-Q4",
+      "basis": "CFS",
+      "receipt": "20251017000151",
+      "report_name": "사업보고서 (2024.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "수익(매출액)",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 27005385000000,
+      "liabilities": 17335972000000,
+      "equity": 9669413000000,
+      "current_assets": 21100663000000,
+      "current_liabilities": 14663775000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20251017000151"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 179.28670540807389,
+        "current_ratio_pct": 143.89652732669452,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2025,
+      "month": 3,
+      "period": "2025-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2025,
+      "month": 6,
+      "period": "2025-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2025,
+      "month": 9,
+      "period": "2025-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2025,
+      "month": 12,
+      "period": "2025-Q4",
+      "basis": "CFS",
+      "receipt": "20260318001395",
+      "report_name": "사업보고서 (2025.12)",
+      "source": "OpenDART CFS API",
+      "warnings": [
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {
+        "revenue": {
+          "account_id": "ifrs-full_Revenue",
+          "account_name": "수익(매출액)",
+          "column": "thstrm_amount"
+        },
+        "operating_profit": {
+          "account_id": "dart_OperatingIncomeLoss",
+          "account_name": "영업이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "net_income": {
+          "account_id": "ifrs-full_ProfitLoss",
+          "account_name": "당기순이익(손실)",
+          "column": "thstrm_amount"
+        },
+        "assets": {
+          "account_id": "ifrs-full_Assets",
+          "account_name": "자산총계",
+          "column": "thstrm_amount"
+        },
+        "liabilities": {
+          "account_id": "ifrs-full_Liabilities",
+          "account_name": "부채총계",
+          "column": "thstrm_amount"
+        },
+        "equity": {
+          "account_id": "ifrs-full_Equity",
+          "account_name": "자본총계",
+          "column": "thstrm_amount"
+        },
+        "current_assets": {
+          "account_id": "ifrs-full_CurrentAssets",
+          "account_name": "유동자산",
+          "column": "thstrm_amount"
+        },
+        "current_liabilities": {
+          "account_id": "ifrs-full_CurrentLiabilities",
+          "account_name": "유동부채",
+          "column": "thstrm_amount"
+        },
+        "operating_cashflow": {
+          "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+          "account_name": "영업활동현금흐름",
+          "column": "thstrm_amount"
+        }
+      },
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": 27791708000000,
+      "liabilities": 17678843000000,
+      "equity": 10112865000000,
+      "current_assets": 21958006000000,
+      "current_liabilities": 14842910000000,
+      "operating_cashflow": null,
+      "financial_receipts": [
+        "20260318001395"
+      ],
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": 174.8153762558879,
+        "current_ratio_pct": 147.93599098829003,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "period": "2026-Q1",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": false,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2026,
+      "month": 6,
+      "period": "2026-Q2",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    },
+    {
+      "year": 2026,
+      "month": 9,
+      "period": "2026-Q3",
+      "basis": "CFS",
+      "receipt": "",
+      "report_name": "",
+      "source": "",
+      "warnings": [
+        "미공시 또는 미수집",
+        "前 누적期 결측: 해당 개별분기 계산 불가"
+      ],
+      "evidence": {},
+      "revenue": null,
+      "operating_profit": null,
+      "net_income": null,
+      "assets": null,
+      "liabilities": null,
+      "equity": null,
+      "current_assets": null,
+      "current_liabilities": null,
+      "operating_cashflow": null,
+      "ratios": {
+        "revenue_growth_pct": null,
+        "operating_margin_pct": null,
+        "net_margin_pct": null,
+        "debt_to_equity_pct": null,
+        "current_ratio_pct": null,
+        "roa_pct": null,
+        "roe_pct": null
+      },
+      "derived": true,
+      "prior_receipt": ""
+    }
+  ],
+  "peers": [
+    {
+      "name": "GS건설",
+      "stock_code": "006360",
+      "website": "https://www.gsenc.com/",
+      "comparison": "주택·건축·토목·플랜트",
+      "caution": "해외 프로젝트와 자회사 구성 차이"
+    },
+    {
+      "name": "DL이앤씨",
+      "stock_code": "375500",
+      "website": "https://www.dlenc.co.kr/",
+      "comparison": "주택·토목·플랜트",
+      "caution": "2021년 분할 신설: 이전 DL 수치와 단순 연결 불가"
+    },
+    {
+      "name": "대우건설",
+      "stock_code": "047040",
+      "website": "https://www.daewooenc.com/",
+      "comparison": "주택·건축·토목·플랜트",
+      "caution": "해외사업 비중과 수익 인식 차이"
+    },
+    {
+      "name": "삼성물산",
+      "stock_code": "028260",
+      "website": "https://www.samsungcnt.com/",
+      "comparison": "건설부문 중심 비교",
+      "caution": "상사·패션·리조트·바이오 포함: 연결 전체 직접 비교 주의"
+    }
+  ]
+}

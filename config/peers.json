@@ -1,0 +1,6 @@
+[
+  {"name":"GS건설","stock_code":"006360","website":"https://www.gsenc.com/","comparison":"주택·건축·토목·플랜트","caution":"해외 프로젝트와 자회사 구성 차이"},
+  {"name":"DL이앤씨","stock_code":"375500","website":"https://www.dlenc.co.kr/","comparison":"주택·토목·플랜트","caution":"2021년 분할 신설: 이전 DL 수치와 단순 연결 불가"},
+  {"name":"대우건설","stock_code":"047040","website":"https://www.daewooenc.com/","comparison":"주택·건축·토목·플랜트","caution":"해외사업 비중과 수익 인식 차이"},
+  {"name":"삼성물산","stock_code":"028260","website":"https://www.samsungcnt.com/","comparison":"건설부문 중심 비교","caution":"상사·패션·리조트·바이오 포함: 연결 전체 직접 비교 주의"}
+]
