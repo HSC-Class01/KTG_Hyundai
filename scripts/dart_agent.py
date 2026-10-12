@@ -200,6 +200,8 @@ def collect(cfg, today, budget_minutes):
     previous = load_json(DATA / "filings.json", [])
     try:
         filings = list_filings(dart, corp, f"{cfg['first_year']}0101", today.strftime("%Y%m%d"))
+        # 2010년 초에 접수된 2009년 사업보고서처럼 분석 시작 연도 이전 기간의 보고서는 뺍니다.
+        filings = [f for f in filings if period_of(f)[0] >= cfg["first_year"]]
         if previous and not filings:
             raise ApiError("공시 목록이 비어 있습니다")
         old_ids = {f["rcept_no"] for f in previous}

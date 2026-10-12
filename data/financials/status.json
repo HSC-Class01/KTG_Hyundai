@@ -3,13 +3,7 @@
  "mode": "online",
  "errors": [],
  "notes": [],
- "new_filings": [
-  {
-   "rcept_no": "20100331002993",
-   "report_nm": "사업보고서 (2009.12)",
-   "rcept_dt": "20100331"
-  }
- ],
+ "new_filings": [],
  "api_calls": 14,
  "archives_downloaded": 0,
  "archives_pending": 0,

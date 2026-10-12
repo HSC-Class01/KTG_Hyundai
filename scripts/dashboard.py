@@ -897,6 +897,31 @@ def peer_table_rows(ctx):
     return rows, year
 
 
+def peer_summary(rows, name):
+    """자기 회사가 동종기업 가운데 몇 번째인지 한 문장으로 만듭니다."""
+    have = [(p, own) for p, own in rows if p.get("year") and p["values"].get("revenue")]
+    me = next((p for p, own in have if own), None)
+    if not me or len(have) < 3:
+        return ""
+
+    def place(key, src, reverse):
+        vals = [(p[src].get(key), own) for p, own in have if p[src].get(key) is not None]
+        order = sorted(vals, key=lambda x: x[0], reverse=reverse)
+        return next((i for i, (_, own) in enumerate(order, 1) if own), None), len(order)
+
+    rev, n1 = place("revenue", "values", True)
+    om, n2 = place("operating_margin_pct", "ratios", True)
+    debt, n3 = place("debt_to_equity_pct", "ratios", False)
+    parts = []
+    if rev:
+        parts.append(f"매출은 {n1}개사 중 **{rev}위**")
+    if om:
+        parts.append(f"영업이익률은 **{om}위**")
+    if debt:
+        parts.append(f"부채비율은 낮은 순서로 **{debt}위**")
+    return f"{me['year']}년 사업보고서 기준으로 {name}의 " + ", ".join(parts) + "입니다." if parts else ""
+
+
 PEER_COLS = [("revenue", "매출액", "amt"), ("operating_profit", "영업이익", "amt"), ("net_income", "당기순이익", "amt"),
              ("operating_margin_pct", "영업이익률", "pct"), ("net_margin_pct", "순이익률", "pct"),
              ("debt_to_equity_pct", "부채비율", "pct"), ("current_ratio_pct", "유동비율", "pct")]
@@ -933,8 +958,9 @@ def peers_section(ctx):
              f"({rank.get('source_name', '')}). " if rank else "")
     desc = (f"{basis}재무 숫자는 각 회사의 {str(year) + '년 ' if year else ''}사업보고서 연결재무제표를 OpenDART에서 자동으로 받아 "
             f"현대건설과 같은 방식으로 계산합니다. 회사 이름을 누르면 원문 공시가 열립니다.")
+    summary = peer_summary(rows, ctx["company"]["name"])
     return (f'<section id="peers" aria-labelledby="h-peers" class="tbl-sec">'
-            f'{section_head("peers", "Peer firms", "국내 동종업계", "국내 대형 건설사와 비교", desc)}'
+            f'{section_head("peers", "Peer firms", "국내 동종업계", "국내 대형 건설사와 비교", summary, desc)}'
             f'<div class="table-scroll pe" tabindex="0"><table><caption class="sr">국내 동종업계 비교</caption>'
             f'<thead>{head}</thead><tbody>{"".join(body)}</tbody></table></div>'
             f'<p class="mini-h">비교할 때 주의</p>{foot}</section>')
@@ -1470,7 +1496,9 @@ def readme_peers(ctx):
                      f"{p['year']}년" if p.get("year") else "수집 전", *vals])
     head = ["시평 순위", "회사", "종목코드", "주요 사업", "기준", "매출액(억 원)", "영업이익(억 원)", "영업이익률(%)",
             "부채비율(%)", "유동비율(%)"]
-    out = [_md_table(head, rows, ["---:", "---", "---", "---", "---", "---:", "---:", "---:", "---:", "---:"]), ""]
+    summary = peer_summary(rows_, ctx["company"]["name"])
+    out = ([summary, ""] if summary else []) + [
+        _md_table(head, rows, ["---:", "---", "---", "---", "---", "---:", "---:", "---:", "---:", "---:"]), ""]
     if rank:
         out.append(f"- 순위: {rank.get('year')}년 {rank.get('basis')} ([{rank.get('source_name')}]({rank.get('source_url')}))")
     out.append("- 재무 숫자: 각 회사의 가장 최근 사업보고서 연결재무제표 (OpenDART, 매월 자동 갱신). "
