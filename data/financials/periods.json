@@ -1,0 +1,3629 @@
+[
+  {
+    "year": 2010,
+    "month": 3,
+    "period": "2010-Q1",
+    "basis": "CFS",
+    "receipt": "20100517001199",
+    "report_name": "분기보고서 (2010.03)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20100517001199.zip",
+    "archive_sha256": "4e1d1aa47a7f6c4183930bf87ea5659aa6312d14ed3a5d5e90f4f8005dd6cdb5"
+  },
+  {
+    "year": 2010,
+    "month": 6,
+    "period": "2010-H1",
+    "basis": "CFS",
+    "receipt": "20100816001099",
+    "report_name": "반기보고서 (2010.06)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20100816001099.zip",
+    "archive_sha256": "3109f1d9adc1aeb5614305674a8098803622f12fb35fa292d74932f150a12919"
+  },
+  {
+    "year": 2010,
+    "month": 9,
+    "period": "2010-Q3",
+    "basis": "CFS",
+    "receipt": "20101115001602",
+    "report_name": "분기보고서 (2010.09)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20101115001602.zip",
+    "archive_sha256": "f23dc43b7083d65a6defa75ccfb9c044bb319774f70a01b7408b6bbbacb39a85"
+  },
+  {
+    "year": 2010,
+    "month": 12,
+    "period": "2010-FY",
+    "basis": "CFS",
+    "receipt": "20110331002986",
+    "report_name": "사업보고서 (2010.12)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20110331002986.zip",
+    "archive_sha256": "37672dfc37d6ddf2003699f8a5855022b1ee05c4f58152c5a6f41a2b26230bcc"
+  },
+  {
+    "year": 2011,
+    "month": 3,
+    "period": "2011-Q1",
+    "basis": "CFS",
+    "receipt": "20110530001072",
+    "report_name": "분기보고서 (2011.03)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20110530001072.zip",
+    "archive_sha256": "c6dfd7a3ad98a5b5fdbb8bf4a3d6987db2dd3108eb77c5dd80e81b630982ab9c"
+  },
+  {
+    "year": 2011,
+    "month": 6,
+    "period": "2011-H1",
+    "basis": "CFS",
+    "receipt": "20110829000609",
+    "report_name": "반기보고서 (2011.06)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20110829000609.zip",
+    "archive_sha256": "5b89572b9e122490f985dbe9a0935b49c63596c5e47d87159cb94036a9ba57b4"
+  },
+  {
+    "year": 2011,
+    "month": 9,
+    "period": "2011-Q3",
+    "basis": "CFS",
+    "receipt": "20111129000857",
+    "report_name": "분기보고서 (2011.09)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20111129000857.zip",
+    "archive_sha256": "809a33cc9c7fc497686459228aaf87490640ab5952da8bdc1b16b0f9c3c3b5d4"
+  },
+  {
+    "year": 2011,
+    "month": 12,
+    "period": "2011-FY",
+    "basis": "CFS",
+    "receipt": "20120330002259",
+    "report_name": "[첨부추가]사업보고서 (2011.12)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20120330002259.zip",
+    "archive_sha256": "6009a4231ad5d568e9ce1e8e728642ea0d40d20005f3ef6dd5ac0574267fc8df"
+  },
+  {
+    "year": 2012,
+    "month": 3,
+    "period": "2012-Q1",
+    "basis": "CFS",
+    "receipt": "20120530000336",
+    "report_name": "분기보고서 (2012.03)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20120530000336.zip",
+    "archive_sha256": "c6ca35832b57b2a3a1954054d3b6cdb6b301811db0a28c6356c2adf79e436235"
+  },
+  {
+    "year": 2012,
+    "month": 6,
+    "period": "2012-H1",
+    "basis": "CFS",
+    "receipt": "20120829000187",
+    "report_name": "반기보고서 (2012.06)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20120829000187.zip",
+    "archive_sha256": "ecc5c8ee228503421888f6d5f0e3cd9c2402d10ca5d91b0920d70b23c8da24b2"
+  },
+  {
+    "year": 2012,
+    "month": 9,
+    "period": "2012-Q3",
+    "basis": "CFS",
+    "receipt": "20121129000869",
+    "report_name": "분기보고서 (2012.09)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20121129000869.zip",
+    "archive_sha256": "8eb446c2911076bdc2b96d8c56b8e9b96ed934a19667aad8c77e46cd0698f891"
+  },
+  {
+    "year": 2012,
+    "month": 12,
+    "period": "2012-FY",
+    "basis": "CFS",
+    "receipt": "20130329002403",
+    "report_name": "사업보고서 (2012.12)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20130329002403.zip",
+    "archive_sha256": "b64b51b34092230a45247d39cd6e857cd1478e9fa854880743550a1228fb07fe"
+  },
+  {
+    "year": 2013,
+    "month": 3,
+    "period": "2013-Q1",
+    "basis": "CFS",
+    "receipt": "20130515001174",
+    "report_name": "분기보고서 (2013.03)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20130515001174.zip",
+    "archive_sha256": "08bfd6add555af25d5756af238f186a52fff70102e9b2f1c0c54718c697d1b8f"
+  },
+  {
+    "year": 2013,
+    "month": 6,
+    "period": "2013-H1",
+    "basis": "CFS",
+    "receipt": "20130814001009",
+    "report_name": "반기보고서 (2013.06)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20130814001009.zip",
+    "archive_sha256": "c2b0304e0f5aa8b6224c928d7ecce5c41f44acdfb52e930eabb61f518f75fb4f"
+  },
+  {
+    "year": 2013,
+    "month": 9,
+    "period": "2013-Q3",
+    "basis": "CFS",
+    "receipt": "20131114001109",
+    "report_name": "분기보고서 (2013.09)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20131114001109.zip",
+    "archive_sha256": "57e945f5d62220a5350823431b56ff714b0ffab485e55f3d4c6fc1835129dbd1"
+  },
+  {
+    "year": 2013,
+    "month": 12,
+    "period": "2013-FY",
+    "basis": "CFS",
+    "receipt": "20170622000230",
+    "report_name": "[기재정정]사업보고서 (2013.12)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20170622000230.zip",
+    "archive_sha256": "fcd61223db18d5bdac81ca8868509a09bd979242ef16c185908177dd6ca4ec86"
+  },
+  {
+    "year": 2014,
+    "month": 3,
+    "period": "2014-Q1",
+    "basis": "CFS",
+    "receipt": "20140515001627",
+    "report_name": "분기보고서 (2014.03)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20140515001627.zip",
+    "archive_sha256": "f9505d5abaad0bbd58122504da73b4aa49193464c22c2575f50b3420d048690e"
+  },
+  {
+    "year": 2014,
+    "month": 6,
+    "period": "2014-H1",
+    "basis": "CFS",
+    "receipt": "20140814001591",
+    "report_name": "반기보고서 (2014.06)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20140814001591.zip",
+    "archive_sha256": "9903f221334ce3d041007521fe342546a61bcfc161248bee6038a9baa66a1d01"
+  },
+  {
+    "year": 2014,
+    "month": 9,
+    "period": "2014-Q3",
+    "basis": "CFS",
+    "receipt": "20141114001469",
+    "report_name": "분기보고서 (2014.09)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20141114001469.zip",
+    "archive_sha256": "f120aa80a352e8a4ecd45cf0a987d7fa60ece6764f2f00ae0f0f8373eaef3dfa"
+  },
+  {
+    "year": 2014,
+    "month": 12,
+    "period": "2014-FY",
+    "basis": "CFS",
+    "receipt": "20170622000233",
+    "report_name": "[기재정정]사업보고서 (2014.12)",
+    "source": "",
+    "warnings": [
+      "2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20170622000233.zip",
+    "archive_sha256": "78fb8ec62bfa3786159f112827de81cd2cd0ccfb9035b2cff280597fe4c3ba18"
+  },
+  {
+    "year": 2015,
+    "month": 3,
+    "period": "2015-Q1",
+    "basis": "CFS",
+    "receipt": "20150515002676",
+    "report_name": "분기보고서 (2015.03)",
+    "source": "",
+    "warnings": [
+      "재무 API 미제공"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20150515002676.zip",
+    "archive_sha256": "54bc9a766afeb7fc176f6cf2517ad60aee6dcb25e5051127d5d9b6e2aa3e5c4f"
+  },
+  {
+    "year": 2015,
+    "month": 6,
+    "period": "2015-H1",
+    "basis": "CFS",
+    "receipt": "20150817001536",
+    "report_name": "반기보고서 (2015.06)",
+    "source": "",
+    "warnings": [
+      "재무 API 미제공"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20150817001536.zip",
+    "archive_sha256": "22df2fbc5441e4b31047e6720d46293495cdfa8a1f3ecead84aaa9a9e124fc0d"
+  },
+  {
+    "year": 2015,
+    "month": 9,
+    "period": "2015-Q3",
+    "basis": "CFS",
+    "receipt": "20151116001747",
+    "report_name": "분기보고서 (2015.09)",
+    "source": "",
+    "warnings": [
+      "재무 API 미제공"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null,
+    "archive": "data/financials/raw/20151116001747.zip",
+    "archive_sha256": "1a3e23225be16c5d2015a6b527605d64c479a25b9bd99fb0ab8c6ed3ffb98a37"
+  },
+  {
+    "year": 2015,
+    "month": 12,
+    "period": "2015-FY",
+    "basis": "CFS",
+    "receipt": "20170622000235",
+    "report_name": "[기재정정]사업보고서 (2015.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 19233180000000,
+    "operating_profit": 1089328000000,
+    "net_income": 663778000000,
+    "assets": 19350103000000,
+    "liabilities": 11959465000000,
+    "equity": 7390638000000,
+    "current_assets": 14228424000000,
+    "current_liabilities": 8575299000000,
+    "operating_cashflow": 596001000000,
+    "financial_receipts": [
+      "20170622000235"
+    ],
+    "archive": "data/financials/raw/20170622000235.zip",
+    "archive_sha256": "df43a11274f86e86ec7e21f3f60d9a0820b38eca643d18c9eb6b5858b8870378"
+  },
+  {
+    "year": 2016,
+    "month": 3,
+    "period": "2016-Q1",
+    "basis": "CFS",
+    "receipt": "20160516003560",
+    "report_name": "분기보고서 (2016.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 4287904000000,
+    "operating_profit": 207176000000,
+    "net_income": 86936000000,
+    "assets": 19197468000000,
+    "liabilities": 11678583000000,
+    "equity": 7518885000000,
+    "current_assets": 14241493000000,
+    "current_liabilities": 8401727000000,
+    "operating_cashflow": -199446000000,
+    "financial_receipts": [
+      "20160516003560"
+    ],
+    "archive": "data/financials/raw/20160516003560.zip",
+    "archive_sha256": "88718c84c84130beb45abb199a5dcea6270a1d4c2a48214746084f7cf5d36f8e"
+  },
+  {
+    "year": 2016,
+    "month": 6,
+    "period": "2016-H1",
+    "basis": "CFS",
+    "receipt": "20160816002090",
+    "report_name": "반기보고서 (2016.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 8974461000000,
+    "operating_profit": 475575000000,
+    "net_income": 254713000000,
+    "assets": 19629477000000,
+    "liabilities": 11919480000000,
+    "equity": 7709997000000,
+    "current_assets": 14652436000000,
+    "current_liabilities": 8621849000000,
+    "operating_cashflow": 239457000000,
+    "financial_receipts": [
+      "20160816002090"
+    ],
+    "archive": "data/financials/raw/20160816002090.zip",
+    "archive_sha256": "cfcbae8ee7612318becd035a93e1be84a21015c148dda3393bc79d0c0b4f6be5"
+  },
+  {
+    "year": 2016,
+    "month": 9,
+    "period": "2016-Q3",
+    "basis": "CFS",
+    "receipt": "20161114002302",
+    "report_name": "분기보고서 (2016.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 13438575000000,
+    "operating_profit": 750695000000,
+    "net_income": 390320000000,
+    "assets": 19192423000000,
+    "liabilities": 11464112000000,
+    "equity": 7728311000000,
+    "current_assets": 14329577000000,
+    "current_liabilities": 8199049000000,
+    "operating_cashflow": 421522000000,
+    "financial_receipts": [
+      "20161114002302"
+    ],
+    "archive": "data/financials/raw/20161114002302.zip",
+    "archive_sha256": "7e70cdf8f79b1db714daa1e292b786d2fc6f021d49fe2f3f01cc7000798b0a1a"
+  },
+  {
+    "year": 2016,
+    "month": 12,
+    "period": "2016-FY",
+    "basis": "CFS",
+    "receipt": "20170622000239",
+    "report_name": "[기재정정]사업보고서 (2016.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 18825015000000,
+    "operating_profit": 1158959000000,
+    "net_income": 731713000000,
+    "assets": 19873443000000,
+    "liabilities": 11748798000000,
+    "equity": 8124645000000,
+    "current_assets": 14937924000000,
+    "current_liabilities": 8749576000000,
+    "operating_cashflow": 1086520000000,
+    "financial_receipts": [
+      "20170622000239"
+    ],
+    "archive": "data/financials/raw/20170622000239.zip",
+    "archive_sha256": "efc32257aa0650a7250167f98e8c2cd83442f717ba7fcfd48f872e87fc9b21e2"
+  },
+  {
+    "year": 2017,
+    "month": 3,
+    "period": "2017-Q1",
+    "basis": "CFS",
+    "receipt": "20170515004898",
+    "report_name": "분기보고서 (2017.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 4129693000000,
+    "operating_profit": 228632000000,
+    "net_income": 43905000000,
+    "assets": 19170736000000,
+    "liabilities": 11202840000000,
+    "equity": 7967896000000,
+    "current_assets": 14190713000000,
+    "current_liabilities": 8322178000000,
+    "operating_cashflow": 225135000000,
+    "financial_receipts": [
+      "20170515004898"
+    ],
+    "archive": "data/financials/raw/20170515004898.zip",
+    "archive_sha256": "a29c6c1044fac84505d72088163514bf55142b2c963ed993bf3744950983c447"
+  },
+  {
+    "year": 2017,
+    "month": 6,
+    "period": "2017-H1",
+    "basis": "CFS",
+    "receipt": "20170811001073",
+    "report_name": "반기보고서 (2017.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 8347504000000,
+    "operating_profit": 510430000000,
+    "net_income": 259389000000,
+    "assets": 18965533000000,
+    "liabilities": 10738117000000,
+    "equity": 8227416000000,
+    "current_assets": 13864805000000,
+    "current_liabilities": 7976043000000,
+    "operating_cashflow": 472101000000,
+    "financial_receipts": [
+      "20170811001073"
+    ],
+    "archive": "data/financials/raw/20170811001073.zip",
+    "archive_sha256": "dd24be78d5e683f2303e4ae910b431cde697a5203dadbb81b9c5cec31ae94208"
+  },
+  {
+    "year": 2017,
+    "month": 9,
+    "period": "2017-Q3",
+    "basis": "CFS",
+    "receipt": "20171114002702",
+    "report_name": "분기보고서 (2017.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 12590617000000,
+    "operating_profit": 791481000000,
+    "net_income": 370510000000,
+    "assets": 18746796000000,
+    "liabilities": 10340308000000,
+    "equity": 8406488000000,
+    "current_assets": 13720420000000,
+    "current_liabilities": 7551294000000,
+    "operating_cashflow": -61777000000,
+    "financial_receipts": [
+      "20171114002702"
+    ],
+    "archive": "data/financials/raw/20171114002702.zip",
+    "archive_sha256": "24c65f0e96c2de20ad4f3d1bd20c9b4d4db057b18d24518c5056cd11f223542d"
+  },
+  {
+    "year": 2017,
+    "month": 12,
+    "period": "2017-FY",
+    "basis": "CFS",
+    "receipt": "20180402004254",
+    "report_name": "사업보고서 (2017.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익(손실)",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 16887090000000,
+    "operating_profit": 986105000000,
+    "net_income": 371564000000,
+    "assets": 18431902000000,
+    "liabilities": 9958964000000,
+    "equity": 8472938000000,
+    "current_assets": 13249840000000,
+    "current_liabilities": 7219038000000,
+    "operating_cashflow": 514404000000,
+    "financial_receipts": [
+      "20180402004254"
+    ],
+    "archive": "data/financials/raw/20180402004254.zip",
+    "archive_sha256": "7f715b292c9fee6f433a5dfdd1d37c6b06fa0768534c11e86a6e5cbd1d7b7a50"
+  },
+  {
+    "year": 2018,
+    "month": 3,
+    "period": "2018-Q1",
+    "basis": "CFS",
+    "receipt": "20180515002542",
+    "report_name": "분기보고서 (2018.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 3538167000000,
+    "operating_profit": 218470000000,
+    "net_income": 140151000000,
+    "assets": 18187539000000,
+    "liabilities": 10064557000000,
+    "equity": 8122982000000,
+    "current_assets": 13067589000000,
+    "current_liabilities": 7216994000000,
+    "operating_cashflow": 112431000000,
+    "financial_receipts": [
+      "20180515002542"
+    ],
+    "archive": "data/financials/raw/20180515002542.zip",
+    "archive_sha256": "9a55233361d3bd8c3b18cfc86c649e08a901b87ebef176cda67a094a5d7f72bc"
+  },
+  {
+    "year": 2018,
+    "month": 6,
+    "period": "2018-H1",
+    "basis": "CFS",
+    "receipt": "20180814002125",
+    "report_name": "반기보고서 (2018.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "반기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 7778261000000,
+    "operating_profit": 439357000000,
+    "net_income": 341801000000,
+    "assets": 18147229000000,
+    "liabilities": 9795458000000,
+    "equity": 8351771000000,
+    "current_assets": 13120808000000,
+    "current_liabilities": 6899014000000,
+    "operating_cashflow": 188143000000,
+    "financial_receipts": [
+      "20180814002125"
+    ],
+    "archive": "data/financials/raw/20180814002125.zip",
+    "archive_sha256": "f7c956109f63212610334f44c90ef563d1e4920326cd637cecb927ff4a4d4a93"
+  },
+  {
+    "year": 2018,
+    "month": 9,
+    "period": "2018-Q3",
+    "basis": "CFS",
+    "receipt": "20181114001954",
+    "report_name": "분기보고서 (2018.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "분기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 12264590000000,
+    "operating_profit": 677276000000,
+    "net_income": 468451000000,
+    "assets": 18180931000000,
+    "liabilities": 9780212000000,
+    "equity": 8400719000000,
+    "current_assets": 13321218000000,
+    "current_liabilities": 6883732000000,
+    "operating_cashflow": 281185000000,
+    "financial_receipts": [
+      "20181114001954"
+    ],
+    "archive": "data/financials/raw/20181114001954.zip",
+    "archive_sha256": "171987abcc071e65684cac0ea6d5617e1a7eb356fcda46f7a40c62758a719abb"
+  },
+  {
+    "year": 2018,
+    "month": 12,
+    "period": "2018-FY",
+    "basis": "CFS",
+    "receipt": "20190401004695",
+    "report_name": "사업보고서 (2018.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 16730894000000,
+    "operating_profit": 839989000000,
+    "net_income": 535303000000,
+    "assets": 18054609000000,
+    "liabilities": 9762753000000,
+    "equity": 8291856000000,
+    "current_assets": 13336768000000,
+    "current_liabilities": 6860875000000,
+    "operating_cashflow": 249524000000,
+    "financial_receipts": [
+      "20190401004695"
+    ],
+    "archive": "data/financials/raw/20190401004695.zip",
+    "archive_sha256": "5824489596d1da07e40efedc25a6705e84de0e91d4e8b218789e9c7c5ab95e7c"
+  },
+  {
+    "year": 2019,
+    "month": 3,
+    "period": "2019-Q1",
+    "basis": "CFS",
+    "receipt": "20190515002208",
+    "report_name": "분기보고서 (2019.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "분기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 3877659000000,
+    "operating_profit": 205203000000,
+    "net_income": 155986000000,
+    "assets": 18445187000000,
+    "liabilities": 10007800000000,
+    "equity": 8437387000000,
+    "current_assets": 13625563000000,
+    "current_liabilities": 6933678000000,
+    "operating_cashflow": -22798000000,
+    "financial_receipts": [
+      "20190515002208"
+    ],
+    "archive": "data/financials/raw/20190515002208.zip",
+    "archive_sha256": "5d3f926d12b7942396a359f72732a8327655d4d9a41cb83890cfc9642faf57cc"
+  },
+  {
+    "year": 2019,
+    "month": 6,
+    "period": "2019-H1",
+    "basis": "CFS",
+    "receipt": "20190814002741",
+    "report_name": "반기보고서 (2019.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs_ProfitLoss",
+        "account_name": "분기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 8559547000000,
+    "operating_profit": 450293000000,
+    "net_income": 348182000000,
+    "assets": 18418824000000,
+    "liabilities": 9809037000000,
+    "equity": 8609787000000,
+    "current_assets": 13767776000000,
+    "current_liabilities": 6955135000000,
+    "operating_cashflow": 739945000000,
+    "financial_receipts": [
+      "20190814002741"
+    ],
+    "archive": "data/financials/raw/20190814002741.zip",
+    "archive_sha256": "dc7e323182d0ca9ec2c0a08c2b5743ee337794a883954c7aeadde7f3f7608cfc"
+  },
+  {
+    "year": 2019,
+    "month": 9,
+    "period": "2019-Q3",
+    "basis": "CFS",
+    "receipt": "20191114001760",
+    "report_name": "분기보고서 (2019.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "분기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 12647308000000,
+    "operating_profit": 689455000000,
+    "net_income": 566414000000,
+    "assets": 18342355000000,
+    "liabilities": 9455263000000,
+    "equity": 8887092000000,
+    "current_assets": 13668184000000,
+    "current_liabilities": 6707559000000,
+    "operating_cashflow": 390918000000,
+    "financial_receipts": [
+      "20191114001760"
+    ],
+    "archive": "data/financials/raw/20191114001760.zip",
+    "archive_sha256": "a91c889f68506e0e3a1f4635378ec14518d9895f3e78361fea01db5b5f422933"
+  },
+  {
+    "year": 2019,
+    "month": 12,
+    "period": "2019-FY",
+    "basis": "CFS",
+    "receipt": "20200330004026",
+    "report_name": "사업보고서 (2019.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 17278792000000,
+    "operating_profit": 859667000000,
+    "net_income": 573331000000,
+    "assets": 18226972000000,
+    "liabilities": 9511990000000,
+    "equity": 8714982000000,
+    "current_assets": 13171993000000,
+    "current_liabilities": 6770867000000,
+    "operating_cashflow": 478916000000,
+    "financial_receipts": [
+      "20200330004026"
+    ],
+    "archive": "data/financials/raw/20200330004026.zip",
+    "archive_sha256": "8eb9e6ac9ee4a0b347f80fdee856287d50ef3fe0dc21107f480f439d467478ac"
+  },
+  {
+    "year": 2020,
+    "month": 3,
+    "period": "2020-Q1",
+    "basis": "CFS",
+    "receipt": "20200515001715",
+    "report_name": "분기보고서 (2020.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 4058864000000,
+    "operating_profit": 165347000000,
+    "net_income": 196540000000,
+    "assets": 19376595000000,
+    "liabilities": 10586072000000,
+    "equity": 8790523000000,
+    "current_assets": 14483130000000,
+    "current_liabilities": 7705134000000,
+    "operating_cashflow": 1070372000000,
+    "financial_receipts": [
+      "20200515001715"
+    ],
+    "archive": "data/financials/raw/20200515001715.zip",
+    "archive_sha256": "74343616dd152ca79aa33e3d7f462cfb52e67e25dc2108448112d5daef6790df"
+  },
+  {
+    "year": 2020,
+    "month": 6,
+    "period": "2020-H1",
+    "basis": "CFS",
+    "receipt": "20200814001996",
+    "report_name": "반기보고서 (2020.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 8603014000000,
+    "operating_profit": 319205000000,
+    "net_income": 265967000000,
+    "assets": 18793593000000,
+    "liabilities": 9982934000000,
+    "equity": 8810659000000,
+    "current_assets": 14393321000000,
+    "current_liabilities": 7162926000000,
+    "operating_cashflow": 964590000000,
+    "financial_receipts": [
+      "20200814001996"
+    ],
+    "archive": "data/financials/raw/20200814001996.zip",
+    "archive_sha256": "0499e9a5d28b5c512143b496604c440916ac057ac86ae96b00c8ed9ce478ac0b"
+  },
+  {
+    "year": 2020,
+    "month": 9,
+    "period": "2020-Q3",
+    "basis": "CFS",
+    "receipt": "20201116001448",
+    "report_name": "분기보고서 (2020.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 12645497000000,
+    "operating_profit": 459051000000,
+    "net_income": 349809000000,
+    "assets": 18309124000000,
+    "liabilities": 9422369000000,
+    "equity": 8886755000000,
+    "current_assets": 13994834000000,
+    "current_liabilities": 6590504000000,
+    "operating_cashflow": 1002826000000,
+    "financial_receipts": [
+      "20201116001448"
+    ],
+    "archive": "data/financials/raw/20201116001448.zip",
+    "archive_sha256": "b8d21f48dbb2c21ed700f6bf8b1d21156587204078716121a54bac0a4f36f3fd"
+  },
+  {
+    "year": 2020,
+    "month": 12,
+    "period": "2020-FY",
+    "basis": "CFS",
+    "receipt": "20210317001019",
+    "report_name": "사업보고서 (2020.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 16970859000000,
+    "operating_profit": 548972000000,
+    "net_income": 227697000000,
+    "assets": 17939274000000,
+    "liabilities": 9172896000000,
+    "equity": 8766378000000,
+    "current_assets": 13398943000000,
+    "current_liabilities": 6467725000000,
+    "operating_cashflow": 1729721000000,
+    "financial_receipts": [
+      "20210317001019"
+    ],
+    "archive": "data/financials/raw/20210317001019.zip",
+    "archive_sha256": "51df94c0d407162619c5c00005019a15fcd57ef53ebfd41ccfbac378f733f2b9"
+  },
+  {
+    "year": 2021,
+    "month": 3,
+    "period": "2021-Q1",
+    "basis": "CFS",
+    "receipt": "20210517001151",
+    "report_name": "분기보고서 (2021.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 4149570000000,
+    "operating_profit": 200899000000,
+    "net_income": 194434000000,
+    "assets": 18246552000000,
+    "liabilities": 9357554000000,
+    "equity": 8888998000000,
+    "current_assets": 13667416000000,
+    "current_liabilities": 6956129000000,
+    "operating_cashflow": 477649000000,
+    "financial_receipts": [
+      "20210517001151"
+    ],
+    "archive": "data/financials/raw/20210517001151.zip",
+    "archive_sha256": "3feb60a4ba35eb62198f573d6b19fd61292bb8c66c01b83d8e7e7c834d3df529"
+  },
+  {
+    "year": 2021,
+    "month": 6,
+    "period": "2021-H1",
+    "basis": "CFS",
+    "receipt": "20210817002181",
+    "report_name": "반기보고서 (2021.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 8533102000000,
+    "operating_profit": 341867000000,
+    "net_income": 279368000000,
+    "assets": 18377638000000,
+    "liabilities": 9418013000000,
+    "equity": 8959625000000,
+    "current_assets": 13699348000000,
+    "current_liabilities": 6820458000000,
+    "operating_cashflow": 190556000000,
+    "financial_receipts": [
+      "20210817002181"
+    ],
+    "archive": "data/financials/raw/20210817002181.zip",
+    "archive_sha256": "1d461ad4f916f043e7bd492e93ca8514025216ce3e166e862ac12c4382796f40"
+  },
+  {
+    "year": 2021,
+    "month": 9,
+    "period": "2021-Q3",
+    "basis": "CFS",
+    "receipt": "20211115001832",
+    "report_name": "분기보고서 (2021.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 12885050000000,
+    "operating_profit": 562231000000,
+    "net_income": 427744000000,
+    "assets": 18663839000000,
+    "liabilities": 9477182000000,
+    "equity": 9186657000000,
+    "current_assets": 13943365000000,
+    "current_liabilities": 6965443000000,
+    "operating_cashflow": 615800000000,
+    "financial_receipts": [
+      "20211115001832"
+    ],
+    "archive": "data/financials/raw/20211115001832.zip",
+    "archive_sha256": "6091576a7912bad198ba4d909981806e3607466b46a13972dd2cc9b4edf01e47"
+  },
+  {
+    "year": 2021,
+    "month": 12,
+    "period": "2021-FY",
+    "basis": "CFS",
+    "receipt": "20220325001068",
+    "report_name": "[기재정정]사업보고서 (2021.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 18065534000000,
+    "operating_profit": 753504000000,
+    "net_income": 554377000000,
+    "assets": 19637264000000,
+    "liabilities": 10207973000000,
+    "equity": 9429291000000,
+    "current_assets": 14526404000000,
+    "current_liabilities": 7613217000000,
+    "operating_cashflow": 1009401000000,
+    "financial_receipts": [
+      "20220325001068"
+    ],
+    "archive": "data/financials/raw/20220325001068.zip",
+    "archive_sha256": "9f39e09d28df845345728d51a97875bdde6ee1596831f5667cb8bd9bfdb9c57a"
+  },
+  {
+    "year": 2022,
+    "month": 3,
+    "period": "2022-Q1",
+    "basis": "CFS",
+    "receipt": "20220516002639",
+    "report_name": "분기보고서 (2022.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 4145303000000,
+    "operating_profit": 171481000000,
+    "net_income": 183108000000,
+    "assets": 20093350000000,
+    "liabilities": 10563594000000,
+    "equity": 9529756000000,
+    "current_assets": 14968615000000,
+    "current_liabilities": 8134596000000,
+    "operating_cashflow": 37042000000,
+    "financial_receipts": [
+      "20220516002639"
+    ],
+    "archive": "data/financials/raw/20220516002639.zip",
+    "archive_sha256": "2ca946843178c7ad20ddb4c813c71c348d86543cfd50aca90ed486b4a791bbae"
+  },
+  {
+    "year": 2022,
+    "month": 6,
+    "period": "2022-H1",
+    "basis": "CFS",
+    "receipt": "20220816002063",
+    "report_name": "반기보고서 (2022.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "반기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 9724751000000,
+    "operating_profit": 346889000000,
+    "net_income": 408052000000,
+    "assets": 20525833000000,
+    "liabilities": 10671293000000,
+    "equity": 9854540000000,
+    "current_assets": 15175228000000,
+    "current_liabilities": 8156103000000,
+    "operating_cashflow": -314983000000,
+    "financial_receipts": [
+      "20220816002063"
+    ],
+    "archive": "data/financials/raw/20220816002063.zip",
+    "archive_sha256": "8766db009278723108fbc82059a4caa40dca0515d28161904255f5cb3ebf4060"
+  },
+  {
+    "year": 2022,
+    "month": 9,
+    "period": "2022-Q3",
+    "basis": "CFS",
+    "receipt": "20221114002493",
+    "report_name": "분기보고서 (2022.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "분기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 15155595000000,
+    "operating_profit": 500595000000,
+    "net_income": 642850000000,
+    "assets": 21228666000000,
+    "liabilities": 10865523000000,
+    "equity": 10363143000000,
+    "current_assets": 15836766000000,
+    "current_liabilities": 8485264000000,
+    "operating_cashflow": -45200000000,
+    "financial_receipts": [
+      "20221114002493"
+    ],
+    "archive": "data/financials/raw/20221114002493.zip",
+    "archive_sha256": "4b5df3075de07560c05aa62928e21c05c812083216ff41df1d3abe861db56106"
+  },
+  {
+    "year": 2022,
+    "month": 12,
+    "period": "2022-FY",
+    "basis": "CFS",
+    "receipt": "20230315001104",
+    "report_name": "사업보고서 (2022.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 21239082000000,
+    "operating_profit": 574902000000,
+    "net_income": 470876000000,
+    "assets": 20911708000000,
+    "liabilities": 10987431000000,
+    "equity": 9924277000000,
+    "current_assets": 15516744000000,
+    "current_liabilities": 8757397000000,
+    "operating_cashflow": -143474000000,
+    "financial_receipts": [
+      "20230315001104"
+    ],
+    "archive": "data/financials/raw/20230315001104.zip",
+    "archive_sha256": "0fea7e89a848b66e2aa6c31194edd17bf9c0a883238ae8ec739e0669e64d806f"
+  },
+  {
+    "year": 2023,
+    "month": 3,
+    "period": "2023-Q1",
+    "basis": "CFS",
+    "receipt": "20230515001656",
+    "report_name": "분기보고서 (2023.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "분기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 6031081000000,
+    "operating_profit": 173512000000,
+    "net_income": 150552000000,
+    "assets": 21693730000000,
+    "liabilities": 11600487000000,
+    "equity": 10093243000000,
+    "current_assets": 16261072000000,
+    "current_liabilities": 9220818000000,
+    "operating_cashflow": -512010000000,
+    "financial_receipts": [
+      "20230515001656"
+    ],
+    "archive": "data/financials/raw/20230515001656.zip",
+    "archive_sha256": "c0b47c7d6044bc334b6131e1a895cbdaf28a939ed94c9e63ab87b82de0e98ed2"
+  },
+  {
+    "year": 2023,
+    "month": 6,
+    "period": "2023-H1",
+    "basis": "CFS",
+    "receipt": "20230811002236",
+    "report_name": "반기보고서 (2023.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "반기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 13194440000000,
+    "operating_profit": 397063000000,
+    "net_income": 362911000000,
+    "assets": 22688832000000,
+    "liabilities": 12377887000000,
+    "equity": 10310945000000,
+    "current_assets": 17241546000000,
+    "current_liabilities": 9744106000000,
+    "operating_cashflow": -969813000000,
+    "financial_receipts": [
+      "20230811002236"
+    ],
+    "archive": "data/financials/raw/20230811002236.zip",
+    "archive_sha256": "15c415b45908cc93f5aafea4361207497a042cf6df8d90ff46f5a98b37d7cea0"
+  },
+  {
+    "year": 2023,
+    "month": 9,
+    "period": "2023-Q3",
+    "basis": "CFS",
+    "receipt": "20231114002527",
+    "report_name": "분기보고서 (2023.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "분기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 21052970000000,
+    "operating_profit": 640932000000,
+    "net_income": 544236000000,
+    "assets": 23042465000000,
+    "liabilities": 12504278000000,
+    "equity": 10538187000000,
+    "current_assets": 17737374000000,
+    "current_liabilities": 9507619000000,
+    "operating_cashflow": -1507080000000,
+    "financial_receipts": [
+      "20231114002527"
+    ],
+    "archive": "data/financials/raw/20231114002527.zip",
+    "archive_sha256": "42729157abe84d8393f628d202e00b5b6aa2891b80affb902842909016516a71"
+  },
+  {
+    "year": 2023,
+    "month": 12,
+    "period": "2023-FY",
+    "basis": "CFS",
+    "receipt": "20240329003141",
+    "report_name": "[기재정정]사업보고서 (2023.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "수익(매출액)",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익(손실)",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "순자산",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 29651357000000,
+    "operating_profit": 785430000000,
+    "net_income": 654281000000,
+    "assets": 23714495000000,
+    "liabilities": 13258980000000,
+    "equity": 10455515000000,
+    "current_assets": 18613430000000,
+    "current_liabilities": 10356647000000,
+    "operating_cashflow": -714716000000,
+    "financial_receipts": [
+      "20240329003141"
+    ],
+    "archive": "data/financials/raw/20240329003141.zip",
+    "archive_sha256": "4b2dcbf28a876992c8658ca61cf48a446139801ffab55d0e42a8e98d0c8200bb"
+  },
+  {
+    "year": 2024,
+    "month": 3,
+    "period": "2024-Q1",
+    "basis": "CFS",
+    "receipt": "20240516002107",
+    "report_name": "분기보고서 (2024.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "수익(매출액)",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "분기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "순자산",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 8545258000000,
+    "operating_profit": 250913000000,
+    "net_income": 208363000000,
+    "assets": 24330039000000,
+    "liabilities": 13708881000000,
+    "equity": 10621158000000,
+    "current_assets": 19091196000000,
+    "current_liabilities": 10616821000000,
+    "operating_cashflow": -1152470000000,
+    "financial_receipts": [
+      "20240516002107"
+    ],
+    "archive": "data/financials/raw/20240516002107.zip",
+    "archive_sha256": "bb677d5bbd59a8cd22e7b664849e21c0d939e460520c9e17bfe98724deeb02b1"
+  },
+  {
+    "year": 2024,
+    "month": 6,
+    "period": "2024-H1",
+    "basis": "CFS",
+    "receipt": "20240814002457",
+    "report_name": "반기보고서 (2024.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "수익(매출액)",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "반기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 17166494000000,
+    "operating_profit": 398216000000,
+    "net_income": 354480000000,
+    "assets": 24931312000000,
+    "liabilities": 14104306000000,
+    "equity": 10827006000000,
+    "current_assets": 19460802000000,
+    "current_liabilities": 11127310000000,
+    "operating_cashflow": -1343817000000,
+    "financial_receipts": [
+      "20240814002457"
+    ],
+    "archive": "data/financials/raw/20240814002457.zip",
+    "archive_sha256": "c296f933efda6e70ecb3cb78c842da016f46f81abb069cd6c84eefd95c6404d6"
+  },
+  {
+    "year": 2024,
+    "month": 9,
+    "period": "2024-Q3",
+    "basis": "CFS",
+    "receipt": "20241114002820",
+    "report_name": "분기보고서 (2024.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "수익(매출액)",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "분기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 25423400000000,
+    "operating_profit": 512507000000,
+    "net_income": 394586000000,
+    "assets": 24977834000000,
+    "liabilities": 14221460000000,
+    "equity": 10756374000000,
+    "current_assets": 19658640000000,
+    "current_liabilities": 11579954000000,
+    "operating_cashflow": -707365000000,
+    "financial_receipts": [
+      "20241114002820"
+    ],
+    "archive": "data/financials/raw/20241114002820.zip",
+    "archive_sha256": "371544348c32bbf103b129b6b1568f6198c3a0a009b15045bac7e8b59f6e6c38"
+  },
+  {
+    "year": 2024,
+    "month": 12,
+    "period": "2024-FY",
+    "basis": "CFS",
+    "receipt": "20251017000151",
+    "report_name": "[기재정정]사업보고서 (2024.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "수익(매출액)",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익(손실)",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 32670268000000,
+    "operating_profit": -1263420000000,
+    "net_income": -766221000000,
+    "assets": 27005385000000,
+    "liabilities": 17335972000000,
+    "equity": 9669413000000,
+    "current_assets": 21100663000000,
+    "current_liabilities": 14663775000000,
+    "operating_cashflow": -118800000000,
+    "financial_receipts": [
+      "20251017000151"
+    ],
+    "archive": "data/financials/raw/20251017000151.zip",
+    "archive_sha256": "ad8a5bf5d38f49c707ed3dc26878d416417b986b7da0111d8699ea9fd5d94738"
+  },
+  {
+    "year": 2025,
+    "month": 3,
+    "period": "2025-Q1",
+    "basis": "CFS",
+    "receipt": "20250515001248",
+    "report_name": "분기보고서 (2025.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "수익(매출액)",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "분기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 7455579000000,
+    "operating_profit": 213697000000,
+    "net_income": 166742000000,
+    "assets": 26768637000000,
+    "liabilities": 16977875000000,
+    "equity": 9790762000000,
+    "current_assets": 20960211000000,
+    "current_liabilities": 14530525000000,
+    "operating_cashflow": -1209151000000,
+    "financial_receipts": [
+      "20250515001248"
+    ],
+    "archive": "data/financials/raw/20250515001248.zip",
+    "archive_sha256": "758753d2ecffc8fda560b94b8a3f5337541d667c3fde495f7effa7ccdfb2a519"
+  },
+  {
+    "year": 2025,
+    "month": 6,
+    "period": "2025-H1",
+    "basis": "CFS",
+    "receipt": "20250814002545",
+    "report_name": "반기보고서 (2025.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "반기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 15176299000000,
+    "operating_profit": 430698000000,
+    "net_income": 325326000000,
+    "assets": 26158151000000,
+    "liabilities": 16393515000000,
+    "equity": 9764636000000,
+    "current_assets": 20472218000000,
+    "current_liabilities": 14087088000000,
+    "operating_cashflow": -1889152000000,
+    "financial_receipts": [
+      "20250814002545"
+    ],
+    "archive": "data/financials/raw/20250814002545.zip",
+    "archive_sha256": "772a005e3abae0d88ca596f1575b455673c0305b68ff0dc644288d0ea10a43df"
+  },
+  {
+    "year": 2025,
+    "month": 9,
+    "period": "2025-Q3",
+    "basis": "CFS",
+    "receipt": "20251114001296",
+    "report_name": "분기보고서 (2025.09)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "매출액",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "분기순이익",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 23002768000000,
+    "operating_profit": 534236000000,
+    "net_income": 393152000000,
+    "assets": 26860826000000,
+    "liabilities": 16946646000000,
+    "equity": 9914180000000,
+    "current_assets": 21295580000000,
+    "current_liabilities": 13977822000000,
+    "operating_cashflow": -2395721000000,
+    "financial_receipts": [
+      "20251114001296"
+    ],
+    "archive": "data/financials/raw/20251114001296.zip",
+    "archive_sha256": "9ede547df643d4f597795434842365553c28b7e25689d957b40d8971147342dc"
+  },
+  {
+    "year": 2025,
+    "month": 12,
+    "period": "2025-FY",
+    "basis": "CFS",
+    "receipt": "20260318001395",
+    "report_name": "사업보고서 (2025.12)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "수익(매출액)",
+        "column": "thstrm_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "당기순이익(손실)",
+        "column": "thstrm_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 31062912000000,
+    "operating_profit": 653006000000,
+    "net_income": 559068000000,
+    "assets": 27791708000000,
+    "liabilities": 17678843000000,
+    "equity": 10112865000000,
+    "current_assets": 21958006000000,
+    "current_liabilities": 14842910000000,
+    "operating_cashflow": -748259000000,
+    "financial_receipts": [
+      "20260318001395"
+    ],
+    "archive": "data/financials/raw/20260318001395.zip",
+    "archive_sha256": "f9d8d82b17f6149629f486ce12dc49bd04c309996d105429ca0703a6ec84c267"
+  },
+  {
+    "year": 2026,
+    "month": 3,
+    "period": "2026-Q1",
+    "basis": "CFS",
+    "receipt": "20260515002899",
+    "report_name": "분기보고서 (2026.03)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "수익(매출액)",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "분기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 6281265000000,
+    "operating_profit": 180890000000,
+    "net_income": 206753000000,
+    "assets": 28405874000000,
+    "liabilities": 17377275000000,
+    "equity": 11028599000000,
+    "current_assets": 21655690000000,
+    "current_liabilities": 14452745000000,
+    "operating_cashflow": -1599624000000,
+    "financial_receipts": [
+      "20260515002899"
+    ],
+    "archive": "data/financials/raw/20260515002899.zip",
+    "archive_sha256": "1758b97a5e79385b8d4d2a8e17faebe9961a066109d19d6b82887727e979b39b"
+  },
+  {
+    "year": 2026,
+    "month": 6,
+    "period": "2026-H1",
+    "basis": "CFS",
+    "receipt": "20260814003360",
+    "report_name": "반기보고서 (2026.06)",
+    "source": "OpenDART CFS API",
+    "warnings": [],
+    "evidence": {
+      "revenue": {
+        "account_id": "ifrs-full_Revenue",
+        "account_name": "수익",
+        "column": "thstrm_add_amount"
+      },
+      "operating_profit": {
+        "account_id": "dart_OperatingIncomeLoss",
+        "account_name": "영업이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "net_income": {
+        "account_id": "ifrs-full_ProfitLoss",
+        "account_name": "반기순이익(손실)",
+        "column": "thstrm_add_amount"
+      },
+      "assets": {
+        "account_id": "ifrs-full_Assets",
+        "account_name": "자산총계",
+        "column": "thstrm_amount"
+      },
+      "liabilities": {
+        "account_id": "ifrs-full_Liabilities",
+        "account_name": "부채총계",
+        "column": "thstrm_amount"
+      },
+      "equity": {
+        "account_id": "ifrs-full_Equity",
+        "account_name": "자본총계",
+        "column": "thstrm_amount"
+      },
+      "current_assets": {
+        "account_id": "ifrs-full_CurrentAssets",
+        "account_name": "유동 자산",
+        "column": "thstrm_amount"
+      },
+      "current_liabilities": {
+        "account_id": "ifrs-full_CurrentLiabilities",
+        "account_name": "유동 부채",
+        "column": "thstrm_amount"
+      },
+      "operating_cashflow": {
+        "account_id": "ifrs-full_CashFlowsFromUsedInOperatingActivities",
+        "account_name": "영업활동현금흐름",
+        "column": "thstrm_amount"
+      }
+    },
+    "revenue": 13123568000000,
+    "operating_profit": 442716000000,
+    "net_income": 363741000000,
+    "assets": 28629147000000,
+    "liabilities": 17411335000000,
+    "equity": 11217812000000,
+    "current_assets": 21843651000000,
+    "current_liabilities": 14742845000000,
+    "operating_cashflow": -1677087000000,
+    "financial_receipts": [
+      "20260814003360"
+    ],
+    "archive": "data/financials/raw/20260814003360.zip",
+    "archive_sha256": "1887534f0e0595812d205adfea358a8e90a6f74c3bbc44979e5849a31336c9fd"
+  },
+  {
+    "year": 2026,
+    "month": 9,
+    "period": "2026-Q3",
+    "basis": "CFS",
+    "receipt": "",
+    "report_name": "",
+    "source": "",
+    "warnings": [
+      "미공시 또는 미수집"
+    ],
+    "evidence": {},
+    "revenue": null,
+    "operating_profit": null,
+    "net_income": null,
+    "assets": null,
+    "liabilities": null,
+    "equity": null,
+    "current_assets": null,
+    "current_liabilities": null,
+    "operating_cashflow": null
+  }
+]
