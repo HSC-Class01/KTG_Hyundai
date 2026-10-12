@@ -1,8 +1,18 @@
 {
- "checked_at": "2026-10-12T11:32:04+09:00",
- "mode": "offline",
+ "checked_at": "2026-10-12T11:43:59+09:00",
+ "mode": "online",
  "errors": [],
- "new_filings": [],
+ "notes": [],
+ "new_filings": [
+  {
+   "rcept_no": "20100331002993",
+   "report_nm": "사업보고서 (2009.12)",
+   "rcept_dt": "20100331"
+  }
+ ],
+ "api_calls": 14,
+ "archives_downloaded": 0,
+ "archives_pending": 0,
  "periods": 66,
  "annual_rows": 16,
  "half_year_rows": 33,
