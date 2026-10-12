@@ -153,7 +153,7 @@ def column_chart(xlabels, series, *, ticks_fmt, tips, labels=None, include=(), h
             f'<div class="pa">{_grid(lo, hi, ticks, neg_zone)}{"".join(slots)}</div>{_xa(xlabels)}</div>')
 
 
-def line_chart(xlabels, values, *, color, ticks_fmt, tips, labels=None, refs=(), height=200):
+def line_chart(xlabels, values, *, color, ticks_fmt, tips, labels=None, refs=(), height=200, dots=True):
     """꺾은선 차트(시리즈 1개). refs: [(값, 설명, 'left'|'right')] 참고선."""
     n = len(xlabels)
     lo, hi, ticks = axis(values, include=[r[0] for r in refs])
@@ -175,7 +175,8 @@ def line_chart(xlabels, values, *, color, ticks_fmt, tips, labels=None, refs=(),
         if v is None:
             continue
         x, y = (i + 0.5) / n * 100, yp(v)
-        marks.append(f'<i class="dt" style="left:{x:.3f}%;bottom:{y:.3f}%;--c:var({color})"></i>')
+        if dots or i in labels:
+            marks.append(f'<i class="dt" style="left:{x:.3f}%;bottom:{y:.3f}%;--c:var({color})"></i>')
         text = labels.get(i)
         if text:
             # 바로 옆 점에도 숫자가 붙으면, 둘 중 낮은 점의 숫자는 점 아래로 내립니다.
@@ -860,7 +861,7 @@ def valuation_block(v, ctx):
     monthly = ctx.get("prices") or {}
     months = sorted(monthly)[-60:]
     if len(months) >= 6:
-        xl = [f'<span>{"’" + m[2:4] if m[4:] == "01" or i == 0 else "&nbsp;"}</span>' for i, m in enumerate(months)]
+        xl = [f'<span>{"’" + m[2:4] if m[4:] == "01" else "&nbsp;"}</span>' for m in months]
         vals = [monthly[m] / 1000 for m in months]
 
         def ptips(i):
@@ -872,7 +873,7 @@ def valuation_block(v, ctx):
         figs.append(figure("fig-price", "월말 주가", f"최근 {len(months)}개월 · 보통주 종가 · 단위: 천 원 ({val.get('source', '')})",
                            line_chart(xl, vals, color="--data", ticks_fmt=tick_plain, tips=ptips,
                                       labels={hi_i: f"{vals[hi_i]:.1f}", lo_i: f"{vals[lo_i]:.1f}", len(vals) - 1: f"{vals[-1]:.1f}"},
-                                      height=180)))
+                                      height=180, dots=False)))
     years = [t for t in v.years if v.a(t, "pbr_x") is not None]
     if len(years) >= 2:
         pbr = [v.a(t, "pbr_x") for t in years]
@@ -1110,6 +1111,7 @@ CAVEATS = [
     "2010~2013년 분·반기 주석에는 이 표가 없어 그 기간의 EBITDA·이자보상배율은 비어 있습니다.",
     "지배주주 순이익은 원문 표에서 같은 이름의 줄이 여러 번 나와 2010~2014년은 비워 두었습니다.",
     "주가는 네이버 금융(실패하면 Yahoo Finance) 월말 종가, 주식수는 OpenDART ‘주식의 총수 현황’(2015년부터)입니다. "
+    "네이버 금융의 과거 주가는 권리 변동을 반영한 수정주가라 그때 실제 거래 가격과 조금 다를 수 있고, "
     "우선주도 보통주 주가로 계산해 시가총액이 조금 다를 수 있습니다.",
     "판정(성장·주의 등)은 화면 아래 판정 기준의 단순 규칙입니다. 투자 판단의 근거로 쓰기에는 정보가 부족합니다.",
     "동종기업은 사업 구성이 달라(삼성물산의 상사·바이오 등) 연결 전체 숫자를 그대로 비교하면 차이가 과장될 수 있습니다.",

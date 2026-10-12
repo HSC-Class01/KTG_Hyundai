@@ -202,8 +202,7 @@ def verdicts(v):
         returns = ("good", "양호")
 
     # 6 주가 수준: 좋고 나쁨을 판정하지 않고 참고 값만 보여 줍니다(가이드: 배수는 결과).
-    val = v.ctx.get("valuation") or {}
-    valuation = ("info", f"PBR {val['pbr_x']:.2f}배") if val.get("pbr_x") else ("info", "참고")
+    valuation = ("info", "참고")
 
     return {"growth": growth, "profit": profit, "cash": cash, "debt": debt, "returns": returns, "valuation": valuation,
             "cagr": cagr, "margin_now": m_now, "margin_first": m0, "streak": streak, "balance_row": bal,
@@ -558,9 +557,12 @@ def _valuation_step(v, vd, ctx):
     if val.get("fcf_yield_pct") is not None and val["fcf_yield_pct"] < 0:
         more.append("FCF 수익률이 마이너스인 것은 최근 1년 영업현금흐름이 설비투자보다 적었기 때문입니다(투자 후 남는 현금이 없음).")
     peers = [p for p in ctx.get("peers", []) if (p.get("market") or {}).get("pbr_x")]
-    if peers and val.get("pbr_x"):
-        lower = sum(1 for p in peers if p["market"]["pbr_x"] < val["pbr_x"])
-        more.append(f"PBR을 동종기업 {len(peers)}곳과 비교하면 현대건설보다 낮은 곳이 {lower}곳입니다(화면 맨 아래 표).")
+    own = (ctx.get("own_market") or {}).get("pbr_x")
+    if peers and own:
+        lower = sum(1 for p in peers if p["market"]["pbr_x"] < own)
+        py = max(p.get("year") or 0 for p in peers)
+        more.append(f"같은 기준(현재 주가 ÷ {py}년 사업보고서 지배주주지분)으로 동종기업 {len(peers)}곳과 비교하면, "
+                    f"현대건설 PBR {own:.2f}배보다 낮은 곳이 {lower}곳입니다(화면 맨 아래 표).")
     return {**base, "answer": answer, "lead": lead, "more": more}
 
 
