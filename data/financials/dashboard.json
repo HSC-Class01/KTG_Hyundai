@@ -1,6 +1,6 @@
 {
  "company": "현대건설",
- "checked_at": "2026-10-12T11:46:25+09:00",
+ "checked_at": "2026-10-12T12:50:42+09:00",
  "annual": [
   {
    "label": "2010",
@@ -541,7 +541,9 @@
     "fcf": 399691000000,
     "ebitda": 1285152000000,
     "quick_assets": 12899860000000,
-    "nci_equity": 1670344000000
+    "nci_equity": 1670344000000,
+    "price_close": 27778.0,
+    "market_cap": 3095986462138.0
    },
    "derived": false,
    "receipt": "20170622000235",
@@ -580,11 +582,12 @@
     "sga_ratio_pct": 3.305298447786585,
     "receivables_to_revenue_pct": 34.617598337872366,
     "borrowing_rate_pct": 3.941841951949994,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 7.3540442958115495,
+    "pbr_x": 0.5412285561088294,
+    "ev_ebitda_x": 4.203079061572483,
+    "fcf_yield_pct": 12.90997247203674
+   },
+   "market_note": "2015.12 종가 27,778원 × 111,454,621주"
   },
   {
    "label": "2016",
@@ -637,7 +640,9 @@
     "fcf": 899279000000,
     "ebitda": 1350160000000,
     "quick_assets": 13738562000000,
-    "nci_equity": 1795620000000
+    "nci_equity": 1795620000000,
+    "price_close": 41643.0,
+    "market_cap": 4641304782303.0
    },
    "derived": false,
    "receipt": "20170622000239",
@@ -676,11 +681,12 @@
     "sga_ratio_pct": 4.0944509207562385,
     "receivables_to_revenue_pct": 32.67460344653112,
     "borrowing_rate_pct": 3.3532751928467364,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 8.112580722486156,
+    "pbr_x": 0.7333364589811227,
+    "ev_ebitda_x": 5.071151405983735,
+    "fcf_yield_pct": 19.375564462581593
+   },
+   "market_note": "2016.12 종가 41,643원 × 111,454,621주"
   },
   {
    "label": "2017",
@@ -733,7 +739,9 @@
     "fcf": 460946000000,
     "ebitda": 1180666000000,
     "quick_assets": 11144323000000,
-    "nci_equity": 2005292000000
+    "nci_equity": 2005292000000,
+    "price_close": 35319.0,
+    "market_cap": 3936465759099.0
    },
    "derived": false,
    "receipt": "20180402004254",
@@ -772,11 +780,12 @@
     "sga_ratio_pct": 4.695059954083267,
     "receivables_to_revenue_pct": 28.79603886756096,
     "borrowing_rate_pct": 3.17310625564498,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 19.516729346985827,
+    "pbr_x": 0.6086396440217972,
+    "ev_ebitda_x": 5.180365792780515,
+    "fcf_yield_pct": 11.709640784618532
+   },
+   "market_note": "2017.12 종가 35,319원 × 111,454,621주"
   },
   {
    "label": "2018",
@@ -829,7 +838,9 @@
     "fcf": 54869000000,
     "ebitda": 1015562000000,
     "quick_assets": 11389716000000,
-    "nci_equity": 2017762000000
+    "nci_equity": 2017762000000,
+    "price_close": 53124.0,
+    "market_cap": 5920915286004.0
    },
    "derived": false,
    "receipt": "20190401004695",
@@ -868,11 +879,12 @@
     "sga_ratio_pct": 4.908034203073667,
     "receivables_to_revenue_pct": 29.02683502746476,
     "borrowing_rate_pct": 3.8867669946875503,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 15.515781423782645,
+    "pbr_x": 0.9437084120837208,
+    "ev_ebitda_x": 7.9799601462087,
+    "fcf_yield_pct": 0.9266979402610377
+   },
+   "market_note": "2018.12 종가 53,124원 × 111,454,621주"
   },
   {
    "label": "2019",
@@ -925,7 +937,9 @@
     "fcf": 353987000000,
     "ebitda": 1045472000000,
     "quick_assets": 11448568000000,
-    "nci_equity": 2052426000000
+    "nci_equity": 2052426000000,
+    "price_close": 41157.0,
+    "market_cap": 4587137836497.0
    },
    "derived": false,
    "receipt": "20200330004026",
@@ -964,11 +978,12 @@
     "sga_ratio_pct": 5.01330185582418,
     "receivables_to_revenue_pct": 24.692935709857494,
     "borrowing_rate_pct": 3.393107252959921,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 11.258769246338003,
+    "pbr_x": 0.6884952016158663,
+    "ev_ebitda_x": 6.353645852301161,
+    "fcf_yield_pct": 7.716947094625015
+   },
+   "market_note": "2019.12 종가 41,157원 × 111,454,621주"
   },
   {
    "label": "2020",
@@ -1021,7 +1036,9 @@
     "fcf": 1639239000000,
     "ebitda": 724625000000,
     "quick_assets": 12273464000000,
-    "nci_equity": 2134626000000
+    "nci_equity": 2134626000000,
+    "price_close": 36438.0,
+    "market_cap": 4061183479998.0
    },
    "derived": false,
    "receipt": "20210317001019",
@@ -1060,11 +1077,12 @@
     "sga_ratio_pct": 4.996158414845118,
     "receivables_to_revenue_pct": 22.32294193240307,
     "borrowing_rate_pct": 3.064503191063101,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 33.200760942414284,
+    "pbr_x": 0.6123847031671269,
+    "ev_ebitda_x": 7.615989622215629,
+    "fcf_yield_pct": 40.36357894376167
+   },
+   "market_note": "2020.12 종가 36,438원 × 111,454,621주"
   },
   {
    "label": "2021",
@@ -1117,7 +1135,9 @@
     "fcf": 887252000000,
     "ebitda": 929403000000,
     "quick_assets": 13808157000000,
-    "nci_equity": 2212554000000
+    "nci_equity": 2212554000000,
+    "price_close": 44450.0,
+    "market_cap": 4996644858100.0
    },
    "derived": false,
    "receipt": "20220325001068",
@@ -1156,11 +1176,12 @@
     "sga_ratio_pct": 5.777476602684427,
     "receivables_to_revenue_pct": 27.024941526776903,
     "borrowing_rate_pct": 2.4857202575322,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 12.261464457384886,
+    "pbr_x": 0.6923689831152223,
+    "ev_ebitda_x": 6.931466606090146,
+    "fcf_yield_pct": 17.756955421029904
+   },
+   "market_note": "2021.12 종가 44,450원 × 112,410,458주"
   },
   {
    "label": "2022",
@@ -1213,7 +1234,9 @@
     "fcf": -310270000000,
     "ebitda": 761342000000,
     "quick_assets": 14661350000000,
-    "nci_equity": 2237600000000
+    "nci_equity": 2237600000000,
+    "price_close": 34900.0,
+    "market_cap": 3923124984200.0
    },
    "derived": false,
    "receipt": "20230315001104",
@@ -1252,11 +1275,12 @@
     "sga_ratio_pct": 4.415661656186458,
     "receivables_to_revenue_pct": 27.075242705875898,
     "borrowing_rate_pct": 2.245321113731032,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 9.594666934548995,
+    "pbr_x": 0.51037984088573,
+    "ev_ebitda_x": 5.1514155060406495,
+    "fcf_yield_pct": -7.908746248197085
+   },
+   "market_note": "2022.12 종가 34,900원 × 112,410,458주"
   },
   {
    "label": "2023",
@@ -1309,7 +1333,9 @@
     "fcf": -951756000000,
     "ebitda": 988417000000,
     "quick_assets": 17797805000000,
-    "nci_equity": 2318864000000
+    "nci_equity": 2318864000000,
+    "price_close": 34900.0,
+    "market_cap": 3923124984200.0
    },
    "derived": false,
    "receipt": "20240329003141",
@@ -1348,11 +1374,12 @@
     "sga_ratio_pct": 3.0938820101892803,
     "receivables_to_revenue_pct": 29.387963593032186,
     "borrowing_rate_pct": 3.1747408338167236,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 7.3205741778378215,
+    "pbr_x": 0.4821547568157956,
+    "ev_ebitda_x": 4.387716909158787,
+    "fcf_yield_pct": -24.26014985077212
+   },
+   "market_note": "2023.12 종가 34,900원 × 112,410,458주"
   },
   {
    "label": "2024",
@@ -1405,7 +1432,9 @@
     "fcf": -318144000000,
     "ebitda": -1041446000000,
     "quick_assets": 20324152000000,
-    "nci_equity": 1644003000000
+    "nci_equity": 1644003000000,
+    "price_close": 25400.0,
+    "market_cap": 2855225633200.0
    },
    "derived": false,
    "receipt": "20251017000151",
@@ -1445,10 +1474,11 @@
     "receivables_to_revenue_pct": 30.621704725532094,
     "borrowing_rate_pct": 3.625141491602263,
     "per_x": null,
-    "pbr_x": null,
+    "pbr_x": 0.35577317958833254,
     "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "fcf_yield_pct": -11.142516945094789
+   },
+   "market_note": "2024.12 종가 25,400원 × 112,410,458주"
   },
   {
    "label": "2025",
@@ -1501,7 +1531,9 @@
     "fcf": -864121000000,
     "ebitda": 853922000000,
     "quick_assets": 21210962000000,
-    "nci_equity": 1848139000000
+    "nci_equity": 1848139000000,
+    "price_close": 70100.0,
+    "market_cap": 7879973105800.0
    },
    "derived": false,
    "receipt": "20260318001395",
@@ -1540,11 +1572,12 @@
     "sga_ratio_pct": 4.272867270138743,
     "receivables_to_revenue_pct": 34.702606117546225,
     "borrowing_rate_pct": 3.4406331502148126,
-    "per_x": null,
-    "pbr_x": null,
-    "ev_ebitda_x": null,
-    "fcf_yield_pct": null
-   }
+    "per_x": 21.11761076948227,
+    "pbr_x": 0.9534463823483077,
+    "ev_ebitda_x": 10.266116935504648,
+    "fcf_yield_pct": -10.966039964831475
+   },
+   "market_note": "2025.12 종가 70,100원 × 112,410,458주"
   }
  ],
  "half_year": [
@@ -11139,7 +11172,14 @@
     "roe_pct": 6.794538849874998
    },
    "receipt": "20260312000856",
-   "market": {}
+   "market": {
+    "price": 314750.0,
+    "shares": 171444134,
+    "market_cap": 53962041176500.0,
+    "per_x": 22.123622307553376,
+    "pbr_x": 1.081145965885802,
+    "as_of": "2026.10"
+   }
   },
   {
    "name": "GS건설",
@@ -11203,7 +11243,14 @@
     "roe_pct": 1.6913557694797032
    },
    "receipt": "20260701000624",
-   "market": {}
+   "market": {
+    "price": 30000.0,
+    "shares": 85581490,
+    "market_cap": 2567444700000.0,
+    "per_x": 27.454016339100495,
+    "pbr_x": 0.5356697382537146,
+    "as_of": "2026.10"
+   }
   },
   {
    "name": "대우건설",
@@ -11267,7 +11314,13 @@
     "roe_pct": -26.364993202681813
    },
    "receipt": "20260318001029",
-   "market": {}
+   "market": {
+    "price": 16110.0,
+    "shares": 415622638,
+    "market_cap": 6695680698180.0,
+    "pbr_x": 2.0000881923055442,
+    "as_of": "2026.10"
+   }
   },
   {
    "name": "DL이앤씨",
@@ -11331,7 +11384,14 @@
     "roe_pct": 7.059163557915279
    },
    "receipt": "20260814003447",
-   "market": {}
+   "market": {
+    "price": 64400.0,
+    "shares": 38693623,
+    "market_cap": 2491869321200.0,
+    "per_x": 6.731343151776128,
+    "pbr_x": 0.4751765227284063,
+    "as_of": "2026.10"
+   }
   },
   {
    "name": "IPARK현대산업개발",
@@ -11395,7 +11455,14 @@
     "roe_pct": 4.922525627861506
    },
    "receipt": "20260318001249",
-   "market": {}
+   "market": {
+    "price": 21750.0,
+    "shares": 65907330,
+    "market_cap": 1433484427500.0,
+    "per_x": 9.064154561797455,
+    "pbr_x": 0.4461853312534575,
+    "as_of": "2026.10"
+   }
   }
  ],
  "analysis": {
@@ -11513,12 +11580,16 @@
     "en": "Valuation",
     "ko": "주가 수준",
     "q": "지금 주가는 이 실적을 어떻게 평가하나?",
-    "answer": "주가 자료를 아직 받지 못했습니다.",
-    "lead": "다음 자동 실행(매월 1일) 때 주가를 받아 PER·PBR·EV/EBITDA·FCF 수익률을 계산합니다.",
-    "more": [],
+    "answer": "PBR 1.22배: 주가가 장부상 순자산보다 높게 거래됩니다.",
+    "lead": "2026.10 월말 주가 101,000원 × 발행주식 112,410,458주 = 시가총액 11.35조 원. 최근 4개 분기 지배주주 순이익 기준 PER 25.3배, EV/EBITDA 16.3배, FCF 수익률 −7.0%.",
+    "more": [
+     "연말 주가 기준 PBR은 2015년 0.54배 → 2025년 0.95배였고, 가장 높았던 해는 2025년(0.95배), 가장 낮았던 해는 2024년(0.36배)입니다.",
+     "FCF 수익률이 마이너스인 것은 최근 1년 영업현금흐름이 설비투자보다 적었기 때문입니다(투자 후 남는 현금이 없음).",
+     "PBR을 동종기업 5곳과 비교하면 현대건설보다 낮은 곳이 4곳입니다(화면 맨 아래 표)."
+    ],
     "verdict": [
      "info",
-     "참고"
+     "PBR 1.22배"
     ]
    }
   ],
@@ -11629,7 +11700,10 @@
     "detail": "PER을 계산할 수 없는 해(적자 또는 주가 없음)",
     "meaning": "낮은 가격이 사업의 가치 창출력 약화를 반영할 가능성",
     "check": "정상화 이익, 투자회수, 산업 구조 변화",
-    "years": [],
+    "years": [
+     2018,
+     2022
+    ],
     "basis": "2024→2025년"
    }
   ],
@@ -11656,7 +11730,7 @@
    ],
    "valuation": [
     "info",
-    "참고"
+    "PBR 1.22배"
    ]
   }
  }
