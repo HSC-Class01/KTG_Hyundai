@@ -2,6 +2,7 @@
 """OpenDART periodic filings: archive, normalize, validate, render. No key is persisted."""
 import argparse
 import copy
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import hashlib
 import io
 import json
@@ -254,6 +255,39 @@ def offline(today):
     return export(rows,today)
 
 
+def collect_period(year, month, filing):
+    if not filing:
+        return blank_row(year, month)
+    receipt=filing['rcept_no']
+    archive=RAW/f'{receipt}.zip'
+    if not archive.exists():
+        content=core.get_api('document.xml',{'rcept_no':receipt})
+        if not zipfile.is_zipfile(io.BytesIO(content)):
+            raise RuntimeError(f'{receipt}: 공시 원문 ZIP 응답 실패')
+        if len(content)>90*1024*1024:
+            raise RuntimeError(f'{receipt}: GitHub 원문 파일 크기 제한 초과')
+        archive.write_bytes(content)
+    row=blank_row(year,month,filing,'2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기')
+    if year<2015:
+        candidate_path=RAW/f'{receipt}_candidates.json'
+        if not candidate_path.exists():
+            candidates=[]
+            with zipfile.ZipFile(archive) as z:
+                for name in z.namelist():
+                    if name.lower().endswith(('.xml','.html','.htm')):
+                        candidates.extend(legacy_candidates(z.read(name),year,month))
+            write_json(candidate_path,candidates)
+        row=reviewed_legacy(row)
+    else:
+        doc=api('fnlttSinglAcntAll.json',{'corp_code':CORP,'bsns_year':str(year),'reprt_code':CODES[month],'fs_div':'CFS'},True)
+        write_json(RAW/f'{year}_{CODES[month]}_CFS.json',doc)
+        row=normalized_api(doc,year,month,filing)
+    row['archive']=str(archive.relative_to(ROOT))
+    row['archive_sha256']=hashlib.sha256(archive.read_bytes()).hexdigest()
+    print(f"{year} {NAMES[month]}: 수집 완료 · {sum(row[k] is not None for k in core.FIELDS)}/{len(core.FIELDS)} 항목", flush=True)
+    return row
+
+
 def collect(today):
     if core.get_corp_code() != CORP:
         raise RuntimeError('현대건설 고유번호 불일치')
@@ -261,41 +295,23 @@ def collect(today):
     filings=list_filings(today)
     write_json(DATA/'filings.json',filings)
     latest=select_latest(filings)
+    work=[(year,month,latest.get((year,month)))
+          for year in range(2010,int(today[:4])+1) for month in CODES
+          if f'{year}{month:02d}01' <= today]
     rows=[]
-    for year in range(2010,int(today[:4])+1):
-        for month in CODES:
-            if f'{year}{month:02d}01' > today: continue
-            filing=latest.get((year,month))
-            if not filing:
-                rows.append(blank_row(year,month)); continue
-            receipt=filing['rcept_no']
-            archive=RAW/f'{receipt}.zip'
-            if not archive.exists():
-                content=core.get_api('document.xml',{'rcept_no':receipt})
-                if not zipfile.is_zipfile(io.BytesIO(content)):
-                    raise RuntimeError(f'{receipt}: 공시 원문 ZIP 응답 실패')
-                if len(content)>90*1024*1024:
-                    raise RuntimeError(f'{receipt}: GitHub 원문 파일 크기 제한 초과')
-                archive.write_bytes(content)
-            row=blank_row(year,month,filing,'2015년 이전: 재무 API 미제공 · 원문 수치 검증 대기')
-            if year<2015:
-                candidate_path=RAW/f'{receipt}_candidates.json'
-                if not candidate_path.exists():
-                    candidates=[]
-                    with zipfile.ZipFile(archive) as z:
-                        for name in z.namelist():
-                            if name.lower().endswith(('.xml','.html','.htm')):
-                                candidates.extend(legacy_candidates(z.read(name),year,month))
-                    write_json(candidate_path,candidates)
-                row=reviewed_legacy(row)
-            else:
-                doc=api('fnlttSinglAcntAll.json',{'corp_code':CORP,'bsns_year':str(year),'reprt_code':CODES[month],'fs_div':'CFS'},True)
-                write_json(RAW/f'{year}_{CODES[month]}_CFS.json',doc)
-                row=normalized_api(doc,year,month,filing)
-            row['archive']=str(archive.relative_to(ROOT))
-            row['archive_sha256']=hashlib.sha256(archive.read_bytes()).hexdigest()
-            rows.append(row)
-            print(f"{year} {NAMES[month]}: 수집 완료 · {sum(row[k] is not None for k in core.FIELDS)}/{len(core.FIELDS)} 항목")
+    # Only 3 concurrent independent filings; each writes distinct receipt paths.
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        futures=[pool.submit(collect_period,*item) for item in work]
+        try:
+            for future in as_completed(futures):
+                rows.append(future.result())
+        except Exception:
+            for future in futures:
+                future.cancel()
+            write_json(DATA/'partial_periods.json',rows)
+            raise
+    rows.sort(key=lambda row:(row['year'],row['month']))
+    (DATA/'partial_periods.json').unlink(missing_ok=True)
     write_json(DATA/'periods.json',rows)
     export(rows,today)
     write_json(DATA/'last_run.json',{'checked_at':datetime.now(ZoneInfo('Asia/Seoul')).isoformat(),'filing_count':len(filings),'period_count':len(rows),'status':'success'})
