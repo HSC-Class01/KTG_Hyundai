@@ -100,7 +100,12 @@ def normalized_api(doc, year, month, filing):
     for field in core.FIELDS:
         value, (aid, name), issue = pick_api(records, field, month)
         row[field] = value
-        row['evidence'][field] = {'account_id': aid, 'account_name': name, 'column': 'thstrm_add_amount' if field in FLOW - {'operating_cashflow'} and month != 12 else 'thstrm_amount'}
+        column = 'thstrm_add_amount' if field in FLOW - {'operating_cashflow'} and month != 12 else 'thstrm_amount'
+        if month == 3 and column == 'thstrm_add_amount':
+            matched = [r for r in records if r.get('account_id') == aid and r.get('account_nm') == name]
+            if matched and all(core.amount(r.get('thstrm_add_amount')) is None for r in matched):
+                column = 'thstrm_amount'
+        row['evidence'][field] = {'account_id': aid, 'account_name': name, 'column': column}
         if issue:
             row['warnings'].append(issue)
     validate_balance(row)
@@ -134,7 +139,7 @@ def legacy_candidates(content, year, month):
     for table in root.iter():
         if str(table.tag).upper() != 'TABLE':
             continue
-        context = ' '.join(' '.join(x.itertext()) for x in list(table.itersiblings(preceding=True))[:6])
+        context = ' '.join(' '.join(x.itertext()) for x in [x for x in table.itersiblings(preceding=True) if isinstance(x.tag, str)][:6])
         text = ' '.join(table.itertext())
         if '연결' not in context + text:
             continue

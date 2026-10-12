@@ -45,7 +45,7 @@ class FinancialRules(unittest.TestCase):
         self.assertEqual(agent.select_latest(reports)[(2024,12)]['rcept_no'],'20260401000001')
         self.assertIsNone(agent.period_of({'report_nm':'사업보고서 (2009.12)'}))
     def test_legacy_candidates_do_not_become_facts(self):
-        text='<DOCUMENT><P>연결재무제표 (단위: 백만원)</P><TABLE><TR><TD>매출액</TD><TD>999</TD></TR></TABLE></DOCUMENT>'
+        text='<DOCUMENT><P>연결재무제표 (단위: 백만원)</P>&nbsp;<TABLE><TR><TD>매출액</TD><TD>999</TD></TR></TABLE></DOCUMENT>'
         self.assertTrue(agent.legacy_candidates(text.encode(),2010,12))
         r=agent.blank_row(2010,12)
         self.assertIsNone(agent.reviewed_legacy(r)['revenue'])

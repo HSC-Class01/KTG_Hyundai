@@ -13,6 +13,10 @@ on:
       - 'config/**'
       - 'dashboard/template.html'
       - 'requirements.txt'
+      - 'index.html'
+      - 'projects/**'
+      - 'reports/**'
+      - 'assets/**'
       - '.github/workflows/financial-dashboard.yml'
 
 permissions:
@@ -41,7 +45,14 @@ jobs:
       - name: Collect filings and financial statements
         env:
           DART_API_KEY: ${{ secrets.DART_API_KEY }}
-        run: python scripts/dart_agent.py
+        run: python -u scripts/dart_agent.py
+      - name: Preserve collection diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collection-diagnostics
+          path: data/financials
+          retention-days: 7
       - name: Commit updated source data and dashboard
         run: |
           git config user.name "github-actions[bot]"

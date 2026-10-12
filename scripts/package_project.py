@@ -12,7 +12,7 @@ output.parent.mkdir(parents=True,exist_ok=True)
 with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as z:
     for path in sorted(ROOT.rglob('*')):
         rel=path.relative_to(ROOT)
-        if not path.is_file() or any(p.startswith('.') or p in ('_site','__pycache__','node_modules') for p in rel.parts) or path==output:
+        if not path.is_file() or any(p.startswith('.') or p in ('_site','__pycache__','node_modules') for p in rel.parts) or path==output or (rel.parts[:3]==('data','financials','raw') and path.suffix=='.zip'):
             continue
         z.write(path,rel.as_posix())
     for path in sorted((ROOT/'.github/workflows').glob('*.yml')):

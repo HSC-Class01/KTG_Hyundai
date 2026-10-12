@@ -99,7 +99,7 @@ Windows PowerShell 키 입력: `$env:DART_API_KEY = Read-Host 'OpenDART API key'
 
 ## ZIP 제출과 숨김 파일
 
-`python scripts/package_project.py`로 제출용 ZIP을 만듭니다. `.git`, `.github`, `.nojekyll`, 캐시를 포함한 **모든 점으로 시작하는 경로를 ZIP에서 제외**합니다. GitHub Actions 필수 워크플로는 ZIP의 `workflows/financial-dashboard.yml`과 `workflows/hyundai-10y.yml`로 제공합니다. 복원 방법은 `SETUP.md`에 있습니다. 실제 저장소에는 `.github/workflows` 경로가 필요합니다. ZIP을 웹에 올리는 것만으로 예약 실행이 설치되지는 않습니다.
+`python scripts/package_project.py`로 제출용 ZIP을 만듭니다. `.git`, `.github`, `.nojekyll`, 캐시를 포함한 **모든 점으로 시작하는 경로를 ZIP에서 제외**합니다. GitHub Actions 필수 워크플로는 ZIP의 `workflows/financial-dashboard.yml`과 `workflows/hyundai-10y.yml`로 제공합니다. 복원 방법은 `SETUP.md`에 있습니다. 용량이 큰 공시 원문 ZIP은 제출 ZIP에서 제외하며 GitHub 저장소에 보존합니다. 로컬 수집을 실행하면 누락된 원문을 다시 다운로드합니다. 실제 저장소에는 `.github/workflows` 경로가 필요합니다. ZIP을 웹에 올리는 것만으로 예약 실행이 설치되지는 않습니다.
 
 ## 국내 Peer Firms
 
