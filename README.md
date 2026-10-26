@@ -54,7 +54,7 @@
 | 2025년 | 310,629 | 6,530 | 2.1 | 8,539 | 5,591 | −7,483 | −8,641 | 175 | 5.3 | 5.7 | 6.7 |
 | 2026년 상반기 | 131,236 | 4,427 | 3.4 | 5,477 | 3,637 | −16,771 | −18,581 | 155 | 4.8 | – | – |
 
-주가 수준(2026.10 월말 종가 89,900원): 시가총액 10.11조 원 · PER 22.5배 · PBR 1.09배 · EV/EBITDA 14.9배
+주가 수준(2026.10 월말 종가 89,800원): 시가총액 10.09조 원 · PER 22.5배 · PBR 1.09배 · EV/EBITDA 14.9배
 
 전체 표: [연간](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#annual) · [반기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#half) · [분기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#quarter) · [재무제표 10년 시각화](https://hsc-class01.github.io/KTG_Hyundai/statements/) · CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv)
 <!-- AUTO:SUMMARY:END -->
@@ -211,10 +211,10 @@ python scripts/package_project.py     # → dist/KTG_Hyundai_agent.zip
 | ---: | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 1위 | [삼성물산](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260312000856) | 028260 | 건축·토목·플랜트, 상사·패션·리조트·바이오 | 2025년 | 407,422 | 32,927 | 8.1 | 6.8 | 50.5 | 154.0 | 20.1 | 0.98 |
 | 2위 | [**현대건설**](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260318001395) | 000720 | 건축·주택·토목·플랜트·원자력 | 2025년 | 310,629 | 6,530 | 2.1 | 5.5 | 174.8 | 147.9 | 27.1 | 1.22 |
-| 3위 | [GS건설](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260701000624) | 006360 | 주택·건축·인프라·플랜트 | 2025년 | 124,503 | 4,378 | 3.5 | 1.7 | 234.2 | 115.9 | 26.1 | 0.51 |
+| 3위 | [GS건설](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260701000624) | 006360 | 주택·건축·인프라·플랜트 | 2025년 | 124,503 | 4,378 | 3.5 | 1.7 | 234.2 | 115.9 | 25.9 | 0.51 |
 | 5위 | [대우건설](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260318001029) | 047040 | 주택·건축·토목·플랜트 | 2025년 | 80,546 | −8,154 | −10.1 | −26.4 | 284.5 | 194.1 | – | 1.77 |
-| 6위 | [DL이앤씨](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814003447) | 375500 | 주택·토목·플랜트 | 2025년 | 74,024 | 3,870 | 5.2 | 7.1 | 84.4 | 151.2 | 5.9 | 0.42 |
-| 10위 | [IPARK현대산업개발](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260318001249) | 294870 | 주택·개발사업(디벨로퍼) | 2025년 | 41,470 | 2,486 | 6.0 | 4.9 | 136.5 | 143.3 | 9.4 | 0.46 |
+| 6위 | [DL이앤씨](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814003447) | 375500 | 주택·토목·플랜트 | 2025년 | 74,024 | 3,870 | 5.2 | 7.1 | 84.4 | 151.2 | 5.9 | 0.41 |
+| 10위 | [IPARK현대산업개발](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260318001249) | 294870 | 주택·개발사업(디벨로퍼) | 2025년 | 41,470 | 2,486 | 6.0 | 4.9 | 136.5 | 143.3 | 9.3 | 0.46 |
 
 - 순위: 2026년 국토교통부 시공능력평가(토목건축공사업) ([이데일리, 2026.07.30](https://v.daum.net/v/20260730110336152))
 - 재무 숫자: 각 회사의 가장 최근 사업보고서 연결재무제표 (OpenDART, 매월 자동 갱신). ROE는 기말 자본 기준, PER·PBR은 2026.10 월말 주가 기준. 동종기업 목록은 `config/company.json`에서 바꿀 수 있습니다.
