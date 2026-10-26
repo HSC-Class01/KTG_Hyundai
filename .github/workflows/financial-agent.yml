@@ -4,6 +4,7 @@
 # - 에이전트 코드(scripts, config, tests)나 이 파일을 고쳐서 main에 올려도 실행됩니다.
 # - OpenDART 인증키는 저장소 Secret 'DART_API_KEY'로만 전달합니다. 키가 없으면 저장된 자료로 화면만 다시 만들고
 #   경고만 남깁니다(실패로 끝나지 않음).
+# - 러너는 ubuntu-24.04로 고정합니다(ubuntu-latest가 새 버전으로 바뀌어도 같은 환경에서 돌도록).
 # - 기업분석 보고서 PDF(reports/)는 러너에 있는 Chrome으로 인쇄합니다. 한글 글꼴(나눔고딕)만 설치하고,
 #   설치나 인쇄가 안 되면 경고만 남기고 지난 PDF를 그대로 둡니다(실패로 끝나지 않음).
 name: Financial Agent
@@ -32,7 +33,7 @@ concurrency:
 jobs:
   update:
     name: Collect, analyze, publish
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     outputs:
       pages: ${{ steps.pages.outputs.mode }}
@@ -115,7 +116,7 @@ jobs:
     name: Deploy to GitHub Pages
     needs: update
     if: needs.update.outputs.pages == 'workflow'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment:
       name: github-pages
