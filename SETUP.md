@@ -25,7 +25,7 @@
 ## 4. 실행과 확인
 
 1. **Actions → Financial Agent → Run workflow** 를 누릅니다. 처음에는 공시 원문을 모두 받느라 5~15분 걸릴 수 있습니다.
-2. 초록색 체크가 뜨면 `https://<계정>.github.io/<저장소>/dashboard/` 에서 대시보드를 확인합니다.
+2. 초록색 체크가 뜨면 `https://<계정>.github.io/<저장소>/dashboard/` 에서 재무제표 대시보드를, `reports/hyundai-company-report.pdf` 에서 기업분석 보고서(PDF)를 확인합니다.
 3. 저장소 첫 화면 오른쪽 **About → ⚙️ → Website** 에 대시보드 주소를 넣고 Save 합니다.
 4. 이후에는 매월 1일 09:17(한국시간)에 자동으로 실행됩니다.
 
@@ -38,8 +38,8 @@
 ## 키 없이 화면만 확인하기
 
 ```bash
-python scripts/dart_agent.py --offline     # 저장된 자료로 대시보드 다시 만들기
+python scripts/dart_agent.py --offline     # 저장된 자료로 대시보드·PDF 다시 만들기
 python -m http.server 8000                 # 브라우저에서 http://localhost:8000/dashboard/
 ```
 
-Python 3.10 이상이면 추가로 설치할 패키지는 없습니다.
+Python 3.10 이상이면 추가로 설치할 패키지는 없습니다. PDF는 컴퓨터에 설치된 Chrome(또는 Edge·Chromium)으로 인쇄합니다. 브라우저를 못 찾으면 PDF만 건너뛰고 나머지는 그대로 만듭니다(경로를 `CHROME_PATH` 환경변수로 알려 줄 수도 있습니다).

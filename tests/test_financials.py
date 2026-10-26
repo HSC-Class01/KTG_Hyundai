@@ -3,6 +3,8 @@
 GitHub Actions가 매달 수집 전에 먼저 실행합니다. 새 공시가 나와 숫자가 바뀌어도 깨지지 않도록,
 실제 자료에 대해서는 '항상 성립해야 하는 관계'(분기 합 = 연간, 자산 = 부채 + 자본 등)만 확인합니다.
 """
+import contextlib
+import io
 import sys
 import tempfile
 import unittest
@@ -15,6 +17,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import analysis  # noqa: E402
 import business  # noqa: E402
+import company_report  # noqa: E402
 import dart_agent as agent  # noqa: E402
 import dashboard  # noqa: E402
 import financials as fin  # noqa: E402
@@ -273,8 +276,8 @@ class RealData(unittest.TestCase):
 
     def test_dashboard_and_readme_render(self):
         page = dashboard.render(self.ctx)
-        for anchor in ('id="annual"', 'id="half"', 'id="quarter"', 'id="peers"', 'id="fig-revenue"', 'id="debt"',
-                       'id="returns"', 'id="valuation"', 'id="combos"'):
+        for anchor in ('id="annual"', 'id="half"', 'id="quarter"', 'id="peers"', 'id="fig-revenue"', 'id="stability"',
+                       'id="dupont"', 'id="market"', 'id="combos"', 'id="fig-returns"', 'id="fig-coverage"', 'id="fig-cash"'):
             self.assertIn(anchor, page)
         self.assertLess(page.index('id="quarter"'), page.index('id="peers"'))   # 동종업계 표는 맨 아래
         self.assertNotIn("None", page.split("<script>")[0].replace("NoneType", ""))
@@ -321,20 +324,42 @@ class RealData(unittest.TestCase):
         for pj in biz["projects"]["rows"]:
             self.assertLessEqual(pj["done"], pj["contract"] * 1.05)
 
-    def test_dashboard_starts_with_business_structure(self):
+    def test_dashboard_is_financial_statements(self):
+        """대시보드 = 재무제표: 위쪽 그래프(요약 → 이번 달 → 재무제표 10년 → 10가지 관점) → 아래쪽 표 → 맨 아래 동종업계."""
         page = dashboard.render(self.ctx)
-        order = [page.index(f'id="{x}"') for x in ("structure", "why", "orders", "lenses", "summary")]
-        self.assertEqual(order, sorted(order))       # 돈 버는 구조 → 사업보고서 → 수주·PF → 10가지 관점 → 6단계
-        for anchor in ('id="fig-backlog"', 'id="fig-pf"', 'id="fig-projects"', 'id="fig-segments"', 'href="../statements/"'):
-            self.assertIn(anchor, page)
-
-    def test_statements_page_renders(self):
-        page = statements.render(self.ctx)
-        for lens in lenses.LENSES:
-            self.assertIn(f'id="{lens["id"]}"', page)
-        for anchor in ('id="is"', 'id="bs"', 'id="cf"', 'id="all"', 'class="table-scroll heat"', 'id="fig-roe"'):
-            self.assertIn(anchor, page)
+        ids = ["summary", "now", "is", "bs", "cf", "lenses"] + [x["id"] for x in lenses.LENSES] + ["combos", "annual", "half",
+                                                                                                    "quarter", "notes", "peers"]
+        order = [page.index(f'<section id="{x}"') if f'<section id="{x}"' in page else page.index(f'id="{x}"') for x in ids]
+        self.assertEqual(order, sorted(order))
+        for gone in ('id="structure"', 'id="orders"', 'id="fig-backlog"', "../statements/"):    # 사업보고서 부분은 PDF로
+            self.assertNotIn(gone, page)
+        self.assertIn('href="../reports/hyundai-company-report.pdf"', page)
+        for step, lens in lenses.LENS_OF_STEP.items():      # 가이드 6단계 카드는 짝이 되는 관점으로 연결
+            self.assertIn(f'href="#{lens}"', page)
+        self.assertIn('class="table-scroll heat"', page)
+        self.assertEqual(page.count("가이드 판정 · "), 6)
         self.assertNotIn("None", page.split("<script>")[0].replace("NoneType", ""))
+
+    def test_old_statements_address_redirects(self):
+        page = statements.redirect_page(self.ctx)
+        self.assertIn('url=../dashboard/#is', page)
+        self.assertIn('location.replace("../dashboard/"+h)', page)
+
+    def test_company_report_html(self):
+        html = company_report.build_html(self.ctx)
+        for cid in ("summary", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7", "ch8", "appendix"):
+            self.assertIn(f'<section class="r-chap', html.split(f'id="{cid}"')[0][-120:] + f'<section class="r-chap')
+            self.assertIn(f'id="{cid}"', html)
+        nums = [int(n) for n in __import__("re").findall(r'<span class="fig-no">그림 (\d+)</span>', html)]
+        self.assertEqual(nums, list(range(1, len(nums) + 1)))      # 그림 번호는 1부터 빠짐없이
+        self.assertGreaterEqual(len(nums), 12)
+        self.assertNotIn("<h3>", html.split("<body>")[1].split('class="r-sec')[0])     # 표지·요약 제목만 책갈피에
+        body = html.split("<body>")[1]
+        self.assertNotIn("None", body)
+        self.assertIsNone(__import__("re").search(r"(?<![\w-])(nan|inf)(?![\w-])", body, __import__("re").I))
+        self.assertEqual(html, company_report.build_html(self.ctx))     # 같은 자료면 같은 글자(해시 비교로 PDF 재인쇄 판단)
+        self.assertIn("2026년 10월판", html)
+
 
     def test_dupont_identity(self):
         L = {x["id"]: x for x in lenses.build(self.ctx)}["dupont"]
@@ -519,6 +544,58 @@ class NoteParsing(unittest.TestCase):
         self.assertEqual(notes._row_key("사용권자산감가상각비 조정"), "dep_rou")
         self.assertEqual(notes._row_key("무형자산상각비에 대한 조정"), "amort")
         self.assertIsNone(notes._row_key("대손상각비"))
+
+
+class CompanyReportPrinting(unittest.TestCase):
+    """PDF 인쇄 단계: Chrome·한글 글꼴이 없으면 건너뛰고, 내용이 같으면 다시 인쇄하지 않습니다(Chrome 없이 확인)."""
+
+    def ctx(self):
+        cfg = agent.company_config()
+        status = {"checked_at": "2026-10-12T09:17:00+09:00", "mode": "offline", "errors": [], "new_filings": []}
+        ctx, _ = agent.make_context(cfg, date(2026, 10, 12), status, log=[])
+        if not ctx["annual"]:
+            self.skipTest("아직 수집된 자료가 없습니다")
+        return ctx
+
+    def test_skips_without_chrome_and_keeps_old_pdf(self):
+        ctx = self.ctx()
+        original = company_report.find_chrome
+        company_report.find_chrome = lambda: None
+        try:
+            with tempfile.TemporaryDirectory() as tmp, contextlib.redirect_stdout(io.StringIO()):   # 경고 줄이 Actions 주석으로 남지 않게
+                msg = company_report.write(ctx, tmp)
+                self.assertIn("건너뜀", msg)
+                self.assertFalse((Path(tmp) / company_report.PDF_PATH).exists())
+        finally:
+            company_report.find_chrome = original
+
+    def test_same_content_is_not_printed_again(self):
+        ctx = self.ctx()
+        html = company_report.build_html(ctx)
+        digest = __import__("hashlib").sha256(html.encode("utf-8")).hexdigest()
+        original = company_report.print_pdf
+        company_report.print_pdf = lambda *a, **k: self.fail("내용이 같으면 인쇄하지 않아야 합니다")
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                pdf = Path(tmp) / company_report.PDF_PATH
+                pdf.parent.mkdir(parents=True)
+                pdf.write_bytes(b"%PDF-1.4 old")
+                state = Path(tmp) / company_report.STATE_PATH
+                state.parent.mkdir(parents=True)
+                state.write_text(__import__("json").dumps({"source_sha256": digest, "pages": 18}), encoding="utf-8")
+                with contextlib.redirect_stdout(io.StringIO()):
+                    self.assertIn("그대로", company_report.write(ctx, tmp))
+                self.assertEqual(pdf.read_bytes(), b"%PDF-1.4 old")
+        finally:
+            company_report.print_pdf = original
+
+    def test_published_pdf_is_a_pdf(self):
+        pdf = ROOT / company_report.PDF_PATH
+        if not pdf.exists():
+            self.skipTest("아직 인쇄한 PDF가 없습니다(첫 자동 실행 전)")
+        data = pdf.read_bytes()
+        self.assertTrue(data.startswith(b"%PDF"))
+        self.assertGreater(len(data), 100_000)
 
 
 class Packaging(unittest.TestCase):

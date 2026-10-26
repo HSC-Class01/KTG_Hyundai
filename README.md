@@ -1,13 +1,13 @@
 [![🔗 대시보드 바로가기](assets/dashboard-badge.svg)](https://hsc-class01.github.io/KTG_Hyundai/dashboard/)
 
-[📊 재무제표 10년 시각화 바로가기](https://hsc-class01.github.io/KTG_Hyundai/statements/)
+[📄 기업분석 보고서 PDF 바로가기](reports/hyundai-company-report.pdf)
 
 # 현대건설 OpenDART 재무분석 에이전트
 
-금융감독원 전자공시(DART)에서 **현대건설(000720)** 의 사업·반기·분기보고서를 **2010년부터** 모아 주요 재무 숫자와 재무비율을 계산하고, 사업보고서 본문의 수주잔고·PF 보증까지 읽어 **두 가지 시각화**(사업보고서 대시보드, 재무제표 10년 시각화)를 만드는 Python 에이전트입니다. GitHub Actions가 **매월 1일 오전 9시 17분(한국시간)** 에 자동으로 실행해, 새 보고서가 나왔으면 숫자와 분석 문장까지 다시 씁니다.
+금융감독원 전자공시(DART)에서 **현대건설(000720)** 의 사업·반기·분기보고서를 **2010년부터** 모아 주요 재무 숫자와 재무비율을 계산하고, 사업보고서 본문의 수주잔고·PF 보증까지 읽어 **재무제표 대시보드**와 **기업분석 보고서(PDF)** 를 만드는 Python 에이전트입니다. GitHub Actions가 **매월 1일 오전 9시 17분(한국시간)** 에 자동으로 실행해, 새 보고서가 나왔으면 숫자와 분석 문장까지 다시 씁니다.
 
-- **사업보고서 대시보드**: https://hsc-class01.github.io/KTG_Hyundai/dashboard/
-- **재무제표 10년 시각화**: https://hsc-class01.github.io/KTG_Hyundai/statements/
+- **재무제표 대시보드**: https://hsc-class01.github.io/KTG_Hyundai/dashboard/
+- **기업분석 보고서(PDF)**: [reports/hyundai-company-report.pdf](reports/hyundai-company-report.pdf) · 웹 주소 https://hsc-class01.github.io/KTG_Hyundai/reports/hyundai-company-report.pdf
 - **자동 실행 기록**: [Actions → Financial Agent](https://github.com/HSC-Class01/KTG_Hyundai/actions/workflows/financial-agent.yml)
 - **데이터(CSV)**: [연간](data/financials/annual.csv) · [반기](data/financials/half_year.csv) · [분기](data/financials/quarterly.csv)
 
@@ -33,7 +33,7 @@
 
 지표 조합 신호(가이드 5장): **순이익 증가 + CFO 감소**(순이익 −0.77 → 0.56조, 영업현금흐름 −0.12 → −0.75조 원)
 
-사업보고서 본문(수주·PF): 수주잔고 **104.9조 원**(2026년 6월 말, 매출 3.6년 치) · 2025년 신규 수주 25.5조 원(현대건설 단독) · PF 보증 14.2조 원(자본의 1.3배)
+사업보고서 본문(수주·PF): 수주잔고 **104.9조 원**(2026년 6월 말, 매출 3.6년 치) · 2025년 신규 수주 25.5조 원(현대건설 단독) · PF 보증 14.2조 원(자본의 1.3배) → [기업분석 보고서(PDF)](reports/hyundai-company-report.pdf)
 
 **가장 최근 분기: 2026년 2분기(4~6월)**
 
@@ -56,17 +56,17 @@
 
 주가 수준(2026.10 월말 종가 89,800원): 시가총액 10.09조 원 · PER 22.5배 · PBR 1.09배 · EV/EBITDA 14.9배
 
-전체 표: [연간](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#annual) · [반기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#half) · [분기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#quarter) · [재무제표 10년 시각화](https://hsc-class01.github.io/KTG_Hyundai/statements/) · CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv)
+대시보드: [재무제표 10년](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#is) · [10가지 관점](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#lenses) · 전체 표 [연간](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#annual) · [반기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#half) · [분기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#quarter) · CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv) · 기업분석 보고서: [PDF](reports/hyundai-company-report.pdf)
 <!-- AUTO:SUMMARY:END -->
 
-## 두 가지 시각화
+## 두 가지 결과물
 
-| 화면 | 무엇을 보여 주나 |
+| 결과물 | 무엇을 보여 주나 |
 |---|---|
-| [사업보고서 대시보드](https://hsc-class01.github.io/KTG_Hyundai/dashboard/) | ① **건설사가 돈을 버는 구조**(수주 → 공사·매출 → 이익 → 현금 → 재무 체력 → 다음 수주 자격, 발주 방식, 사업부문별 매출) → ② **그래서 사업보고서가 중요한 이유**(단계마다 보고서의 어느 장을 봐야 하는지) → ③ **수주·PF**(수주잔고, 일감 연수, 신규 수주, 진행 중인 큰 공사, PF 보증) → ④ **10가지 관점 요약** → 교수님 가이드 6단계 → Annual·Half-year·Quarterly 표 → 동종업계 |
-| [재무제표 10년 시각화](https://hsc-class01.github.io/KTG_Hyundai/statements/) | 최근 10개 사업연도의 **손익계산서·재무상태표·현금흐름표**를 그림으로 보고, 재무비율 **10가지 관점**(수익성·안정성·유동성·활동성·성장성·생산성·현금흐름·시장가치·종합 분석(듀퐁 분해·10년 위치표)·주가 반영)을 관점마다 차트와 자동 해설로 풉니다 |
+| [재무제표 대시보드](https://hsc-class01.github.io/KTG_Hyundai/dashboard/) (웹) | **위쪽 그래프**: 교수님 가이드 6단계 판정 카드 → 이번 달(최근 분기) → **재무제표 10년**(손익계산서·재무상태표·현금흐름표) → **재무비율 10가지 관점**(수익성·안정성·유동성·활동성·성장성·생산성·현금흐름·시장가치·종합 분석(듀퐁·10년 위치표)·주가 반영, 관점마다 차트·10년 위치·가이드 판정과 해설) → 지표 조합 신호 → 시기별 흐름 · **아래쪽 표**: Annual · Half-year · Quarterly → 자료와 검증 → 맨 아래 동종업계 |
+| [기업분석 보고서](reports/hyundai-company-report.pdf) (PDF, A4 약 18쪽) | 표지 · 한 장 요약 → ① **건설사가 돈을 버는 구조**(수주 → 공사·매출 → 이익 → 현금 → 재무 체력 → 다음 수주 자격, 진행기준 회계, 발주 방식, 사업부문별 매출) → ② **그래서 사업보고서가 중요한 이유**(단계마다 보고서의 어느 장을 봐야 하는지) → ③ 수주·수주잔고·진행 중인 큰 공사 → ④ 원가율·수익성·자재값·시기별 흐름 → ⑤ 현금흐름·부채 구성·PF 보증 → ⑥ 재무비율 10가지 관점 요약 → ⑦ 주가·경쟁사 → ⑧ 종합 의견(강점·위험·다음 공시에서 볼 숫자) → 부록(용어·자료와 한계·출처) |
 
-두 화면 모두 매월 1일 에이전트가 새 공시로 다시 만듭니다. 판정은 절대 기준이 아니라 ‘최근 10년 안에서 지금이 어디쯤인가’입니다.
+두 결과물 모두 매월 1일 에이전트가 새 공시로 다시 만듭니다(PDF는 내용이 바뀐 달에만 다시 인쇄). 10가지 관점의 판정은 절대 기준이 아니라 ‘최근 10년 안에서 지금이 어디쯤인가’이고, 가이드 6단계 판정은 정해진 규칙을 따릅니다. 예전 주소 `statements/` 로 들어오면 대시보드의 같은 위치로 이동합니다.
 
 ## 에이전트가 하는 일
 
@@ -78,13 +78,14 @@ flowchart LR
   C --> G["business.py<br/>사업보고서 본문: 수주잔고 · PF 보증<br/>사업부문 · 직원 · 주요 공사"]
   D --> E["analysis.py · lenses.py<br/>판정 · 10가지 관점 · 해설 문장"]
   G --> E
-  E --> F["dashboard/ · statements/<br/>README 요약 · CSV · JSON"]
+  E --> F["dashboard.py · statements.py<br/>재무제표 대시보드 · README 요약 · CSV · JSON"]
+  E --> H["company_report.py · report_view.py<br/>기업분석 보고서 PDF<br/>(러너의 Chrome으로 인쇄)"]
 ```
 
 1. **수집**: 2010년 이후 정기보고서(사업·반기·1분기·3분기) 목록을 받고, 기간마다 가장 최근 보고서(정정 공시 포함)를 고릅니다. 보고서 원문 ZIP과 재무제표 API 응답을 `data/financials/raw/`에 보관합니다.
 2. **정리**: 누적 보고서로 **Annual(연간) · Half-year(반기) · Quarterly(분기)** 표를 만듭니다. 2분기 = 반기 − 1분기, 4분기 = 연간 − 3분기 누적처럼 빼서 계산합니다.
 3. **분석**: 교수님 자료 **「재무제표·재무비율 실무가이드」** 의 정의와 분석 순서(매출 성장 → 이익률 → 현금흐름 → 차입 부담 → 투자수익률 → 주가 수준)를 따라 재무비율을 계산하고, 단계마다 정해진 규칙으로 판정해 해설 문장을 씁니다. 가이드 5장의 ‘지표 조합 신호’도 자동으로 점검합니다.
-4. **게시**: 대시보드, 이 README의 요약과 동종업계 표, CSV를 갱신하고 저장소에 커밋합니다. GitHub Pages가 바뀐 화면을 게시합니다.
+4. **게시**: 대시보드, 기업분석 보고서 PDF, 이 README의 요약과 동종업계 표, CSV를 갱신하고 저장소에 커밋합니다. GitHub Pages가 바뀐 화면을 게시합니다. PDF는 인쇄용 HTML을 만들어 러너에 있는 Chrome으로 A4 PDF로 인쇄하고, 내용이 지난번과 같으면 다시 인쇄하지 않습니다.
 
 새 보고서가 없는 달에는 숫자는 그대로 두고 확인 기록만 남깁니다.
 
@@ -93,12 +94,13 @@ flowchart LR
 | 가이드 | 대시보드에서 보는 곳 |
 |---|---|
 | 2장 주요 재무제표 수치: 총자산·현금·매출채권·재고자산·유형자산·총부채·이자부차입금·자본 / 매출·매출총이익·판관비·영업이익·세전이익·당기순이익·지배주주순이익·EBITDA / 영업·투자·재무활동현금흐름·CAPEX·FCF·순차입금 | 아래쪽 Annual · Half-year · Quarterly 표 (CSV 포함) |
-| 3장 주요 재무비율: 수익성(매출총이익률·영업이익률·순이익률·EBITDA 마진·ROA·ROE·ROIC), 유동성·안정성(유동·당좌·부채·자기자본비율·차입금의존도·이자보상배율·순차입금/EBITDA), 활동성·성장성(총자산회전율·DSO·DIO·DPO·CCC·매출증가율·CFO/순이익), 시장가치(PER·PBR·EV/EBITDA·FCF 수익률) | 같은 표의 열 묶음(버튼으로 골라 보기)과 단계별 차트 |
-| 4장 실무 필수 분석 흐름 6단계 | 맨 위 요약 카드 6개, STEP 1~6 섹션 |
+| 3장 주요 재무비율: 수익성(매출총이익률·영업이익률·순이익률·EBITDA 마진·ROA·ROE·ROIC), 유동성·안정성(유동·당좌·부채·자기자본비율·차입금의존도·이자보상배율·순차입금/EBITDA), 활동성·성장성(총자산회전율·DSO·DIO·DPO·CCC·매출증가율·CFO/순이익), 시장가치(PER·PBR·EV/EBITDA·FCF 수익률) | 같은 표의 열 묶음(버튼으로 골라 보기)과 10가지 관점의 차트 |
+| 4장 실무 필수 분석 흐름 6단계 | 맨 위 요약 카드 6개(누르면 짝이 되는 관점으로 이동). 성장성·수익성·현금흐름·안정성·종합 분석·시장가치 섹션의 ‘가이드 판정’과 해설. 기업분석 보고서 요약 쪽의 판정표 |
 | 5장 지표 조합으로 읽는 실무 신호 | ‘조합 신호’ 섹션: 최근 두 해로 8가지 조합 자동 점검 |
 | 6장 실무 검토 체크리스트 | ‘자료’ 섹션의 반영 표 |
 | 7장 해석 시 주의사항 | 0 이하 분모 제외, 적자 기간 PER 미계산, 건설업 지표(받을 돈·미청구공사·미리 받은 돈) 추가 |
-| 분석 관점: 수익성·안정성·유동성·활동성·성장성·생산성·현금흐름·시장가치·종합 분석·주가 반영 | 대시보드 ‘10가지 관점’ 카드, 재무제표 10년 시각화의 관점별 섹션 |
+| 분석 관점: 수익성·안정성·유동성·활동성·성장성·생산성·현금흐름·시장가치·종합 분석·주가 반영 | 대시보드 ‘10가지 관점’ 카드와 관점별 섹션, 기업분석 보고서 6장 |
+| 사업보고서의 의미: 건설사가 돈을 버는 구조와 사업보고서에서 볼 곳 | 기업분석 보고서 1~3장(돈 버는 구조, 사업보고서가 중요한 이유, 수주·수주잔고)과 5장(PF 보증) |
 
 ## 처음 설정하기 (API 키 입력)
 
@@ -121,7 +123,8 @@ flowchart LR
 | 직접 실행 | Actions → Financial Agent → Run workflow |
 | 코드를 고쳐서 push할 때 | `scripts/`, `config/`, `tests/`, 워크플로 파일이 바뀌면 자동 실행 |
 
-- 실행 순서: 계산 규칙 테스트 → OpenDART 수집 → 표·해설·대시보드 생성 → 커밋 → GitHub Pages 게시
+- 실행 순서: 계산 규칙 테스트 → 한글 글꼴(나눔고딕) 설치 → OpenDART 수집 → 표·해설·대시보드·기업분석 보고서 PDF 생성 → 커밋 → GitHub Pages 게시
+- PDF 단계는 실패해도 워크플로를 멈추지 않습니다. 글꼴이나 Chrome이 없으면 경고만 남기고 지난달 PDF를 그대로 둡니다.
 - 공개 저장소의 예약 실행은 60일 동안 저장소 활동이 없으면 GitHub가 멈춥니다. 에이전트는 매달 확인 기록(`status.json`)을 커밋하므로 활동이 이어집니다.
 - 분기보고서는 분기 종료 후 45일, 사업보고서는 90일 안에 공시됩니다. 그래서 대시보드에는 보통 1~2개월 전 분기까지 반영됩니다.
 
@@ -136,7 +139,7 @@ flowchart LR
 | 주가 · 주식수 (PER·PBR 등) | 월말 종가: 네이버 금융(실패하면 Yahoo Finance) · 발행주식수: OpenDART ‘주식의 총수 현황’(2015년부터) |
 | 수주잔고 (2014년부터) | 사업보고서 Ⅱ장 ‘수주상황’ 표의 회사별 국내·해외 계약잔액 합계. 앞뒤 보고서와 15% 넘게 어긋나는 값(표 범위가 다른 보고서)은 그래프에서 뺌 |
 | 신규 수주 | Ⅱ장 ‘지배회사 현황’ 문단의 수주실적(현대건설 단독) |
-| PF 보증 (2022년 말부터) | 연결 주석 ‘우발부채 및 약정사항’의 보증금액 기준 신용보강. 2023년 사업보고서부터 바뀐 공시 기준이라 그 이후만 씀 |
+| PF 보증 (2022년 말부터) | Ⅺ장 ‘우발부채 등에 관한 사항’(채무보증현황)의 보증금액 기준 신용보강 문장. 2023년 사업보고서부터 바뀐 공시 기준이라 그 이후만 씀 |
 | 사업부문별 매출 · 주요 공사 · 국내 건설시장 · 원자재 | 가장 최근 사업보고서(주요 공사는 가장 최근 정기보고서)의 Ⅱ장 표와 문단 |
 | 직원 수 · 1인 평균 급여 · 단독 매출 (생산성) | Ⅷ장 직원 현황, Ⅲ장 요약재무정보(별도) |
 
@@ -158,15 +161,17 @@ scripts/notes.py           공시 주석에서 감가상각비·이자비용 읽
 scripts/market.py          주가·주식수로 PER·PBR·EV/EBITDA 계산
 scripts/business.py        사업보고서 본문에서 수주잔고·PF 보증·사업부문·직원·주요 공사 읽기
 scripts/lenses.py          재무비율 10가지 관점의 정의와 10년 위치 판정
-scripts/dashboard.py       사업보고서 대시보드 HTML과 README 자동 구역
-scripts/report_view.py     대시보드 앞부분: 돈 버는 구조 · 사업보고서가 중요한 이유 · 수주·PF · 10가지 관점
-scripts/statements.py      재무제표 10년 시각화 HTML
+scripts/dashboard.py       재무제표 대시보드 HTML, 차트 부품, README 자동 구역
+scripts/statements.py      대시보드의 재무제표 10년 · 10가지 관점 섹션 (statements/ 예전 주소 안내 페이지)
+scripts/report_view.py     기업분석 보고서의 사업보고서 그림: 돈 버는 구조 · 사업보고서 · 수주·PF
+scripts/company_report.py  기업분석 보고서 PDF 조립과 인쇄(헤드리스 Chrome)
 scripts/package_project.py 제출용 ZIP 만들기
 config/company.json        분석 대상 회사, 동종기업, 시공능력평가 순위
-data/financials/           annual.csv · half_year.csv · quarterly.csv · dashboard.json · business.json · status.json
+data/financials/           annual.csv · half_year.csv · quarterly.csv · dashboard.json · business.json · status.json · report_pdf.json
 data/financials/raw/       공시 원문 ZIP, 재무제표 API 응답(JSON), market/ 주가·주식수
-dashboard/index.html       자동 생성되는 사업보고서 대시보드
-statements/index.html      자동 생성되는 재무제표 10년 시각화
+dashboard/index.html       자동 생성되는 재무제표 대시보드
+statements/index.html      예전 주소 → 대시보드로 이동
+reports/hyundai-company-report.pdf  자동 생성되는 기업분석 보고서
 tests/test_financials.py   계산 규칙 테스트
 .github/workflows/financial-agent.yml  매월 1일 자동 실행
 ```
@@ -175,7 +180,7 @@ tests/test_financials.py   계산 규칙 테스트
 
 ## 내 컴퓨터에서 실행
 
-Python 3.10 이상, 추가 설치 없음(표준 라이브러리만 사용).
+Python 3.10 이상, 추가 설치 없음(표준 라이브러리만 사용). 기업분석 보고서 PDF는 컴퓨터에 있는 Chrome(또는 Edge·Chromium)으로 인쇄하며, 없으면 PDF만 건너뜁니다.
 
 ```bash
 # 저장된 자료로 화면만 다시 만들기 (키 필요 없음)
@@ -189,7 +194,7 @@ python scripts/dart_agent.py
 python -m unittest discover -s tests -v
 
 # 결과 보기
-python -m http.server 8000      # → http://localhost:8000/dashboard/ · http://localhost:8000/statements/
+python -m http.server 8000      # → http://localhost:8000/dashboard/ · PDF는 reports/hyundai-company-report.pdf
 ```
 
 ## 제출용 ZIP (숨김 파일 없음)

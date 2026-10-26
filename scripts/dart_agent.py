@@ -4,7 +4,8 @@
 GitHub Actions가 매월 1일 실행합니다. 하는 일:
   1) OpenDART에서 2010년 이후 사업·반기·분기보고서 목록을 받고, 보고서 원문(ZIP)을 저장소에 보관
   2) 2015년 이후 연결재무제표를 API로 받아 저장 (2013~2014 연간, 2015 분기 손익은 다음 해 보고서의 비교 열로 보충)
-  3) 연간·반기·분기 표, 재무비율, 자동 해설을 다시 계산하고 대시보드(dashboard/index.html)와 README를 갱신
+  3) 연간·반기·분기 표, 재무비율, 자동 해설을 다시 계산하고 재무제표 대시보드(dashboard/index.html)와 README를 갱신
+  4) 사업보고서 본문(수주·PF 등)과 재무제표로 기업분석 보고서 PDF(reports/)를 다시 인쇄 (내용이 바뀐 경우만)
 새 보고서가 없으면 숫자는 그대로 두고 '확인 기록'만 남깁니다.
 
 실행
@@ -568,7 +569,8 @@ def step_summary(ctx):
              f"- 확인 시각: {status.get('checked_at', '')} ({'OpenDART 접속' if status.get('mode') == 'online' else '저장된 자료로 다시 생성'})",
              f"- 표: 연간 {len(ctx['annual'])} · 반기 {len(ctx['halves'])} · 분기 {len(ctx['quarters'])}개 기간",
              f"- 새로 나온 공시: {len(status.get('new_filings', []))}건 · OpenDART 호출 {status.get('api_calls', 0)}회",
-             f"- 대시보드: {ctx['company']['dashboard_url']}", ""]
+             f"- 대시보드: {ctx['company']['dashboard_url']}",
+             f"- 기업분석 보고서 PDF: {ctx.get('report_pdf', '–')}", ""]
     for f in status.get("new_filings", []):
         lines.append(f"  - {f['report_nm'].strip()} ({f['rcept_dt']})")
     if a.get("headline"):
@@ -580,6 +582,7 @@ def step_summary(ctx):
 
 
 def build(cfg, today, status, online):
+    import company_report
     import dashboard
     import statements
     log = load_json(DATA / "update_log.json", [])
@@ -599,8 +602,13 @@ def build(cfg, today, status, online):
                                          "peers": peers, "analysis": ctx["analysis"]["plain"]})
     write_json(DATA / "business.json", {k: v for k, v in ctx["business"].items()})
     write_text(ROOT / "dashboard" / "index.html", dashboard.render(ctx))
-    write_text(ROOT / "statements" / "index.html", statements.render(ctx))
+    write_text(ROOT / "statements" / "index.html", statements.redirect_page(ctx))   # 예전 주소 → 대시보드
     dashboard.update_readme(ROOT / "README.md", ctx)
+    try:
+        ctx["report_pdf"] = company_report.write(ctx, ROOT)       # 기업분석 보고서 PDF (내용이 바뀐 경우에만 다시 인쇄)
+    except Exception as exc:    # PDF를 못 만들어도 대시보드·데이터 갱신은 그대로 진행합니다
+        ctx["report_pdf"] = f"기업분석 보고서 PDF 생략: {type(exc).__name__}: {exc}"
+        print(f"::warning::{ctx['report_pdf']}")
     write_json(DATA / "status.json", {**status, "periods": len(periods), "annual_rows": len(annual),
                                       "half_year_rows": len(halves), "quarter_rows": len(quarters)})
     step_summary(ctx)

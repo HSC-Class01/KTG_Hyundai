@@ -1,10 +1,12 @@
-"""대시보드 화면(dashboard/index.html)과 README 자동 구역을 만듭니다.
+"""재무제표 대시보드(dashboard/index.html)와 README 자동 구역을 만듭니다.
 
 - 파이썬 표준 라이브러리만 씁니다. 차트는 HTML/CSS와 SVG로 직접 그려서 자바스크립트가 꺼져 있어도 보입니다.
   스크립트는 마우스를 올리거나 누르면 나오는 설명 상자만 담당합니다.
-- 화면 위쪽: 판정 카드 → 이번 달(최근 분기) → 질문별 차트·해설 → 시기별 흐름
-- 화면 아래쪽: Annual · Half-year · Quarterly 표 → 자료·검증 → 동종업계(Peer firms) 표
-- 화면의 숫자와 문장은 모두 ctx(dart_agent.build가 만든 표)에서 계산합니다.
+- 화면 위쪽(그래프): 가이드 6단계 판정 카드 → 이번 달(최근 분기) → 재무제표 10년(손익·재무상태·현금흐름)
+  → 재무비율 10가지 관점(statements.py) → 조합 신호 → 시기별 흐름
+- 화면 아래쪽(표): Annual · Half-year · Quarterly 표 → 자료·검증 → 동종업계(Peer firms) 표
+- 사업보고서 본문(수주·PF 등)을 읽은 내용은 기업분석 보고서 PDF(company_report.py)로 따로 만듭니다.
+- 화면의 숫자와 문장은 모두 ctx(dart_agent.build가 만든 표)에서 계산합니다. 차트 부품은 기업분석 보고서도 함께 씁니다.
 """
 import html
 import json
@@ -14,6 +16,7 @@ from pathlib import Path
 
 import analysis as an
 import financials as fin
+import lenses as ln
 
 EOK = 100_000_000          # 1억 원
 T = an.T                   # 1조 원
@@ -276,6 +279,56 @@ def sparkline(values, color="--data", zero=False):
             f'{zl}<polyline points="{pts}"/></svg>{end}</div>')
 
 
+def stack_chart(xlabels, groups, *, ticks_fmt, tips, height=220, labels=None, wide_bars=False):
+    """누적 세로 막대. groups: 묶음 1~2개, 묶음마다 [{'values': [...], 'color': '--s1'}, …]를 아래부터 쌓습니다(양수만).
+    labels: {(묶음, 위치): 글자} 막대 위 글자."""
+    n, k = len(xlabels), len(groups)
+    tops = [sum(seg["values"][i] or 0 for seg in g) for g in groups for i in range(n)]
+    lo, hi, ticks = axis(tops)
+    span = hi - lo
+    slots = []
+    for i in range(n):
+        marks = []
+        for j, g in enumerate(groups):
+            base = 0.0
+            segs = [seg for seg in g if seg["values"][i]]
+            for s_i, seg in enumerate(segs):
+                v = seg["values"][i]
+                h = v / span * 100
+                top = " top" if s_i == len(segs) - 1 else ""
+                marks.append(f'<i class="bar stk j{j}{top}" style="bottom:{base / span * 100:.3f}%;height:{h:.3f}%;--c:var({seg["color"]})"></i>')
+                base += v
+            text = (labels or {}).get((j, i))
+            if text and base:
+                marks.append(f'<b class="vl j{j}" style="bottom:calc({base / span * 100:.3f}% + 4px)">{esc(text)}</b>')
+        title, rows, note = tips(i)
+        slots.append(f'<div class="slot" style="left:{i / n * 100:.4f}%;width:{100 / n:.4f}%"'
+                     f'{tip_attr(title, rows, note)}>{"".join(marks)}</div>')
+    wb = " wb" if wide_bars else ""
+    return (f'<div class="plot cc k{k}{wb}" style="--h:{height}px;--n:{n}">{_y_axis(lo, hi, ticks, ticks_fmt)}'
+            f'<div class="pa">{_grid(lo, hi, ticks)}{"".join(slots)}</div>{_xa(xlabels)}</div>')
+
+
+def hstack(rows, *, scale_max, value_fmt, unit_label=""):
+    """가로 누적 막대 목록. rows: [{'label', 'meta', 'segs': [(값, 색, 이름)], 'value', 'tip': (제목, 줄, 메모)}]"""
+    out = []
+    for r in rows:
+        left = 0.0
+        segs = []
+        for val, color, cls in r["segs"]:
+            if not val or val <= 0:
+                continue
+            w = val / scale_max * 100
+            segs.append(f'<i class="hs-seg {cls}" style="left:{left:.3f}%;width:{w:.3f}%;--c:var({color})"></i>')
+            left += w
+        title, tip_rows, note = r["tip"]
+        meta = f'<span class="hs-meta">{esc(r["meta"])}</span>' if r.get("meta") else ""
+        out.append(f'<div class="hs-row"{tip_attr(title, tip_rows, note)}><span class="hs-l"><b>{esc(r["label"])}</b>{meta}</span>'
+                   f'<span class="hs-t">{"".join(segs)}</span><span class="hs-v">{esc(value_fmt(r))}</span></div>')
+    unit = f'<p class="hs-unit">{esc(unit_label)}</p>' if unit_label else ""
+    return f'<div class="hs">{"".join(out)}</div>{unit}'
+
+
 def data_table(headers, rows, caption=None):
     """작은 표. rows: [[셀, ...]] 셀은 (표시 문자열, 원값) 또는 문자열. 첫 칸은 행 제목."""
     th = "".join(f'<th scope="col">{esc(h)}</th>' for h in headers)
@@ -436,7 +489,7 @@ def kpis(v, vd, ctx):
     out = []
     for no, label, sid, verdict, value, unit, basis, delta, now, spark, question_text in tiles:
         now_html = f'<p class="kpi-now">{rich(now)}</p>' if now else ""
-        out.append(f'<article class="kpi"><div class="kpi-top"><h3 class="kpi-label"><a href="#{sid}"><span class="no">{no}</span>{esc(label)}</a></h3>'
+        out.append(f'<article class="kpi"><div class="kpi-top"><h3 class="kpi-label"><a href="#{ln.LENS_OF_STEP.get(sid, sid)}"><span class="no">{no}</span>{esc(label)}</a></h3>'
                    f'{chip(verdict)}</div><p class="kpi-basis">{esc(basis)}</p>'
                    f'<p class="kpi-value">{esc(value)}<small>{esc(unit)}</small></p>'
                    f'<p class="kpi-delta">{rich(delta)}</p>{now_html}{spark}<p class="kpi-term">{esc(question_text)}</p></article>')
@@ -567,29 +620,6 @@ def quarter_figs(v, notes):
 # ---------------------------------------------------------------------------
 # 6. 화면 위쪽: 질문별 차트 (연간)
 # ---------------------------------------------------------------------------
-def growth_fig(v, notes):
-    years, revs = v.years, v.series("revenue")
-    peak = max(range(len(revs)), key=lambda i: revs[i] or 0)
-    labels = {(0, 0): an.jo(revs[0]), (0, peak): an.jo(revs[peak]), (0, len(revs) - 1): an.jo(revs[-1])}
-
-    def tips(i):
-        t = years[i]
-        rows = [["매출액", an.won(revs[i]) + " 원", "var(--data)"]]
-        g = v.a(t, "revenue_growth_pct")
-        if g is not None:
-            rows.append(["전년 대비", an.signed(g) + "%", None])
-        return f"{t}년", rows, None
-
-    chart = column_chart([year_label(t) for t in years], [{"values": in_jo(revs), "color": "--data"}],
-                         ticks_fmt=tick_jo, tips=tips, labels=labels)
-    table = data_table(["연도", "매출액(억 원)", "전년 대비(%)"],
-                       [[str(t), (eok(v.a(t, "revenue")), v.a(t, "revenue")),
-                         (an.signed(v.a(t, "revenue_growth_pct")), v.a(t, "revenue_growth_pct"))] for t in years])
-    return figure("fig-revenue", "연간 매출액", "단위: 조 원 · 각 연도 사업보고서 연결 기준", chart,
-                  note=notes.get("revenue", "") + " 막대를 누르거나 마우스를 올리면 전년 대비 증감률이 나옵니다.",
-                  table_html=table, wide=True)
-
-
 def per100_fig(v, notes):
     years = v.years
     totals = [v.per100(t, "cost_of_sales") + v.per100(t, "sga") for t in years
@@ -842,7 +872,8 @@ def returns_fig(v, vd):
                   note="ROE·ROA는 연결 당기순이익 ÷ 평균 자본·자산. 첫해는 평균을 구할 수 없어 비어 있습니다.")
 
 
-def valuation_block(v, ctx):
+def valuation_tiles(ctx):
+    """현재 주가 기준 시장가치 숫자 6칸 (대시보드 ‘시장가치’ 관점과 기업분석 보고서 7장이 함께 씀)."""
     val = ctx.get("valuation") or {}
     if not val.get("market_cap"):
         return ('<div class="card empty"><h3>주가 자료 대기 중</h3><p>주가는 GitHub Actions가 매월 실행될 때 네이버 금융(실패하면 Yahoo Finance)에서 '
@@ -857,45 +888,7 @@ def valuation_block(v, ctx):
               "최근 4개 분기 FCF ÷ 시가총액")]
     cells = "".join(f'<div class="vt"><p class="vt-l">{esc(a)}</p><p class="vt-v">{esc(b)}<small>{esc(c)}</small></p>'
                     f'<p class="vt-d">{esc(d)}</p></div>' for a, b, c, d in tiles)
-    figs = []
-    monthly = ctx.get("prices") or {}
-    months = sorted(monthly)[-60:]
-    if len(months) >= 6:
-        xl = [f'<span>{"’" + m[2:4] if m[4:] == "01" else "&nbsp;"}</span>' for m in months]
-        vals = [monthly[m] / 1000 for m in months]
-
-        def ptips(i):
-            m = months[i]
-            return f"{m[:4]}년 {int(m[4:])}월 말", [["종가", f"{monthly[m]:,.0f}원", "var(--data)"]], None
-
-        hi_i = max(range(len(vals)), key=lambda i: vals[i])
-        lo_i = min(range(len(vals)), key=lambda i: vals[i])
-        figs.append(figure("fig-price", "월말 주가", f"최근 {len(months)}개월 · 보통주 종가 · 단위: 천 원 ({val.get('source', '')})",
-                           line_chart(xl, vals, color="--data", ticks_fmt=tick_plain, tips=ptips,
-                                      labels={hi_i: f"{vals[hi_i]:.1f}", lo_i: f"{vals[lo_i]:.1f}", len(vals) - 1: f"{vals[-1]:.1f}"},
-                                      height=180, dots=False)))
-    years = [t for t in v.years if v.a(t, "pbr_x") is not None]
-    if len(years) >= 2:
-        pbr = [v.a(t, "pbr_x") for t in years]
-        per = [v.a(t, "per_x") for t in years]
-
-        def vtips(i):
-            t = years[i]
-            rows = [["PBR", f"{pbr[i]:.2f}배", "var(--s3)"], ["PER", "–" if per[i] is None else f"{per[i]:.1f}배", None],
-                    ["연말 주가", f"{v.a(t, 'price_close'):,.0f}원", None]]
-            return f"{t}년 말", rows, None
-
-        figs.append(figure("fig-pbr", "연말 PBR", "연말 주가 기준 · 단위: 배 · 1배 = 장부상 순자산과 같은 값",
-                           line_chart([year_label(t) for t in years], pbr, color="--s3", ticks_fmt=tick_plain, tips=vtips,
-                                      labels={0: f"{pbr[0]:.2f}", len(pbr) - 1: f"{pbr[-1]:.2f}"}, refs=[(1, "1배", "right")], height=180),
-                           table_html=data_table(["연도", "연말 주가(원)", "시가총액(억 원)", "PER(배)", "PBR(배)", "EV/EBITDA(배)"],
-                                                 [[str(t), (f"{v.a(t, 'price_close'):,.0f}", None), (eok(v.a(t, "market_cap")), None),
-                                                   ("–" if v.a(t, "per_x") is None else f"{v.a(t, 'per_x'):.1f}", v.a(t, "per_x")),
-                                                   (f"{v.a(t, 'pbr_x'):.2f}", v.a(t, "pbr_x")),
-                                                   ("–" if v.a(t, "ev_ebitda_x") is None else f"{v.a(t, 'ev_ebitda_x'):.1f}", v.a(t, "ev_ebitda_x"))]
-                                                  for t in years])))
-    grid = f'<div class="grid-2">{"".join(figs)}</div>' if figs else ""
-    return f'<div class="vtiles">{cells}</div>{grid}'
+    return f'<div class="vtiles">{cells}</div>'
 
 
 def combos_section(a):
@@ -936,16 +929,6 @@ def acts_html(items):
                    f'<ul>{facts}</ul><p class="act-why"><span class="tag">배경</span>{esc(why_text)} '
                    f'<span class="src">출처: {links}</span></p></li>')
     return f'<ol class="acts">{"".join(out)}</ol>'
-
-
-def question(q, body):
-    more = "".join(f"<p>{rich(p)}</p>" for p in q["more"])
-    step = f'<span class="step-no">STEP {q["no"]}</span>' if q.get("no") else ""
-    verdict = chip(q["verdict"]) if q.get("verdict") else ""
-    return (f'<section id="{q["id"]}" aria-labelledby="h-{q["id"]}"><div class="sec-head"><div class="sec-top">{step}{eyebrow(q["en"], q["ko"])}{verdict}</div>'
-            f'<h2 id="h-{q["id"]}">{esc(q["q"])}</h2><p class="answer">{rich(q["answer"])}</p>'
-            + (f'<p>{rich(q["lead"])}</p>' if q.get("lead") else "") + f'</div>{body}'
-            + (f'<div class="explain">{more}</div>' if more else "") + "</section>")
 
 
 # ---------------------------------------------------------------------------
@@ -1642,34 +1625,6 @@ footer{margin-top:64px;background:var(--forest);color:var(--forest-ink)}
 footer .wrap{padding-block:22px;font-size:.82rem;display:flex;flex-wrap:wrap;gap:6px 18px}
 footer a{color:var(--forest-soft)}
 
-/* 돈 버는 구조: 순서 카드 */
-.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,152px),1fr));gap:12px}
-.fl{position:relative;background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:14px 14px 12px;display:flex;flex-direction:column;min-width:0}
-.fl-top{display:flex;align-items:center;gap:8px;margin:0;font-size:.98rem}
-.fl-no{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--data);color:var(--sheet);font:700 .72rem/1 var(--font-mono)}
-.fl-what{margin:2px 0 0;font-size:.78rem;color:var(--muted)}
-.fl-v{margin:10px 0 0;font-size:1.55rem;font-weight:700;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums}
-.fl-basis{margin:2px 0 0;font-size:.74rem;color:var(--muted)}
-.fl-sub{margin:6px 0 0;font-size:.8rem;color:var(--ink-2)}
-.fl-sub b{color:var(--ink)}
-.fl-gap{flex:1 0 10px}
-.fl-where{margin:0;padding-top:8px;border-top:1px dashed var(--line);font:600 .72rem/1.45 var(--font-sans);color:var(--data)}
-@media (min-width:1180px){.flow{grid-template-columns:repeat(6,minmax(0,1fr))}
-  .fl:not(:last-child)::after{content:"";position:absolute;right:-11px;top:46px;width:8px;height:8px;border-top:2px solid var(--axis);border-right:2px solid var(--axis);transform:rotate(45deg)}}
-.flow-loop{margin:10px 0 0;font-size:.8rem;color:var(--muted)}
-.buyers{margin-top:12px}
-.buyer h3{margin-bottom:0}
-.buyer-who{margin:2px 0 8px;font-size:.8rem;font-weight:600;color:var(--data)}
-/* 국내 건설 시장 100% 막대 */
-.mk-bars{margin-top:12px;display:grid;gap:8px}
-.mk-row{display:grid;grid-template-columns:3.6em minmax(0,1fr);gap:10px;align-items:center;outline:none;border-radius:6px}
-.mk-row:focus-visible{box-shadow:0 0 0 2px var(--focus)}
-.mk-l{font-size:.78rem;color:var(--muted)}
-.mk-t{position:relative;height:32px}
-.mk-seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding-left:10px;font-style:normal;font-size:.8rem;font-weight:700;color:var(--ink);
-  background:color-mix(in srgb,var(--c) 26%,var(--sheet));border-left:4px solid var(--c);white-space:nowrap;overflow:hidden}
-.mk-seg+.mk-seg{box-shadow:inset 2px 0 0 var(--sheet)}
-.mk-row:hover .mk-seg,.mk-row.on .mk-seg{background:color-mix(in srgb,var(--c) 38%,var(--sheet))}
 /* 가로 누적 막대 (사업부문·공사) */
 .hs{margin-top:12px;display:grid;gap:2px;font-variant-numeric:tabular-nums}
 .hs-row{display:grid;grid-template-columns:minmax(0,16em) minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:5px 6px;border-radius:6px;outline:none}
@@ -1699,20 +1654,6 @@ footer a{color:var(--forest-soft)}
 .k3 .vl.j0{left:calc(50% - var(--bw) - 2px)}
 .k3 .vl.j1{left:50%}
 .k3 .vl.j2{left:calc(50% + var(--bw) + 2px)}
-/* 사업보고서가 중요한 이유 */
-.why-grid{align-items:start}
-.why-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px}
-.why-card{display:flex;flex-direction:column;gap:4px;position:relative}
-.why-card h3{margin:0;font-size:1rem}
-.why-no{margin:0;font:700 .7rem/1 var(--font-mono);color:var(--data);letter-spacing:.1em}
-.why-where{margin:2px 0 0;font:600 .76rem/1.5 var(--font-sans);color:var(--data)}
-.why-now{margin:6px 0 0;font-size:.95rem;font-weight:700;line-height:1.4}
-.why-read{margin:4px 0 0;font-size:.82rem;color:var(--ink-2);line-height:1.6}
-.why td,.why th{vertical-align:top}
-.why td.wrap{min-width:14em;max-width:30em;line-height:1.55}
-.why td.left:not(.wrap){min-width:12em;white-space:normal;font-weight:600}
-.why tbody th{white-space:nowrap}
-.report-what ul.plain li{margin:.5em 0}
 .cc.wb .slot{--bw:min(26px,40%)}
 .cc.k2.wb .slot{--bw:min(22px,34%)}
 .cc.k3.wb .slot{--bw:min(14px,26%)}
@@ -1720,18 +1661,9 @@ footer a{color:var(--forest-soft)}
 .heat td{text-align:center}
 .lens-now ul.plain{columns:2 300px;column-gap:28px}
 .lens-now li{break-inside:avoid}
-.chapters{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:3px}
-.chapters li{display:grid;grid-template-columns:3.4em minmax(0,1fr);gap:8px;padding:6px 10px;border-radius:6px;font-size:.82rem;color:var(--muted)}
-.chapters li.on{background:var(--hover);color:var(--ink-2)}
-.chapters li b{display:block;font-weight:600}
-.chapters li.on b{color:var(--ink)}
-.ch-no{font:600 .74rem/1.7 var(--font-mono)}
-.chapters li.on .ch-no{color:var(--data)}
-.ch-t span{font-size:.76rem}
 /* 10가지 관점 */
 .kpis.ten{grid-template-columns:repeat(auto-fit,minmax(min(100%,216px),1fr))}
 .lens .kpi-value{font-size:1.9rem}
-.more-link{margin:14px 0 0;font-weight:600}
 .cross{margin:20px 0 0;display:flex;flex-wrap:wrap;gap:8px}
 .cross a{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--forest-line);border-radius:999px;color:var(--forest-ink);text-decoration:none;font-weight:600;font-size:.86rem}
 .cross a:hover{background:rgba(255,255,255,.08)}
@@ -1819,16 +1751,15 @@ FONT_LINK = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
              '&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">')
 
 
-CROSS = [("dashboard", "../dashboard/", "사업보고서 대시보드"), ("statements", "../statements/", "재무제표 10년 시각화")]
+REPORT_PDF = "reports/hyundai-company-report.pdf"     # 기업분석 보고서 (company_report.py가 매월 다시 만듦)
 
 
-def cross_links(current):
-    links = []
-    for key, href, name in CROSS:
-        here = ' aria-current="page"' if key == current else ""
-        arrow = "" if key == current else " →"
-        links.append(f'<a href="{href}"{here}>{esc(name)}{arrow}</a>')
-    return f'<nav class="cross" aria-label="시각화 화면">{"".join(links)}</nav>'
+def doc_links(cfg):
+    """머리글 아래 버튼: 기업분석 보고서(PDF) · 아래쪽 표 · 저장소."""
+    return ('<nav class="cross" aria-label="함께 보는 자료">'
+            f'<a href="../{REPORT_PDF}">📄 기업분석 보고서 PDF</a>'
+            '<a href="#annual">연간·반기·분기 표 ↓</a>'
+            f'<a href="{esc(cfg.get("repo_url", ""))}" target="_blank" rel="noopener">GitHub 저장소 ↗</a></nav>')
 
 
 def page(title, description, body):
@@ -1842,15 +1773,15 @@ def page(title, description, body):
 def render(ctx):
     cfg = ctx["company"]
     a = ctx["analysis"]
-    title = f"{cfg['name']} 사업보고서 대시보드"
+    title = f"{cfg['name']} 재무제표 대시보드"
     if not a.get("verdicts"):
         body = (f'<header class="masthead"><div class="wrap"><h1>{esc(title)}</h1>'
                 f'<p class="thesis">아직 수집된 숫자가 없습니다. GitHub Actions에서 에이전트를 실행하면 채워집니다.</p></div></header>')
         return page(title, "수집 전", body)
+    import statements as st
     v = an.View(ctx)
     vd = a["verdicts"]
     notes = a["notes"]
-    qmap = {q["id"]: q for q in a["steps"]}
     status = ctx["status"]
     q_all, y_all = ctx["quarters"], ctx["annual"]
     lf = ctx.get("latest_filing")
@@ -1865,61 +1796,41 @@ def render(ctx):
     header = (f'<header class="masthead"><div class="wrap"><p class="eyebrow">HSC-Class01 · OpenDART Financial Agent'
               f'<span class="live"><i aria-hidden="true"></i>매월 1일 자동 업데이트</span></p>'
               f'<h1>{esc(title)}</h1><p class="thesis">{rich(a["headline"])}</p><dl class="titleblock">{block_html}</dl>'
-              f'{cross_links("dashboard")}</div></header>')
-    toc = [("structure", "돈 버는 구조"), ("why", "왜 사업보고서인가"), ("orders", "수주·PF"), ("lenses", "10가지 관점"), None,
-           ("summary", "6단계 요약"), ("now", "이번 달"), ("growth", "1 매출 성장"), ("profit", "2 이익률"), ("cash", "3 현금흐름"),
-           ("debt", "4 차입 부담"), ("returns", "5 투자수익률"), ("valuation", "6 주가 수준"), ("combos", "조합 신호"),
-           ("story", "흐름"), None, ("annual", "Annual"), ("half", "Half-year"), ("quarter", "Quarterly"), ("notes", "자료"),
-           ("peers", "Peer firms")]
-    toc_html = "".join('<span class="sep" aria-hidden="true"></span>' if t is None else f'<a href="#{t[0]}">{esc(t[1])}</a>'
-                       for t in toc)
+              f'{doc_links(cfg)}</div></header>')
 
     sections = []
-    import report_view as rv
-    for build_section in (rv.structure_section, rv.why_section, rv.orders_section):
-        try:
-            sections.append(build_section(ctx, v))
-        except Exception as exc:      # 사업보고서 본문 자료가 낯선 형식이어도 나머지 화면은 만듭니다
-            print(f"::warning::{build_section.__name__} 생략: {type(exc).__name__}: {exc}")
-    try:
-        sections.append(rv.lenses_section(ctx))
-    except Exception as exc:
-        print(f"::warning::lenses_section 생략: {type(exc).__name__}: {exc}")
     sections.append(f'<section id="summary" aria-labelledby="h-summary">'
                     + section_head("summary", "Summary", "한눈에 보기", "여섯 단계로 본 현대건설",
                                    "교수님 자료(재무제표·재무비율 실무가이드)의 분석 순서대로 매출 성장 → 이익률 → 현금흐름 → 차입 부담 → "
-                                   "투자수익률 → 주가 수준을 봤습니다. 판정은 화면 아래 ‘판정 기준’의 단순 규칙을 따르고, 새 보고서가 나오면 자동으로 다시 매겨집니다.")
+                                   "투자수익률 → 주가 수준을 봤습니다. 판정은 화면 아래 ‘판정 기준’의 단순 규칙을 따르고, 새 보고서가 나오면 자동으로 다시 매겨집니다. "
+                                   "카드를 누르면 짝이 되는 재무비율 관점의 차트와 해설로 갑니다.")
                     + kpis(v, vd, ctx) + "</section>")
     now_desc = ("매월 1일 OpenDART에서 새 정기보고서(사업·반기·분기)가 나왔는지 확인하고, 있으면 아래 숫자와 문장을 모두 다시 씁니다. "
                 + notes.get("quarters", ""))
     sections.append(f'<section id="now" aria-labelledby="h-now">'
                     + section_head("now", "Latest", "이번 달 업데이트", "가장 최근 분기에 무슨 일이 있었나", now_desc)
                     + f'<div class="grid-2">{latest_card(a)}{update_card(ctx, a)}</div>{quarter_figs(v, notes)}</section>')
-    if "growth" in qmap:
-        sections.append(question(qmap["growth"], growth_fig(v, notes)))
-    if "profit" in qmap:
-        sections.append(question(qmap["profit"], f'<div class="stack">{per100_fig(v, notes)}{margins_fig(v)}</div>'))
-    if "cash" in qmap:
-        f1, f2 = cash_figs(v, vd, notes)
-        signals = (f'<div class="sub-head"><h3>돈은 어디서 와서 어디로 갔나</h3><p>현금흐름표의 세 칸(영업·투자·재무)이 들어왔는지(▲) '
-                   f'나갔는지(▼)만 봐도 회사의 상태가 보입니다. 영업 현금이 마이너스인 해는 붉은 바탕으로 표시했습니다.</p></div>'
-                   f'{signal_table(a["signals"])}')
-        body = f'<div class="stack"><div class="grid-2">{f1}{f2}</div>{fcf_fig(v)}</div>'
-        sections.append(question(qmap["cash"], body).replace("</section>", signals + "</section>"))
-    if "debt" in qmap:
-        f1, f2, f3, f4 = debt_figs(v)
-        sections.append(question(qmap["debt"], f'<div class="stack"><div class="grid-2">{f1}{f2}</div><div class="grid-2">{f3}{f4}</div></div>'))
-    if "returns" in qmap:
-        sections.append(question(qmap["returns"], returns_fig(v, vd)))
-    if "valuation" in qmap:
-        sections.append(question(qmap["valuation"], valuation_block(v, ctx)))
+    st_toc, st_html = [], ""
+    try:
+        st_toc, st_html = st.sections(ctx)
+    except Exception as exc:     # 재무제표 10년 부분이 실패해도 요약과 표는 만듭니다
+        print(f"::warning::재무제표 10년 · 10가지 관점 생략: {type(exc).__name__}: {exc}")
+    sections.append(st_html)
+    tail = '<p class="band-label" aria-hidden="true">Signals · 신호와 흐름</p>'
     if a.get("combos"):
-        sections.append(combos_section(a))
+        tail += combos_section(a)
     if a["acts"]:
-        sections.append(f'<section id="story" aria-labelledby="h-story">'
-                        + section_head("story", "Timeline", "시기별 흐름", f"{y_all[0]['year']}년부터 지금까지, 다섯 장면",
-                                       "숫자는 재무제표에서 자동으로 계산하고, 배경 설명은 언론 보도에서 가져왔습니다. 각 장면 아래 링크가 출처입니다.")
-                        + acts_html(a["acts"]) + "</section>")
+        tail += (f'<section id="story" aria-labelledby="h-story">'
+                 + section_head("story", "Timeline", "시기별 흐름", f"{y_all[0]['year']}년부터 지금까지, 다섯 장면",
+                                "숫자는 재무제표에서 자동으로 계산하고, 배경 설명은 언론 보도에서 가져왔습니다. 각 장면 아래 링크가 출처입니다.")
+                 + acts_html(a["acts"]) + "</section>")
+    sections.append(tail)
+
+    toc = [("summary", "요약"), ("now", "이번 달"), None] + st_toc + [None, ("combos", "조합 신호"), ("story", "흐름"), None,
+                                                                    ("annual", "Annual"), ("half", "Half-year"), ("quarter", "Quarterly"),
+                                                                    ("notes", "자료"), ("peers", "Peer firms")]
+    toc_html = "".join('<span class="sep" aria-hidden="true"></span>' if t is None else f'<a href="#{t[0]}">{esc(t[1])}</a>'
+                       for t in toc)
 
     tables = ['<p class="band-label" aria-hidden="true">Data tables · 전체 숫자</p>']
     tables.append(table_section("annual", "Annual", "연간", "연간 실적 (사업보고서)",
@@ -1939,7 +1850,8 @@ def render(ctx):
                   '<span>붉은 글씨 = 마이너스 · – = 숫자 없음</span></div>')
     body = (header + f'<nav class="toc" aria-label="목차"><div class="wrap">{toc_html}</div></nav>'
             f'<main class="wrap">{"".join(sections)}{"".join(tables)}{notes_section(ctx, a)}{peers_section(ctx)}</main>'
-            f'<footer><div class="wrap"><span>HSC-Class01 · KTG_Hyundai · OpenDART 공시로 매월 자동 생성하는 교육용 재무 대시보드</span>'
+            f'<footer><div class="wrap"><span>HSC-Class01 · KTG_Hyundai · OpenDART 공시로 매월 자동 생성하는 교육용 재무제표 대시보드</span>'
+            f'<a href="../{REPORT_PDF}">기업분석 보고서 PDF</a>'
             f'<a href="{esc(cfg.get("repo_url", ""))}" target="_blank" rel="noopener">GitHub 저장소 ↗</a>'
             f'<a href="{esc(cfg.get("repo_url", ""))}/actions" target="_blank" rel="noopener">자동 실행 기록 ↗</a>'
             f'<a href="../">포트폴리오 홈</a></div></footer>')
@@ -2008,9 +1920,9 @@ def readme_summary(ctx):
                   + (f" · PER {val['per_x']:.1f}배" if val.get("per_x") else "") + (f" · PBR {val['pbr_x']:.2f}배" if val.get("pbr_x") else "")
                   + (f" · EV/EBITDA {val['ev_ebitda_x']:.1f}배" if val.get("ev_ebitda_x") else "")]
     url = ctx['company']['dashboard_url']
-    lines += ["", f"전체 표: [연간]({url}#annual) · [반기]({url}#half) · "
-              f"[분기]({url}#quarter) · [재무제표 10년 시각화]({url.replace('/dashboard/', '/statements/')}) · "
-              f"CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv)"]
+    lines += ["", f"대시보드: [재무제표 10년]({url}#is) · [10가지 관점]({url}#lenses) · 전체 표 [연간]({url}#annual) · [반기]({url}#half) · "
+              f"[분기]({url}#quarter) · CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · "
+              f"[quarterly](data/financials/quarterly.csv) · 기업분석 보고서: [PDF]({REPORT_PDF})"]
     return "\n".join(lines)
 
 
@@ -2032,7 +1944,7 @@ def readme_business(ctx):
             p, r = pf[-1]
             b = rv.balance_at(ctx, int(p[:4]), int(p[5:]))
             parts.append(f"PF 보증 {an.jo(r['amount'])}조 원" + (f"(자본의 {r['amount'] / b['values']['equity']:.1f}배)" if b else ""))
-        return ["", "사업보고서 본문(수주·PF): " + " · ".join(parts)] if parts else []
+        return ["", "사업보고서 본문(수주·PF): " + " · ".join(parts) + f" → [기업분석 보고서(PDF)]({REPORT_PDF})"] if parts else []
     except Exception as exc:     # README 요약은 이 줄 없이도 만듭니다
         print(f"::warning::README 수주·PF 줄 생략: {type(exc).__name__}: {exc}")
         return []

@@ -4,6 +4,8 @@
 # - 에이전트 코드(scripts, config, tests)나 이 파일을 고쳐서 main에 올려도 실행됩니다.
 # - OpenDART 인증키는 저장소 Secret 'DART_API_KEY'로만 전달합니다. 키가 없으면 저장된 자료로 화면만 다시 만들고
 #   경고만 남깁니다(실패로 끝나지 않음).
+# - 기업분석 보고서 PDF(reports/)는 러너에 있는 Chrome으로 인쇄합니다. 한글 글꼴(나눔고딕)만 설치하고,
+#   설치나 인쇄가 안 되면 경고만 남기고 지난 PDF를 그대로 둡니다(실패로 끝나지 않음).
 name: Financial Agent
 
 on:
@@ -44,6 +46,18 @@ jobs:
       - name: Test calculation rules
         run: python3 -m unittest discover -s tests -v
 
+      - name: Install Korean font for the PDF report
+        timeout-minutes: 8
+        continue-on-error: true
+        run: |
+          # 나눔고딕(TrueType): PDF에 필요한 글자만 작게 들어갑니다. 실패해도 다음 단계는 계속합니다.
+          if sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-nanum > /dev/null; then
+            fc-list :lang=ko family | sort -u | head -5
+          else
+            echo "::warning::한글 글꼴을 설치하지 못했습니다. 이번 달은 기업분석 보고서 PDF를 다시 만들지 않습니다."
+          fi
+          (google-chrome --version || chromium --version || echo "Chrome 없음") 2>/dev/null
+
       - name: Collect OpenDART filings and rebuild dashboard
         env:
           DART_API_KEY: ${{ secrets.DART_API_KEY }}
@@ -53,7 +67,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A data/financials dashboard statements README.md
+          git add -A data/financials dashboard statements reports README.md
           if git diff --cached --quiet; then
             echo "바뀐 내용이 없습니다."
             exit 0

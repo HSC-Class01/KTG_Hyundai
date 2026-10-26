@@ -50,7 +50,8 @@ def build(output):
     if hidden:
         raise SystemExit(f"숨김 경로가 들어갔습니다: {hidden[:5]}")
     required = ["README.md", "SETUP.md", "scripts/dart_agent.py", "config/company.json", "workflows/financial-agent.yml",
-                "dashboard/index.html", "statements/index.html", "data/financials/business.json"]
+                "dashboard/index.html", "statements/index.html", "data/financials/business.json",
+                "reports/hyundai-company-report.pdf"]
     missing = [n for n in required if n not in inside]
     if missing:
         raise SystemExit(f"필수 파일이 빠졌습니다: {missing}")

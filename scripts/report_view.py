@@ -1,11 +1,10 @@
-"""대시보드(사업보고서 시각화)의 앞부분: 건설사가 돈을 버는 구조 → 사업보고서가 중요한 이유 → 수주·PF → 10가지 관점.
+"""기업분석 보고서(PDF)의 사업보고서 부분: 건설사가 돈을 버는 구조 → 사업보고서가 중요한 이유 → 수주·PF.
 
 숫자는 모두 ctx(재무제표 표)와 ctx['business'](사업보고서 본문에서 읽은 숫자, business.py)에서 계산합니다.
-제도 설명(입찰 방식 등)은 문장으로 고정해 두고, 출처를 함께 적습니다.
+제도 설명(입찰 방식 등)은 문장으로 고정해 두고, 출처를 함께 적습니다. 보고서 조립과 PDF 인쇄는 company_report.py가 합니다.
 """
 import analysis as an
 import dashboard as d
-import lenses as ln
 
 T = an.T
 esc, rich = d.esc, d.rich
@@ -92,59 +91,6 @@ def pf_rows(ctx):
 def years_of_work(ctx, r):
     rev = ttm_revenue_at(ctx, r["year"], r["month"])
     return None if not rev or not r.get("total") else r["total"] / rev
-
-
-# ---------------------------------------------------------------------------
-# 차트 부품: 누적 세로 막대, 가로 누적 막대
-# ---------------------------------------------------------------------------
-def stack_chart(xlabels, groups, *, ticks_fmt, tips, height=220, labels=None, wide_bars=False):
-    """누적 세로 막대. groups: 묶음 1~2개, 묶음마다 [{'values': [...], 'color': '--s1'}, …]를 아래부터 쌓습니다(양수만).
-    labels: {(묶음, 위치): 글자} 막대 위 글자."""
-    n, k = len(xlabels), len(groups)
-    tops = [sum(seg["values"][i] or 0 for seg in g) for g in groups for i in range(n)]
-    lo, hi, ticks = d.axis(tops)
-    span = hi - lo
-    slots = []
-    for i in range(n):
-        marks = []
-        for j, g in enumerate(groups):
-            base = 0.0
-            segs = [seg for seg in g if seg["values"][i]]
-            for s_i, seg in enumerate(segs):
-                v = seg["values"][i]
-                h = v / span * 100
-                top = " top" if s_i == len(segs) - 1 else ""
-                marks.append(f'<i class="bar stk j{j}{top}" style="bottom:{base / span * 100:.3f}%;height:{h:.3f}%;--c:var({seg["color"]})"></i>')
-                base += v
-            text = (labels or {}).get((j, i))
-            if text and base:
-                marks.append(f'<b class="vl j{j}" style="bottom:calc({base / span * 100:.3f}% + 4px)">{esc(text)}</b>')
-        title, rows, note = tips(i)
-        slots.append(f'<div class="slot" style="left:{i / n * 100:.4f}%;width:{100 / n:.4f}%"'
-                     f'{d.tip_attr(title, rows, note)}>{"".join(marks)}</div>')
-    wb = " wb" if wide_bars else ""
-    return (f'<div class="plot cc k{k}{wb}" style="--h:{height}px;--n:{n}">{d._y_axis(lo, hi, ticks, ticks_fmt)}'
-            f'<div class="pa">{d._grid(lo, hi, ticks)}{"".join(slots)}</div>{d._xa(xlabels)}</div>')
-
-
-def hstack(rows, *, scale_max, value_fmt, unit_label=""):
-    """가로 누적 막대 목록. rows: [{'label', 'meta', 'segs': [(값, 색, 이름)], 'value', 'tip': (제목, 줄, 메모)}]"""
-    out = []
-    for r in rows:
-        left = 0.0
-        segs = []
-        for val, color, cls in r["segs"]:
-            if not val or val <= 0:
-                continue
-            w = val / scale_max * 100
-            segs.append(f'<i class="hs-seg {cls}" style="left:{left:.3f}%;width:{w:.3f}%;--c:var({color})"></i>')
-            left += w
-        title, tip_rows, note = r["tip"]
-        meta = f'<span class="hs-meta">{esc(r["meta"])}</span>' if r.get("meta") else ""
-        out.append(f'<div class="hs-row"{d.tip_attr(title, tip_rows, note)}><span class="hs-l"><b>{esc(r["label"])}</b>{meta}</span>'
-                   f'<span class="hs-t">{"".join(segs)}</span><span class="hs-v">{esc(value_fmt(r))}</span></div>')
-    unit = f'<p class="hs-unit">{esc(unit_label)}</p>' if unit_label else ""
-    return f'<div class="hs">{"".join(out)}</div>{unit}'
 
 
 # ---------------------------------------------------------------------------
@@ -283,7 +229,7 @@ def segments_fig(ctx):
                                                          ["해외", f"{an.jo(ovs, 2)}조 원", "var(--s3)"],
                                                          ["합계", f"{an.jo(tot, 2)}조 원 (매출의 {tot / sub * 100:.1f}%)", None]],
                               r["products"])})
-    body = hstack(items, scale_max=scale, value_fmt=lambda r: f"{an.jo(r['value'])}조 · {r['value'] / sub * 100:.0f}%",
+    body = d.hstack(items, scale_max=scale, value_fmt=lambda r: f"{an.jo(r['value'])}조 · {r['value'] / sub * 100:.0f}%",
                   unit_label="단위: 조 원 · 부문 사이 내부거래를 빼기 전 금액")
     dom_all = sum(x[1] for x in rows)
     table_rows = []
@@ -301,18 +247,6 @@ def segments_fig(ctx):
                     f"사업부문별 매출 · 국내·해외 · 출처: {seg['report']}", body,
                     legend_html=d.legend([("국내", "--s1", "box"), ("해외", "--s3", "box")]),
                     table_html=d.data_table(heads, table_rows), note=note, wide=True)
-
-
-def structure_section(ctx, v):
-    steps = _flow_steps(ctx, v)
-    head = d.section_head("structure", "Business model", "돈 버는 구조", "건설사는 이렇게 돈을 법니다",
-                          "건설사는 물건을 먼저 만들어 파는 회사가 아닙니다. **공사를 먼저 따내고(수주), 몇 년에 걸쳐 지으면서 진행한 만큼 매출로 잡고, "
-                          "공사비를 받아 현금을 회수하는** 수주산업입니다. 그래서 돈이 들어오는 길이 아래처럼 한 바퀴로 이어집니다.",
-                          "카드의 숫자는 현대건설의 가장 최근 공시에서 매월 자동으로 다시 계산합니다. 맨 아래 작은 글씨는 그 숫자가 사업보고서의 어디에 있는지입니다.")
-    buyers = ('<div class="sub-head"><h3>누가 어떻게 공사를 맡기나</h3><p>공사를 따내는 기준은 발주처마다 다릅니다. '
-              '공공은 점수, 재건축은 조합원 투표, 민간·해외는 실적과 신뢰로 정해집니다.</p></div>')
-    return (f'<section id="structure" aria-labelledby="h-structure">{head}{flow_html(steps)}{buyers}{buyers_html(ctx)}'
-            f'<div class="stack" style="margin-top:14px">{market_html(ctx)}{segments_fig(ctx)}</div></section>')
 
 
 # ---------------------------------------------------------------------------
@@ -366,37 +300,6 @@ def why_rows(ctx, v):
     return rows
 
 
-def why_section(ctx, v):
-    head = d.section_head("why", "Why the report", "사업보고서가 중요한 이유", "그래서 사업보고서를 봅니다",
-                          "재무제표(Ⅲ장)는 위 순환의 **결과**만 보여 줍니다. 결과를 만든 **원인**, 즉 얼마나 따냈고(수주) 공사가 어디까지 왔고 "
-                          "어떤 보증을 섰는지는 Ⅱ장(사업의 내용)과 Ⅺ장(우발부채)에 있습니다. 그래서 숫자 하나를 보더라도 "
-                          "사업보고서 전체에서 그 원인을 같이 찾아야 합니다.",
-                          "아래 다섯 장의 카드는 돈 버는 단계마다 보고서의 어디를 봐야 하는지와, 그 자리에서 이 화면이 매월 자동으로 읽어 온 현대건설의 지금 숫자입니다.")
-    rows = why_rows(ctx, v)
-    cards = "".join(f'<article class="card why-card"><p class="why-no">{i}</p><h3>{esc(a)}</h3><p class="why-where">{esc(b)}</p>'
-                    f'<p class="why-now">{esc(c)}</p><p class="why-read">{esc(e)}</p></article>'
-                    for i, (a, b, c, e) in enumerate(rows, 1))
-    table = f'<div class="why-cards" role="list" aria-label="돈 버는 단계별로 사업보고서에서 볼 곳">{cards}</div>'
-    lf = ctx.get("latest_filing")
-    chap = "".join(f'<li class="{"on" if on else ""}"><span class="ch-no">{esc(no)}</span><span class="ch-t"><b>{esc(t)}</b>'
-                   f'<span>{esc(what)}</span></span></li>' for no, t, what, on in CHAPTERS)
-    link = f' · 최근 보고서: {dart(lf["rcept_no"], lf["report_nm"].strip())}' if lf else ""
-    chapters = (f'<figure class="chart" id="fig-chapters"><figcaption class="chart-head"><h3>사업보고서 한 권의 구조</h3>'
-                f'<p>금융감독원 작성기준의 목차 · 진하게 표시한 장을 이 대시보드가 읽습니다{link}</p></figcaption>'
-                f'<ol class="chapters">{chap}</ol>'
-                f'<p class="chart-note">건설사 보고서에서 특히 볼 곳: Ⅱ장의 수주상황 표, Ⅲ장 주석의 ‘건설계약’(2016년부터 매출 5% 이상 공사는 공사별 진행률·미청구공사 공개), '
-                f'Ⅺ장의 PF 보증. 출처: {ref("law159")} · {ref("crowe")}</p></figure>')
-    what = ('<article class="card report-what"><h3>사업보고서란?</h3><ul class="plain">'
-            '<li>상장회사가 <b>자본시장법 제159조</b>에 따라 1년 동안의 사업과 재무 상태를 투자자에게 알리는 공식 연간 보고서입니다.</li>'
-            '<li>사업연도가 끝나고 <b>90일 안에</b> 금융위원회와 한국거래소에 내고, 전자공시시스템(DART)에 공개됩니다. '
-            '6개월 치는 반기보고서, 3·9개월 치는 분기보고서로 <b>45일 안에</b> 냅니다(제160조).</li>'
-            '<li>회계법인의 <b>감사보고서</b>가 함께 붙어, 재무제표 숫자를 외부에서 한 번 확인받은 자료입니다.</li>'
-            '<li>건설업만의 정의가 따로 있지는 않지만, 건설사 보고서는 <b>수주잔고·공사별 진행률·미청구공사·PF 보증</b>이 핵심입니다.</li>'
-            f'</ul><p class="card-foot">출처: {ref("law159")}</p></article>')
-    return (f'<section id="why" aria-labelledby="h-why">{head}{table}'
-            f'<div class="grid-2 why-grid" style="margin-top:14px">{what}{chapters}</div></section>')
-
-
 # ---------------------------------------------------------------------------
 # 3. 수주·PF
 # ---------------------------------------------------------------------------
@@ -418,7 +321,7 @@ def backlog_fig(ctx):
         note = r.get("flag") or f"{r['report']} · 회사별 계약잔액 합계"
         return period_label(r["period"]), tr, note
 
-    chart = stack_chart(xl, [[{"values": dom, "color": "--s1"}, {"values": ovs, "color": "--s3"}]],
+    chart = d.stack_chart(xl, [[{"values": dom, "color": "--s1"}, {"values": ovs, "color": "--s3"}]],
                         ticks_fmt=d.tick_plain, tips=tips, labels=labels)
     table = d.data_table(["기간", "국내(억 원)", "해외(억 원)", "합계(억 원)", "연결기준(억 원)", "비고"],
                          [[period_label(r["period"]), (d.eok(r["domestic"]), None), (d.eok(r["overseas"]), None),
@@ -474,7 +377,7 @@ def orders_fig(ctx):
 
     labels = {(0, i): an.jo(orders[str(y)]["total"]) for i, y in enumerate(years)
               if str(y) in orders and (i == len(years) - 1 or orders[str(y)]["total"] == max(o["total"] for o in orders.values()))}
-    chart = stack_chart([d.year_label(y) for y in years],
+    chart = d.stack_chart([d.year_label(y) for y in years],
                         [[{"values": dom, "color": "--s1"}, {"values": ovs, "color": "--s3"}, {"values": tot_only, "color": "--spark"}]],
                         ticks_fmt=d.tick_plain, tips=tips, labels=labels)
     missing = [str(y) for y in years if str(y) not in orders]
@@ -538,7 +441,7 @@ def projects_fig(ctx):
                                           ["완성", f"{an.jo(r['done'], 2)}조 원 ({prog:.0f}%)", "var(--s1)"],
                                           ["남은 공사", f"{an.jo(r['remain'], 2)}조 원", None]],
                               f"{r['client']} · {r['start'].replace('-', '.')} ~ {r['end'].replace('-', '.')}")})
-    body = hstack(items, scale_max=scale, value_fmt=lambda r: f"{an.jo(r['value'], 2)}조 남음 · {r['prog']:.0f}%",
+    body = d.hstack(items, scale_max=scale, value_fmt=lambda r: f"{an.jo(r['value'], 2)}조 남음 · {r['prog']:.0f}%",
                   unit_label="막대 길이 = 계약금액 · 진한 부분 = 이미 지은 만큼 · 연한 부분 = 남은 공사")
     note = (f"남은 공사 금액이 큰 순서 {len(rows)}건 (전체 {pj['count']}건 중). 출처: {pj['report']} ‘수주상황’ 표. "
             "같은 공사를 현대건설과 현대엔지니어링이 나눠 맡으면 회사별로 따로 나옵니다.")
@@ -546,7 +449,8 @@ def projects_fig(ctx):
                     legend_html=d.legend([("완성", "--s1", "box"), ("남은 공사", "--s1", "tint")]), note=note, wide=True)
 
 
-def orders_section(ctx, v):
+def orders_tiles(ctx):
+    """수주잔고 · 일감 · 신규 수주 · PF 보증 네 칸 [(이름, 값, 단위, 설명)]."""
     biz = biz_of(ctx)
     lb = latest_backlog(ctx)
     orders = biz.get("orders") or {}
@@ -566,51 +470,4 @@ def orders_section(ctx, v):
         p, r = pf[-1]
         b = balance_at(ctx, int(p[:4]), int(p[5:]))
         tiles.append(("PF 보증", an.jo(r["amount"]), "조 원", period_label(p) + (f" · 자본의 {r['amount'] / b['values']['equity']:.1f}배" if b else "")))
-    cells = "".join(f'<div class="vt"><p class="vt-l">{esc(a)}</p><p class="vt-v">{esc(b)}<small>{esc(c)}</small></p>'
-                    f'<p class="vt-d">{esc(e)}</p></div>' for a, b, c, e in tiles)
-    head = d.section_head("orders", "Orders & PF", "수주·PF", "일감은 얼마나 쌓였고, 위험은 얼마나 지고 있나",
-                          "재무제표에는 나오지 않는 두 숫자입니다. **수주잔고**는 앞으로 매출이 될 일감이고, **PF 보증**은 남의 빚을 대신 책임지기로 한 금액입니다. "
-                          "둘 다 사업보고서 본문(Ⅱ장 수주상황, Ⅺ장 우발부채)에서 매월 자동으로 읽습니다.")
-    errs = biz.get("errors") or []
-    err = (f'<div class="callout warn" role="note"><p class="mini-h">읽지 못한 부분</p><ul>{"".join(f"<li>{esc(e)}</li>" for e in errs[:5])}</ul></div>'
-           if errs else "")
-    grid1 = f'<div class="grid-2">{backlog_fig(ctx)}{work_years_fig(ctx)}</div>'
-    grid2 = f'<div class="grid-2">{orders_fig(ctx)}{pf_fig(ctx)}</div>'
-    return (f'<section id="orders" aria-labelledby="h-orders">{head}<div class="vtiles">{cells}</div>'
-            f'<div class="stack">{grid1}{projects_fig(ctx)}{grid2}</div>{err}</section>')
-
-
-# ---------------------------------------------------------------------------
-# 4. 10가지 관점 (요약 카드 · 자세한 차트는 재무제표 10년 화면)
-# ---------------------------------------------------------------------------
-def lens_tile(lens, href):
-    m = lens["head"]
-    if lens["id"] == "price":
-        m = lens["metrics_data"][0]
-    value = ln.fmt(m["latest"], m["unit"])
-    unit = m["unit"]
-    vals = [ln.display(x, m["unit"]) for x in m["values"]]
-    spark = d.sparkline(vals, zero=any(x is not None and x < 0 for x in vals))
-    verdict = (m["tone"], m["word"])
-    extra = ""
-    others = [x for x in lens["metrics_data"] if x is not m][:2]
-    if others:
-        extra = " · ".join(f"{x['label']} {ln.with_unit(x['latest'], x['unit'])}" for x in others if x["latest"] is not None)
-    return (f'<article class="kpi lens"><div class="kpi-top"><h3 class="kpi-label"><a href="{esc(href)}#{lens["id"]}">'
-            f'<span class="no">{lens["no"]}</span>{esc(lens["ko"])}</a></h3>{d.chip(verdict)}</div>'
-            f'<p class="kpi-basis">{esc(m["latest_year"])}년 {esc(m["label"])}</p>'
-            f'<p class="kpi-value">{esc(value)}<small>{esc(unit)}</small></p>'
-            f'<p class="kpi-delta">{esc(extra)}</p>{spark}<p class="kpi-term">{esc(lens["q"])}</p></article>')
-
-
-def lenses_section(ctx, href="../statements/"):
-    L = ln.build(ctx)
-    years = L[0]["years"] if L else []
-    span = f"{years[0]}~{years[-1]}" if years else ""
-    head = d.section_head("lenses", "10 lenses", "10가지 관점", "재무비율 10가지 관점으로 본 현대건설",
-                          f"수익성·안정성·유동성·활동성·성장성·생산성·현금흐름·시장가치에 종합 분석(듀퐁)과 주가 반영을 더했습니다. "
-                          f"판정은 절대 기준이 아니라 **최근 10년({span}) 안에서 지금이 어디쯤인지**입니다(높을수록 좋은 지표와 낮을수록 좋은 지표를 구분). "
-                          f"PER처럼 해석이 갈리는 지표는 ‘참고’로 둡니다.")
-    tiles = "".join(lens_tile(x, href) for x in L)
-    more = (f'<p class="more-link"><a href="{esc(href)}">재무제표 10년 시각화에서 관점별 차트 자세히 보기 →</a></p>')
-    return f'<section id="lenses" aria-labelledby="h-lenses">{head}<div class="kpis ten">{tiles}</div>{more}</section>'
+    return tiles
