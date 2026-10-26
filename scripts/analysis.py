@@ -226,6 +226,14 @@ VERDICT_RULES = [
 # ---------------------------------------------------------------------------
 # 문장 만들기
 # ---------------------------------------------------------------------------
+def price_when(val):
+    """주가 기준 시점. 지난달까지는 '2026.09 월말', 아직 끝나지 않은 이번 달이면 받은 날 '2026.10.26'."""
+    as_of, fetched = val.get("as_of", ""), str(val.get("fetched") or "")
+    if fetched[:7].replace("-", ".") == as_of:
+        return fetched.replace("-", ".")
+    return f"{as_of} 월말"
+
+
 def update_box(ctx):
     status = ctx["status"]
     lines = []
@@ -245,7 +253,7 @@ def update_box(ctx):
         lines.append(f"가장 최근 반영 보고서: **{lf['report_nm'].strip()}** ({lf['rcept_dt'][:4]}.{lf['rcept_dt'][4:6]}.{lf['rcept_dt'][6:]} 접수)")
     val = ctx.get("valuation") or {}
     if val.get("as_of"):
-        lines.append(f"주가: {val['as_of']} 월말 종가 기준 ({val.get('source', '')}, {val.get('fetched', '')} 받음)")
+        lines.append(f"주가: {price_when(val)} 종가 기준 ({val.get('source', '')}, {val.get('fetched', '')} 받음)")
     lines.append(f"다음 자동 확인: **{ctx['next_run'].replace('-', '.')} 09:17** (매월 1일)")
     return {"lines": lines, "errors": status.get("errors", []), "notes": status.get("notes", [])}
 
@@ -540,7 +548,7 @@ def _valuation_step(v, vd, ctx):
                   f"PBR {pbr:.2f}배: 주가가 장부상 순자산보다 높게 거래됩니다.")
     else:
         answer = "자본이 0 이하라 PBR을 계산할 수 없습니다."
-    lead = (f"{val['as_of']} 월말 주가 {val['price']:,.0f}원 × 발행주식 {val['shares']:,}주 = 시가총액 **{jo(val['market_cap'], 2)}조 원**. "
+    lead = (f"{price_when(val)} 주가 {val['price']:,.0f}원 × 발행주식 {val['shares']:,}주 = 시가총액 **{jo(val['market_cap'], 2)}조 원**. "
             + (f"최근 4개 분기 지배주주 순이익 기준 PER **{per:.1f}배**" if per is not None else "최근 4개 분기 지배주주 순이익이 0 이하라 PER은 계산하지 않습니다")
             + (f", EV/EBITDA {val['ev_ebitda_x']:.1f}배" if val.get("ev_ebitda_x") is not None else "")
             + (f", FCF 수익률 {pct(val['fcf_yield_pct'])}%" if val.get("fcf_yield_pct") is not None else "") + ".")

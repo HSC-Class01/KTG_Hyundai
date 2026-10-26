@@ -59,6 +59,11 @@ class NumberParsing(unittest.TestCase):
         self.assertAlmostEqual(fin.growth(110, 100), 10)
         self.assertIsNone(fin.growth(110, 0))
 
+    def test_price_date_label(self):
+        # 끝난 달은 '월말', 아직 끝나지 않은 달은 받은 날짜로 적습니다
+        self.assertEqual(analysis.price_when({"as_of": "2026.09", "fetched": "2026-10-01"}), "2026.09 월말")
+        self.assertEqual(analysis.price_when({"as_of": "2026.10", "fetched": "2026-10-26"}), "2026.10.26")
+
     def test_korean_won_format(self):
         self.assertEqual(analysis.won(31_062_912_000_000), "31조 629억")
         self.assertEqual(analysis.won(-216_900_000_000), "−2,169억")

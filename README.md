@@ -54,7 +54,7 @@
 | 2025년 | 310,629 | 6,530 | 2.1 | 8,539 | 5,591 | −7,483 | −8,641 | 175 | 5.3 | 5.7 | 6.7 |
 | 2026년 상반기 | 131,236 | 4,427 | 3.4 | 5,477 | 3,637 | −16,771 | −18,581 | 155 | 4.8 | – | – |
 
-주가 수준(2026.10 월말 종가 89,800원): 시가총액 10.09조 원 · PER 22.5배 · PBR 1.09배 · EV/EBITDA 14.9배
+주가 수준(2026.10.26 종가 89,800원): 시가총액 10.09조 원 · PER 22.5배 · PBR 1.09배 · EV/EBITDA 14.9배
 
 대시보드: [재무제표 10년](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#is) · [10가지 관점](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#lenses) · 전체 표 [연간](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#annual) · [반기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#half) · [분기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#quarter) · CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv) · 기업분석 보고서: [PDF](reports/hyundai-company-report.pdf)
 <!-- AUTO:SUMMARY:END -->
@@ -222,7 +222,7 @@ python scripts/package_project.py     # → dist/KTG_Hyundai_agent.zip
 | 10위 | [IPARK현대산업개발](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260318001249) | 294870 | 주택·개발사업(디벨로퍼) | 2025년 | 41,470 | 2,486 | 6.0 | 4.9 | 136.5 | 143.3 | 9.3 | 0.46 |
 
 - 순위: 2026년 국토교통부 시공능력평가(토목건축공사업) ([이데일리, 2026.07.30](https://v.daum.net/v/20260730110336152))
-- 재무 숫자: 각 회사의 가장 최근 사업보고서 연결재무제표 (OpenDART, 매월 자동 갱신). ROE는 기말 자본 기준, PER·PBR은 2026.10 월말 주가 기준. 동종기업 목록은 `config/company.json`에서 바꿀 수 있습니다.
+- 재무 숫자: 각 회사의 가장 최근 사업보고서 연결재무제표 (OpenDART, 매월 자동 갱신). ROE는 기말 자본 기준, PER·PBR은 2026.10 주가 기준. 동종기업 목록은 `config/company.json`에서 바꿀 수 있습니다.
 - 삼성물산: 건설 외 사업 비중이 커서 연결 전체 숫자를 그대로 비교하면 안 됩니다
 - GS건설: 주택 비중이 높아 분양 경기 영향을 크게 받습니다
 - 대우건설: 해외 플랜트·원전 등 대형 프로젝트 비중

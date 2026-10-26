@@ -478,7 +478,7 @@ def kpis(v, vd, ctx):
         delta = " · ".join(x for x in (f"PER **{val['per_x']:.1f}배**" if val.get("per_x") else "",
                                        f"EV/EBITDA {val['ev_ebitda_x']:.1f}배" if val.get("ev_ebitda_x") else "") if x)
         tiles.append((6, "주가 수준", "valuation", vd["valuation"], f"{val['pbr_x']:.2f}" if val.get("pbr_x") else "–", "배",
-                      f"PBR · {val['as_of']} 월말 주가 기준", delta,
+                      f"PBR · {an.price_when(val)} 주가 기준", delta,
                       f"주가 {val['price']:,.0f}원 · 시가총액 {an.jo(val['market_cap'], 2)}조 원",
                       sparkline(v.series("pbr_x")), "현재 가격이 성장과 위험을 어느 정도 반영하고 있는가"))
     else:
@@ -877,8 +877,8 @@ def valuation_tiles(ctx):
     val = ctx.get("valuation") or {}
     if not val.get("market_cap"):
         return ('<div class="card empty"><h3>주가 자료 대기 중</h3><p>주가는 GitHub Actions가 매월 실행될 때 네이버 금융(실패하면 Yahoo Finance)에서 '
-                '월말 종가를 받아 옵니다. 받는 즉시 PER·PBR·EV/EBITDA·FCF 수익률이 이 자리에 채워집니다.</p></div>')
-    tiles = [("주가", f"{val['price']:,.0f}", "원", f"{val['as_of']} 월말 종가"),
+                '달마다 마지막 거래일 종가를 받아 옵니다. 받는 즉시 PER·PBR·EV/EBITDA·FCF 수익률이 이 자리에 채워집니다.</p></div>')
+    tiles = [("주가", f"{val['price']:,.0f}", "원", f"{an.price_when(val)} 종가"),
              ("시가총액", an.jo(val["market_cap"], 2), "조 원", f"발행주식 {val['shares']:,}주 (보통주+우선주)"),
              ("PER", "–" if val.get("per_x") is None else f"{val['per_x']:.1f}", "배", "시가총액 ÷ 최근 4개 분기 지배주주 순이익"),
              ("PBR", "–" if val.get("pbr_x") is None else f"{val['pbr_x']:.2f}", "배", f"시가총액 ÷ {val.get('balance_label', '')} 지배주주지분"),
@@ -1093,7 +1093,7 @@ CAVEATS = [
     "감가상각비·이자비용은 재무제표 본문에 없어 연결재무제표 주석(현금흐름표 조정 항목)에서 읽었습니다. "
     "2010~2013년 분·반기 주석에는 이 표가 없어 그 기간의 EBITDA·이자보상배율은 비어 있습니다.",
     "지배주주 순이익은 원문 표에서 같은 이름의 줄이 여러 번 나와 2010~2014년은 비워 두었습니다.",
-    "주가는 네이버 금융(실패하면 Yahoo Finance) 월말 종가, 주식수는 OpenDART ‘주식의 총수 현황’(2015년부터)입니다. "
+    "주가는 네이버 금융(실패하면 Yahoo Finance)의 달마다 마지막 거래일 종가(아직 끝나지 않은 달은 받은 날까지), 주식수는 OpenDART ‘주식의 총수 현황’(2015년부터)입니다. "
     "네이버 금융의 과거 주가는 권리 변동을 반영한 수정주가라 그때 실제 거래 가격과 조금 다를 수 있고, "
     "우선주도 보통주 주가로 계산해 시가총액이 조금 다를 수 있습니다.",
     "판정(성장·주의 등)은 화면 아래 판정 기준의 단순 규칙입니다. 투자 판단의 근거로 쓰기에는 정보가 부족합니다.",
@@ -1162,7 +1162,7 @@ def notes_section(ctx, a):
                      + (f", {len(nr['from_prior'])}개 기간은 다음 보고서의 비교 열로 보충" if nr.get("from_prior") else ""))
     val = ctx.get("valuation") or {}
     if val.get("as_of"):
-        check.append(f"주가: {val.get('source', '')}에서 {val.get('fetched', '')}에 받은 월말 종가 (최근 {val['as_of']})")
+        check.append(f"주가: {val.get('source', '')}에서 {val.get('fetched', '')}에 받은 달마다 마지막 거래일 종가 (최근 {val['as_of']})")
     rows = "".join(f'<tr><th scope="row">{esc(c["item"])}</th><td class="st {c["status"]}"><span aria-hidden="true">{STATUS_ICON[c["status"]][0]}</span>'
                    f'{STATUS_ICON[c["status"]][1]}</td><td class="left wrap">{esc(c["how"])}</td></tr>' for c in a.get("checklist", []))
     checklist = (f'<div class="table-scroll ck"><table><caption>교수님 가이드 6장 ‘실무 검토 체크리스트’에 대한 이 대시보드의 반영 정도</caption>'
@@ -1273,7 +1273,7 @@ def peers_section(ctx):
     as_of = next((p["market"].get("as_of") for p, _ in rows if (p.get("market") or {}).get("as_of")), None)
     desc = (f"{basis}재무 숫자는 각 회사의 {str(year) + '년 ' if year else ''}사업보고서 연결재무제표를 OpenDART에서 자동으로 받아 "
             f"현대건설과 같은 방식으로 계산합니다. ROE는 기말 자본 기준"
-            + (f", PER·PBR은 {as_of} 월말 주가 × 발행주식수(시가총액) ÷ 사업보고서의 지배주주 순이익·지배주주지분입니다. "
+            + (f", PER·PBR은 {as_of} 주가 × 발행주식수(시가총액) ÷ 사업보고서의 지배주주 순이익·지배주주지분입니다. "
                if as_of else ", PER·PBR은 주가를 받은 뒤 채워집니다. ")
             + "회사 이름을 누르면 원문 공시가 열립니다.")
     summary = peer_summary(rows, ctx["company"]["name"])
@@ -1916,7 +1916,7 @@ def readme_summary(ctx):
                          "부채비율(%)", "이자보상배율(배)", "ROE(%)", "ROIC(%)"], rows)]
     val = ctx.get("valuation") or {}
     if val.get("market_cap"):
-        lines += ["", f"주가 수준({val['as_of']} 월말 종가 {val['price']:,.0f}원): 시가총액 {an.jo(val['market_cap'], 2)}조 원"
+        lines += ["", f"주가 수준({an.price_when(val)} 종가 {val['price']:,.0f}원): 시가총액 {an.jo(val['market_cap'], 2)}조 원"
                   + (f" · PER {val['per_x']:.1f}배" if val.get("per_x") else "") + (f" · PBR {val['pbr_x']:.2f}배" if val.get("pbr_x") else "")
                   + (f" · EV/EBITDA {val['ev_ebitda_x']:.1f}배" if val.get("ev_ebitda_x") else "")]
     url = ctx['company']['dashboard_url']
@@ -1970,7 +1970,7 @@ def readme_peers(ctx):
         out.append(f"- 순위: {rank.get('year')}년 {rank.get('basis')} ([{rank.get('source_name')}]({rank.get('source_url')}))")
     as_of = next((p["market"].get("as_of") for p, _ in rows_ if (p.get("market") or {}).get("as_of")), None)
     out.append("- 재무 숫자: 각 회사의 가장 최근 사업보고서 연결재무제표 (OpenDART, 매월 자동 갱신). ROE는 기말 자본 기준"
-               + (f", PER·PBR은 {as_of} 월말 주가 기준." if as_of else ", PER·PBR은 주가를 받은 뒤 채워집니다.")
+               + (f", PER·PBR은 {as_of} 주가 기준." if as_of else ", PER·PBR은 주가를 받은 뒤 채워집니다.")
                + " 동종기업 목록은 `config/company.json`에서 바꿀 수 있습니다.")
     for p, own in rows_:
         if not own and p.get("note"):

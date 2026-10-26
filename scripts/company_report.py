@@ -203,7 +203,7 @@ def cover(ctx, F):
     meta = [("대상", f"{cfg['name']} ({cfg['stock_code']}) · 연결재무제표 · {cfg.get('business', '')}"),
             ("기준 공시", (f"{lf['report_nm'].strip()} · {d.fmt_date(lf['rcept_dt'])} 접수" if lf else "–")
              + (f" / {seg['report']}" if seg.get("report") else "")),
-            ("주가", f"{val['as_of']} 월말 종가 ({val.get('source', '')})" if val.get("as_of") else "–"),
+            ("주가", f"{an.price_when(val)} 종가 ({val.get('source', '')})" if val.get("as_of") else "–"),
             ("자료", "OpenDART 전자공시 · 사업·반기·분기보고서 " + f"{F['y0']}년~"),
             ("작성", "HSC-Class01 · OpenDART 재무분석 에이전트 (GitHub Actions가 매월 1일 다시 만듦)"),
             ("대시보드", cfg.get("dashboard_url", ""))]
@@ -338,7 +338,7 @@ def ch1_structure(ctx, F):
                 ["올해 이익", num("50억 원"), num("−50억 원", -1)]]
     poc = (rtable(["계약금액 1,000억 원짜리 공사", "처음 예상", "원가 추정이 늘면"], poc_rows, "r-poc")
            + bullets(["공사 전체가 손해로 예상되면 앞으로 생길 손실(이 예에서 50억 원)까지 **그해에 한꺼번에** 비용으로 잡습니다. "
-                      "2024년 현대건설의 적자가 이렇게 생겼습니다(4장).",
+                      "2024년 연결 적자도 자회사 해외 현장에서 앞으로 들 비용을 한꺼번에 반영하면서 생겼습니다(4장).",
                       "진행률로 잡은 매출보다 청구한 돈이 적으면 **미청구공사**(받을 돈), 많으면 **초과청구공사**(미리 받은 돈)가 생깁니다(5장)."], "small"))
     body = (sub("1-1", "돈이 도는 여섯 단계", flow,
                 "카드의 숫자는 가장 최근 공시 기준이며 매월 다시 계산합니다. 카드 맨 아래 작은 글씨는 그 숫자가 사업보고서의 어디에 있는지입니다.")
@@ -725,7 +725,7 @@ LIMITS = [
     "신규 수주는 현대건설 단독 수주실적이라 현대엔지니어링 등 자회사 수주가 빠져 있고, 보고서에 같은 문장이 없는 해는 비웠습니다.",
     "PF 보증은 정비사업 PF까지 포함하도록 바뀐 공시 기준(2023년 사업보고서부터)이라 그 전 숫자와 비교하지 않습니다.",
     "10가지 관점의 판정은 절대 기준이 아니라 최근 10년 안에서의 상대 위치이고, 가이드 6단계 판정은 아래의 단순 규칙을 따릅니다.",
-    "주가는 월말 종가(네이버 금융, 실패하면 Yahoo Finance)이고 2021년 이전은 수정주가입니다.",
+    "주가는 달마다 마지막 거래일 종가(아직 끝나지 않은 달은 받은 날까지의 마지막 종가, 네이버 금융·실패하면 Yahoo Finance)이고 2021년 이전은 수정주가입니다.",
 ]
 
 
@@ -758,7 +758,10 @@ def appendix(ctx, F):
 # ---------------------------------------------------------------------------
 # 한글 글꼴: 러너에서는 fonts-nanum(나눔고딕, TrueType)을 설치합니다. TrueType 글꼴은 PDF에 필요한 글자만 작게 들어가고,
 # Noto Sans CJK 같은 CFF 글꼴은 Chrome이 글자마다 그림(Type 3)으로 넣어 파일이 몇 배 커집니다.
-FONT_STACK = '"NanumGothic","나눔고딕",__FONTS__'
+# 나눔고딕에 없는 글자(빼기 기호 −, Ⅺ 같은 로마 숫자)는 목록 끝의 DejaVu Sans로 채웁니다(없으면 세리프 글꼴로 빠짐).
+# Windows·macOS에서 직접 실행하면 맑은 고딕·애플 SD 산돌고딕 Neo로 인쇄됩니다.
+FONT_STACK = ('"NanumGothic","나눔고딕","Noto Sans CJK KR","Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo",'
+              '"DejaVu Sans",sans-serif')
 PRINT_CSS = """
 @page{size:A4;margin:17mm 15mm 15mm 15mm;
   @top-left{content:"__TITLE__";font:500 7pt __FONTS__;color:#7a7d78;vertical-align:bottom;padding-bottom:4.5mm}

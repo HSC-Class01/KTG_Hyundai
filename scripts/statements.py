@@ -304,7 +304,7 @@ def dupont_body(lens, years, L, v, vd):
 
 
 def price_fig(ctx, first_year, fid="fig-price10"):
-    """월말 주가 꺾은선 (first_year 1월부터). 대시보드와 기업분석 보고서가 함께 씁니다."""
+    """월별 주가 꺾은선 (first_year 1월부터). 대시보드와 기업분석 보고서가 함께 씁니다."""
     monthly = ctx.get("prices") or {}
     months = [m for m in sorted(monthly) if int(m[:4]) >= first_year]
     if len(months) < 12:
@@ -318,7 +318,7 @@ def price_fig(ctx, first_year, fid="fig-price10"):
         m = months[i]
         return f"{m[:4]}년 {int(m[4:])}월 말", [["종가", f"{monthly[m]:,.0f}원", "var(--data)"]], None
 
-    return d.figure(fid, "월말 주가", f"{months[0][:4]}.{months[0][4:]}~{months[-1][:4]}.{months[-1][4:]} · 보통주 종가 · 단위: 천 원",
+    return d.figure(fid, "월별 주가", f"{months[0][:4]}.{months[0][4:]}~{months[-1][:4]}.{months[-1][4:]} · 달마다 마지막 거래일의 보통주 종가 · 단위: 천 원",
                     d.line_chart(xl, vals, color="--data", ticks_fmt=d.tick_plain, tips=ptips,
                                  labels={hi_i: f"{vals[hi_i]:.1f}", lo_i: f"{vals[lo_i]:.1f}", len(vals) - 1: f"{vals[-1]:.1f}"},
                                  height=200, dots=False), wide=True,
