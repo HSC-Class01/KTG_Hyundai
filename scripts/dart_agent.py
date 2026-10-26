@@ -551,7 +551,8 @@ def make_context(cfg, today, status, log=None):
     except Exception as exc:    # 사업보고서 본문을 못 읽어도 재무제표 화면은 만듭니다
         fresh = {"errors": [f"사업보고서 본문 읽기 실패: {type(exc).__name__}"]}
     # 원문 ZIP이 없는 환경(제출용 ZIP을 푼 폴더 등)에서는 지난번에 저장한 값을 그대로 씁니다
-    ctx["business"] = {k: (fresh.get(k) if fresh.get(k) else saved.get(k)) for k in set(fresh) | set(saved)}
+    keys = list(fresh) + [k for k in saved if k not in fresh]     # 순서를 고정해야 매달 JSON 차이가 생기지 않습니다
+    ctx["business"] = {k: (fresh.get(k) if fresh.get(k) else saved.get(k)) for k in keys}
     ctx["business"]["errors"] = fresh.get("errors") or []
     ctx["analysis"] = analysis.analyze(ctx)
     return ctx, periods
