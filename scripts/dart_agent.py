@@ -523,6 +523,7 @@ def write_csv(path, rows):
 def make_context(cfg, today, status, log=None):
     """저장된 원자료로 표·비율·자동 해설을 계산합니다. 파일은 쓰지 않습니다. 반환: (ctx, periods)"""
     import analysis
+    import business
     import legacy
     import notes
     periods, latest = assemble(cfg)
@@ -544,6 +545,14 @@ def make_context(cfg, today, status, log=None):
     base = next((r for r in annual if peer_years and r["year"] == max(peer_years)), annual[-1] if annual else None)
     ctx["own_market"] = peer_market(cfg["stock_code"], base["year"], base["values"])["market"] if base else {}
     ctx["prices"] = prices.get("monthly", {})
+    saved = load_json(DATA / "business.json", {}) or {}
+    try:
+        fresh = business.collect(latest, RAW)
+    except Exception as exc:    # 사업보고서 본문을 못 읽어도 재무제표 화면은 만듭니다
+        fresh = {"errors": [f"사업보고서 본문 읽기 실패: {type(exc).__name__}"]}
+    # 원문 ZIP이 없는 환경(제출용 ZIP을 푼 폴더 등)에서는 지난번에 저장한 값을 그대로 씁니다
+    ctx["business"] = {k: (fresh.get(k) if fresh.get(k) else saved.get(k)) for k in set(fresh) | set(saved)}
+    ctx["business"]["errors"] = fresh.get("errors") or []
     ctx["analysis"] = analysis.analyze(ctx)
     return ctx, periods
 
@@ -571,6 +580,7 @@ def step_summary(ctx):
 
 def build(cfg, today, status, online):
     import dashboard
+    import statements
     log = load_json(DATA / "update_log.json", [])
     if online:
         log.insert(0, {"checked_at": status["checked_at"], "new_filings": status.get("new_filings", []),
@@ -586,7 +596,9 @@ def build(cfg, today, status, online):
     write_json(DATA / "dashboard.json", {"company": cfg["name"], "checked_at": status["checked_at"],
                                          "annual": annual, "half_year": halves, "quarterly": quarters,
                                          "peers": peers, "analysis": ctx["analysis"]["plain"]})
+    write_json(DATA / "business.json", {k: v for k, v in ctx["business"].items()})
     write_text(ROOT / "dashboard" / "index.html", dashboard.render(ctx))
+    write_text(ROOT / "statements" / "index.html", statements.render(ctx))
     dashboard.update_readme(ROOT / "README.md", ctx)
     write_json(DATA / "status.json", {**status, "periods": len(periods), "annual_rows": len(annual),
                                       "half_year_rows": len(halves), "quarter_rows": len(quarters)})
@@ -601,7 +613,7 @@ def build_site():
     if site.exists():
         shutil.rmtree(site)
     site.mkdir()
-    for name in ("index.html", "projects", "reports", "dashboard", "assets"):
+    for name in ("index.html", "projects", "reports", "dashboard", "statements", "assets"):
         src = ROOT / name
         if src.is_dir():
             shutil.copytree(src, site / name)
@@ -609,7 +621,7 @@ def build_site():
             shutil.copy2(src, site / name)
     out = site / "data" / "financials"
     out.mkdir(parents=True)
-    for name in ("annual.csv", "half_year.csv", "quarterly.csv", "dashboard.json", "status.json", "filings.json"):
+    for name in ("annual.csv", "half_year.csv", "quarterly.csv", "dashboard.json", "business.json", "status.json", "filings.json"):
         if (DATA / name).exists():
             shutil.copy2(DATA / name, out / name)
     (site / ".nojekyll").write_text("")

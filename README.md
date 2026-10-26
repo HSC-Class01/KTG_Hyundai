@@ -1,10 +1,13 @@
 [![🔗 대시보드 바로가기](assets/dashboard-badge.svg)](https://hsc-class01.github.io/KTG_Hyundai/dashboard/)
 
+[📊 재무제표 10년 시각화 바로가기](https://hsc-class01.github.io/KTG_Hyundai/statements/)
+
 # 현대건설 OpenDART 재무분석 에이전트
 
-금융감독원 전자공시(DART)에서 **현대건설(000720)** 의 사업·반기·분기보고서를 **2010년부터** 모아 주요 재무 숫자와 재무비율을 계산하고, 그래프·표·해설이 있는 대시보드를 만드는 Python 에이전트입니다. GitHub Actions가 **매월 1일 오전 9시 17분(한국시간)** 에 자동으로 실행해, 새 보고서가 나왔으면 숫자와 분석 문장까지 다시 씁니다.
+금융감독원 전자공시(DART)에서 **현대건설(000720)** 의 사업·반기·분기보고서를 **2010년부터** 모아 주요 재무 숫자와 재무비율을 계산하고, 사업보고서 본문의 수주잔고·PF 보증까지 읽어 **두 가지 시각화**(사업보고서 대시보드, 재무제표 10년 시각화)를 만드는 Python 에이전트입니다. GitHub Actions가 **매월 1일 오전 9시 17분(한국시간)** 에 자동으로 실행해, 새 보고서가 나왔으면 숫자와 분석 문장까지 다시 씁니다.
 
-- **대시보드**: https://hsc-class01.github.io/KTG_Hyundai/dashboard/
+- **사업보고서 대시보드**: https://hsc-class01.github.io/KTG_Hyundai/dashboard/
+- **재무제표 10년 시각화**: https://hsc-class01.github.io/KTG_Hyundai/statements/
 - **자동 실행 기록**: [Actions → Financial Agent](https://github.com/HSC-Class01/KTG_Hyundai/actions/workflows/financial-agent.yml)
 - **데이터(CSV)**: [연간](data/financials/annual.csv) · [반기](data/financials/half_year.csv) · [분기](data/financials/quarterly.csv)
 
@@ -30,6 +33,8 @@
 
 지표 조합 신호(가이드 5장): **순이익 증가 + CFO 감소**(순이익 −0.77 → 0.56조, 영업현금흐름 −0.12 → −0.75조 원)
 
+사업보고서 본문(수주·PF): 수주잔고 **104.9조 원**(2026년 6월 말, 매출 3.6년 치) · 2025년 신규 수주 25.5조 원(현대건설 단독) · PF 보증 14.2조 원(자본의 1.3배)
+
 **가장 최근 분기: 2026년 2분기(4~6월)**
 
 - 2026년 2분기(4~6월) 매출은 **6.84조 원**으로 1년 전보다 11.4% 줄었고, 직전 분기보다 8.9% 늘었습니다.
@@ -51,8 +56,17 @@
 
 주가 수준(2026.10 월말 종가 100,900원): 시가총액 11.34조 원 · PER 25.3배 · PBR 1.22배 · EV/EBITDA 16.3배
 
-전체 표: [연간](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#annual) · [반기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#half) · [분기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#quarter) · CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv)
+전체 표: [연간](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#annual) · [반기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#half) · [분기](https://hsc-class01.github.io/KTG_Hyundai/dashboard/#quarter) · [재무제표 10년 시각화](https://hsc-class01.github.io/KTG_Hyundai/statements/) · CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv)
 <!-- AUTO:SUMMARY:END -->
+
+## 두 가지 시각화
+
+| 화면 | 무엇을 보여 주나 |
+|---|---|
+| [사업보고서 대시보드](https://hsc-class01.github.io/KTG_Hyundai/dashboard/) | ① **건설사가 돈을 버는 구조**(수주 → 공사·매출 → 이익 → 현금 → 재무 체력 → 다음 수주 자격, 발주 방식, 사업부문별 매출) → ② **그래서 사업보고서가 중요한 이유**(단계마다 보고서의 어느 장을 봐야 하는지) → ③ **수주·PF**(수주잔고, 일감 연수, 신규 수주, 진행 중인 큰 공사, PF 보증) → ④ **10가지 관점 요약** → 교수님 가이드 6단계 → Annual·Half-year·Quarterly 표 → 동종업계 |
+| [재무제표 10년 시각화](https://hsc-class01.github.io/KTG_Hyundai/statements/) | 최근 10개 사업연도의 **손익계산서·재무상태표·현금흐름표**를 그림으로 보고, 재무비율 **10가지 관점**(수익성·안정성·유동성·활동성·성장성·생산성·현금흐름·시장가치·종합 분석(듀퐁 분해·10년 위치표)·주가 반영)을 관점마다 차트와 자동 해설로 풉니다 |
+
+두 화면 모두 매월 1일 에이전트가 새 공시로 다시 만듭니다. 판정은 절대 기준이 아니라 ‘최근 10년 안에서 지금이 어디쯤인가’입니다.
 
 ## 에이전트가 하는 일
 
@@ -60,9 +74,11 @@
 flowchart LR
   A["OpenDART<br/>공시 목록 · 재무제표 API · 공시 원문"] --> B["dart_agent.py<br/>매월 1일 자동 실행"]
   B --> C["data/financials/raw<br/>원문 ZIP · API 응답 보관"]
-  C --> D["financials.py · legacy.py<br/>연간 · 반기 · 분기 정리<br/>재무비율 계산"]
-  D --> E["analysis.py<br/>판정 · 해설 문장"]
-  E --> F["dashboard/index.html<br/>README 요약 · CSV"]
+  C --> D["financials.py · legacy.py · notes.py<br/>연간 · 반기 · 분기 정리<br/>재무비율 계산"]
+  C --> G["business.py<br/>사업보고서 본문: 수주잔고 · PF 보증<br/>사업부문 · 직원 · 주요 공사"]
+  D --> E["analysis.py · lenses.py<br/>판정 · 10가지 관점 · 해설 문장"]
+  G --> E
+  E --> F["dashboard/ · statements/<br/>README 요약 · CSV · JSON"]
 ```
 
 1. **수집**: 2010년 이후 정기보고서(사업·반기·1분기·3분기) 목록을 받고, 기간마다 가장 최근 보고서(정정 공시 포함)를 고릅니다. 보고서 원문 ZIP과 재무제표 API 응답을 `data/financials/raw/`에 보관합니다.
@@ -82,6 +98,7 @@ flowchart LR
 | 5장 지표 조합으로 읽는 실무 신호 | ‘조합 신호’ 섹션: 최근 두 해로 8가지 조합 자동 점검 |
 | 6장 실무 검토 체크리스트 | ‘자료’ 섹션의 반영 표 |
 | 7장 해석 시 주의사항 | 0 이하 분모 제외, 적자 기간 PER 미계산, 건설업 지표(받을 돈·미청구공사·미리 받은 돈) 추가 |
+| 분석 관점: 수익성·안정성·유동성·활동성·성장성·생산성·현금흐름·시장가치·종합 분석·주가 반영 | 대시보드 ‘10가지 관점’ 카드, 재무제표 10년 시각화의 관점별 섹션 |
 
 ## 처음 설정하기 (API 키 입력)
 
@@ -117,6 +134,11 @@ flowchart LR
 | 2010~2015년 | 공시 원문(XML)에 들어 있는 XBRL 재무제표 표. 표 제목의 기간·단위로 열을 판단 |
 | 감가상각비·이자비용 (EBITDA·이자보상배율용) | 재무제표 본문에 없어 공시 원문의 연결재무제표 주석(현금흐름표 조정 항목)에서 읽음 |
 | 주가 · 주식수 (PER·PBR 등) | 월말 종가: 네이버 금융(실패하면 Yahoo Finance) · 발행주식수: OpenDART ‘주식의 총수 현황’(2015년부터) |
+| 수주잔고 (2014년부터) | 사업보고서 Ⅱ장 ‘수주상황’ 표의 회사별 국내·해외 계약잔액 합계. 앞뒤 보고서와 15% 넘게 어긋나는 값(표 범위가 다른 보고서)은 그래프에서 뺌 |
+| 신규 수주 | Ⅱ장 ‘지배회사 현황’ 문단의 수주실적(현대건설 단독) |
+| PF 보증 (2022년 말부터) | 연결 주석 ‘우발부채 및 약정사항’의 보증금액 기준 신용보강. 2023년 사업보고서부터 바뀐 공시 기준이라 그 이후만 씀 |
+| 사업부문별 매출 · 주요 공사 · 국내 건설시장 · 원자재 | 가장 최근 사업보고서(주요 공사는 가장 최근 정기보고서)의 Ⅱ장 표와 문단 |
+| 직원 수 · 1인 평균 급여 · 단독 매출 (생산성) | Ⅷ장 직원 현황, Ⅲ장 요약재무정보(별도) |
 
 - **원문 추출 정확도**: 2015~2016년 보고서는 API와 원문을 모두 읽어 같은 숫자가 나오는지 비교합니다(대시보드 ‘자료와 검증’에 결과 표시).
 - **Annual**: 1~12월 실적, 12월 말 재무상태 · **Half-year**: 상반기(1~6월)와 하반기(연간 − 상반기) · **Quarterly**: 각 분기 3개월 실적
@@ -134,12 +156,17 @@ scripts/legacy.py          2010~2015년 공시 원문 표에서 숫자 읽기
 scripts/analysis.py        판정 규칙과 자동 해설 문장
 scripts/notes.py           공시 주석에서 감가상각비·이자비용 읽기
 scripts/market.py          주가·주식수로 PER·PBR·EV/EBITDA 계산
-scripts/dashboard.py       대시보드 HTML과 README 자동 구역
+scripts/business.py        사업보고서 본문에서 수주잔고·PF 보증·사업부문·직원·주요 공사 읽기
+scripts/lenses.py          재무비율 10가지 관점의 정의와 10년 위치 판정
+scripts/dashboard.py       사업보고서 대시보드 HTML과 README 자동 구역
+scripts/report_view.py     대시보드 앞부분: 돈 버는 구조 · 사업보고서가 중요한 이유 · 수주·PF · 10가지 관점
+scripts/statements.py      재무제표 10년 시각화 HTML
 scripts/package_project.py 제출용 ZIP 만들기
 config/company.json        분석 대상 회사, 동종기업, 시공능력평가 순위
-data/financials/           annual.csv · half_year.csv · quarterly.csv · dashboard.json · status.json
+data/financials/           annual.csv · half_year.csv · quarterly.csv · dashboard.json · business.json · status.json
 data/financials/raw/       공시 원문 ZIP, 재무제표 API 응답(JSON), market/ 주가·주식수
-dashboard/index.html       자동 생성되는 대시보드
+dashboard/index.html       자동 생성되는 사업보고서 대시보드
+statements/index.html      자동 생성되는 재무제표 10년 시각화
 tests/test_financials.py   계산 규칙 테스트
 .github/workflows/financial-agent.yml  매월 1일 자동 실행
 ```
@@ -162,7 +189,7 @@ python scripts/dart_agent.py
 python -m unittest discover -s tests -v
 
 # 결과 보기
-python -m http.server 8000      # → http://localhost:8000/dashboard/
+python -m http.server 8000      # → http://localhost:8000/dashboard/ · http://localhost:8000/statements/
 ```
 
 ## 제출용 ZIP (숨김 파일 없음)

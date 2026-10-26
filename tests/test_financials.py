@@ -14,12 +14,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import analysis  # noqa: E402
+import business  # noqa: E402
 import dart_agent as agent  # noqa: E402
 import dashboard  # noqa: E402
 import financials as fin  # noqa: E402
 import legacy  # noqa: E402
+import lenses  # noqa: E402
 import market  # noqa: E402
 import notes  # noqa: E402
+import statements  # noqa: E402
 
 
 def api_row(sj, account_id, name, **amounts):
@@ -285,6 +288,128 @@ class RealData(unittest.TestCase):
             self.assertIn("| 단계 | 판정 | 한 줄 답 |", text)
             self.assertIn("시평 순위", text)
             self.assertFalse(dashboard.update_readme(readme, self.ctx))   # 두 번째는 바뀌는 것이 없음
+
+
+    def test_business_report_numbers(self):
+        """사업보고서 본문에서 읽은 숫자(수주잔고·PF 보증·신규 수주·직원·사업부문)가 공시 문장과 맞는지."""
+        if self.ctx["archives"] < self.ctx["filing_count"]:
+            self.skipTest("공시 원문 ZIP을 아직 다 받지 않았습니다(첫 실행 전)")
+        biz = self.ctx["business"]
+        self.assertFalse(biz.get("errors"))
+        backlog = {r["period"]: r for r in biz["backlog"]}
+        # 보고서가 직접 적은 연결기준 수주잔고와 회사별 합계는 내부거래만큼(1% 안팎)만 다릅니다
+        for period in ("2024.12", "2025.12"):
+            r = backlog[period]
+            self.assertIsNotNone(r["consolidated"])
+            self.assertLess(abs(r["total"] - r["consolidated"]) / r["consolidated"], 0.01)
+            split = (r["domestic"] or 0) + (r["overseas"] or 0)    # 국내·해외 구분이 없는 작은 회사 표만큼만 모자랄 수 있음
+            self.assertLessEqual(split, r["total"])
+            self.assertGreater(split / r["total"], 0.98)
+        self.assertEqual(backlog["2025.12"]["consolidated"], 95_038_562 * 1_000_000)
+        self.assertTrue(backlog["2021.12"].get("flag"))          # 앞뒤 보고서와 범위가 다른 값은 표시
+        self.assertEqual(biz["pf"]["2025.12"]["amount"], 13_940_533 * 1_000_000)
+        self.assertEqual(biz["pf"]["2022.12"]["amount"], 9_567_709 * 1_000_000)   # 다음 해 보고서의 전기말
+        self.assertEqual(biz["orders"]["2025"]["total"], 25_515_100_000_000)
+        self.assertEqual(biz["orders"]["2025"]["domestic"] + biz["orders"]["2025"]["overseas"], 25_515_100_000_000)
+        self.assertEqual(biz["employees"]["2025"]["count"], 6900)
+        seg = biz["segments"]
+        rev = next(r for r in self.ctx["annual"] if r["year"] == seg["year"])["values"]["revenue"]
+        self.assertEqual(seg["total"][0], rev)                    # 사업부문 표 합계 = 연결 매출액
+        parts = sum((x["domestic"] or [0])[0] + (x["overseas"] or [0])[0] for x in seg["rows"])
+        self.assertEqual(parts + seg["internal"][0], seg["total"][0])
+        self.assertGreaterEqual(len(biz["projects"]["rows"]), 5)
+        for pj in biz["projects"]["rows"]:
+            self.assertLessEqual(pj["done"], pj["contract"] * 1.05)
+
+    def test_dashboard_starts_with_business_structure(self):
+        page = dashboard.render(self.ctx)
+        order = [page.index(f'id="{x}"') for x in ("structure", "why", "orders", "lenses", "summary")]
+        self.assertEqual(order, sorted(order))       # 돈 버는 구조 → 사업보고서 → 수주·PF → 10가지 관점 → 6단계
+        for anchor in ('id="fig-backlog"', 'id="fig-pf"', 'id="fig-projects"', 'id="fig-segments"', 'href="../statements/"'):
+            self.assertIn(anchor, page)
+
+    def test_statements_page_renders(self):
+        page = statements.render(self.ctx)
+        for lens in lenses.LENSES:
+            self.assertIn(f'id="{lens["id"]}"', page)
+        for anchor in ('id="is"', 'id="bs"', 'id="cf"', 'id="all"', 'class="table-scroll heat"', 'id="fig-roe"'):
+            self.assertIn(anchor, page)
+        self.assertNotIn("None", page.split("<script>")[0].replace("NoneType", ""))
+
+    def test_dupont_identity(self):
+        L = {x["id"]: x for x in lenses.build(self.ctx)}["dupont"]
+        m = {x["key"]: x["values"] for x in L["metrics_data"]}
+        checked = 0
+        for roe, nm, at, lev in zip(m["roe_pct"], m["net_margin_pct"], m["asset_turnover_x"], m["leverage_x"]):
+            if None in (roe, nm, at, lev):
+                continue
+            self.assertAlmostEqual(nm * at * lev, roe, places=6)
+            checked += 1
+        self.assertGreaterEqual(checked, 8)
+
+
+class BusinessParsing(unittest.TestCase):
+    """사업보고서 본문 읽기 규칙 (작은 예시 문서)."""
+
+    def test_korean_amount(self):
+        self.assertEqual(business.korean_amount("25조 5,151억원"), 25_515_100_000_000)
+        self.assertEqual(business.korean_amount("12조 8천억원"), 12_800_000_000_000)
+        self.assertEqual(business.korean_amount("4.9조원"), 4_900_000_000_000)
+        self.assertEqual(business.korean_amount("8조 733억원"), 8_073_300_000_000)
+        self.assertEqual(business.korean_amount("9,000억원"), 900_000_000_000)
+        self.assertIsNone(business.korean_amount("약 3년"))
+
+    def table(self, rows):
+        trs = "".join("<TR>" + "".join(f"<TD>{c}</TD>" for c in r) + "</TR>" for r in rows)
+        return f"<TABLE>{trs}</TABLE>"
+
+    def test_backlog_sums_company_tables_and_reads_consolidated_sentence(self):
+        head = ["구분", "공사명", "발주처", "공사착공일", "완공예정일", "기본도급액", "완성공사액", "계약잔액"]
+        a = self.table([head, ["국내", "A현장", "갑", "2024-01-01", "2027-01-01", "1,000", "400", "600"],
+                        ["국내합계", "1,000", "400", "600"], ["해외", "B현장", "을", "2023-01-01", "2028-01-01", "2,000", "500", "1,500"],
+                        ["해외합계", "2,000", "500", "1,500"]])
+        b = self.table([head, ["국내", "C현장", "병", "2025-01-01", "2026-12-31", "300", "100", "200"], ["국내/해외 합계", "300", "100", "200"]])
+        xml = (f"<P>4. 매출 및 수주상황</P><P>다. 수주상황</P><P>1) 현대건설</P><P>(단위 : 백만원)</P>{a}"
+               f"<P>2) 현대엔지니어링</P>{b}<P>연결기준 계약잔액은 2,250백만원입니다.</P><TITLE>5. 위험관리 및 파생거래</TITLE>")
+        got = business.parse_backlog(xml)
+        self.assertEqual(got["total"], 2_300 * 1_000_000)
+        self.assertEqual(got["domestic"], 600 * 1_000_000)
+        self.assertEqual(got["overseas"], 1_500 * 1_000_000)
+        self.assertEqual(got["consolidated"], 2_250 * 1_000_000)
+        self.assertEqual([c["name"] for c in got["companies"]], ["현대건설", "현대엔지니어링"])
+        projects = business.parse_projects(xml)
+        self.assertEqual([p["name"] for p in projects], ["A현장", "B현장", "C현장"])
+        self.assertEqual(projects[1]["client"], "을")
+        self.assertEqual(projects[1]["remain"], 1_500 * 1_000_000)
+
+    def test_incomplete_company_table_leaves_total_empty(self):
+        head = ["구분", "공사명", "발주처", "공사착공일", "완공예정일", "기본도급액", "완성공사액", "계약잔액"]
+        a = self.table([head, ["국내합계", "1,000", "400", "600"]])
+        xml = f"<P>수주상황</P><P>(단위 : 백만원)</P>{a}<TITLE>5. 위험관리</TITLE>"
+        self.assertIsNone(business.parse_backlog(xml)["total"])
+
+    def test_pf_takes_consolidated_sentence(self):
+        xml = ("<P>회사는 PF(대출)과 관련하여 보증금액 기준 13,940,533백만원 (전기말 12,816,602백만원)의 신용보강을 제공</P>"
+               "<P>회사는 PF(대출)과 관련하여 보증금액 기준 12,843,503백만원 (전기말 11,000,000백만원)의 신용보강</P>")
+        self.assertEqual(business.parse_pf(xml), {"current": 13_940_533_000_000, "prior": 12_816_602_000_000})
+
+    def test_new_orders_sentences(self):
+        new = "<P>나. 지배회사 현황 [현대건설] 2025년 당사는 국내 20조 972억원, 해외 5조 4,179억원, 총 25조 5,151억원의 수주실적(별도기준)을 기록하였습니다.</P>"
+        got = business.parse_new_orders(new)
+        self.assertEqual((got["total"], got["domestic"], got["overseas"]), (25_515_100_000_000, 20_097_200_000_000, 5_417_900_000_000))
+        old = ("<P>◎ 현대건설 2012년 당사는 전년대비 33% 증가한 15조 6,227억원을 수주하며 개선된 실적을 기록하였습니다. "
+               "국내부문에서는 경기침체에 따라 전년대비 감소한 4조 8,374억원을 수주하였으나, 해외부문에서는 전년대비 2배 이상 증가한 "
+               "10조 7,853억원의 수주실적을 기록하였습니다.</P>")
+        got = business.parse_new_orders(old)
+        self.assertEqual(got["total"], 15_622_700_000_000)
+        self.assertEqual(got["domestic"] + got["overseas"], 15_622_700_000_000)
+
+    def test_employee_total_row(self):
+        xml = ("<P>직원 등 현황</P>" + self.table([["사업부문", "성별", "직원수", "평균근속연수", "연간급여 총액", "1인평균 급여액"],
+                                                 ["합 계", "4,624", "3", "2,272", "1", "6,900", "13.9", "810,669", "112", "-"]]))
+        got = business.parse_employees(xml)
+        self.assertEqual(got["count"], 6900)
+        self.assertEqual(got["avg_salary"], 112_000_000)
 
 
 class GuideRatios(unittest.TestCase):

@@ -1642,6 +1642,101 @@ footer{margin-top:64px;background:var(--forest);color:var(--forest-ink)}
 footer .wrap{padding-block:22px;font-size:.82rem;display:flex;flex-wrap:wrap;gap:6px 18px}
 footer a{color:var(--forest-soft)}
 
+/* 돈 버는 구조: 순서 카드 */
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,152px),1fr));gap:12px}
+.fl{position:relative;background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:14px 14px 12px;display:flex;flex-direction:column;min-width:0}
+.fl-top{display:flex;align-items:center;gap:8px;margin:0;font-size:.98rem}
+.fl-no{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--data);color:var(--sheet);font:700 .72rem/1 var(--font-mono)}
+.fl-what{margin:2px 0 0;font-size:.78rem;color:var(--muted)}
+.fl-v{margin:10px 0 0;font-size:1.55rem;font-weight:700;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums}
+.fl-basis{margin:2px 0 0;font-size:.74rem;color:var(--muted)}
+.fl-sub{margin:6px 0 0;font-size:.8rem;color:var(--ink-2)}
+.fl-sub b{color:var(--ink)}
+.fl-gap{flex:1 0 10px}
+.fl-where{margin:0;padding-top:8px;border-top:1px dashed var(--line);font:600 .72rem/1.45 var(--font-sans);color:var(--data)}
+@media (min-width:1180px){.flow{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .fl:not(:last-child)::after{content:"";position:absolute;right:-11px;top:46px;width:8px;height:8px;border-top:2px solid var(--axis);border-right:2px solid var(--axis);transform:rotate(45deg)}}
+.flow-loop{margin:10px 0 0;font-size:.8rem;color:var(--muted)}
+.buyers{margin-top:12px}
+.buyer h3{margin-bottom:0}
+.buyer-who{margin:2px 0 8px;font-size:.8rem;font-weight:600;color:var(--data)}
+/* 국내 건설 시장 100% 막대 */
+.mk-bars{margin-top:12px;display:grid;gap:8px}
+.mk-row{display:grid;grid-template-columns:3.6em minmax(0,1fr);gap:10px;align-items:center;outline:none;border-radius:6px}
+.mk-row:focus-visible{box-shadow:0 0 0 2px var(--focus)}
+.mk-l{font-size:.78rem;color:var(--muted)}
+.mk-t{position:relative;height:32px}
+.mk-seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding-left:10px;font-style:normal;font-size:.8rem;font-weight:700;color:var(--ink);
+  background:color-mix(in srgb,var(--c) 26%,var(--sheet));border-left:4px solid var(--c);white-space:nowrap;overflow:hidden}
+.mk-seg+.mk-seg{box-shadow:inset 2px 0 0 var(--sheet)}
+.mk-row:hover .mk-seg,.mk-row.on .mk-seg{background:color-mix(in srgb,var(--c) 38%,var(--sheet))}
+/* 가로 누적 막대 (사업부문·공사) */
+.hs{margin-top:12px;display:grid;gap:2px;font-variant-numeric:tabular-nums}
+.hs-row{display:grid;grid-template-columns:minmax(0,16em) minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:5px 6px;border-radius:6px;outline:none}
+.hs-row:hover,.hs-row.on{background:var(--hover)}
+.hs-row:focus-visible{box-shadow:inset 0 0 0 2px var(--focus)}
+.hs-l{min-width:0}
+.hs-l b{display:block;font-size:.84rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hs-meta{display:block;font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hs-t{position:relative;height:16px}
+.hs-seg{position:absolute;top:0;bottom:0;background:var(--c)}
+.hs-seg:first-child{border-radius:4px 0 0 4px}
+.hs-seg:last-child{border-radius:0 4px 4px 0}
+.hs-seg:only-child{border-radius:4px}
+.hs-seg.left{background:color-mix(in srgb,var(--c) 20%,var(--sheet));box-shadow:inset 0 0 0 1.5px var(--c)}
+.hs-seg+.hs-seg:not(.left){box-shadow:inset 2px 0 0 var(--sheet)}
+.hs-v{font-size:.78rem;font-weight:700;white-space:nowrap;text-align:right}
+.hs-unit{margin:8px 0 0;font-size:.72rem;color:var(--muted)}
+.sw.tint{background:color-mix(in srgb,var(--c) 20%,var(--sheet));border:1.5px solid var(--c)}
+@media (max-width:640px){.hs-row{grid-template-columns:minmax(0,1fr) auto}.hs-l{grid-column:1/-1}}
+/* 누적 세로 막대 · 3개 묶음 */
+.bar.stk{border-radius:0;box-shadow:inset 0 1px 0 var(--sheet)}
+.bar.stk.top{border-radius:4px 4px 0 0}
+.cc.k3 .slot{--bw:min(9px,24%)}
+.k3 .bar.j0{left:calc(50% - var(--bw) * 1.5 - 2px)}
+.k3 .bar.j1{left:calc(50% - var(--bw) / 2)}
+.k3 .bar.j2{left:calc(50% + var(--bw) / 2 + 2px)}
+.k3 .vl.j0{left:calc(50% - var(--bw) - 2px)}
+.k3 .vl.j1{left:50%}
+.k3 .vl.j2{left:calc(50% + var(--bw) + 2px)}
+/* 사업보고서가 중요한 이유 */
+.why-grid{align-items:start}
+.why-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px}
+.why-card{display:flex;flex-direction:column;gap:4px;position:relative}
+.why-card h3{margin:0;font-size:1rem}
+.why-no{margin:0;font:700 .7rem/1 var(--font-mono);color:var(--data);letter-spacing:.1em}
+.why-where{margin:2px 0 0;font:600 .76rem/1.5 var(--font-sans);color:var(--data)}
+.why-now{margin:6px 0 0;font-size:.95rem;font-weight:700;line-height:1.4}
+.why-read{margin:4px 0 0;font-size:.82rem;color:var(--ink-2);line-height:1.6}
+.why td,.why th{vertical-align:top}
+.why td.wrap{min-width:14em;max-width:30em;line-height:1.55}
+.why td.left:not(.wrap){min-width:12em;white-space:normal;font-weight:600}
+.why tbody th{white-space:nowrap}
+.report-what ul.plain li{margin:.5em 0}
+.cc.wb .slot{--bw:min(26px,40%)}
+.cc.k2.wb .slot{--bw:min(22px,34%)}
+.cc.k3.wb .slot{--bw:min(14px,26%)}
+.heat th small{margin-left:5px;font-weight:500;font-size:.7rem;color:var(--muted)}
+.heat td{text-align:center}
+.lens-now ul.plain{columns:2 300px;column-gap:28px}
+.lens-now li{break-inside:avoid}
+.chapters{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:3px}
+.chapters li{display:grid;grid-template-columns:3.4em minmax(0,1fr);gap:8px;padding:6px 10px;border-radius:6px;font-size:.82rem;color:var(--muted)}
+.chapters li.on{background:var(--hover);color:var(--ink-2)}
+.chapters li b{display:block;font-weight:600}
+.chapters li.on b{color:var(--ink)}
+.ch-no{font:600 .74rem/1.7 var(--font-mono)}
+.chapters li.on .ch-no{color:var(--data)}
+.ch-t span{font-size:.76rem}
+/* 10가지 관점 */
+.kpis.ten{grid-template-columns:repeat(auto-fit,minmax(min(100%,216px),1fr))}
+.lens .kpi-value{font-size:1.9rem}
+.more-link{margin:14px 0 0;font-weight:600}
+.cross{margin:20px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.cross a{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--forest-line);border-radius:999px;color:var(--forest-ink);text-decoration:none;font-weight:600;font-size:.86rem}
+.cross a:hover{background:rgba(255,255,255,.08)}
+.cross a[aria-current]{background:var(--forest-soft);color:var(--forest);border-color:var(--forest-soft)}
+
 /* 툴팁 */
 .tip{position:fixed;z-index:60;pointer-events:none;min-width:160px;max-width:min(290px,calc(100vw - 16px));padding:10px 12px;border-radius:8px;
   background:var(--tip-bg);color:var(--tip-fg);box-shadow:0 10px 28px rgba(0,0,0,.22);font-size:.8rem;line-height:1.45}
@@ -1724,6 +1819,18 @@ FONT_LINK = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
              '&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">')
 
 
+CROSS = [("dashboard", "../dashboard/", "사업보고서 대시보드"), ("statements", "../statements/", "재무제표 10년 시각화")]
+
+
+def cross_links(current):
+    links = []
+    for key, href, name in CROSS:
+        here = ' aria-current="page"' if key == current else ""
+        arrow = "" if key == current else " →"
+        links.append(f'<a href="{href}"{here}>{esc(name)}{arrow}</a>')
+    return f'<nav class="cross" aria-label="시각화 화면">{"".join(links)}</nav>'
+
+
 def page(title, description, body):
     return ("<!doctype html>\n<html lang=\"ko\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">"
@@ -1735,7 +1842,7 @@ def page(title, description, body):
 def render(ctx):
     cfg = ctx["company"]
     a = ctx["analysis"]
-    title = f"{cfg['name']} 재무 대시보드"
+    title = f"{cfg['name']} 사업보고서 대시보드"
     if not a.get("verdicts"):
         body = (f'<header class="masthead"><div class="wrap"><h1>{esc(title)}</h1>'
                 f'<p class="thesis">아직 수집된 숫자가 없습니다. GitHub Actions에서 에이전트를 실행하면 채워집니다.</p></div></header>')
@@ -1757,8 +1864,10 @@ def render(ctx):
     block_html = "".join(f"<div><dt>{esc(k)}</dt><dd>{esc(val)}</dd></div>" for k, val in block)
     header = (f'<header class="masthead"><div class="wrap"><p class="eyebrow">HSC-Class01 · OpenDART Financial Agent'
               f'<span class="live"><i aria-hidden="true"></i>매월 1일 자동 업데이트</span></p>'
-              f'<h1>{esc(title)}</h1><p class="thesis">{rich(a["headline"])}</p><dl class="titleblock">{block_html}</dl></div></header>')
-    toc = [("summary", "요약"), ("now", "이번 달"), ("growth", "1 매출 성장"), ("profit", "2 이익률"), ("cash", "3 현금흐름"),
+              f'<h1>{esc(title)}</h1><p class="thesis">{rich(a["headline"])}</p><dl class="titleblock">{block_html}</dl>'
+              f'{cross_links("dashboard")}</div></header>')
+    toc = [("structure", "돈 버는 구조"), ("why", "왜 사업보고서인가"), ("orders", "수주·PF"), ("lenses", "10가지 관점"), None,
+           ("summary", "6단계 요약"), ("now", "이번 달"), ("growth", "1 매출 성장"), ("profit", "2 이익률"), ("cash", "3 현금흐름"),
            ("debt", "4 차입 부담"), ("returns", "5 투자수익률"), ("valuation", "6 주가 수준"), ("combos", "조합 신호"),
            ("story", "흐름"), None, ("annual", "Annual"), ("half", "Half-year"), ("quarter", "Quarterly"), ("notes", "자료"),
            ("peers", "Peer firms")]
@@ -1766,6 +1875,16 @@ def render(ctx):
                        for t in toc)
 
     sections = []
+    import report_view as rv
+    for build_section in (rv.structure_section, rv.why_section, rv.orders_section):
+        try:
+            sections.append(build_section(ctx, v))
+        except Exception as exc:      # 사업보고서 본문 자료가 낯선 형식이어도 나머지 화면은 만듭니다
+            print(f"::warning::{build_section.__name__} 생략: {type(exc).__name__}: {exc}")
+    try:
+        sections.append(rv.lenses_section(ctx))
+    except Exception as exc:
+        print(f"::warning::lenses_section 생략: {type(exc).__name__}: {exc}")
     sections.append(f'<section id="summary" aria-labelledby="h-summary">'
                     + section_head("summary", "Summary", "한눈에 보기", "여섯 단계로 본 현대건설",
                                    "교수님 자료(재무제표·재무비율 실무가이드)의 분석 순서대로 매출 성장 → 이익률 → 현금흐름 → 차입 부담 → "
@@ -1864,6 +1983,7 @@ def readme_summary(ctx):
     hits = [c for c in a.get("combos", []) if c["hit"]]
     if hits:
         lines += ["", "지표 조합 신호(가이드 5장): " + ", ".join(f"**{c['name']}**({c['detail']})" for c in hits)]
+    lines += readme_business(ctx)
     lq = a.get("latest")
     if lq:
         lines += ["", f"**{lq['title']}**", ""] + [f"- {x}" for x in lq["lines"]]
@@ -1887,10 +2007,35 @@ def readme_summary(ctx):
         lines += ["", f"주가 수준({val['as_of']} 월말 종가 {val['price']:,.0f}원): 시가총액 {an.jo(val['market_cap'], 2)}조 원"
                   + (f" · PER {val['per_x']:.1f}배" if val.get("per_x") else "") + (f" · PBR {val['pbr_x']:.2f}배" if val.get("pbr_x") else "")
                   + (f" · EV/EBITDA {val['ev_ebitda_x']:.1f}배" if val.get("ev_ebitda_x") else "")]
-    lines += ["", f"전체 표: [연간]({ctx['company']['dashboard_url']}#annual) · [반기]({ctx['company']['dashboard_url']}#half) · "
-              f"[분기]({ctx['company']['dashboard_url']}#quarter) · CSV: [annual](data/financials/annual.csv) · "
-              f"[half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv)"]
+    url = ctx['company']['dashboard_url']
+    lines += ["", f"전체 표: [연간]({url}#annual) · [반기]({url}#half) · "
+              f"[분기]({url}#quarter) · [재무제표 10년 시각화]({url.replace('/dashboard/', '/statements/')}) · "
+              f"CSV: [annual](data/financials/annual.csv) · [half_year](data/financials/half_year.csv) · [quarterly](data/financials/quarterly.csv)"]
     return "\n".join(lines)
+
+
+def readme_business(ctx):
+    """README 요약에 넣을 사업보고서 본문 숫자(수주잔고·신규 수주·PF 보증) 한 줄."""
+    try:
+        import report_view as rv
+        lb = rv.latest_backlog(ctx)
+        orders = (ctx.get("business") or {}).get("orders") or {}
+        pf = rv.pf_rows(ctx)
+        parts = []
+        if lb:
+            yrs = rv.years_of_work(ctx, lb)
+            parts.append(f"수주잔고 **{an.jo(lb['total'])}조 원**({rv.period_label(lb['period'])}" + (f", 매출 {yrs:.1f}년 치" if yrs else "") + ")")
+        if orders:
+            oy = max(orders)
+            parts.append(f"{oy}년 신규 수주 {an.jo(orders[oy]['total'])}조 원(현대건설 단독)")
+        if pf:
+            p, r = pf[-1]
+            b = rv.balance_at(ctx, int(p[:4]), int(p[5:]))
+            parts.append(f"PF 보증 {an.jo(r['amount'])}조 원" + (f"(자본의 {r['amount'] / b['values']['equity']:.1f}배)" if b else ""))
+        return ["", "사업보고서 본문(수주·PF): " + " · ".join(parts)] if parts else []
+    except Exception as exc:     # README 요약은 이 줄 없이도 만듭니다
+        print(f"::warning::README 수주·PF 줄 생략: {type(exc).__name__}: {exc}")
+        return []
 
 
 def readme_peers(ctx):
