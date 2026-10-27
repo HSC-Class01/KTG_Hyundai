@@ -1950,6 +1950,24 @@ def readme_business(ctx):
         return []
 
 
+def _readme_peer_business(value):
+    """긴 업종명을 자연스러운 지점에서 줄바꿈해 README 표의 가로 폭을 줄입니다."""
+    lines = []
+    for raw_group in str(value or "").split(","):
+        group = raw_group.strip()
+        if not group:
+            continue
+        terms = [part.strip() for part in group.split("·")]
+        if len(group) > 10 and len(terms) > 1:
+            # 긴 항목은 가운데에서 나눠 각 줄이 과도하게 길어지지 않도록 합니다.
+            midpoint = (len(terms) + 1) // 2 if len(terms) > 2 else 1
+            lines.append("·".join(terms[:midpoint]))
+            lines.append("·".join(terms[midpoint:]))
+        else:
+            lines.append(group)
+    return "<br>".join(esc(line) for line in lines)
+
+
 def readme_peers(ctx):
     rows_, year = peer_table_rows(ctx)
     rank = ctx["company"].get("rank", {})
@@ -1959,7 +1977,8 @@ def readme_peers(ctx):
         if p.get("receipt"):
             name = f"[{name}]({DART_VIEW}{p['receipt']})"
         vals = [fmt_cell(peer_value(p, k, w), t) for k, _, t, w in PEER_COLS if k not in ("net_income", "net_margin_pct")]
-        rows.append([f"{p['rank']}위" if p.get("rank") else "–", name, p["stock_code"], p.get("business", ""),
+        rows.append([f"{p['rank']}위" if p.get("rank") else "–", name, p["stock_code"],
+                     _readme_peer_business(p.get("business", "")),
                      f"{p['year']}년" if p.get("year") else "수집 전", *vals])
     head = ["시평 순위", "회사", "종목코드", "주요 사업", "기준"] + [
         f"{lab}({PEER_UNITS[t]})" for k, lab, t, _ in PEER_COLS if k not in ("net_income", "net_margin_pct")]
