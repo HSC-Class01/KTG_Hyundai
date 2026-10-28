@@ -10,9 +10,13 @@
 3. 종속기업 주석: 비지배지분이 중요한 종속기업(현대엔지니어링)의 매출·영업손익·순손익·영업활동현금흐름 (내부거래 제거 전)
 4. Ⅱ장 연구개발활동: 현대건설 연구개발비용 합계와 매출 대비 비율
 5. 배당에 관한 사항: 보통주 주당 현금배당금, 현금배당금 총액, 연결 배당성향
-6. 시장위험(환율 10% · 이자율 1%p 변동 시 세전이익 영향): 회사가 직접 계산해 공시한 민감도
+6. 시장위험 민감도(회사가 직접 계산해 공시한 숫자): 변동이자율 차입금 이자율 1% 변동 → 법인세비용차감전순이익,
+   환율 10% 변동 → 결제되지 않은 외화 화폐성 항목 환산이 순자산(법인세효과 차감전)에 주는 영향
 7. 국내 건설수주·해외건설 수주 통계, 주요 원자재 가격 (business.py의 읽기 함수를 해마다 적용)
 8. 현금흐름표 세부(재무제표 API): 설비투자 · 지분투자 · 자산 처분 · 예금 운용 · 대여금 · 차입과 상환 · 배당 · 리스
+9. 영업으로부터 창출된 현금(현금흐름표 주석): 당기순이익 + 비현금 조정 + 운전자본 변동 — 영업활동현금흐름을 나누어 보는 근거
+10. 매출채권 연령분석(연체 기간별 잔액)과 매출채권 구성(공사미수금 · 분양미수금) — 돈이 어디에 묶였는지 보는 근거
+11. 수익의 구분(도급공사 · 분양공사 · 자산관리 등, 2024년 보고서부터) — 도급 사업과 자체(분양) 사업의 비중
 
 안전장치
 - 연결/별도는 표 바로 앞의 장 제목(TITLE: '3. 연결재무제표 주석', '5. 재무제표 주석')으로 가립니다. 정정신고서 맨 앞의
@@ -520,7 +524,8 @@ def parse_dividends(doc, report_year):
 
 
 def parse_sensitivity(doc):
-    """{'fx': {'pct': 10, 'impact': 원}, 'rate': {'pct': 1, 'impact': 원}} — 원화 환율 상승·이자율 상승 시 세전이익 영향."""
+    """{'fx': {'pct': 10, 'impact': 원, 'measure', 'scope'}, 'rate': {...}} — 원화 환율 10% 상승(원화 약세)·이자율 1% 상승 시 영향.
+    이자율은 '법인세비용차감전순이익', 환율은 '순자산(법인세효과 차감전)'에 대한 영향입니다(measure에 원문 문구)."""
     out = {}
     for pos, table in doc.tables:
         if doc.scope(pos) == "separate":
@@ -552,7 +557,15 @@ def parse_sensitivity(doc):
             impact = sum(v[0] for v in firsts if v) if any(firsts) else None
         if impact is None:
             continue
-        out[kind] = {"pct": pct, "impact": impact * unit}
+        # 회사가 무엇에 대한 영향으로 계산했는지 원문 문구 그대로: 이자율 → '법인세비용차감전순이익', 환율 → '순자산(법인세효과 차감전)'
+        measure = re.findall(r"변동이\s*([^.]{2,30}?)에\s*미치는\s*영향", tail)
+        scope = None
+        if kind == "rate" and re.search(r"변동이자율\s*차입금", tail):
+            scope = "변동이자율 차입금"
+        elif kind == "fx" and re.search(r"외화표시\s*화폐성\s*항목", head):
+            scope = "결제되지 않은 외화표시 화폐성 항목"
+        out[kind] = {"pct": pct, "impact": impact * unit, "measure": re.sub(r"\s+", " ", measure[-1]).strip() if measure else None,
+                     "scope": scope}
         if len(out) == 2:
             break
     return out
@@ -698,8 +711,341 @@ def cf_detail(records):
 
 
 # ---------------------------------------------------------------------------
-# 모으기
+# 9. 영업으로부터 창출된 현금 (현금흐름표 주석): 당기순이익 + 비현금 조정 + 운전자본 변동
 # ---------------------------------------------------------------------------
+# 조정(현금이 오가지 않은 손익) 분류 — 위에서부터 먼저 맞는 규칙
+CG_ADJ = (
+    ("provisions", r"충당부채.*(전입|환입)|충당부채의?(전입|환입)"),
+    ("fx", r"외환|외화환산|해외사업환산|파생상품"),
+    ("impairment", r"대손|손상|재고자산평가"),          # '대손상각비'가 감가상각으로 가지 않게 먼저 봅니다
+    ("dep_amort", r"감가상각|상각비"),
+    ("interest_tax", r"^이자(비용|수익)|^법인세비용|^배당(금)?수익"),
+    ("employee", r"퇴직급여|장기종업원급여"),
+)
+# 운전자본(영업활동으로 인한 자산·부채의 변동) 분류
+CG_WC = (
+    ("receivables", r"^매출채권"),
+    ("contract_assets", r"미청구공사|계약자산"),
+    ("inventories", r"재고자산"),
+    ("payables", r"^매입채무"),
+    ("contract_liabilities", r"초과청구공사|계약부채"),
+    ("advances", r"선수금"),
+    ("provisions_used", r"^충당부채|퇴직급여채무|장기종업원급여충당부채|퇴직금"),
+    ("other_receivables", r"기타채권|장기성기타채권|장기미수채권"),
+    ("other_payables", r"기타채무|장기성기타채무"),
+)
+CG_ADJ_KEYS = tuple(k for k, _ in CG_ADJ) + ("other_adj",)
+CG_WC_KEYS = tuple(k for k, _ in CG_WC) + ("other_wc",)
+
+
+def _cg_key(label, rules, rest):
+    for key, pat in rules:
+        if re.search(pat, label):
+            return key
+    return rest
+
+
+def _cg_rows(rows):
+    """표의 줄 → [(라벨, [숫자…], 묶음 머리글)] — XBRL 서식은 첫 칸이 묶음 이름이고 둘째 칸이 항목 이름입니다."""
+    out = []
+    for r in rows:
+        if not r:
+            continue
+        group = bz.label(r[0])
+        if len(r) >= 3 and r[1].strip() and num(r[1]) is None and not re.fullmatch(r"[\s\d,().\-△▲−–]+", r[1]):
+            label, vals = bz.label(r[1]), numbers(r[2:])
+        else:
+            label, vals, group = group, numbers(r[1:]), ""
+        out.append((label, vals, group))
+    return out
+
+
+WC_HEAD = r"자산\s*부채의?\s*변동|자산부채의변동"
+CG_TOTAL = r"(영업에서|영업으로부터|영업활동에서|영업활동으로부터)창출된현금"
+
+
+def _cg_classify(items, col):
+    """[(라벨, 숫자들, 묶음)] → 영업으로부터 창출된 현금의 구성 (col: 0 = 당기, 1 = 전기 열).
+    lines: 원문 줄 그대로 [(라벨, 분류, 금액)] — 분류가 맞는지 사람이 다시 볼 수 있게 남깁니다."""
+    got = {"net_income": None, "adj": {k: 0 for k in CG_ADJ_KEYS}, "wc": {k: 0 for k in CG_WC_KEYS},
+           "adj_total": None, "wc_total": None, "cash_generated": None, "lines": []}
+    section = None
+    for label, vals, group in items:
+        val = vals[col] if len(vals) > col else None
+        if re.search(r"^(이자|배당금|법인세)(의)?(수취|지급|납부|환급|수입)", label):
+            break                                   # 현금흐름표 본문이면 여기부터는 영업으로부터 창출된 현금 밖입니다
+        if re.search(CG_TOTAL, label):
+            got["cash_generated"] = val
+            continue
+        if label.startswith("당기순이익") and not re.search(r"조정|가감", label):
+            got["net_income"] = val
+            continue
+        for head in (group, label):
+            if re.search(WC_HEAD, head):
+                section = "wc"
+            elif head and section != "wc" and re.search(r"^조정|가감", head):
+                section = "adj"
+        if val is None:
+            continue
+        # 묶음 합계 줄: '당기순이익조정을 위한 가감 257,894' · '영업활동으로 인한 자산 부채의 변동 588,…' · '소 계'
+        if not group and (re.search(r"가감$|" + WC_HEAD + r"$", label) or re.search(r"소계$|^합계$", label)):
+            got["wc_total" if section == "wc" else "adj_total"] = val
+            continue
+        if re.search(r"소계$", label):
+            got["wc_total" if section == "wc" else "adj_total"] = val
+            continue
+        if section == "wc":
+            key = _cg_key(label, CG_WC, "other_wc")
+            got["wc"][key] += val
+            got["lines"].append((label, "wc." + key, val))
+        elif section == "adj":
+            key = _cg_key(label, CG_ADJ, "other_adj")
+            got["adj"][key] += val
+            got["lines"].append((label, "adj." + key, val))
+    return got
+
+
+def _cg_check(got):
+    """당기순이익 + 조정 합 + 운전자본 합 − 영업으로부터 창출된 현금 (0이어야 맞게 읽은 것)."""
+    parts = [got.get("net_income"), sum(got["adj"].values()), sum(got["wc"].values())]
+    if None in parts or got.get("cash_generated") is None:
+        return None
+    return sum(parts) - got["cash_generated"]
+
+
+def _label_table(table_xml):
+    """'(단위 : 백만원)'·'당기'·'영업활동현금흐름'처럼 숫자 칸이 없는 작은 머리글 표인지."""
+    rows = bz.table_rows(table_xml)
+    return len(rows) <= 4 and not any(numbers(r) for r in rows)
+
+
+def _prev_table(doc, idx):
+    """표 idx 앞의 '진짜' 표(숫자 칸이 있는 표)의 번호. 없으면 -1."""
+    j = idx - 1
+    while j >= 0 and _label_table(doc.tables[j][1]):
+        j -= 1
+    return j
+
+
+def _lead(doc, idx, chars=500):
+    """표 idx 바로 앞의 글자 — 앞의 '진짜' 표가 끝난 곳부터. 단위·당기/전기만 적힌 작은 표는 건너뛰되 그 글자는 포함합니다."""
+    j = _prev_table(doc, idx)
+    start = doc.tables[j][0] + len(doc.tables[j][1]) if j >= 0 else 0
+    pos = doc.tables[idx][0]
+    return legacy._text(doc.xml[max(start, pos - chars * 8):pos])[-chars:]
+
+
+def parse_cash_generated(doc):
+    """{period: {...}} — 연결 현금흐름표 주석의 '영업으로부터(영업에서) 창출된 현금' 표.
+    당기순이익 + 조정(현금이 오가지 않은 손익) + 영업활동으로 인한 자산·부채의 변동 = 영업으로부터 창출된 현금.
+    2017년 사업보고서부터 이 한 표로 공시합니다(2016년 숫자는 2017년 보고서의 전기 열). 그 전 보고서는 조정 내역을
+    '가산'·'차감' 두 표로만 공시하고 운전자본 줄은 본문에만 있어 여기서는 읽지 않습니다.
+    합계 검사: 구성 합계가 표의 '영업으로부터 창출된 현금'과 다르면 gap에 차이를 남깁니다(쓰는 쪽에서 0이 아니면 버림)."""
+    out = {}
+    for idx, (pos, table) in enumerate(doc.tables):
+        if doc.scope(pos) != "consolidated":
+            continue
+        flat = legacy._text(table[:80000])
+        if not (re.search(r"당기순이익", flat) and re.search(r"창출된\s*현금", flat) and re.search(r"자산\s*[ㆍ·]?\s*부채의?\s*변동", flat)):
+            continue
+        lead = _lead(doc, idx)
+        if re.search(r"제\s*\d+\s*기", lead):          # 재무제표 본문(현금흐름표)은 주석이 아님
+            continue
+        unit = unit_of(lead[-200:]) or unit_of(flat[:300])
+        if not unit:
+            continue
+        items = _cg_rows(bz.table_rows(table))
+        two_cols = sum(1 for _, v, _ in items if len(v) >= 2) >= 3
+        periods = [("current", 0), ("prior", 1)] if two_cols else [(period_of(lead[-120:]) or "current", 0)]
+        for period, col in periods:
+            if period in out:
+                continue
+            got = _cg_classify(items, col)
+            if got["cash_generated"] is None or got["net_income"] is None:
+                continue
+            scaled = {}
+            for k, v in got.items():
+                if isinstance(v, dict):
+                    scaled[k] = {kk: vv * unit for kk, vv in v.items()}
+                elif k == "lines":
+                    scaled[k] = [(a, b, c * unit) for a, b, c in v]
+                else:
+                    scaled[k] = v * unit if v is not None else None
+            scaled["gap"] = _cg_check(scaled)
+            checks = []
+            if scaled["adj_total"] is not None:
+                checks.append(("adj", sum(scaled["adj"].values()) - scaled["adj_total"]))
+            if scaled["wc_total"] is not None:
+                checks.append(("wc", sum(scaled["wc"].values()) - scaled["wc_total"]))
+            scaled["subtotal_gaps"] = dict(checks)
+            out[period] = scaled
+    return out
+
+
+# ---------------------------------------------------------------------------
+# 10. 매출채권 연령분석 · 매출채권 구성(공사미수금 / 분양미수금) — 영업활동현금흐름이 왜 나빠졌는지 보는 근거
+# ---------------------------------------------------------------------------
+AGING_KEYS = ("b0", "b1", "b2", "b3")      # 표의 구간 순서 그대로: 연체되지 않음(3개월 이내) · 1년 이내 · 1~3년 · 3년 초과
+
+
+def _aging_from_values(vals):
+    """한 줄의 숫자 → 구간 4개 + 손상차손누계액(음수) + 장부금액. '구간 합 + 손상 = 장부금액'이 맞을 때만."""
+    neg = [i for i, v in enumerate(vals) if v < 0]
+    if len(vals) < 6 or len(neg) != 1:
+        return None
+    buckets, allowance, net = vals[:4], vals[neg[0]], vals[-1]
+    if sum(buckets) + allowance != net:
+        return None
+    return {"buckets": dict(zip(AGING_KEYS, buckets)), "allowance": allowance, "net": net}
+
+
+def parse_receivable_aging(doc):
+    """{period: {'buckets': {b0..b3}, 'allowance', 'net', 'labels'}} — 연결 매출채권 연령분석(원).
+    2022년 보고서까지: '구 분 | 당기말 | 전기말' 표에 '연체되지 않은 채권 · 1년 이하 · 1년 초과 3년 이하 · 3년 초과 · 대손충당금 · 합 계'.
+    2023년 보고서부터: 당기·전기 표가 따로 있고 한 줄에 구간 숫자가 이어집니다(구간 이름은 보고서마다 '현재'·'3개월 이내' 등으로 다름)."""
+    out = {}
+    matched = -2
+    for idx, (pos, table) in enumerate(doc.tables):
+        if doc.scope(pos) != "consolidated":
+            continue
+        lead = _lead(doc, idx, 400)
+        if not (re.search(r"매출채권의\s*연령분석|연체되거나\s*손상된\s*매출채권", lead)
+                or (_prev_table(doc, idx) == matched and re.search(r"전기", lead[-60:]))):
+            continue
+        matched = idx
+        rows = bz.table_rows(table)
+        unit = unit_of(lead[-200:]) or unit_of(legacy._text(table[:3000]))
+        if not unit or not rows:
+            continue
+        by_label = {bz.label(r[0]): numbers(r[1:]) for r in rows if r}
+        if "연체되지않은채권" in by_label:                     # 2022년 보고서까지의 서식
+            keys = ("연체되지않은채권", "1년이하", "1년초과3년이하", "3년초과")
+            if not all(k in by_label for k in keys) or "대손충당금" not in by_label:
+                continue
+            total = next((v for k, v in by_label.items() if k in ("합계", "계")), None)
+            for period, col in (("current", 0), ("prior", 1)):
+                try:
+                    vals = [by_label[k][col] for k in keys] + [by_label["대손충당금"][col], 0, total[col]]
+                except (IndexError, TypeError):
+                    continue
+                got = _aging_from_values([v for i, v in enumerate(vals) if i != 5])
+                if got and period not in out:
+                    out[period] = {**{k: (v * unit if isinstance(v, int) else {kk: vv * unit for kk, vv in v.items()})
+                                      for k, v in got.items()},
+                                   "labels": ["연체되지 않은 채권", "1년 이하", "1년 초과 3년 이하", "3년 초과"]}
+            continue
+        period = period_of(lead[-120:]) or "current"
+        if period in out:
+            continue
+        flat = [c for r in rows for c in r]
+        labels = [bz.label(c) for c in flat if re.search(r"^(현재|3개월이내|1년이내|3개월초과1년이내|1년초과3년이내|3년초과)$", bz.label(c))]
+        for r in rows:
+            got = _aging_from_values(numbers(r[1:]))
+            if got:
+                out[period] = {"buckets": {k: v * unit for k, v in got["buckets"].items()}, "allowance": got["allowance"] * unit,
+                               "net": got["net"] * unit, "labels": list(dict.fromkeys(labels))[:4]}
+                break
+    return out
+
+
+def parse_receivable_mix(doc):
+    """{period: {'construction': 총액, 'construction_allowance', 'sales': 총액, 'sales_allowance'}} — 연결 매출채권 중
+    공사미수금(도급공사 대금 중 청구한 것)과 분양미수금(자체·분양 사업의 분양대금)의 총장부금액과 대손충당금(원). 장기공사미수금은 뺍니다."""
+    out = {}
+    matched = -2
+    for idx, (pos, table) in enumerate(doc.tables):
+        if doc.scope(pos) != "consolidated":
+            continue
+        lead = _lead(doc, idx, 400)
+        if not (re.search(r"매출채권[^.]{0,60}(구성내역|의\s*공시)", lead)
+                or (_prev_table(doc, idx) == matched and re.search(r"전기", lead[-60:]))):
+            continue
+        matched = idx
+        rows = bz.table_rows(table)
+        unit = unit_of(lead[-200:]) or unit_of(legacy._text(table[:3000]))
+        if not unit:
+            continue
+        flat_head = " ".join(bz.label(c) for r in rows[:2] for c in r)
+        two_col = "당기말" in flat_head and "전기말" in flat_head
+        found = {}
+        for i, r in enumerate(rows):
+            cells = [bz.label(c) for c in r]
+            name = next((c for c in cells[:2] if c in ("공사미수금", "분양미수금")), None)
+            if not name or name in found:
+                continue
+            vals = numbers(r[1:])
+            if two_col:
+                nxt = rows[i + 1] if i + 1 < len(rows) else []
+                allow = numbers(nxt[1:]) if nxt and bz.label(nxt[0]) == "대손충당금" else []
+                if len(vals) >= 2:
+                    found[name] = [(vals[0], allow[0] if len(allow) > 0 else 0), (vals[1], allow[1] if len(allow) > 1 else 0)]
+            elif vals:
+                neg = [v for v in vals[1:] if v < 0]
+                found[name] = [(vals[0], neg[0] if neg else 0)]
+        if "공사미수금" not in found:
+            continue
+        periods = [("current", 0), ("prior", 1)] if two_col else [(period_of(lead[-120:]) or "current", 0)]
+        for period, col in periods:
+            if period in out:
+                continue
+            try:
+                c, ca = found["공사미수금"][col]
+                sl, sa = found.get("분양미수금", [(0, 0), (0, 0)])[col]
+            except IndexError:
+                continue
+            out[period] = {"construction": c * unit, "construction_allowance": ca * unit, "sales": sl * unit, "sales_allowance": sa * unit}
+    return out
+
+
+REV_TYPES = {"도급공사수익": "contract", "분양공사수익": "sales", "자산관리수익": "asset_mgmt", "기타수익": "other", "임대료수익": "rent"}
+
+
+def parse_revenue_types(doc):
+    """{period: {'contract': 도급공사수익, 'sales': 분양공사수익, 'asset_mgmt', 'other', 'rent', 'total'}} — 연결 건설계약 주석
+    '고객과의 계약에서 생기는 수익의 구분'(2024년 사업보고서부터의 XBRL 표, 원). 기간에 걸쳐·한 시점에 인식한 금액을 더합니다.
+    표는 [이름] + (기간에 걸쳐: 다섯 칸 + 소계) + (한 시점에: 다섯 칸 + 소계) 순서이고, 칸 합 = 소계가 맞을 때만 씁니다."""
+    out = {}
+    matched = -2
+    for idx, (pos, table) in enumerate(doc.tables):
+        if doc.scope(pos) != "consolidated":
+            continue
+        lead = _lead(doc, idx, 300)
+        if not (re.search(r"고객과의\s*계약에서\s*생기는\s*수익의\s*구분", lead)
+                or (_prev_table(doc, idx) == matched and re.search(r"전기", lead[-60:]))):
+            continue
+        rows = bz.table_rows(table)
+        head = next((r for r in rows if sum(1 for c in r if bz.label(c) in REV_TYPES) >= 6), None)
+        if not head:
+            continue
+        matched = idx
+        labels = [REV_TYPES[bz.label(c)] for c in head if bz.label(c) in REV_TYPES]
+        n = len(labels) // 2
+        unit = unit_of(lead[-200:]) or unit_of(legacy._text(table[:2000]))
+        period = period_of(lead[-120:]) or "current"
+        if not unit or period in out or n < 4:
+            continue
+        got = {k: 0 for k in REV_TYPES.values()}
+        ok = True
+        for r in rows:
+            if not bz.label(r[0] if r else "").startswith(("고객과의계약에서생기는수익", "기타원천으로부터의수익")):
+                continue
+            cells = [num(c) if (c or "").strip() else 0 for c in r[1:]]
+            if len(cells) != 2 * (n + 1):
+                ok = False
+                break
+            for g in range(2):
+                part = cells[g * (n + 1): g * (n + 1) + n]
+                sub = cells[g * (n + 1) + n]
+                if None in part or sub is None or sum(part) != sub:
+                    ok = False
+                for k, x in zip(labels[g * n:(g + 1) * n], part):
+                    got[k] += (x or 0) * unit
+        if ok and any(got.values()):
+            got["total"] = sum(got.values())
+            out[period] = got
+    return out
+
+
 def _fill(series, year, value, basis, receipt):
     """그 해 보고서(own) 값이 있으면 다음 해 보고서(next) 값으로 덮어쓰지 않습니다."""
     if value is None:
@@ -716,7 +1062,8 @@ def collect(latest, raw_dir, api_revenue=None, load_json=None):
     """연간 사업보고서(12월)마다 위 1~8을 읽어 {항목: {연도: …}}로 돌려줍니다.
     api_revenue: {연도: 연결 매출(원)} — 부문 표 검증용. load_json: 현금흐름 세부를 읽을 함수(경로 → dict)."""
     out = {"segments": {}, "segments_separate": {}, "regions": {}, "estimates": {}, "estimates_separate": {}, "subsidiary": {},
-           "rnd": {}, "dividends": {}, "sensitivity": {}, "market": {}, "materials": {}, "mdna": {}, "cashflow": {}, "errors": []}
+           "rnd": {}, "dividends": {}, "sensitivity": {}, "market": {}, "materials": {}, "mdna": {}, "cashflow": {},
+           "cash_generated": {}, "receivable_aging": {}, "receivable_mix": {}, "revenue_types": {}, "errors": []}
     annual = sorted((y, f) for (y, m), f in latest.items() if m == 12 and y >= FIRST_YEAR)
     for y, f in annual:
         rcept = f["rcept_no"]
@@ -770,13 +1117,28 @@ def collect(latest, raw_dir, api_revenue=None, load_json=None):
                                 item["values"][str(y - i)] = v
         except Exception as exc:       # 한 보고서의 형식이 낯설어도 나머지 해는 계속 읽습니다
             out["errors"].append(f"{y}년 사업보고서 주석 읽기({rcept}): {type(exc).__name__}: {exc}")
-        if load_json:
-            doc_cf = load_json(raw_dir / f"{y}_11011_CFS.json") or {}
-            if doc_cf.get("status") == "000":
-                out["cashflow"][str(y)] = cf_detail(doc_cf.get("list", []))
+        try:
+            for period, v in parse_cash_generated(doc).items():
+                if v.get("gap") != 0 or any(v["subtotal_gaps"].values()):
+                    out["errors"].append(f"{y}년 영업으로부터 창출된 현금 주석({period}): 구성 합계가 표의 합계와 달라 쓰지 않음({rcept})")
+                    continue
+                _fill(out["cash_generated"], y if period == "current" else y - 1, v, "own" if period == "current" else "next", rcept)
+        except Exception as exc:
+            out["errors"].append(f"{y}년 영업으로부터 창출된 현금 주석 읽기({rcept}): {type(exc).__name__}: {exc}")
+        for key, fn in (("receivable_aging", parse_receivable_aging), ("receivable_mix", parse_receivable_mix),
+                        ("revenue_types", parse_revenue_types)):
+            try:
+                for period, v in fn(doc).items():
+                    _fill(out[key], y if period == "current" else y - 1, v, "own" if period == "current" else "next", rcept)
+            except Exception as exc:
+                out["errors"].append(f"{y}년 매출채권 주석 읽기({key}, {rcept}): {type(exc).__name__}: {exc}")
+        doc_cf = (load_json(raw_dir / f"{y}_11011_CFS.json") or {}) if load_json else {}
+        if doc_cf.get("status") == "000":
+            out["cashflow"][str(y)] = cf_detail(doc_cf.get("list", []))
     for item in out["materials"].values():
         item["values"] = dict(sorted(item["values"].items()))
     for k in ("segments", "segments_separate", "regions", "estimates", "estimates_separate", "subsidiary", "rnd", "dividends",
-              "sensitivity", "market", "mdna", "cashflow"):
+              "sensitivity", "market", "mdna", "cashflow", "cash_generated", "receivable_aging", "receivable_mix",
+              "revenue_types"):
         out[k] = dict(sorted(out[k].items()))
     return out

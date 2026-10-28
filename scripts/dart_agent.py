@@ -676,6 +676,14 @@ def step_summary(ctx):
              f"- 기업분석 보고서 PDF: {ctx.get('report_pdf', '–')}", ""]
     for f in status.get("new_filings", []):
         lines.append(f"  - {f['report_nm'].strip()} ({f['rcept_dt']})")
+    try:                                   # 조사 기준일 뒤 새 공시 → 보고서의 해석 문장은 사람이 다시 봐야 함
+        import company_report
+        review = company_report.review_status(ctx, company_report.load_research())
+    except Exception:
+        review = []
+    if review:
+        lines.append("- 기업분석 보고서: 조사 기준일 뒤에 새 공시(" + ", ".join(f"{n} {d[:4]}.{d[4:6]}.{d[6:]}" for n, d in review)
+                     + ")가 있어 숫자는 반영했지만 해석 문장·연표는 **추가 검토 필요**")
     if a.get("headline"):
         lines += ["", "**자동 해설**: " + a["plain"].get("headline", ""), ""]
     if status.get("errors"):

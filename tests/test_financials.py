@@ -224,7 +224,8 @@ class RealData(unittest.TestCase):
 
     def test_coverage_starts_in_first_year(self):
         if self.ctx["archives"] < self.ctx["filing_count"]:
-            self.skipTest("공시 원문 ZIP을 아직 다 받지 않았습니다(첫 실행 전)")
+            # 2010~2014년 숫자는 공시 원문 ZIP의 표에서 읽습니다. 제출 ZIP에는 용량 때문에 원문이 빠져 있어(첫 실행 때 다시 받음) 건너뜁니다.
+            self.skipTest("공시 원문 ZIP(data/financials/raw)이 없는 환경: 2010~2014년 숫자는 원문에서 읽습니다")
         annual = self.ctx["annual"]
         self.assertEqual(annual[0]["year"], self.cfg["first_year"])
         self.assertGreaterEqual(len(annual), 16)
@@ -272,7 +273,8 @@ class RealData(unittest.TestCase):
 
     def test_ebitda_and_interest_from_notes(self):
         if self.ctx["archives"] < self.ctx["filing_count"]:
-            self.skipTest("공시 원문 ZIP을 아직 다 받지 않았습니다(첫 실행 전)")
+            # 감가상각비·이자비용은 현금흐름표 주석(원문 ZIP)에서 읽습니다. 제출 ZIP에는 원문이 없어 건너뜁니다.
+            self.skipTest("공시 원문 ZIP(data/financials/raw)이 없는 환경: EBITDA의 감가상각비는 주석 원문에서 읽습니다")
         recent = [r for r in self.ctx["annual"] if r["year"] >= 2015]
         self.assertTrue(recent)
         for r in recent:
@@ -301,10 +303,11 @@ class RealData(unittest.TestCase):
 
 
     def test_business_report_numbers(self):
-        """사업보고서 본문에서 읽은 숫자(수주잔고·PF 보증·신규 수주·직원·사업부문)가 공시 문장과 맞는지."""
-        if self.ctx["archives"] < self.ctx["filing_count"]:
-            self.skipTest("공시 원문 ZIP을 아직 다 받지 않았습니다(첫 실행 전)")
+        """사업보고서 본문에서 읽은 숫자(수주잔고·PF 보증·신규 수주·직원·사업부문)가 공시 문장과 맞는지.
+        원문 ZIP이 없는 환경(제출 ZIP을 푼 폴더)에서는 저장된 data/financials/business.json으로 확인합니다."""
         biz = self.ctx["business"]
+        if not biz.get("backlog"):
+            self.skipTest("사업보고서 본문에서 읽은 숫자(business.json)가 아직 없습니다(첫 실행 전)")
         self.assertFalse(biz.get("errors"))
         backlog = {r["period"]: r for r in biz["backlog"]}
         # 보고서가 직접 적은 연결기준 수주잔고와 회사별 합계는 내부거래만큼(1% 안팎)만 다릅니다
@@ -385,9 +388,9 @@ class RealData(unittest.TestCase):
         self.assertEqual(html.count('class="yc"'), 10 + (1 if company_report.half_after(self.ctx, company_report.facts(self.ctx)) else 0))
 
     def test_research_identities(self):
-        """원인 분해는 회계 항등식이라 나머지 없이 맞아야 합니다."""
-        if self.ctx["archives"] < self.ctx["filing_count"]:
-            self.skipTest("공시 원문 ZIP을 아직 다 받지 않았습니다(첫 실행 전)")
+        """원인 분해는 회계 항등식이라 나머지 없이 맞아야 합니다. 원문 ZIP이 없으면 저장된 drivers.json으로 확인합니다."""
+        if not (self.ctx.get("drivers") or {}).get("segments"):
+            self.skipTest("사업보고서 주석에서 읽은 숫자(drivers.json)가 아직 없습니다(첫 실행 전)")
         R = research.build(self.ctx)
         self.assertEqual(len(R["years"]), 10)
         for b in R["bridges"] + [R["bridge_10y"]]:
@@ -410,6 +413,110 @@ class RealData(unittest.TestCase):
             rev = next(r for r in self.ctx["annual"] if r["year"] == y)["values"]["revenue"]
             self.assertLess(abs(seg["revenue"]["total"] - rev) / rev, 0.005, y)
         self.assertEqual(dr["errors"], 0 if isinstance(dr["errors"], int) else [])
+        # 원가 추정 변경 표: 총계약수익 변경 − 총계약원가 변경 = 당기 영향 + 미래 영향 (공시 표의 반올림 1백만원까지)
+        for e in R["estimates"]:
+            self.assertLessEqual(abs(e["identity_gap"]), 2_000_000, e["year"])
+        # 영업활동현금흐름 = 순이익 + 조정 + 운전자본(주석) + 이자·배당·법인세(본문) — 재무제표 값과 같아야 함
+        self.assertEqual([r["year"] for r in R["cash"]], R["years"])
+        for r in R["cash"]:
+            self.assertEqual(r["ni"] + r["adj_total"] + r["wc_total"], r["generated"], r["year"])
+            self.assertLessEqual(abs(r["check"]), 2_000_000, r["year"])
+            self.assertLessEqual(abs(r["ni_check"]), 2_000_000, r["year"])
+            for key in ("trade_receivables", "contract_assets"):
+                self.assertIn({"trade_receivables": "receivables", "contract_assets": "contract_assets"}[key], r["bs_delta"])
+        for y, a in dr["receivable_aging"].items():
+            self.assertEqual(sum(a["buckets"].values()) + a["allowance"], a["net"], y)
+        for y, t in dr["revenue_types"].items():
+            rev = next(r for r in self.ctx["annual"] if r["year"] == int(y))["values"]["revenue"]
+            self.assertLessEqual(abs(t["total"] - rev), 2_000_000, y)
+        # 회사가 공시한 민감도는 무엇에 대한 영향인지(원문 문구)와 범위를 함께 저장
+        last = dr["sensitivity"][max(dr["sensitivity"])]
+        self.assertEqual(last["rate"]["measure"], "법인세비용차감전순이익")
+        self.assertEqual(last["fx"]["measure"], "순자산(법인세효과 차감전)")
+        self.assertEqual(last["rate"]["scope"], "변동이자율 차입금")
+        # 분해 방법을 바꿔도 합은 같고, 결론(원가율 효과 > 규모 효과)도 같아야 함
+        for m in R["bridge_robust"]["methods"]:
+            w = m["whole"]
+            self.assertAlmostEqual(w["volume"] + w["cost"] + w["sga"] + w["other"], w["d_op"], delta=1)
+            self.assertAlmostEqual(sum(m["abs_share"].values()), 100, places=6)
+        for w in R["bridge_robust"]["windows"] + [m["whole"] for m in R["bridge_robust"]["methods"]]:
+            self.assertGreater(abs(w["cost"]), abs(w["volume"]))
+        # 검증표: '공시' 숫자는 접수번호가 있어야 하고, 접수번호는 보고서 이름·접수일로 찾아져야 함
+        for v in R["verification"]:
+            self.assertIn(v["kind"], ("공시", "계산"))
+            if v["kind"] == "공시":
+                self.assertTrue(v["receipts"], v["item"])
+            for rc_, name, filed in v["sources"]:
+                self.assertTrue(name and filed, (v["item"], rc_))
+
+    def test_report_numbers_are_consistent(self):
+        """표지 · 요약 · 본문 · 부록 검증표 · README가 같은 숫자를 같은 글자로 씁니다."""
+        import re
+        if not (self.ctx.get("drivers") or {}).get("cash_generated"):
+            self.skipTest("현금흐름표 주석에서 읽은 숫자(drivers.json)가 아직 없습니다")
+        html = company_report.build_html(self.ctx)
+        text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html.split("<body>")[1]))
+        F = company_report.facts(self.ctx)
+        R = F["R"]
+        rows = {v["item"]: company_report.shown_value(v) for v in R["verification"]}
+        cover = re.sub(r"<[^>]+>", " ", company_report.cover(self.ctx, F))
+        summary = re.sub(r"<[^>]+>", " ", company_report.summary_page(self.ctx, F))
+        ch6 = re.sub(r"<[^>]+>", " ", company_report.ch6_drivers(self.ctx, F))
+        est = rows["2024년 원가 추정 변경의 그해 세전손익 영향"].replace(" 원", "")
+        cfo_key = next(k for k in rows if k.endswith("영업활동현금흐름 합계"))
+        cfo = rows[cfo_key].replace(" 원", "")
+        wc = rows[next(k for k in rows if k.endswith("운전자본 변동 합계"))].replace(" 원", "")
+        for part, name in ((summary, "요약"), (ch6, "6장")):
+            for x in (est, cfo, wc):
+                self.assertIn(x, part, (name, x))
+        self.assertIn(est.replace("조", ""), cover)                  # 표지는 '−2.99 조 원'처럼 숫자와 단위를 나눠 씀
+        self.assertIn(cfo.replace("조", ""), cover)
+        for item, shown in rows.items():                              # 검증표의 표시값은 본문 어딘가에 같은 글자로 있어야 함
+            self.assertGreaterEqual(text.count(shown.replace(" 원", "")), 2 if item != "연간 영업이익 변화 크기 중 원가율 효과의 몫" else 1, item)
+        # 영업활동현금흐름 합계 = 대시보드·CSV의 연간 값(같은 ctx['annual'])을 더한 값
+        w = next(x for x in R["cash_windows"] if x["start"] == R["alloc_split"])
+        annual = {r["year"]: r["values"]["operating_cashflow"] for r in self.ctx["annual"]}
+        self.assertEqual(sum(annual[y] for y in range(w["start"], w["end"] + 1)), w["cfo"])
+        # README 자동 요약의 최근 영업활동현금흐름이 보고서와 같은 숫자
+        with tempfile.TemporaryDirectory() as tmp:
+            readme = Path(tmp) / "README.md"
+            readme.write_text("<!-- AUTO:SUMMARY:START -->\n<!-- AUTO:SUMMARY:END -->\n<!-- AUTO:PEERS:START -->\n<!-- AUTO:PEERS:END -->\n",
+                              encoding="utf-8")
+            dashboard.update_readme(readme, self.ctx)
+            readme_text = readme.read_text(encoding="utf-8")
+        last_cfo = company_report.jo(annual[F["yl"]])
+        self.assertIn(last_cfo.replace("조", ""), readme_text)
+        self.assertIn(last_cfo, text)
+
+    def test_review_flag_after_research_date(self):
+        """조사 기준일 뒤에 새 공시가 접수되면 표지·요약에 '추가 검토 필요'를 띄우고, 아니면 띄우지 않습니다."""
+        original = company_report.load_research
+        lf = self.ctx["latest_filing"]
+        before = f"{lf['rcept_dt'][:4]}-{lf['rcept_dt'][4:6]}-01"
+        try:
+            company_report.load_research = lambda path=None: {**original(), "as_of": before}
+            F = company_report.facts(self.ctx)
+            self.assertTrue(F["review"])
+            self.assertIn("추가 검토 필요", company_report.summary_page(self.ctx, F))
+            self.assertIn("추가 검토 필요", company_report.cover(self.ctx, F))
+            company_report.load_research = lambda path=None: {**original(), "as_of": "2099-12-31"}
+            F = company_report.facts(self.ctx)
+            self.assertEqual(F["review"], [])
+            self.assertNotIn("추가 검토 필요", company_report.summary_page(self.ctx, F))
+        finally:
+            company_report.load_research = original
+
+    def test_report_without_new_note_data(self):
+        """새로 읽는 주석(현금흐름표 주석·매출채권·수익의 구분)이 없는 해·환경에서도 보고서가 만들어지고 빈 값이 새지 않습니다."""
+        import copy
+        ctx = copy.copy(self.ctx)
+        ctx["drivers"] = {k: v for k, v in self.ctx["drivers"].items()
+                          if k not in ("cash_generated", "receivable_aging", "receivable_mix", "revenue_types")}
+        html = company_report.build_html(ctx)
+        body = html.split("<body>")[1]
+        self.assertNotIn("None", body)
+        self.assertIn('id="ch6"', body)
+        self.assertIn("영업활동현금흐름 합계", body)          # 요약은 합계 비교로 대신함
 
     def test_timeline_marks_unresearched_years(self):
         """조사하지 않은 연도는 '조사 전'으로 표시하고 숫자·회사 설명만 자동으로 채웁니다."""
@@ -711,6 +818,178 @@ class DriverParsing(unittest.TestCase):
         self.assertEqual(t["civil"]["cost_change"], 60)
 
 
+CONS = "<TITLE>III. 재무에 관한 사항</TITLE><TITLE>3. 연결재무제표 주석</TITLE>"
+CG_TWO_COL = (CONS + "<P>38. 현금흐름표 (1) 당기 및 전기 중 영업으로부터 창출된 현금은 다음과 같습니다. (단위:백만원)</P>"
+              "<TABLE><TR><TD>구 분</TD><TD>당 기</TD><TD>전 기</TD></TR>"
+              "<TR><TD>당기순이익</TD><TD>100</TD><TD>80</TD></TR><TR><TD>조정:</TD><TD></TD><TD></TD></TR>"
+              "<TR><TD>감가상각비</TD><TD>30</TD><TD>25</TD></TR><TR><TD>대손상각비</TD><TD>5</TD><TD>4</TD></TR>"
+              "<TR><TD>공사손실충당부채전입액</TD><TD>12</TD><TD>3</TD></TR><TR><TD>이자비용</TD><TD>8</TD><TD>7</TD></TR>"
+              "<TR><TD>이자수익</TD><TD>(6)</TD><TD>(5)</TD></TR><TR><TD>소 계</TD><TD>49</TD><TD>34</TD></TR>"
+              "<TR><TD>영업활동으로 인한 자산부채의 변동:</TD><TD></TD><TD></TD></TR>"
+              "<TR><TD>매출채권</TD><TD>(70)</TD><TD>10</TD></TR><TR><TD>미청구공사</TD><TD>(20)</TD><TD>(5)</TD></TR>"
+              "<TR><TD>매입채무</TD><TD>15</TD><TD>(3)</TD></TR><TR><TD>초과청구공사</TD><TD>4</TD><TD>2</TD></TR>"
+              "<TR><TD>충당부채</TD><TD>(6)</TD><TD>(1)</TD></TR><TR><TD>소 계</TD><TD>(77)</TD><TD>3</TD></TR>"
+              "<TR><TD>영업으로부터 창출된 현금흐름</TD><TD>72</TD><TD>117</TD></TR></TABLE>")
+CG_XBRL_ROWS = ("<TR><TD></TD><TD></TD><TD>공시금액</TD></TR><TR><TD>당기순이익(손실)</TD><TD>(50)</TD></TR>"
+                "<TR><TD>당기순이익조정을 위한 가감</TD><TD>70</TD></TR>"
+                "<TR><TD>당기순이익조정을 위한 가감</TD><TD>공사손실충당부채전입액</TD><TD>60</TD></TR>"
+                "<TR><TD>감가상각비</TD><TD>20</TD></TR><TR><TD>법인세비용</TD><TD>(10)</TD></TR>"
+                "<TR><TD>영업활동으로 인한 자산 부채의 변동</TD><TD>(5)</TD></TR>"
+                "<TR><TD>영업활동으로 인한 자산 부채의 변동</TD><TD>매출채권의 감소(증가)</TD><TD>(40)</TD></TR>"
+                "<TR><TD>계약부채의 증가(감소)</TD><TD>35</TD></TR><TR><TD>영업에서 창출된 현금흐름</TD><TD>15</TD></TR>")
+CG_XBRL = (CONS + "<P>34. 현금흐름표 (연결)</P><TABLE><TR><TD>영업활동현금흐름</TD></TR><TR><TD>당기</TD><TD>(단위 : 백만원)</TD></TR></TABLE>"
+           f"<TABLE>{CG_XBRL_ROWS}</TABLE>"
+           # 재무제표 본문(현금흐름표)에 같은 줄이 있어도 주석이 아니므로 읽지 않습니다
+           "<P>2-4. 연결 현금흐름표</P><TABLE><TR><TD>제 76 기 2025.01.01 부터 2025.12.31 까지</TD></TR><TR><TD>(단위 : 백만원)</TD></TR></TABLE>"
+           f"<TABLE>{CG_XBRL_ROWS.replace('(50)', '(51)')}</TABLE>")
+AGING_OLD = (CONS + "<P>(3) 당기말 및 전기말 현재 연결회사의 매출채권의 연령분석내역은 다음과 같습니다. (단위:백만원)</P>"
+             "<TABLE><TR><TD>구 분</TD><TD>당기말</TD><TD>전기말</TD></TR><TR><TD>연체되지 않은 채권</TD><TD>100</TD><TD>90</TD></TR>"
+             "<TR><TD>1년 이하</TD><TD>20</TD><TD>10</TD></TR><TR><TD>1년 초과 3년 이하</TD><TD>8</TD><TD>6</TD></TR>"
+             "<TR><TD>3년 초과</TD><TD>4</TD><TD>5</TD></TR><TR><TD>대손충당금</TD><TD>(7)</TD><TD>(6)</TD></TR>"
+             "<TR><TD>합 계</TD><TD>125</TD><TD>105</TD></TR></TABLE>")
+AGING_XBRL = (CONS + "<P>(3) 당기말 및 전기말 현재 연결회사의 매출채권의 연령분석내역은 다음과 같습니다. 연체되거나 손상된 매출채권에 대한 공시</P>"
+              "<TABLE><TR><TD>당기</TD><TD>(단위 : 백만원)</TD></TR></TABLE>"
+              "<TABLE><TR><TD>금융자산, 분류</TD><TD>매출채권</TD></TR><TR><TD></TD><TD>3개월 이내</TD><TD>3개월 초과 1년 이내</TD>"
+              "<TD>1년 초과 3년 이내</TD><TD>3년초과</TD></TR>"
+              "<TR><TD>금융자산</TD><TD>50</TD><TD>30</TD><TD>15</TD><TD>5</TD><TD>100</TD><TD>(10)</TD><TD>90</TD></TR></TABLE>"
+              "<TABLE><TR><TD>전기</TD><TD>(단위 : 백만원)</TD></TR></TABLE>"
+              "<TABLE><TR><TD>금융자산, 분류</TD><TD>매출채권</TD></TR>"
+              "<TR><TD>금융자산</TD><TD>40</TD><TD>20</TD><TD>10</TD><TD>2</TD><TD>(4)</TD><TD>68</TD></TR></TABLE>")
+MIX_OLD = (CONS + "<P>(1) 당기말 및 전기말 현재 연결회사의 매출채권, 기타채권, 미청구공사의 구성내역은 다음과 같습니다. (단위:백만원)</P>"
+           "<TABLE><TR><TD>연결재무상태표</TD><TD>계정과목</TD><TD>당기말</TD><TD>전기말</TD></TR>"
+           "<TR><TD>매출채권</TD><TD>분양미수금</TD><TD>30</TD><TD>20</TD></TR><TR><TD>대손충당금</TD><TD>(1)</TD><TD>(1)</TD></TR>"
+           "<TR><TD>공사미수금</TD><TD>200</TD><TD>150</TD></TR><TR><TD>대손충당금</TD><TD>(9)</TD><TD>(8)</TD></TR></TABLE>")
+REV_TYPES = (CONS + "<P>24. 건설계약 (연결) 고객과의 계약에서 생기는 수익의 구분에 대한 공시</P>"
+             "<TABLE><TR><TD>당기</TD><TD>(단위 : 백만원)</TD></TR></TABLE>"
+             "<TABLE><TR><TD></TD><TD>재화나 용역의 이전 시기</TD></TR><TR><TD></TD><TD>기간에 걸쳐</TD><TD>한 시점에</TD></TR>"
+             "<TR><TD></TD>" + "".join(f"<TD>{x}</TD>" for x in ("도급공사수익", "분양공사수익", "자산관리수익", "기타수익", "임대료수익") * 2) + "</TR>"
+             "<TR><TD>고객과의 계약에서 생기는 수익</TD>" + "".join(f"<TD>{x}</TD>" for x in ("900", "20", "40", "5", "", "965", "", "10", "", "1", "", "11")) + "</TR>"
+             "<TR><TD>기타 원천으로부터의 수익: 임대료 수익</TD>" + "".join(f"<TD>{x}</TD>" for x in ("", "", "", "", "3", "3", "", "", "", "", "1", "1")) + "</TR>"
+             "</TABLE>")
+SENS = (CONS + "<P>민감도분석은 결제되지 않은 외화표시 화폐성항목만을 포함합니다. 당기말 현재 각 외화에 대한 기능통화의 환율 10% 변동시 환율변동이 "
+        "순자산(법인세효과 차감전)에 미치는 영향은 다음과 같습니다. (단위:백만원)</P>"
+        "<TABLE><TR><TD>구분</TD><TD>10% 상승시</TD><TD>10% 하락시</TD></TR><TR><TD>USD</TD><TD>150</TD><TD>(150)</TD></TR>"
+        "<TR><TD>기타</TD><TD>(40)</TD><TD>40</TD></TR></TABLE>"
+        "<P>② 이자율위험 연결회사는 고정이자율과 변동이자율로 자금을 차입하고 있습니다. 당기말 현재 각 변동이자율 차입금에 대한 이자율이 1% 변동시 "
+        "이자율 변동이 법인세비용차감전순이익에 미치는 영향은 다음과 같습니다. (단위:백만원)</P>"
+        "<TABLE><TR><TD>구 분</TD><TD>1% 상승시</TD><TD>1% 하락시</TD></TR><TR><TD>단기차입금</TD><TD>(8)</TD><TD>8</TD></TR>"
+        "<TR><TD>장기차입금</TD><TD>(1)</TD><TD>1</TD></TR></TABLE>")
+M = 1_000_000
+
+
+class NoteTables(unittest.TestCase):
+    """현금흐름표 주석·매출채권 주석·수익의 구분·민감도 (작은 예시 문서, 서식별로)."""
+
+    def test_unit_words(self):
+        self.assertEqual([drivers.unit_of(x) for x in ("(단위:백만원)", "(단위 : 백만원)", "단위: 천원", "(단위 : 원)", "단위 없음")],
+                         [M, M, 1000, 1, None])
+
+    def test_cash_generated_two_columns(self):
+        got = drivers.parse_cash_generated(drivers.Doc(CG_TWO_COL))
+        cur, pri = got["current"], got["prior"]
+        self.assertEqual((cur["net_income"], cur["cash_generated"], cur["gap"]), (100 * M, 72 * M, 0))
+        self.assertEqual((pri["net_income"], pri["cash_generated"], pri["gap"]), (80 * M, 117 * M, 0))
+        self.assertEqual(cur["adj"]["impairment"], 5 * M)               # '대손상각비'는 감가상각이 아니라 손상
+        self.assertEqual(cur["adj"]["dep_amort"], 30 * M)
+        self.assertEqual(cur["adj"]["provisions"], 12 * M)
+        self.assertEqual(cur["adj"]["interest_tax"], 2 * M)
+        self.assertEqual((cur["wc"]["receivables"], cur["wc"]["contract_assets"], cur["wc"]["contract_liabilities"]), (-70 * M, -20 * M, 4 * M))
+        self.assertEqual(cur["wc"]["provisions_used"], -6 * M)
+        self.assertEqual(cur["subtotal_gaps"], {"adj": 0, "wc": 0})      # 표의 소계와도 맞음
+        self.assertEqual(pri["wc"]["receivables"], 10 * M)
+
+    def test_cash_generated_xbrl_and_statement_is_skipped(self):
+        got = drivers.parse_cash_generated(drivers.Doc(CG_XBRL))
+        self.assertEqual(list(got), ["current"])
+        cur = got["current"]
+        self.assertEqual((cur["net_income"], cur["adj_total"], cur["wc_total"], cur["cash_generated"], cur["gap"]),
+                         (-50 * M, 70 * M, -5 * M, 15 * M, 0))                 # 본문 표의 (51)이 아니라 주석의 (50)
+        self.assertEqual(cur["adj"]["provisions"], 60 * M)                    # 묶음 머리글 줄의 첫 항목도 읽음
+        self.assertEqual(cur["adj"]["interest_tax"], -10 * M)
+        self.assertEqual((cur["wc"]["receivables"], cur["wc"]["contract_liabilities"]), (-40 * M, 35 * M))
+
+    def test_cash_generated_rejects_tables_that_do_not_add_up(self):
+        broken = CG_TWO_COL.replace("<TD>매입채무</TD><TD>15</TD>", "<TD>매입채무</TD><TD>16</TD>")
+        cur = drivers.parse_cash_generated(drivers.Doc(broken))["current"]
+        self.assertEqual(cur["gap"], 1 * M)                                    # collect는 이런 해를 쓰지 않고 오류로 남김
+        self.assertEqual(cur["subtotal_gaps"]["wc"], 1 * M)
+
+    def test_receivable_aging_both_layouts(self):
+        old = drivers.parse_receivable_aging(drivers.Doc(AGING_OLD))
+        self.assertEqual(old["current"]["buckets"], {"b0": 100 * M, "b1": 20 * M, "b2": 8 * M, "b3": 4 * M})
+        self.assertEqual((old["current"]["allowance"], old["current"]["net"]), (-7 * M, 125 * M))
+        self.assertEqual(old["prior"]["net"], 105 * M)
+        new = drivers.parse_receivable_aging(drivers.Doc(AGING_XBRL))
+        self.assertEqual(new["current"]["buckets"], {"b0": 50 * M, "b1": 30 * M, "b2": 15 * M, "b3": 5 * M})   # 총액 칸(100)은 건너뜀
+        self.assertEqual((new["current"]["allowance"], new["current"]["net"]), (-10 * M, 90 * M))
+        self.assertEqual(new["current"]["labels"], ["3개월이내", "3개월초과1년이내", "1년초과3년이내", "3년초과"])
+        self.assertEqual(new["prior"]["net"], 68 * M)                           # '전기' 표는 앞 표에 이어서 읽음
+
+    def test_receivable_mix(self):
+        got = drivers.parse_receivable_mix(drivers.Doc(MIX_OLD))
+        self.assertEqual(got["current"], {"construction": 200 * M, "construction_allowance": -9 * M, "sales": 30 * M, "sales_allowance": -1 * M})
+        self.assertEqual(got["prior"]["construction"], 150 * M)
+
+    def test_revenue_types(self):
+        got = drivers.parse_revenue_types(drivers.Doc(REV_TYPES))["current"]
+        self.assertEqual((got["contract"], got["sales"], got["asset_mgmt"], got["other"], got["rent"], got["total"]),
+                         (900 * M, 30 * M, 40 * M, 6 * M, 4 * M, 980 * M))
+        bad = REV_TYPES.replace("<TD>965</TD>", "<TD>966</TD>")                  # 칸 합 ≠ 소계면 쓰지 않음
+        self.assertEqual(drivers.parse_revenue_types(drivers.Doc(bad)), {})
+
+    def test_sensitivity_keeps_measure_and_scope(self):
+        got = drivers.parse_sensitivity(drivers.Doc(SENS))
+        self.assertEqual(got["fx"], {"pct": 10.0, "impact": 110 * M, "measure": "순자산(법인세효과 차감전)", "scope": "결제되지 않은 외화표시 화폐성 항목"})
+        self.assertEqual(got["rate"], {"pct": 1.0, "impact": -9 * M, "measure": "법인세비용차감전순이익", "scope": "변동이자율 차입금"})
+
+
+class YearView:
+    def __init__(self, data):
+        self.data = data
+
+    def a(self, year, key):
+        return self.data.get(year, {}).get(key)
+
+
+class ResearchMath(unittest.TestCase):
+    """원인 분해 계산(가상의 숫자): 방법마다 합이 맞고, 평균 기준은 순서에 따라 달라지지 않습니다."""
+    V = YearView({1: {"revenue": 100.0, "cost_of_sales": 88.0, "sga": 6.0, "operating_profit": 6.0},
+                  2: {"revenue": 150.0, "cost_of_sales": 141.0, "sga": 6.6, "operating_profit": 2.4}})
+
+    def test_bridge_methods_add_up(self):
+        for method in ("start", "end", "mid"):
+            b = research.op_bridge(self.V, 1, 2, method)
+            self.assertAlmostEqual(b["volume"] + b["cost"] + b["sga"] + b["other"], -3.6, places=9)
+            self.assertAlmostEqual(b["other"], 0, places=9)
+        mid = research.op_bridge(self.V, 1, 2)
+        self.assertEqual(mid["method"], "mid")
+        self.assertAlmostEqual(mid["volume"], 50 * (0.06 + 0.016) / 2, places=9)
+        self.assertAlmostEqual(mid["cost"], -0.06 * 125, places=9)
+        back = research.op_bridge(self.V, 2, 1)                     # 순서를 바꾸면 정확히 부호만 바뀜
+        for k in ("volume", "cost", "sga"):
+            self.assertAlmostEqual(back[k], -mid[k], places=9)
+        start = research.op_bridge(self.V, 1, 2, "start")
+        self.assertAlmostEqual(start["volume"], 50 * 0.06, places=9)  # 앞 해 이익률 기준
+        shares = research.abs_shares([mid])
+        self.assertAlmostEqual(sum(shares.values()), 100, places=9)
+
+    def test_scale_ratio_split(self):
+        x = research._scale_ratio(10.0, 30.0, 100.0, 150.0)
+        self.assertAlmostEqual(x["scale"] + x["ratio"], x["d"], places=9)
+        self.assertAlmostEqual(x["scale"], 50 * 0.15, places=9)
+        self.assertIsNone(research._scale_ratio(None, 30.0, 100.0, 150.0))
+
+    def test_cash_window_and_missing_years(self):
+        ctx = {"annual": [], "drivers": {}}
+        self.assertEqual(research.cash_window([], 2022, 2025), None)
+        rows = [{"year": 2022, "ni": 1, "adj_total": 2, "wc_total": -4, "generated": -1, "interest_received": 1, "interest_paid": -1,
+                 "dividends_received": 0, "tax_paid": -1, "int_tax": -1, "cfo": -2, "cfo_calc": -2,
+                 "adj": {k: 0 for k, _ in research.CF_ADJ}, "wc": {k: 0 for k, _ in research.CF_WC}}]
+        w = research.cash_window(rows, 2021, 2025)
+        self.assertEqual((w["years"], w["cfo"], w["wc_total"]), (1, -2, -4))
+        self.assertTrue(ctx)
+
+
 class FakeView:
     def __init__(self, values):
         self.values = values
@@ -767,8 +1046,7 @@ class Packaging(unittest.TestCase):
         self.assertNotIn("\t", text)
 
     def test_zip_has_no_hidden_files(self):
-        if not (ROOT / ".github" / "workflows").is_dir():
-            self.skipTest("제출 ZIP을 푼 폴더에서는 .github이 없습니다")
+        """저장소(.github/workflows)와 제출 ZIP을 푼 폴더(workflows/) 어느 쪽에서도 숨김 파일 없는 ZIP을 만듭니다."""
         import package_project
         with tempfile.TemporaryDirectory() as tmp:
             out, names = package_project.build(Path(tmp) / "test.zip")
