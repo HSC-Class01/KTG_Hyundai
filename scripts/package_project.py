@@ -49,8 +49,9 @@ def build(output):
     hidden = [n for n in inside if is_hidden(Path(n))]
     if hidden:
         raise SystemExit(f"숨김 경로가 들어갔습니다: {hidden[:5]}")
-    required = ["README.md", "SETUP.md", "scripts/dart_agent.py", "config/company.json", "workflows/financial-agent.yml",
-                "dashboard/index.html", "statements/index.html", "data/financials/business.json",
+    required = ["README.md", "SETUP.md", "scripts/dart_agent.py", "scripts/drivers.py", "scripts/research.py", "scripts/company_report.py",
+                "config/company.json", "config/research.json", "workflows/financial-agent.yml",
+                "dashboard/index.html", "statements/index.html", "data/financials/business.json", "data/financials/drivers.json",
                 "reports/hyundai-company-report.pdf"]
     missing = [n for n in required if n not in inside]
     if missing:

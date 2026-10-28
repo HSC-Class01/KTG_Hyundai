@@ -1,0 +1,2459 @@
+{
+ "segments": {
+  "2014": {
+   "revenue": {
+    "building": 5663730000000,
+    "civil": 3436269000000,
+    "plant": 7780731000000,
+    "other": 804721000000,
+    "adjust": -408971000000,
+    "total": 17276480000000
+   },
+   "gross_profit": {
+    "building": 598873000000,
+    "civil": 239451000000,
+    "plant": 501839000000,
+    "other": 81675000000,
+    "adjust": -10264000000,
+    "total": 1411574000000
+   },
+   "basis": "next",
+   "receipt": "20170622000235"
+  },
+  "2015": {
+   "revenue": {
+    "building": 6573351000000,
+    "civil": 3572491000000,
+    "plant": 8465803000000,
+    "other": 894161000000,
+    "adjust": -272626000000,
+    "total": 19233180000000
+   },
+   "gross_profit": {
+    "building": 740102000000,
+    "civil": 150746000000,
+    "plant": 745725000000,
+    "other": 93178000000,
+    "adjust": -4709000000,
+    "total": 1725042000000
+   },
+   "basis": "own",
+   "receipt": "20170622000235"
+  },
+  "2016": {
+   "revenue": {
+    "building": 7401412000000,
+    "civil": 3293712000000,
+    "plant": 7521070000000,
+    "other": 929476000000,
+    "adjust": -320655000000,
+    "total": 18825015000000
+   },
+   "gross_profit": {
+    "building": 1114202000000,
+    "civil": 87515000000,
+    "plant": 661571000000,
+    "other": 74062000000,
+    "adjust": -7610000000,
+    "total": 1929740000000
+   },
+   "basis": "own",
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "revenue": {
+    "building": 8197939000000,
+    "civil": 2613388000000,
+    "plant": 5522872000000,
+    "other": 966861000000,
+    "adjust": -413970000000,
+    "total": 16887090000000
+   },
+   "gross_profit": {
+    "building": 1389544000000,
+    "civil": 33406000000,
+    "plant": 262392000000,
+    "other": 88822000000,
+    "adjust": 4800000000,
+    "total": 1778964000000
+   },
+   "basis": "own",
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "revenue": {
+    "building": 8073550000000,
+    "civil": 2570689000000,
+    "plant": 5498832000000,
+    "other": 1166583000000,
+    "adjust": -578760000000,
+    "total": 16730894000000
+   },
+   "gross_profit": {
+    "building": 1198617000000,
+    "civil": 24449000000,
+    "plant": 335217000000,
+    "other": 108836000000,
+    "adjust": -5972000000,
+    "total": 1661147000000
+   },
+   "basis": "own",
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "revenue": {
+    "building": 8257500000000,
+    "civil": 3159893000000,
+    "plant": 5086123000000,
+    "other": 1174260000000,
+    "adjust": -398984000000,
+    "total": 17278792000000
+   },
+   "gross_profit": {
+    "building": 1251508000000,
+    "civil": 103168000000,
+    "plant": 268646000000,
+    "other": 123271000000,
+    "adjust": -20688000000,
+    "total": 1725905000000
+   },
+   "basis": "own",
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "revenue": {
+    "building": 8924303000000,
+    "civil": 2364594000000,
+    "plant": 4796655000000,
+    "other": 1090092000000,
+    "adjust": -204785000000,
+    "total": 16970859000000
+   },
+   "gross_profit": {
+    "building": 1212022000000,
+    "civil": 8341000000,
+    "plant": 36835000000,
+    "other": 158511000000,
+    "adjust": -18846000000,
+    "total": 1396863000000
+   },
+   "basis": "own",
+   "receipt": "20210317001019"
+  },
+  "2021": {
+   "revenue": {
+    "building": 10317436000000,
+    "civil": 2123040000000,
+    "plant": 4630256000000,
+    "other": 1290891000000,
+    "adjust": -296089000000,
+    "total": 18065534000000
+   },
+   "gross_profit": {
+    "building": 1466719000000,
+    "civil": -44862000000,
+    "plant": 198290000000,
+    "other": 191428000000,
+    "adjust": -14340000000,
+    "total": 1797235000000
+   },
+   "basis": "own",
+   "receipt": "20220325001068"
+  },
+  "2022": {
+   "revenue": {
+    "building": 12501151000000,
+    "civil": 2414755000000,
+    "plant": 5419308000000,
+    "other": 1307373000000,
+    "adjust": -403505000000,
+    "total": 21239082000000
+   },
+   "gross_profit": {
+    "building": 1245824000000,
+    "civil": 31124000000,
+    "plant": 78571000000,
+    "other": 176397000000,
+    "adjust": -19168000000,
+    "total": 1512748000000
+   },
+   "basis": "own",
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "revenue": {
+    "building": 19700009000000,
+    "civil": 2739960000000,
+    "plant": 6569105000000,
+    "other": 1336275000000,
+    "adjust": -693992000000,
+    "total": 29651357000000
+   },
+   "gross_profit": {
+    "building": 1236037000000,
+    "civil": 100383000000,
+    "plant": 206935000000,
+    "other": 216756000000,
+    "adjust": -57303000000,
+    "total": 1702808000000
+   },
+   "basis": "own",
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "revenue": {
+    "building": 21999158000000,
+    "civil": 2780178000000,
+    "plant": 6830361000000,
+    "other": 1492524000000,
+    "adjust": -431953000000,
+    "total": 32670268000000
+   },
+   "gross_profit": {
+    "building": 931332000000,
+    "civil": 85005000000,
+    "plant": -1491432000000,
+    "other": 251067000000,
+    "adjust": 7095000000,
+    "total": -216933000000
+   },
+   "basis": "own",
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "revenue": {
+    "building": 17026292000000,
+    "civil": 2745835000000,
+    "plant": 9928163000000,
+    "other": 1627370000000,
+    "adjust": -264748000000,
+    "total": 31062912000000
+   },
+   "gross_profit": {
+    "building": 1295826000000,
+    "civil": 143876000000,
+    "plant": 272058000000,
+    "other": 246818000000,
+    "adjust": 21705000000,
+    "total": 1980283000000
+   },
+   "basis": "own",
+   "receipt": "20260318001395"
+  }
+ },
+ "segments_separate": {
+  "2016": {
+   "revenue": {
+    "building": 4598192000000,
+    "civil": 2470080000000,
+    "plant": 3904787000000,
+    "other": 68018000000,
+    "adjust": 0,
+    "total": 11041077000000
+   },
+   "gross_profit": {
+    "building": 710170000000,
+    "civil": 68756000000,
+    "plant": 232385000000,
+    "other": 18080000000,
+    "adjust": 0,
+    "total": 1029391000000
+   },
+   "basis": "next",
+   "receipt": "20180402004254"
+  },
+  "2017": {
+   "revenue": {
+    "building": 5358236000000,
+    "civil": 2372914000000,
+    "plant": 2390803000000,
+    "other": 46007000000,
+    "adjust": 0,
+    "total": 10167960000000
+   },
+   "gross_profit": {
+    "building": 927534000000,
+    "civil": 42053000000,
+    "plant": -149180000000,
+    "other": 10362000000,
+    "adjust": 0,
+    "total": 830769000000
+   },
+   "basis": "own",
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "revenue": {
+    "building": 5147449000000,
+    "civil": 2302137000000,
+    "plant": 2507727000000,
+    "other": 58820000000,
+    "adjust": 0,
+    "total": 10016133000000
+   },
+   "gross_profit": {
+    "building": 810579000000,
+    "civil": 17174000000,
+    "plant": -98001000000,
+    "other": 20533000000,
+    "adjust": 0,
+    "total": 750285000000
+   },
+   "basis": "own",
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "revenue": {
+    "building": 5384522000000,
+    "civil": 2564347000000,
+    "plant": 2010088000000,
+    "other": 55701000000,
+    "adjust": 0,
+    "total": 10014658000000
+   },
+   "gross_profit": {
+    "building": 879222000000,
+    "civil": 73190000000,
+    "plant": -96967000000,
+    "other": 25555000000,
+    "adjust": 0,
+    "total": 881000000000
+   },
+   "basis": "own",
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "revenue": {
+    "building": 5699998000000,
+    "civil": 1657243000000,
+    "plant": 1902074000000,
+    "other": 60798000000,
+    "adjust": 0,
+    "total": 9320113000000
+   },
+   "gross_profit": {
+    "building": 757656000000,
+    "civil": -39969000000,
+    "plant": 4711000000,
+    "other": 47142000000,
+    "adjust": 0,
+    "total": 769540000000
+   },
+   "basis": "own",
+   "receipt": "20210317001019"
+  },
+  "2021": {
+   "revenue": {
+    "building": 6694506000000,
+    "civil": 1302347000000,
+    "plant": 2073139000000,
+    "other": 176323000000,
+    "adjust": 0,
+    "total": 10246315000000
+   },
+   "gross_profit": {
+    "building": 889657000000,
+    "civil": -117492000000,
+    "plant": 83784000000,
+    "other": 71760000000,
+    "adjust": 0,
+    "total": 927709000000
+   },
+   "basis": "own",
+   "receipt": "20220325001068"
+  },
+  "2022": {
+   "revenue": {
+    "building": 7844060000000,
+    "civil": 1614321000000,
+    "plant": 2405206000000,
+    "other": 114892000000,
+    "adjust": 0,
+    "total": 11978479000000
+   },
+   "gross_profit": {
+    "building": 739197000000,
+    "civil": -21037000000,
+    "plant": 112891000000,
+    "other": 60591000000,
+    "adjust": 0,
+    "total": 891642000000
+   },
+   "basis": "own",
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "revenue": {
+    "building": 10721279000000,
+    "civil": 1784189000000,
+    "plant": 3151214000000,
+    "other": 122162000000,
+    "adjust": 0,
+    "total": 15778844000000
+   },
+   "gross_profit": {
+    "building": 576732000000,
+    "civil": 76612000000,
+    "plant": 98895000000,
+    "other": 98607000000,
+    "adjust": 0,
+    "total": 850846000000
+   },
+   "basis": "own",
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "revenue": {
+    "building": 10913916000000,
+    "civil": 1803291000000,
+    "plant": 3880233000000,
+    "other": 132663000000,
+    "adjust": 0,
+    "total": 16730103000000
+   },
+   "gross_profit": {
+    "building": 367076000000,
+    "civil": 156421000000,
+    "plant": -292096000000,
+    "other": 117427000000,
+    "adjust": 0,
+    "total": 348828000000
+   },
+   "basis": "own",
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "revenue": {
+    "building": 9319603000000,
+    "civil": 1855978000000,
+    "plant": 5148711000000,
+    "other": 188170000000,
+    "adjust": 0,
+    "total": 16512462000000
+   },
+   "gross_profit": {
+    "building": 598800000000,
+    "civil": 111804000000,
+    "plant": 70085000000,
+    "other": 113778000000,
+    "adjust": 0,
+    "total": 894467000000
+   },
+   "basis": "own",
+   "receipt": "20260318001395"
+  }
+ },
+ "regions": {
+  "2014": {
+   "revenue": {
+    "domestic": 7341639000000,
+    "asia": 4022193000000,
+    "mideast": 5157733000000,
+    "other": 1163886000000,
+    "adjust": -408971000000,
+    "total": 17276480000000
+   },
+   "basis": "next",
+   "receipt": "20170622000235"
+  },
+  "2015": {
+   "revenue": {
+    "domestic": 7597504000000,
+    "asia": 4131784000000,
+    "mideast": 5389737000000,
+    "other": 2386781000000,
+    "adjust": -272626000000,
+    "total": 19233180000000
+   },
+   "basis": "own",
+   "receipt": "20170622000235"
+  },
+  "2016": {
+   "revenue": {
+    "domestic": 9006291000000,
+    "asia": 3814160000000,
+    "mideast": 4977706000000,
+    "other": 1347513000000,
+    "adjust": -320655000000,
+    "total": 18825015000000
+   },
+   "basis": "own",
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "revenue": {
+    "domestic": 9943811000000,
+    "asia": 3331574000000,
+    "mideast": 3382657000000,
+    "other": 643018000000,
+    "adjust": -413970000000,
+    "total": 16887090000000
+   },
+   "basis": "own",
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "revenue": {
+    "domestic": 10022578000000,
+    "asia": 3458450000000,
+    "mideast": 3264778000000,
+    "other": 563848000000,
+    "adjust": -578760000000,
+    "total": 16730894000000
+   },
+   "basis": "own",
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "revenue": {
+    "domestic": 10368917000000,
+    "asia": 3283568000000,
+    "mideast": 3420597000000,
+    "other": 604694000000,
+    "adjust": -398984000000,
+    "total": 17278792000000
+   },
+   "basis": "own",
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "revenue": {
+    "domestic": 11206057000000,
+    "asia": 2931377000000,
+    "mideast": 2006705000000,
+    "other": 1031505000000,
+    "adjust": -204785000000,
+    "total": 16970859000000
+   },
+   "basis": "own",
+   "receipt": "20210317001019"
+  },
+  "2021": {
+   "revenue": {
+    "domestic": 12130482000000,
+    "asia": 2576267000000,
+    "mideast": 2212800000000,
+    "other": 1442074000000,
+    "adjust": -296089000000,
+    "total": 18065534000000
+   },
+   "basis": "own",
+   "receipt": "20220325001068"
+  },
+  "2022": {
+   "revenue": {
+    "domestic": 12959560000000,
+    "asia": 3891817000000,
+    "mideast": 3044957000000,
+    "other": 1746253000000,
+    "adjust": -403505000000,
+    "total": 21239082000000
+   },
+   "basis": "own",
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "revenue": {
+    "domestic": 18430445000000,
+    "asia": 3472764000000,
+    "mideast": 3177918000000,
+    "other": 5264222000000,
+    "adjust": -693992000000,
+    "total": 29651357000000
+   },
+   "basis": "own",
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "revenue": {
+    "domestic": 19796160000000,
+    "asia": 2193402000000,
+    "mideast": 3968093000000,
+    "other": 7144566000000,
+    "adjust": -431953000000,
+    "total": 32670268000000
+   },
+   "basis": "own",
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "revenue": {
+    "domestic": 18953740000000,
+    "asia": 2326144000000,
+    "mideast": 5833915000000,
+    "other": 4213862000000,
+    "adjust": -264749000000,
+    "total": 31062912000000
+   },
+   "basis": "own",
+   "receipt": "20260318001395"
+  }
+ },
+ "estimates": {
+  "2016": {
+   "by": {
+    "civil": {
+     "rev_change": 275354000000,
+     "cost_change": 501773000000,
+     "pl_current": -238678000000,
+     "pl_future": 12259000000,
+     "ca_change": -82286000000,
+     "cl_change": 156392000000,
+     "loss_prov": 25040000000
+    },
+    "building": {
+     "rev_change": 808453000000,
+     "cost_change": 329842000000,
+     "pl_current": 296265000000,
+     "pl_future": 182346000000,
+     "ca_change": 238348000000,
+     "cl_change": -57917000000,
+     "loss_prov": 2135000000
+    },
+    "plant": {
+     "rev_change": -795921000000,
+     "cost_change": -361624000000,
+     "pl_current": -332309000000,
+     "pl_future": -101988000000,
+     "ca_change": -201670000000,
+     "cl_change": 130639000000,
+     "loss_prov": 23695000000
+    },
+    "other": {
+     "rev_change": 3863000000,
+     "cost_change": 3591000000,
+     "pl_current": 251000000,
+     "pl_future": 21000000,
+     "ca_change": 217000000,
+     "cl_change": -34000000,
+     "loss_prov": 0
+    },
+    "total": {
+     "rev_change": 291749000000,
+     "cost_change": 473582000000,
+     "pl_current": -274471000000,
+     "pl_future": 92638000000,
+     "ca_change": -45391000000,
+     "cl_change": 229080000000,
+     "loss_prov": 50870000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "by": {
+    "civil": {
+     "rev_change": 279334000000,
+     "cost_change": 386755000000,
+     "pl_current": -237543000000,
+     "pl_future": 130122000000,
+     "ca_change": -137998000000,
+     "cl_change": 99545000000,
+     "loss_prov": 16692000000
+    },
+    "building": {
+     "rev_change": 546644000000,
+     "cost_change": 71127000000,
+     "pl_current": 305299000000,
+     "pl_future": 170218000000,
+     "ca_change": 303072000000,
+     "cl_change": -2227000000,
+     "loss_prov": 6267000000
+    },
+    "plant": {
+     "rev_change": -520166000000,
+     "cost_change": 91546000000,
+     "pl_current": -477611000000,
+     "pl_future": -134101000000,
+     "ca_change": -129594000000,
+     "cl_change": 348017000000,
+     "loss_prov": 45364000000
+    },
+    "other": {
+     "rev_change": 3797000000,
+     "cost_change": 3517000000,
+     "pl_current": 263000000,
+     "pl_future": 17000000,
+     "ca_change": -43000000,
+     "cl_change": -306000000,
+     "loss_prov": 0
+    },
+    "total": {
+     "rev_change": 309609000000,
+     "cost_change": 552945000000,
+     "pl_current": -409592000000,
+     "pl_future": 166256000000,
+     "ca_change": 35437000000,
+     "cl_change": 445029000000,
+     "loss_prov": 68323000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "by": {
+    "civil": {
+     "rev_change": 397002000000,
+     "cost_change": 643220000000,
+     "pl_current": -275424000000,
+     "pl_future": 29206000000,
+     "ca_change": -64184000000,
+     "cl_change": 211240000000,
+     "loss_prov": 4222000000
+    },
+    "building": {
+     "rev_change": 872392000000,
+     "cost_change": 690606000000,
+     "pl_current": 105753000000,
+     "pl_future": 76033000000,
+     "ca_change": 99700000000,
+     "cl_change": -6053000000,
+     "loss_prov": 94000000
+    },
+    "plant": {
+     "rev_change": 1132467000000,
+     "cost_change": 1016850000000,
+     "pl_current": 15409000000,
+     "pl_future": 100208000000,
+     "ca_change": 325901000000,
+     "cl_change": 310492000000,
+     "loss_prov": 31042000000
+    },
+    "other": {
+     "rev_change": 30233000000,
+     "cost_change": 26445000000,
+     "pl_current": 2123000000,
+     "pl_future": 1665000000,
+     "ca_change": 1586000000,
+     "cl_change": -537000000,
+     "loss_prov": 156000000
+    },
+    "total": {
+     "rev_change": 2432094000000,
+     "cost_change": 2377121000000,
+     "pl_current": -152139000000,
+     "pl_future": 207112000000,
+     "ca_change": 363003000000,
+     "cl_change": 515142000000,
+     "loss_prov": 35514000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "by": {
+    "civil": {
+     "rev_change": 473310000000,
+     "cost_change": 726103000000,
+     "pl_current": -292848000000,
+     "pl_future": 40055000000,
+     "ca_change": -290537000000,
+     "cl_change": 2311000000,
+     "loss_prov": 22020000000
+    },
+    "building": {
+     "rev_change": 621088000000,
+     "cost_change": 179127000000,
+     "pl_current": 265491000000,
+     "pl_future": 176470000000,
+     "ca_change": 190197000000,
+     "cl_change": -75294000000,
+     "loss_prov": 7654000000
+    },
+    "plant": {
+     "rev_change": 566485000000,
+     "cost_change": 618566000000,
+     "pl_current": -113345000000,
+     "pl_future": 61264000000,
+     "ca_change": -172471000000,
+     "cl_change": -59126000000,
+     "loss_prov": 14682000000
+    },
+    "other": {
+     "rev_change": 23278000000,
+     "cost_change": 20367000000,
+     "pl_current": 2393000000,
+     "pl_future": 517000000,
+     "ca_change": 1462000000,
+     "cl_change": -931000000,
+     "loss_prov": 13000000
+    },
+    "total": {
+     "rev_change": 1684161000000,
+     "cost_change": 1544163000000,
+     "pl_current": -138309000000,
+     "pl_future": 278306000000,
+     "ca_change": -271349000000,
+     "cl_change": -133040000000,
+     "loss_prov": 44369000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "by": {
+    "civil": {
+     "rev_change": 236611000000,
+     "cost_change": 503877000000,
+     "pl_current": -275132000000,
+     "pl_future": 7866000000,
+     "ca_change": -292439000000,
+     "cl_change": -17307000000,
+     "loss_prov": 15671000000
+    },
+    "building": {
+     "rev_change": 823153000000,
+     "cost_change": 424425000000,
+     "pl_current": 87525000000,
+     "pl_future": 311203000000,
+     "ca_change": 328000000,
+     "cl_change": -87197000000,
+     "loss_prov": 5087000000
+    },
+    "plant": {
+     "rev_change": 381349000000,
+     "cost_change": 550369000000,
+     "pl_current": -278703000000,
+     "pl_future": 109683000000,
+     "ca_change": -222902000000,
+     "cl_change": 55802000000,
+     "loss_prov": 33692000000
+    },
+    "other": {
+     "rev_change": 50653000000,
+     "cost_change": 44578000000,
+     "pl_current": 2201000000,
+     "pl_future": 3874000000,
+     "ca_change": 1355000000,
+     "cl_change": -846000000,
+     "loss_prov": 18000000
+    },
+    "total": {
+     "rev_change": 1491766000000,
+     "cost_change": 1523249000000,
+     "pl_current": -464109000000,
+     "pl_future": 432626000000,
+     "ca_change": -513658000000,
+     "cl_change": -49548000000,
+     "loss_prov": 54468000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20210317001019"
+  },
+  "2021": {
+   "by": {
+    "civil": {
+     "rev_change": 540261000000,
+     "cost_change": 738620000000,
+     "pl_current": -222583000000,
+     "pl_future": 24224000000,
+     "ca_change": -249808000000,
+     "cl_change": -27225000000,
+     "loss_prov": 5753000000
+    },
+    "building": {
+     "rev_change": 1216310000000,
+     "cost_change": 1011823000000,
+     "pl_current": 94895000000,
+     "pl_future": 109592000000,
+     "ca_change": -12728000000,
+     "cl_change": -107623000000,
+     "loss_prov": 3736000000
+    },
+    "plant": {
+     "rev_change": 1438717000000,
+     "cost_change": 1402851000000,
+     "pl_current": -79672000000,
+     "pl_future": 115538000000,
+     "ca_change": -66903000000,
+     "cl_change": 12769000000,
+     "loss_prov": 40454000000
+    },
+    "other": {
+     "rev_change": 50654000000,
+     "cost_change": 44578000000,
+     "pl_current": 2200000000,
+     "pl_future": 3876000000,
+     "ca_change": 1354000000,
+     "cl_change": -846000000,
+     "loss_prov": 100000000
+    },
+    "total": {
+     "rev_change": 3245942000000,
+     "cost_change": 3197872000000,
+     "pl_current": -205160000000,
+     "pl_future": 253230000000,
+     "ca_change": -328085000000,
+     "cl_change": -122925000000,
+     "loss_prov": 50043000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20220325001068"
+  },
+  "2022": {
+   "by": {
+    "civil": {
+     "rev_change": 832498000000,
+     "cost_change": 928271000000,
+     "pl_current": -159019000000,
+     "pl_future": 63246000000,
+     "ca_change": -192962000000,
+     "cl_change": -33943000000,
+     "loss_prov": 5886000000
+    },
+    "building": {
+     "rev_change": 1954337000000,
+     "cost_change": 2105172000000,
+     "pl_current": -230589000000,
+     "pl_future": 79754000000,
+     "ca_change": -233937000000,
+     "cl_change": -3348000000,
+     "loss_prov": 3145000000
+    },
+    "plant": {
+     "rev_change": 1987002000000,
+     "cost_change": 2344612000000,
+     "pl_current": -356120000000,
+     "pl_future": -1490000000,
+     "ca_change": -309120000000,
+     "cl_change": 47000000000,
+     "loss_prov": 34885000000
+    },
+    "total": {
+     "rev_change": 4773837000000,
+     "cost_change": 5378055000000,
+     "pl_current": -745728000000,
+     "pl_future": 141510000000,
+     "ca_change": -736019000000,
+     "cl_change": 9709000000,
+     "loss_prov": 43916000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "by": {
+    "civil": {
+     "rev_change": 599674000000,
+     "cost_change": 688378000000,
+     "pl_current": -153599000000,
+     "pl_future": 64895000000,
+     "ca_change": -179787000000,
+     "cl_change": -26188000000,
+     "loss_prov": 11042000000
+    },
+    "building": {
+     "rev_change": 3041184000000,
+     "cost_change": 3841867000000,
+     "pl_current": -794953000000,
+     "pl_future": -5730000000,
+     "ca_change": -747938000000,
+     "cl_change": 47015000000,
+     "loss_prov": 5212000000
+    },
+    "plant": {
+     "rev_change": 1388860000000,
+     "cost_change": 1585843000000,
+     "pl_current": -293227000000,
+     "pl_future": 96244000000,
+     "ca_change": -171889000000,
+     "cl_change": 121338000000,
+     "loss_prov": 21605000000
+    },
+    "total": {
+     "rev_change": 5029718000000,
+     "cost_change": 6116088000000,
+     "pl_current": -1241779000000,
+     "pl_future": 155409000000,
+     "ca_change": -1099614000000,
+     "cl_change": 142165000000,
+     "loss_prov": 37859000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "by": {
+    "civil": {
+     "rev_change": 2199434000000,
+     "cost_change": 2087699000000,
+     "pl_current": -73110000000,
+     "pl_future": 184845000000,
+     "ca_change": -151145000000,
+     "cl_change": -78035000000,
+     "loss_prov": 71460000000
+    },
+    "building": {
+     "rev_change": 4081704000000,
+     "cost_change": 4935220000000,
+     "pl_current": -957816000000,
+     "pl_future": 104300000000,
+     "ca_change": -971625000000,
+     "cl_change": -13809000000,
+     "loss_prov": 31806000000
+    },
+    "plant": {
+     "rev_change": 1924457000000,
+     "cost_change": 3341493000000,
+     "pl_current": -1959546000000,
+     "pl_future": 542510000000,
+     "ca_change": -709196000000,
+     "cl_change": 1250350000000,
+     "loss_prov": 307351000000
+    },
+    "total": {
+     "rev_change": 8205595000000,
+     "cost_change": 10364412000000,
+     "pl_current": -2990472000000,
+     "pl_future": 831655000000,
+     "ca_change": -1831966000000,
+     "cl_change": 1158506000000,
+     "loss_prov": 410617000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "by": {
+    "civil": {
+     "rev_change": -82693000000,
+     "cost_change": -8820000000,
+     "pl_current": -144688000000,
+     "pl_future": 70815000000,
+     "ca_change": -157701000000,
+     "cl_change": -13013000000,
+     "loss_prov": 51765000000
+    },
+    "building": {
+     "rev_change": 2418727000000,
+     "cost_change": 2324821000000,
+     "pl_current": -259990000000,
+     "pl_future": 353896000000,
+     "ca_change": -502783000000,
+     "cl_change": -242793000000,
+     "loss_prov": 29886000000
+    },
+    "plant": {
+     "rev_change": 667020000000,
+     "cost_change": 1259749000000,
+     "pl_current": -656990000000,
+     "pl_future": 64261000000,
+     "ca_change": -458560000000,
+     "cl_change": 198430000000,
+     "loss_prov": 198169000000
+    },
+    "total": {
+     "rev_change": 3003054000000,
+     "cost_change": 3575750000000,
+     "pl_current": -1061668000000,
+     "pl_future": 488972000000,
+     "ca_change": -1119044000000,
+     "cl_change": -57376000000,
+     "loss_prov": 279820000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20260318001395"
+  }
+ },
+ "estimates_separate": {
+  "2016": {
+   "by": {
+    "civil": {
+     "rev_change": 246130000000,
+     "cost_change": 414171000000,
+     "pl_current": -193076000000,
+     "pl_future": 25035000000,
+     "ca_change": -43002000000,
+     "cl_change": 150074000000,
+     "loss_prov": 5326000000
+    },
+    "building": {
+     "rev_change": 646762000000,
+     "cost_change": 260962000000,
+     "pl_current": 228544000000,
+     "pl_future": 157256000000,
+     "ca_change": 184003000000,
+     "cl_change": -44541000000,
+     "loss_prov": 643000000
+    },
+    "plant": {
+     "rev_change": -1420875000000,
+     "cost_change": -1019808000000,
+     "pl_current": -201381000000,
+     "pl_future": -199686000000,
+     "ca_change": -113265000000,
+     "cl_change": 88116000000,
+     "loss_prov": 7121000000
+    },
+    "total": {
+     "rev_change": -527983000000,
+     "cost_change": -344675000000,
+     "pl_current": -165913000000,
+     "pl_future": -17395000000,
+     "ca_change": 27736000000,
+     "cl_change": 193649000000,
+     "loss_prov": 13090000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "by": {
+    "civil": {
+     "rev_change": 260137000000,
+     "cost_change": 352676000000,
+     "pl_current": -222994000000,
+     "pl_future": 130455000000,
+     "ca_change": -116531000000,
+     "cl_change": 106463000000,
+     "loss_prov": 15829000000
+    },
+    "building": {
+     "rev_change": 305490000000,
+     "cost_change": -61147000000,
+     "pl_current": 200547000000,
+     "pl_future": 166090000000,
+     "ca_change": 196345000000,
+     "cl_change": -4201000000,
+     "loss_prov": 6216000000
+    },
+    "plant": {
+     "rev_change": 157947000000,
+     "cost_change": 499451000000,
+     "pl_current": -397533000000,
+     "pl_future": 56029000000,
+     "ca_change": -42924000000,
+     "cl_change": 354609000000,
+     "loss_prov": 12942000000
+    },
+    "total": {
+     "rev_change": 723574000000,
+     "cost_change": 790980000000,
+     "pl_current": -419980000000,
+     "pl_future": 352574000000,
+     "ca_change": 36890000000,
+     "cl_change": 456871000000,
+     "loss_prov": 34987000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "by": {
+    "civil": {
+     "rev_change": 386465000000,
+     "cost_change": 620484000000,
+     "pl_current": -263740000000,
+     "pl_future": 29721000000,
+     "ca_change": -56408000000,
+     "cl_change": 207332000000,
+     "loss_prov": 3823000000
+    },
+    "building": {
+     "rev_change": 668883000000,
+     "cost_change": 537930000000,
+     "pl_current": 51431000000,
+     "pl_future": 79522000000,
+     "ca_change": 68608000000,
+     "cl_change": 17177000000,
+     "loss_prov": 94000000
+    },
+    "plant": {
+     "rev_change": 845652000000,
+     "cost_change": 872875000000,
+     "pl_current": -95493000000,
+     "pl_future": 68271000000,
+     "ca_change": 69666000000,
+     "cl_change": 165160000000,
+     "loss_prov": 1810000000
+    },
+    "total": {
+     "rev_change": 1901000000000,
+     "cost_change": 2031289000000,
+     "pl_current": -307802000000,
+     "pl_future": 177514000000,
+     "ca_change": 81866000000,
+     "cl_change": 389669000000,
+     "loss_prov": 5727000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "by": {
+    "civil": {
+     "rev_change": 469139000000,
+     "cost_change": 711884000000,
+     "pl_current": -278429000000,
+     "pl_future": 35684000000,
+     "ca_change": -281391000000,
+     "cl_change": -2962000000,
+     "loss_prov": 17264000000
+    },
+    "building": {
+     "rev_change": 352138000000,
+     "cost_change": -50260000000,
+     "pl_current": 225536000000,
+     "pl_future": 176862000000,
+     "ca_change": 140295000000,
+     "cl_change": -85241000000,
+     "loss_prov": 3676000000
+    },
+    "plant": {
+     "rev_change": 135893000000,
+     "cost_change": 390058000000,
+     "pl_current": -262124000000,
+     "pl_future": 7959000000,
+     "ca_change": -275793000000,
+     "cl_change": -13669000000,
+     "loss_prov": 1072000000
+    },
+    "total": {
+     "rev_change": 957170000000,
+     "cost_change": 1051682000000,
+     "pl_current": -315017000000,
+     "pl_future": 220505000000,
+     "ca_change": -416889000000,
+     "cl_change": -101872000000,
+     "loss_prov": 22012000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "by": {
+    "civil": {
+     "rev_change": -20766000000,
+     "cost_change": 234913000000,
+     "pl_current": -279360000000,
+     "pl_future": 23681000000,
+     "ca_change": -291684000000,
+     "cl_change": -12324000000,
+     "loss_prov": 7744000000
+    },
+    "building": {
+     "rev_change": 566307000000,
+     "cost_change": 277426000000,
+     "pl_current": 665000000,
+     "pl_future": 288216000000,
+     "ca_change": -82490000000,
+     "cl_change": -83155000000,
+     "loss_prov": 4305000000
+    },
+    "plant": {
+     "rev_change": 291545000000,
+     "cost_change": 263739000000,
+     "pl_current": -79092000000,
+     "pl_future": 106897000000,
+     "ca_change": -109347000000,
+     "cl_change": -30255000000,
+     "loss_prov": 3953000000
+    },
+    "total": {
+     "rev_change": 837086000000,
+     "cost_change": 776078000000,
+     "pl_current": -357787000000,
+     "pl_future": 418794000000,
+     "ca_change": -483521000000,
+     "cl_change": -125734000000,
+     "loss_prov": 16002000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20210317001019"
+  },
+  "2021": {
+   "by": {
+    "civil": {
+     "rev_change": 386171000000,
+     "cost_change": 590521000000,
+     "pl_current": -244792000000,
+     "pl_future": 40442000000,
+     "ca_change": -263316000000,
+     "cl_change": -18524000000,
+     "loss_prov": 958000000
+    },
+    "building": {
+     "rev_change": 843486000000,
+     "cost_change": 747999000000,
+     "pl_current": -12969000000,
+     "pl_future": 108456000000,
+     "ca_change": -112139000000,
+     "cl_change": -99170000000,
+     "loss_prov": 102000000
+    },
+    "plant": {
+     "rev_change": 753072000000,
+     "cost_change": 734975000000,
+     "pl_current": -11089000000,
+     "pl_future": 29186000000,
+     "ca_change": -47437000000,
+     "cl_change": -36348000000,
+     "loss_prov": 6517000000
+    },
+    "total": {
+     "rev_change": 1982729000000,
+     "cost_change": 2073495000000,
+     "pl_current": -268850000000,
+     "pl_future": 178084000000,
+     "ca_change": -422892000000,
+     "cl_change": -154042000000,
+     "loss_prov": 7577000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20220325001068"
+  },
+  "2022": {
+   "by": {
+    "civil": {
+     "rev_change": 624138000000,
+     "cost_change": 737943000000,
+     "pl_current": -164405000000,
+     "pl_future": 50600000000,
+     "ca_change": -195634000000,
+     "cl_change": -31229000000,
+     "loss_prov": 1826000000
+    },
+    "building": {
+     "rev_change": 1512263000000,
+     "cost_change": 1609425000000,
+     "pl_current": -211974000000,
+     "pl_future": 114812000000,
+     "ca_change": -251952000000,
+     "cl_change": -39978000000,
+     "loss_prov": 2506000000
+    },
+    "plant": {
+     "rev_change": 950612000000,
+     "cost_change": 988488000000,
+     "pl_current": -122538000000,
+     "pl_future": 84662000000,
+     "ca_change": -190806000000,
+     "cl_change": -68268000000,
+     "loss_prov": 1699000000
+    },
+    "total": {
+     "rev_change": 3087013000000,
+     "cost_change": 3335856000000,
+     "pl_current": -498917000000,
+     "pl_future": 250074000000,
+     "ca_change": -638392000000,
+     "cl_change": -139475000000,
+     "loss_prov": 6031000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "by": {
+    "civil": {
+     "rev_change": 461705000000,
+     "cost_change": 492864000000,
+     "pl_current": -103075000000,
+     "pl_future": 71916000000,
+     "ca_change": -131168000000,
+     "cl_change": -28093000000,
+     "loss_prov": 3473000000
+    },
+    "building": {
+     "rev_change": 1112832000000,
+     "cost_change": 1803038000000,
+     "pl_current": -674465000000,
+     "pl_future": -15741000000,
+     "ca_change": -688495000000,
+     "cl_change": -14030000000,
+     "loss_prov": 2019000000
+    },
+    "plant": {
+     "rev_change": 331953000000,
+     "cost_change": 512210000000,
+     "pl_current": -181871000000,
+     "pl_future": 1614000000,
+     "ca_change": -179106000000,
+     "cl_change": 2765000000,
+     "loss_prov": 2871000000
+    },
+    "total": {
+     "rev_change": 1906490000000,
+     "cost_change": 2808112000000,
+     "pl_current": -959411000000,
+     "pl_future": 57789000000,
+     "ca_change": -998769000000,
+     "cl_change": -39358000000,
+     "loss_prov": 8363000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "by": {
+    "civil": {
+     "rev_change": 1727627000000,
+     "cost_change": 1528561000000,
+     "pl_current": 35826000000,
+     "pl_future": 163240000000,
+     "ca_change": -24582000000,
+     "cl_change": -60408000000,
+     "loss_prov": 643000000
+    },
+    "building": {
+     "rev_change": 1479793000000,
+     "cost_change": 2115035000000,
+     "pl_current": -701323000000,
+     "pl_future": 66081000000,
+     "ca_change": -827574000000,
+     "cl_change": -126251000000,
+     "loss_prov": 2636000000
+    },
+    "plant": {
+     "rev_change": 848417000000,
+     "cost_change": 1273929000000,
+     "pl_current": -643192000000,
+     "pl_future": 217680000000,
+     "ca_change": -647908000000,
+     "cl_change": -4716000000,
+     "loss_prov": 49589000000
+    },
+    "total": {
+     "rev_change": 4055837000000,
+     "cost_change": 4917525000000,
+     "pl_current": -1308689000000,
+     "pl_future": 447001000000,
+     "ca_change": -1500064000000,
+     "cl_change": -191375000000,
+     "loss_prov": 52868000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "by": {
+    "civil": {
+     "rev_change": -74149000000,
+     "cost_change": -38856000000,
+     "pl_current": -107368000000,
+     "pl_future": 72076000000,
+     "ca_change": -147868000000,
+     "cl_change": -40500000000,
+     "loss_prov": 382000000
+    },
+    "building": {
+     "rev_change": 1798056000000,
+     "cost_change": 1874923000000,
+     "pl_current": -300559000000,
+     "pl_future": 223692000000,
+     "ca_change": -559136000000,
+     "cl_change": -258576000000,
+     "loss_prov": 8939000000
+    },
+    "plant": {
+     "rev_change": 190171000000,
+     "cost_change": 756588000000,
+     "pl_current": -574107000000,
+     "pl_future": 7690000000,
+     "ca_change": -516785000000,
+     "cl_change": 57322000000,
+     "loss_prov": 60619000000
+    },
+    "total": {
+     "rev_change": 1914078000000,
+     "cost_change": 2592655000000,
+     "pl_current": -982034000000,
+     "pl_future": 303458000000,
+     "ca_change": -1223789000000,
+     "cl_change": -241754000000,
+     "loss_prov": 69940000000
+    }
+   },
+   "basis": "own",
+   "receipt": "20260318001395"
+  }
+ },
+ "subsidiary": {
+  "2014": {
+   "revenue": 5667555000000,
+   "operating_profit": 386547000000,
+   "net_income": 298423000000,
+   "cfo": 314104000000,
+   "cfi": 464873000000,
+   "cff": -14365000000,
+   "basis": "next",
+   "receipt": "20170622000235"
+  },
+  "2015": {
+   "revenue": 7403756000000,
+   "operating_profit": 501985000000,
+   "net_income": 373902000000,
+   "cfo": 148674000000,
+   "cfi": -736477000000,
+   "cff": -43763000000,
+   "basis": "own",
+   "receipt": "20170622000235"
+  },
+  "2016": {
+   "revenue": 6940615000000,
+   "operating_profit": 494612000000,
+   "net_income": 361233000000,
+   "cfo": 456925000000,
+   "cfi": -501113000000,
+   "cff": -91963000000,
+   "basis": "own",
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "revenue": 6268216000000,
+   "operating_profit": 514422000000,
+   "net_income": 319340000000,
+   "cfo": 707705000000,
+   "cfi": -366798000000,
+   "cff": -234658000000,
+   "basis": "own",
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "revenue": 6286224000000,
+   "operating_profit": 453692000000,
+   "net_income": 279092000000,
+   "cfo": -137209000000,
+   "cfi": -6307000000,
+   "cff": -81466000000,
+   "basis": "own",
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "revenue": 6801060000000,
+   "operating_profit": 408107000000,
+   "net_income": 298471000000,
+   "cfo": 399097000000,
+   "cfi": 474472000000,
+   "cff": -212705000000,
+   "basis": "own",
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "revenue": 7187030000000,
+   "operating_profit": 258643000000,
+   "net_income": 173845000000,
+   "cfo": 321572000000,
+   "cfi": -363412000000,
+   "cff": -216506000000,
+   "basis": "own",
+   "receipt": "20210317001019"
+  },
+  "2021": {
+   "revenue": 7355145000000,
+   "operating_profit": 364649000000,
+   "net_income": 248175000000,
+   "cfo": -156068000000,
+   "cfi": 187862000000,
+   "cff": -149880000000,
+   "basis": "own",
+   "receipt": "20220325001068"
+  },
+  "2022": {
+   "revenue": 8812466000000,
+   "operating_profit": 116473000000,
+   "net_income": 103367000000,
+   "cfo": 259000000,
+   "cfi": 728947000000,
+   "cff": -238107000000,
+   "basis": "own",
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "revenue": 13063327000000,
+   "operating_profit": 255178000000,
+   "net_income": 201999000000,
+   "cfo": -100122000000,
+   "cfi": 227403000000,
+   "cff": -81821000000,
+   "basis": "own",
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "revenue": 14760411000000,
+   "operating_profit": -1240068000000,
+   "net_income": -990640000000,
+   "cfo": -138041000000,
+   "cfi": -7248000000,
+   "cff": 440061000000,
+   "basis": "own",
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "revenue": 13896504000000,
+   "operating_profit": 277859000000,
+   "net_income": 295052000000,
+   "cfo": -999482000000,
+   "cfi": 28322000000,
+   "cff": 649337000000,
+   "basis": "own",
+   "receipt": "20260318001395"
+  }
+ },
+ "rnd": {
+  "2013": {
+   "total": 128082000000,
+   "ratio_pct": 1.2,
+   "basis": "next",
+   "receipt": "20170622000235"
+  },
+  "2014": {
+   "total": 123482000000,
+   "ratio_pct": 1.1,
+   "basis": "next",
+   "receipt": "20170622000239"
+  },
+  "2015": {
+   "total": 104814000000,
+   "ratio_pct": 1.0,
+   "basis": "own",
+   "receipt": "20170622000235"
+  },
+  "2016": {
+   "total": 98792000000,
+   "ratio_pct": 0.9,
+   "basis": "own",
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "total": 114143000000,
+   "ratio_pct": 1.1,
+   "basis": "own",
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "total": 137721000000,
+   "ratio_pct": 1.4,
+   "basis": "own",
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "total": 172251000000,
+   "ratio_pct": 1.7,
+   "basis": "own",
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "total": 149099000000,
+   "ratio_pct": 1.6,
+   "basis": "own",
+   "receipt": "20210317001019"
+  },
+  "2021": {
+   "total": 124999000000,
+   "ratio_pct": 1.22,
+   "basis": "own",
+   "receipt": "20220325001068"
+  },
+  "2022": {
+   "total": 136842000000,
+   "ratio_pct": 1.14,
+   "basis": "own",
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "total": 164251000000,
+   "ratio_pct": 1.04,
+   "basis": "own",
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "total": 177866000000,
+   "ratio_pct": 1.06,
+   "basis": "own",
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "total": 164560000000,
+   "ratio_pct": 1.0,
+   "basis": "own",
+   "receipt": "20260318001395"
+  }
+ },
+ "dividends": {
+  "2013": {
+   "total": 55732000000,
+   "payout_pct": 12.6,
+   "dps": 500,
+   "basis": "next",
+   "receipt": "20170622000235"
+  },
+  "2014": {
+   "total": 55732000000,
+   "payout_pct": 16.8,
+   "dps": 500,
+   "basis": "next",
+   "receipt": "20170622000239"
+  },
+  "2015": {
+   "total": 55732000000,
+   "payout_pct": 13.2,
+   "dps": 500,
+   "basis": "own",
+   "receipt": "20170622000235"
+  },
+  "2016": {
+   "total": 55732000000,
+   "payout_pct": 9.7,
+   "dps": 500,
+   "basis": "own",
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "total": 55732000000,
+   "payout_pct": 27.6,
+   "dps": 500,
+   "basis": "own",
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "total": 55732000000,
+   "payout_pct": 14.6,
+   "dps": 500,
+   "basis": "own",
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "total": 66878000000,
+   "payout_pct": 16.4,
+   "dps": 600,
+   "basis": "own",
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "total": 66878000000,
+   "payout_pct": 28.4,
+   "dps": 600,
+   "basis": "own",
+   "receipt": "20210317001019"
+  },
+  "2021": {
+   "total": 67499000000,
+   "payout_pct": 16.6,
+   "dps": 600,
+   "basis": "own",
+   "receipt": "20220325001068"
+  },
+  "2022": {
+   "total": 67499000000,
+   "payout_pct": 16.5,
+   "dps": 600,
+   "basis": "own",
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "total": 67499000000,
+   "payout_pct": 12.6,
+   "dps": 600,
+   "basis": "own",
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "total": 67499000000,
+   "payout_pct": null,
+   "dps": 600,
+   "basis": "own",
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "total": 89981000000,
+   "payout_pct": 24.1,
+   "dps": 800,
+   "basis": "own",
+   "receipt": "20260318001395"
+  }
+ },
+ "sensitivity": {
+  "2015": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 299589000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -2254000000
+   },
+   "receipt": "20170622000235"
+  },
+  "2016": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 314546000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -2196000000
+   },
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 339782000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -2674000000
+   },
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 271152000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -2048000000
+   },
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 23750000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -681000000
+   },
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 3075000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -882000000
+   },
+   "receipt": "20210317001019"
+  },
+  "2021": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 171714000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -1057000000
+   },
+   "receipt": "20220325001068"
+  },
+  "2022": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 125632000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -378000000
+   },
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 67815000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": 1387000000
+   },
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 51160000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -7324000000
+   },
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "fx": {
+    "pct": 10.0,
+    "impact": 110542000000
+   },
+   "rate": {
+    "pct": 1.0,
+    "impact": -9882000000
+   },
+   "receipt": "20260318001395"
+  }
+ },
+ "market": {
+  "2015": {
+   "domestic_total": 157983600000000,
+   "domestic_months": 12,
+   "domestic_growth_pct": 47.0,
+   "provisional": false,
+   "receipt": "20170622000235"
+  },
+  "2016": {
+   "domestic_total": 164900000000000,
+   "domestic_months": 12,
+   "domestic_growth_pct": 4.0,
+   "provisional": false,
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "domestic_total": 160400000000000,
+   "domestic_months": 12,
+   "domestic_growth_pct": null,
+   "provisional": false,
+   "overseas_usd_100m": 290,
+   "overseas_months": 12,
+   "overseas_growth_pct": 10.0,
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "domestic_total": 154527700000000,
+   "domestic_months": 12,
+   "domestic_growth_pct": -4.0,
+   "provisional": false,
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "domestic_total": 166035200000000,
+   "domestic_months": 12,
+   "domestic_growth_pct": 7.4,
+   "provisional": false,
+   "overseas_usd_100m": 223,
+   "overseas_months": 12,
+   "overseas_growth_pct": -30.5,
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "domestic_total": 164589300000000,
+   "domestic_months": 11,
+   "domestic_growth_pct": 19.3,
+   "provisional": false,
+   "overseas_usd_100m": 351,
+   "overseas_months": 12,
+   "overseas_growth_pct": 57.4,
+   "receipt": "20210317001019"
+  },
+  "2022": {
+   "domestic_total": 201203300000000,
+   "domestic_months": 11,
+   "domestic_growth_pct": 10.6,
+   "provisional": false,
+   "overseas_usd_100m": 310,
+   "overseas_months": 12,
+   "overseas_growth_pct": 1.3,
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "domestic_total": 154744600000000,
+   "domestic_months": 11,
+   "domestic_growth_pct": -23.1,
+   "provisional": false,
+   "overseas_usd_100m": 333,
+   "overseas_months": 12,
+   "overseas_growth_pct": 7.5,
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "domestic_total": 180730000000000,
+   "domestic_months": 11,
+   "domestic_growth_pct": 6.5,
+   "provisional": false,
+   "overseas_usd_100m": 371,
+   "overseas_months": 12,
+   "overseas_growth_pct": 11.4,
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "domestic_total": 220219900000000,
+   "domestic_months": 12,
+   "domestic_growth_pct": 1.0,
+   "provisional": false,
+   "overseas_usd_100m": 473,
+   "overseas_months": 12,
+   "overseas_growth_pct": 27.0,
+   "receipt": "20260318001395"
+  }
+ },
+ "materials": {
+  "봉강류(철근)": {
+   "unit": "원/톤",
+   "values": {
+    "2013": 740000,
+    "2014": 695000,
+    "2015": 600000,
+    "2016": 595000,
+    "2017": 651000,
+    "2018": 732500,
+    "2019": 724000,
+    "2020": 677000,
+    "2021": 857000,
+    "2022": 1010000,
+    "2023": 964000,
+    "2024": 926000,
+    "2025": 922000
+   }
+  },
+  "강판류(후판)": {
+   "unit": "원/톤",
+   "values": {
+    "2013": 1110000,
+    "2014": 1110000,
+    "2015": 1060000,
+    "2016": 540000,
+    "2017": 606000,
+    "2018": 697500,
+    "2019": 616667,
+    "2020": 585833,
+    "2021": 982500,
+    "2022": 1148000,
+    "2023": 1039000,
+    "2024": 896000,
+    "2025": 924000
+   }
+  },
+  "레미콘": {
+   "unit": "원/루베",
+   "values": {
+    "2013": 57400,
+    "2014": 59400,
+    "2015": 57400,
+    "2016": 64200,
+    "2017": 64200,
+    "2018": 65800,
+    "2019": 66300,
+    "2020": 66650,
+    "2021": 68525,
+    "2022": 77200,
+    "2023": 87300,
+    "2024": 93700,
+    "2025": 91400
+   }
+  },
+  "시멘트": {
+   "unit": "원/톤",
+   "values": {
+    "2013": 73600,
+    "2014": 75000,
+    "2015": 72000,
+    "2016": 70000,
+    "2017": 69000,
+    "2018": 67000,
+    "2019": 67000,
+    "2020": 65875,
+    "2021": 67250,
+    "2022": 81250,
+    "2023": 99000,
+    "2024": 106000,
+    "2025": 103000
+   }
+  },
+  "아스콘": {
+   "unit": "원/톤",
+   "values": {
+    "2013": 68000,
+    "2014": 67000,
+    "2015": 54470,
+    "2016": 53200,
+    "2017": 59350
+   }
+  },
+  "전선(LME동)": {
+   "unit": "원",
+   "values": {
+    "2013": 7203,
+    "2014": 6472,
+    "2015": 4883,
+    "2016": 5501,
+    "2017": 6165
+   }
+  },
+  "원유(두바이유)": {
+   "unit": "원",
+   "values": {
+    "2013": 104,
+    "2014": 60,
+    "2015": 39,
+    "2016": 54,
+    "2017": 53,
+    "2018": 53,
+    "2019": 61,
+    "2020": 42,
+    "2021": 69
+   }
+  },
+  "전기동": {
+   "unit": "원",
+   "values": {
+    "2016": 5501,
+    "2017": 6165,
+    "2018": 6530,
+    "2019": 5888,
+    "2020": 6167,
+    "2021": 9318
+   }
+  }
+ },
+ "mdna": {
+  "2015": {
+   "sentences": [
+    "해외 대형공사 진행 및 해외 인프라/전력 매출 영향으로 증가했습니다.",
+    "연결 영업이익은 매출액 증가, 판매비와 관리비율(매출액대비) 개선 영향 등으로 전년대비 2,601억원 증가한 1조 893억원을 기록하였습니다."
+   ],
+   "receipt": "20170622000235"
+  },
+  "2016": {
+   "sentences": [
+    "전년 대비 외형 감소 사유는 현대엔지니어링 매출감소에 기인합니다.",
+    "연결 영업이익은 매출액 소폭 감소에도 불구하고, 매출원가율 개선의 영향으로 전년대비 696억원 증가한 1조 1,590억원을 기록하였습니다."
+   ],
+   "receipt": "20170622000239"
+  },
+  "2017": {
+   "sentences": [
+    "전년 대비 외형 감소 사유는 해외공사 매출감소에 기인합니다."
+   ],
+   "receipt": "20180402004254"
+  },
+  "2018": {
+   "sentences": [
+    "전년 대비 외형 감소 사유는 해외공사 매출 감소에 기인합니다."
+   ],
+   "receipt": "20190401004695"
+  },
+  "2019": {
+   "sentences": [
+    "연결 영업이익은 주요 주택사업의 공사 진행에 따른 매출증가 등에 힘입어 전년대비 약 197억원 증가한 8,597억원을 기록하였습니다.",
+    "매출액은 전년대비 5,892억원 증가한 3조 1,599억원을 기록했으며, 이는 카타르 알부스탄 도로건설 프로젝트, 쿠웨이트 알주르 LNG 수입ㆍ저장ㆍ재기화 시설 프로젝트 등 해외 대형공사 진행에 따른 매출증가에 기인합니다."
+   ],
+   "receipt": "20200330004026"
+  },
+  "2020": {
+   "sentences": [
+    "연결 영업이익은 해외 매출 감소 및 코로나19 장기화 대비를 위한 선제적 비용 반영에 따라 전년대비 약 3,107억원 감소한 5,490억원을 기록하였습니 다.",
+    "매출액은 전년대비 7,953억원 감소한 2조 3,646억원을 기록했으며, 이는 코로나19로 인한 일부 해외 현장 공사 중단과 카타르 알부스탄 도로건설 프로젝트, 쿠웨이트 알주르 정유공장 해상 출하 시설, 쿠웨이트 알주르 LNG 수입항 건설 프로젝트 등 해외 대형공사 준공 임박에 따른 매출 감소에 기인합니다."
+   ],
+   "receipt": "20210317001019"
+  },
+  "2022": {
+   "sentences": [
+    "영업이익은 비주택부문 원자재가격 인상 등에 따라 원가율이 상승한 영향에 전년대비 22.8% 감소한 5,820억원을 기록하였습니다.",
+    "환율상승(전년말 대비 +81.8원/$)에 따른 환관련 평가이익과 함께 금리 상승에 따른 외화예금 이자 수익 등 영향에도 불구 법인세비용차감전전순이익은 영업이익 감소 영향에 전년대비 9.9% 감소한 7,692억원을 기록하였습니다.",
+    "매출액은 전년대비 2조 1,837억원 증가한 12조 5,012억원을 기록 하였으며, 이는 개포주공 1단지 재건축 사업 등대형 주택현장 공사 진행에 따른 매출증가에 기인합니다."
+   ],
+   "receipt": "20230315001104"
+  },
+  "2023": {
+   "sentences": [
+    "영업이익은 전년대비 2,105억원 증가한 7,854억원을 기록 하였으며, 이는 현대엔지니어링 및 송도랜드마크시티 등 영업이익 증가에 기인 합니다.",
+    "법인세비용차감전전순이익과 당기순이익은 영업이익 증가 영향에 전년대비 각각 24.6%, 38.9% 증가 하였습니다.",
+    "매출액은 전년대비 3,252억원 증가한 2조 7,400억원을 기록 하였으며 , 이는 파나마 메트로 3호선 현장 등 공사 진행에 따른 매출증가에 기인합니다."
+   ],
+   "receipt": "20240329003141"
+  },
+  "2024": {
+   "sentences": [
+    "영업이익은 연결자회사의 대규모 손실 반영에 따라 약 1.2조원의 적자를 기록하였습니다.",
+    "법인세차감전 순이익과 당기순이익은 영업이익 적자전환에 따라 전년대비 각각 204.9%, 217.1% 감소하였습니다."
+   ],
+   "receipt": "20251017000151"
+  },
+  "2025": {
+   "sentences": [
+    "영업이익, 법인세비용차감전순이익, 당기순이익 등은 주택 부문 수익성 개선 및 전년도 대규모 손실 반영 기저효과가 반영되면서 흑자전환하였습니다.",
+    "국내부문은 힐스테이트 더 운정 등 대규모 현장 준공에 따라 전년대비 12.4% 감소하였으나 데이터센터, 복합개발 등 매출 본격화에 따라 2026년 다시 증가할 전망입니다."
+   ],
+   "receipt": "20260318001395"
+  }
+ },
+ "cashflow": {
+  "2015": {
+   "capex": -196310000000,
+   "asset_sale": 18308000000,
+   "equity_invest": -12309000000,
+   "equity_sale": 3284000000,
+   "fin_invest": -117568000000,
+   "fin_sale": 13554000000,
+   "deposits": -876116000000,
+   "loans": -6655000000,
+   "dividends": -109120000000,
+   "lease": 0,
+   "borrow": 137270000000,
+   "equity_tx": 2559000000,
+   "cash_generated": 762225000000,
+   "interest_received": 68662000000,
+   "interest_paid": -101076000000,
+   "dividends_received": 8720000000,
+   "tax_paid": -142530000000,
+   "other_invest": 0,
+   "other_fin": 0,
+   "cfo": 596001000000,
+   "cfi": -1173812000000,
+   "cff": 30709000000
+  },
+  "2016": {
+   "capex": -188848000000,
+   "asset_sale": 16672000000,
+   "equity_invest": -25843000000,
+   "equity_sale": 4494000000,
+   "fin_invest": -24450000000,
+   "fin_sale": 145862000000,
+   "deposits": -743080000000,
+   "loans": 39992000000,
+   "dividends": -108403000000,
+   "lease": 0,
+   "borrow": -68451000000,
+   "equity_tx": 0,
+   "cash_generated": 1300938000000,
+   "interest_received": 80557000000,
+   "interest_paid": -96277000000,
+   "dividends_received": 1800000000,
+   "tax_paid": -200498000000,
+   "other_invest": 0,
+   "other_fin": 0,
+   "cfo": 1086520000000,
+   "cfi": -775201000000,
+   "cff": -176854000000
+  },
+  "2017": {
+   "capex": -53500000000,
+   "asset_sale": 35390000000,
+   "equity_invest": -221000000,
+   "equity_sale": 50559000000,
+   "fin_invest": -23919000000,
+   "fin_sale": 8749000000,
+   "deposits": 2182000000,
+   "loans": -35492000000,
+   "dividends": -108605000000,
+   "lease": 0,
+   "borrow": -272291000000,
+   "equity_tx": -40000000,
+   "cash_generated": 790887000000,
+   "interest_received": 90198000000,
+   "interest_paid": -96092000000,
+   "dividends_received": 12757000000,
+   "tax_paid": -283346000000,
+   "other_invest": 0,
+   "other_fin": 0,
+   "cfo": 514404000000,
+   "cfi": -16252000000,
+   "cff": -380936000000
+  },
+  "2018": {
+   "capex": -205150000000,
+   "asset_sale": 51393000000,
+   "equity_invest": -6228000000,
+   "equity_sale": 142000000,
+   "fin_invest": -69654000000,
+   "fin_sale": 38267000000,
+   "deposits": 124983000000,
+   "loans": -25796000000,
+   "dividends": -106910000000,
+   "lease": 0,
+   "borrow": 123433000000,
+   "equity_tx": -53872000000,
+   "cash_generated": 678985000000,
+   "interest_received": 104925000000,
+   "interest_paid": -86690000000,
+   "dividends_received": 2593000000,
+   "tax_paid": -450289000000,
+   "other_invest": 0,
+   "other_fin": 59000000,
+   "cfo": 249524000000,
+   "cfi": -92043000000,
+   "cff": -37290000000
+  },
+  "2019": {
+   "capex": -126658000000,
+   "asset_sale": 10547000000,
+   "equity_invest": -29561000000,
+   "equity_sale": 6399000000,
+   "fin_invest": -27235000000,
+   "fin_sale": 40267000000,
+   "deposits": 129101000000,
+   "loans": -154016000000,
+   "dividends": -107758000000,
+   "lease": -48285000000,
+   "borrow": 180588000000,
+   "equity_tx": -9281000000,
+   "cash_generated": 607456000000,
+   "interest_received": 127411000000,
+   "interest_paid": -76583000000,
+   "dividends_received": 7731000000,
+   "tax_paid": -187099000000,
+   "other_invest": 0,
+   "other_fin": 0,
+   "cfo": 478916000000,
+   "cfi": -151156000000,
+   "cff": 15264000000
+  },
+  "2020": {
+   "capex": -90972000000,
+   "asset_sale": 22866000000,
+   "equity_invest": -10550000000,
+   "equity_sale": 1895000000,
+   "fin_invest": -149471000000,
+   "fin_sale": 63736000000,
+   "deposits": -651934000000,
+   "loans": -391714000000,
+   "dividends": -132059000000,
+   "lease": -80181000000,
+   "borrow": 308099000000,
+   "equity_tx": -371000000,
+   "cash_generated": 1874527000000,
+   "interest_received": 103177000000,
+   "interest_paid": -70454000000,
+   "dividends_received": 1485000000,
+   "tax_paid": -179014000000,
+   "other_invest": -13028000000,
+   "other_fin": 0,
+   "cfo": 1729721000000,
+   "cfi": -1219172000000,
+   "cff": 95488000000
+  },
+  "2021": {
+   "capex": -142726000000,
+   "asset_sale": 34772000000,
+   "equity_invest": -31792000000,
+   "equity_sale": 0,
+   "fin_invest": -67313000000,
+   "fin_sale": 7573000000,
+   "deposits": -439967000000,
+   "loans": -158863000000,
+   "dividends": -131842000000,
+   "lease": -86292000000,
+   "borrow": -358679000000,
+   "equity_tx": 84209000000,
+   "cash_generated": 1118582000000,
+   "interest_received": 88330000000,
+   "interest_paid": -55577000000,
+   "dividends_received": 2357000000,
+   "tax_paid": -144291000000,
+   "other_invest": 0,
+   "other_fin": 0,
+   "cfo": 1009401000000,
+   "cfi": -798316000000,
+   "cff": -492604000000
+  },
+  "2022": {
+   "capex": -171945000000,
+   "asset_sale": 32190000000,
+   "equity_invest": -26281000000,
+   "equity_sale": 18267000000,
+   "fin_invest": -66201000000,
+   "fin_sale": 32787000000,
+   "deposits": 1555018000000,
+   "loans": 353629000000,
+   "dividends": -114960000000,
+   "lease": -112201000000,
+   "borrow": -431023000000,
+   "equity_tx": 0,
+   "cash_generated": 113484000000,
+   "interest_received": 151299000000,
+   "interest_paid": -43434000000,
+   "dividends_received": 6119000000,
+   "tax_paid": -370942000000,
+   "other_invest": 125794000000,
+   "other_fin": 0,
+   "cfo": -143474000000,
+   "cfi": 1853258000000,
+   "cff": -658184000000
+  },
+  "2023": {
+   "capex": -244183000000,
+   "asset_sale": 39812000000,
+   "equity_invest": -11589000000,
+   "equity_sale": 4200000000,
+   "fin_invest": -30799000000,
+   "fin_sale": 7454000000,
+   "deposits": 433874000000,
+   "loans": 364806000000,
+   "dividends": -94755000000,
+   "lease": -105409000000,
+   "borrow": 564181000000,
+   "equity_tx": 695000000,
+   "cash_generated": -605477000000,
+   "interest_received": 168153000000,
+   "interest_paid": -58470000000,
+   "dividends_received": 25670000000,
+   "tax_paid": -244592000000,
+   "other_invest": -1009000000,
+   "other_fin": 1277000000,
+   "cfo": -714716000000,
+   "cfi": 562566000000,
+   "cff": 365989000000
+  },
+  "2024": {
+   "capex": -203655000000,
+   "asset_sale": 17418000000,
+   "equity_invest": -104210000000,
+   "equity_sale": 205215000000,
+   "fin_invest": -18190000000,
+   "fin_sale": 108026000000,
+   "deposits": 110717000000,
+   "loans": 93332000000,
+   "dividends": -94882000000,
+   "lease": -110919000000,
+   "borrow": 940630000000,
+   "equity_tx": 1088000000,
+   "cash_generated": 79673000000,
+   "interest_received": 222866000000,
+   "interest_paid": -97623000000,
+   "dividends_received": 2914000000,
+   "tax_paid": -326630000000,
+   "other_invest": 3046000000,
+   "other_fin": -2176000000,
+   "cfo": -118800000000,
+   "cfi": 211699000000,
+   "cff": 733741000000
+  },
+  "2025": {
+   "capex": -122526000000,
+   "asset_sale": 59717000000,
+   "equity_invest": -52193000000,
+   "equity_sale": 21246000000,
+   "fin_invest": -5774000000,
+   "fin_sale": 9066000000,
+   "deposits": -95533000000,
+   "loans": 205407000000,
+   "dividends": -68853000000,
+   "lease": -89885000000,
+   "borrow": 592951000000,
+   "equity_tx": 0,
+   "cash_generated": -760604000000,
+   "interest_received": 222065000000,
+   "interest_paid": -127097000000,
+   "dividends_received": 8596000000,
+   "tax_paid": -91219000000,
+   "other_invest": 5817000000,
+   "other_fin": 0,
+   "cfo": -748259000000,
+   "cfi": 25227000000,
+   "cff": 434213000000
+  }
+ },
+ "errors": []
+}

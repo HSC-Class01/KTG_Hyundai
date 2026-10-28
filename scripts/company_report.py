@@ -1,10 +1,15 @@
-"""기업분석 보고서(PDF): 사업보고서로 읽는 현대건설.
+"""기업분석 보고서(PDF): 현대건설 종합 사업분석 — 건설사는 어떻게 돈을 벌고, 무엇이 현대건설의 10년을 움직였나.
 
-순서: 표지 → 요약 → 1 돈 버는 구조 → 2 사업보고서 → 3 일감(수주) → 4 이익의 질 → 5 현금·재무 체력
-      → 6 재무비율 10가지 관점 → 7 시장의 평가 → 8 종합 의견 → 부록(용어 · 자료와 한계 · 출처)
+순서: 표지 → 요약 → 1 문제의식과 방법 → 2 건설업이 돈을 버는 구조 → 3 그래서 사업보고서를 읽는다 → 4 현대건설은 어디서 버나
+      → 5 성장에 중요한 재무항목 → 6 무엇이 실적을 움직였나 → 7 10년 연표 → 8 현재: 번 돈을 어디에 썼나
+      → 9 미래: 성장사업과 시나리오 → 10 종합 평가 → 부록(방법·자료와 한계·용어·출처)
 
-- 숫자와 문장은 모두 ctx(재무제표 표)와 ctx['business'](사업보고서 본문, business.py)에서 매월 다시 계산합니다.
-  제도 설명(입찰 방식 · 진행기준 회계 등)만 고정 문장이고, 출처를 함께 적습니다.
+- 숫자·그래프·숫자로 쓴 문장은 매월 다시 계산합니다. 재료는 ctx(재무제표 표), ctx['business'](사업보고서 본문, business.py),
+  ctx['drivers'](사업보고서 주석·현금흐름표 세부, drivers.py)이고, 원인 분해 계산은 research.py가 합니다.
+- 사람이 조사한 내용(연도별 사건·정책·경쟁사 사건, 미래사업 단계, 사업 유형 설명)은 config/research.json에서 읽고,
+  보고서에 조사 기준일을 적습니다. 조사하지 않은 새 사업연도는 '조사 전'으로 표시하고 경영진단 문장을 자동으로 옮깁니다.
+- 문장마다 근거 종류를 표시합니다: [공시] 사업보고서·감사보고서, [계산] 공시 숫자로 계산, [가정] 가정을 둔 계산,
+  [보도] 언론·통계·기관 자료, [해석] 분석자의 판단.
 - 차트는 대시보드와 같은 부품(HTML·CSS·SVG)을 쓰고, 인쇄용 CSS를 덧씌운 HTML을 헤드리스 Chrome으로 A4 PDF로 인쇄합니다.
   에이전트는 파이썬 표준 라이브러리만 쓰므로 PDF 그리기는 GitHub Actions 러너에 기본으로 있는 Chrome에 맡깁니다.
 - Chrome이나 한글 글꼴이 없는 환경에서는 PDF를 건너뛰고 경고만 남깁니다(이전 PDF는 그대로 둡니다).
@@ -12,6 +17,7 @@
   (PDF는 만들 때마다 파일 안의 날짜가 바뀌어, 매번 새로 만들면 내용이 같아도 커밋이 생기기 때문입니다).
 """
 import hashlib
+import html
 import json
 import os
 import re
@@ -23,35 +29,67 @@ from pathlib import Path
 import analysis as an
 import dashboard as d
 import lenses as ln
+import report_charts as rc
 import report_view as rv
+import research as rs
 import statements as st
 
 T = an.T
+EOK = 100_000_000
 esc, rich = d.esc, d.rich
 PDF_PATH = d.REPORT_PDF                       # reports/hyundai-company-report.pdf
 STATE_PATH = "data/financials/report_pdf.json"
+RESEARCH_PATH = Path(__file__).resolve().parents[1] / "config" / "research.json"
+SEG = rs.SEG
+SEG_KO = {"building": "건축/주택", "civil": "토목", "plant": "플랜트/전력", "other": "기타"}
+SEG_COLOR = {"building": "--s1", "civil": "--s3", "plant": "--s2", "other": "--s4"}
+REGION_KO = {"domestic": "국내", "asia": "아시아", "mideast": "중동·아프리카", "other": "기타(미주·유럽 등)"}
+REGION_COLOR = {"domestic": "--s1", "asia": "--s3", "mideast": "--s2", "other": "--s4"}
 
 
 # ---------------------------------------------------------------------------
 # 공통 조각
 # ---------------------------------------------------------------------------
+def load_research(path=RESEARCH_PATH):
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
 def edition(ctx):
     y, m = ctx["today"][:4], int(ctx["today"][5:7])
     return f"{y}년 {m}월판"
 
 
+EV_CLASS = {"공시": "d", "계산": "c", "가정": "a", "추정": "a", "보도": "n", "통계": "n", "법령": "n", "WHO": "n",
+            "한국은행": "n", "위키백과": "n", "해석": "h", "가설": "h"}
+
+
+def ev(label):
+    """근거 표시 배지. label 예: '공시', '공시: 대한건설협회 인용', '공시·보도'."""
+    first = re.split(r"[:·\s]", label.strip())[0]
+    return f'<span class="ev ev-{EV_CLASS.get(first, "n")}">{esc(label.strip())}</span>'
+
+
+def tagify(text):
+    """**굵게**와 [근거] 표시를 HTML로 바꿉니다."""
+    out = rich(text or "")
+    return re.sub(r"\[([^\[\]]{1,60})\]", lambda m: ev(html.unescape(m.group(1))), out)
+
+
 def chapter(no, en, title, lead, body, cid):
-    lead_html = "".join(f'<p class="r-lead">{rich(x)}</p>' for x in ([lead] if isinstance(lead, str) else lead) if x)
+    lead_html = "".join(f'<p class="r-lead">{tagify(x)}</p>' for x in ([lead] if isinstance(lead, str) else lead) if x)
     return (f'<section class="r-chap" id="{cid}"><header class="r-head"><span class="r-num">{no}</span>'
             f'<div class="r-tt"><p>{esc(en)}</p><h2>{esc(title)}</h2></div></header>{lead_html}{body}</section>')
 
 
 def sub(no, title, body, note=None, keep=False):
     """번호 붙은 소제목 + 설명 + 내용. keep=True면 한 쪽 안에 통째로 둡니다(제목만 쪽 끝에 남지 않게)."""
-    note_html = f'<p class="r-subnote">{rich(note)}</p>' if note else ""
+    note_html = f'<p class="r-subnote">{tagify(note)}</p>' if note else ""
     num_html = f'<span class="k">{esc(no)}</span> ' if no else ""
     cls = "r-sec keep" if keep else "r-sec"
-    return f'<div class="{cls}"><h3>{num_html}{esc(title)}</h3>{note_html}{body}</div>'
+    return f'<div class="{cls}"><div class="r-hn"><h3>{num_html}{esc(title)}</h3>{note_html}</div>{body}</div>'
 
 
 def box(title, body, cls=""):
@@ -61,12 +99,22 @@ def box(title, body, cls=""):
 
 def bullets(items, cls="", raw=False):
     """글머리 목록. raw=True면 이미 HTML로 만든 줄(링크 등)을 그대로 넣습니다."""
-    return f'<ul class="r-ul {cls}">{"".join(f"<li>{x if raw else rich(x)}</li>" for x in items if x)}</ul>'
+    return f'<ul class="r-ul {cls}">{"".join(f"<li>{x if raw else tagify(x)}</li>" for x in items if x)}</ul>'
+
+
+def para(text, cls="r-p"):
+    return f'<p class="{cls}">{tagify(text)}</p>' if text else ""
+
+
+def head_tags(h):
+    """표 머리글 속 [계산]·[가정] 같은 근거 표시를 배지로 바꿉니다(머리글은 이미 HTML이라 tagify를 쓰지 않음)."""
+    return re.sub(r"\[([^\[\]<>]{1,30})\]",
+                  lambda m: ev(m.group(1)) if re.split(r"[:·\s]", m.group(1).strip())[0] in EV_CLASS else m.group(0), h)
 
 
 def rtable(headers, rows, cls="", caption=None):
     """보고서용 표. 셀은 이미 HTML로 만든 문자열입니다(rich/esc 사용). 숫자 칸은 ('num', 문자열)로 넘깁니다."""
-    th = "".join(f'<th scope="col">{h}</th>' for h in headers)
+    th = "".join(f'<th scope="col">{head_tags(h)}</th>' for h in headers)
     body = []
     for row in rows:
         cells = []
@@ -93,13 +141,87 @@ def dart_link(receipt, text):
     return link(f"{d.DART_VIEW}{receipt}", text)
 
 
-def ratio_word(r, unit="배"):
-    """1.48 → '1.5배로 늘었습니다' · 0.8 → '20% 줄었습니다'."""
-    if r >= 1.05:
-        return f"{r:.1f}{unit}로 늘었습니다"
-    if r <= 0.95:
-        return f"{(1 - r) * 100:.0f}% 줄었습니다"
-    return "비슷합니다"
+def src_links(F, keys):
+    srcs = (F["RC"].get("sources") or {})
+    return " · ".join(link(srcs[k][1], srcs[k][0]) for k in keys if k in srcs)
+
+
+def won(x):
+    return an.won(x) + " 원" if x is not None else "–"
+
+
+def jo(x, digits=2):
+    """원 → '1.26조' (부호 −)."""
+    return "–" if x is None else an._m(f"{x / T:,.{digits}f}조")
+
+
+def sjo(x, digits=2):
+    return "–" if x is None else an._m(f"{x / T:+,.{digits}f}조")
+
+
+def eok(x):
+    return "–" if x is None else an._m(f"{round(x / EOK):,}억")
+
+
+def seok(x):
+    return "–" if x is None else an._m(f"{round(x / EOK):+,}억")
+
+
+def pct(x, digits=1):
+    return "–" if x is None else an._m(f"{x:,.{digits}f}%")
+
+
+def fig(fid, title, subt, body, *, legend_html="", note=None, wide=False):
+    """대시보드 figure와 같은 모양. 설명(note)의 [근거] 표시를 배지로 바꿉니다."""
+    note_html = f'<p class="chart-note">{tagify(note)}</p>' if note else ""
+    cls = "chart wide" if wide else "chart"
+    return (f'<figure class="{cls}" id="{fid}"><figcaption class="chart-head"><h3>{esc(title)}</h3>'
+            f'<p>{esc(subt)}</p></figcaption>{legend_html}{body}{note_html}</figure>')
+
+
+def nd_text(nd, digits=2):
+    """순차입금(+) 또는 순현금(−)을 말로."""
+    if nd is None:
+        return "–"
+    return f"순현금 {jo(-nd, digits)}" if nd < 0 else f"순차입금 {jo(nd, digits)}"
+
+
+def tiles_html(items):
+    return ('<div class="vtiles">' + "".join(f'<div class="vt"><p class="vt-l">{esc(a)}</p><p class="vt-v">{esc(b)}<small>{esc(c)}</small></p>'
+                                             f'<p class="vt-d">{esc(e)}</p></div>' for a, b, c, e in items) + "</div>")
+
+
+def median(xs):
+    xs = sorted(x for x in xs if x is not None)
+    if not xs:
+        return None
+    k = len(xs)
+    return xs[k // 2] if k % 2 else (xs[k // 2 - 1] + xs[k // 2]) / 2
+
+
+FINAL_DIGIT = {"0": (True, False), "1": (True, True), "2": (False, False), "3": (True, False), "4": (False, False),
+               "5": (False, False), "6": (True, False), "7": (True, True), "8": (True, True), "9": (False, False)}
+
+
+def josa(word, kind):
+    """받침에 맞는 조사를 붙입니다. kind: '이'(이/가) · '을'(을/를) · '은'(은/는) · '으로'(으로/로) · '과'(과/와) · '이었'(이었/였).
+    숫자는 읽는 소리(일·이·삼…), %는 '퍼센트'로 봅니다."""
+    ch = (word or " ").rstrip()[-1:] or " "
+    code = ord(ch) - 0xAC00
+    if 0 <= code < 11172:
+        final, rieul = code % 28 != 0, code % 28 == 8
+    else:
+        final, rieul = FINAL_DIGIT.get(ch, (False, False))
+    if kind == "으로":
+        return word + ("로" if (not final or rieul) else "으로")
+    if kind == "이었":
+        return word + ("이었" if final else "였")
+    a, b = {"이": ("이", "가"), "을": ("을", "를"), "은": ("은", "는"), "과": ("과", "와")}[kind]
+    return word + (a if final else b)
+
+
+def xlabels(years):
+    return [d.year_label(t) for t in years]
 
 
 # ---------------------------------------------------------------------------
@@ -108,24 +230,18 @@ def ratio_word(r, unit="배"):
 def facts(ctx):
     a = ctx["analysis"]
     v = an.View(ctx)
-    years10 = ln.window_years(ctx)
+    R = rs.build(ctx)
+    years = R["years"]
     biz = rv.biz_of(ctx)
-    F = {"a": a, "v": v, "vd": a["verdicts"], "steps": {s["id"]: s for s in a.get("steps", [])},
-         "years10": years10, "v10": st.ten_view(ctx, years10), "L": ln.build(ctx), "biz": biz}
-    first, last = v.annual[0], v.annual[-1]
-    F.update(y0=first["year"], yl=last["year"], rev0=first["values"]["revenue"], revl=last["values"]["revenue"],
-             m0=first["ratios"].get("operating_margin_pct"), ml=last["ratios"].get("operating_margin_pct"))
+    F = {"a": a, "v": v, "vd": a["verdicts"], "steps": {s["id"]: s for s in a.get("steps", [])}, "R": R, "RC": load_research(),
+         "years": years, "years10": ln.window_years(ctx), "v10": st.ten_view(ctx, ln.window_years(ctx)), "L": ln.build(ctx),
+         "biz": biz, "dr": ctx.get("drivers") or {}}
+    y0, yl = years[0], years[-1]
+    F.update(y0=y0, yl=yl, rev0=v.a(y0, "revenue"), revl=v.a(yl, "revenue"), op0=v.a(y0, "operating_profit"),
+             opl=v.a(yl, "operating_profit"), m0=v.a(y0, "operating_margin_pct"), ml=v.a(yl, "operating_margin_pct"))
     lb = rv.latest_backlog(ctx)
     F["lb"] = lb
     F["yrs"] = rv.years_of_work(ctx, lb) if lb else None
-    F["lb_prev"] = None
-    if lb:
-        for r in biz.get("backlog") or []:
-            if r["year"] == lb["year"] - 1 and r["month"] == lb["month"] and not r.get("flag"):
-                F["lb_prev"] = r
-    orders = biz.get("orders") or {}
-    F["orders"] = orders
-    F["oy"] = max(orders) if orders else None
     pf = rv.pf_rows(ctx)
     F["pf"] = pf
     F["pf_x"] = None
@@ -133,422 +249,1401 @@ def facts(ctx):
         p, r = pf[-1]
         b = rv.balance_at(ctx, int(p[:4]), int(p[5:]))
         F["pf_x"] = r["amount"] / b["values"]["equity"] if b else None
-    costs = [(t, v.a(t, "cost_ratio_pct")) for t in v.years if v.a(t, "cost_ratio_pct") is not None]
-    F["worst_cost"] = max(costs, key=lambda x: x[1]) if costs else None
     F["bal"] = v.latest_balance()
     F["projects"] = (biz.get("projects") or {}).get("rows") or []
+    F["orders"] = biz.get("orders") or {}
+    # 원가 추정 변경: 10년 합계와 2016~2021 평균(평상시)
+    est = {r["year"]: r for r in R["estimates"]}
+    F["est"] = est
+    calm = [est[y]["current"] for y in years if y <= 2021 and y in est and est[y]["current"] is not None]
+    F["est_calm"] = sum(calm) / len(calm) if calm else None
+    F["est_sum"] = sum(est[y]["current"] for y in years if y in est and est[y]["current"] is not None) if est else None
+    F["est_worst"] = min(est.values(), key=lambda r: r["current"] if r["current"] is not None else 0) if est else None
+    F["seg"] = {r["year"]: r for r in R["segments"]}
+    F["ent"] = {r["year"]: r for r in R["entity"]}
+    F["cash"] = {r["year"]: r for r in R["cash"]}
+    neg = [y for y in years if (v.a(y, "operating_cashflow") or 0) < 0]
+    F["streak"] = F["vd"].get("streak") or 0
+    F["neg_start"] = R.get("alloc_split")
+    F["margin_med"] = median(v.a(y, "operating_margin_pct") for y in years)
+    F["cfo_neg_years"] = neg
     return F
 
 
-def thesis(F):
-    parts = []
-    lb, yrs = F["lb"], F["yrs"]
-    if lb and yrs:
-        lead = "일감은 넉넉합니다" if yrs >= 2.5 else ("일감은 보통 수준입니다" if yrs >= 1.5 else "일감이 많지 않습니다")
-        parts.append(f"{lead}. 수주잔고 **{an.jo(lb['total'])}조 원**은 최근 1년 매출의 **{yrs:.1f}년 치**입니다.")
-    weak_margin = F["ml"] is not None and F["m0"] and F["ml"] < F["m0"] / 2
-    streak = F["vd"].get("streak") or 0
-    issues = []
-    if weak_margin:
-        issues.append(f"매출 100원당 영업이익은 {F['y0']}년 {an.pct(F['m0'])}원에서 {F['yl']}년 **{an.pct(F['ml'])}원**으로 줄었")
-    if streak >= 2:
-        issues.append(f"본업에서 들어오는 현금(영업활동현금흐름)은 **{streak}년 연속 마이너스**입니다.")
-    if weak_margin and streak >= 2:
-        parts.append(f"숙제는 남기는 돈과 받는 돈입니다. {issues[0]}고, {issues[1]}")
-    elif weak_margin:
-        parts.append(f"숙제는 남기는 돈입니다. {issues[0]}습니다.")
-    elif streak >= 2:
-        parts.append(f"숙제는 받는 돈입니다. {issues[0]}")
-    else:
-        parts.append("이익률과 현금흐름도 큰 문제 없이 유지되고 있습니다.")
-    return " ".join(parts)
+def window_sum(F, key, start, end):
+    v = F["v"]
+    vals = [v.a(y, key) for y in range(start, end + 1)]
+    return sum(x for x in vals if x is not None) if any(x is not None for x in vals) else None
+
+
+def bridge_shares(F):
+    """연도별 영업이익 변화에서 세 효과의 절댓값 합 중 원가율 효과가 차지한 비중(%)."""
+    b = F["R"]["bridges"]
+    tot = sum(abs(r["volume"]) + abs(r["cost"]) + abs(r["sga"]) for r in b)
+    return {k: sum(abs(r[k]) for r in b) / tot * 100 if tot else None for k in ("volume", "cost", "sga")}
+
+
+def peer_gap_years(F):
+    """현대건설 영업이익률이 동종사 중앙값보다 낮았던 해."""
+    out = []
+    for y, p in F["R"]["peers"].items():
+        if p["own"] is not None and p["median"] is not None and p["n"] >= 2 and p["own"] < p["median"]:
+            out.append(y)
+    return out
 
 
 # ---------------------------------------------------------------------------
 # 표지
 # ---------------------------------------------------------------------------
 def cover_chart(F):
-    """표지의 연간 매출 막대 (첫해 → 마지막 해)."""
-    v = F["v"]
-    years, rev = v.years, v.series("revenue")
+    """표지의 10년 매출 막대와 영업이익률."""
+    v, years = F["v"], F["years"]
+    rev = [v.a(y, "revenue") for y in years]
     top = max(x for x in rev if x)
     n = len(years)
     bars = "".join(f'<i class="{"last" if i == n - 1 else ""}" style="left:{i / n * 100:.3f}%;width:{100 / n:.3f}%;height:{x / top * 100:.2f}%"></i>'
                    for i, x in enumerate(rev) if x)
-    return (f'<figure class="cv-chart" aria-label="연간 매출액 막대"><div class="cv-bars">{bars}</div>'
-            f'<figcaption><span>{years[0]}년 {an.jo(rev[0])}조 원</span><span>연간 매출액 · 연결</span>'
+    margins = "".join(f'<span style="left:{(i + .5) / n * 100:.3f}%">{an.pct(v.a(y, "operating_margin_pct"))}%</span>'
+                      for i, y in enumerate(years))
+    return (f'<figure class="cv-chart" aria-label="연간 매출액 막대와 영업이익률"><div class="cv-bars">{bars}</div>'
+            f'<div class="cv-m">{margins}</div>'
+            f'<figcaption><span>{years[0]}년 {an.jo(rev[0])}조 원</span><span>연간 매출액(막대) · 영업이익률(숫자) · 연결</span>'
             f'<span>{years[-1]}년 {an.jo(rev[-1])}조 원</span></figcaption></figure>')
+
+
+def cover_thesis(F):
+    b = F["R"]["bridge_10y"]
+    parts = []
+    if b:
+        parts.append(f"{b['start']}→{b['end']}년 매출은 **{b['rev1'] / b['rev0']:.2f}배**가 됐지만 영업이익은 "
+                     f"**{an.won(abs(b['d_op']))} 원 {'늘었' if b['d_op'] >= 0 else '줄었'}습니다**. 매출이 커져 생긴 이익(" + sjo(b['volume'])
+                     + f")보다 원가율이 올라 잃은 이익({sjo(b['cost'])})이 컸습니다.")
+    w = F["est_worst"]
+    if w and w["current"] is not None:
+        parts.append(f"실적을 가장 크게 흔든 것은 진행 중인 공사의 **원가 추정 변경**(최대 {w['year']}년 {jo(w['current'])} 원)이었고, "
+                     "이익을 현금으로 바꾸는 힘이 그 다음 과제입니다.")
+    return " ".join(parts)
 
 
 def cover(ctx, F):
     cfg = ctx["company"]
-    v = F["v"]
-    kp = []
-    if F["lb"]:
-        kp.append(("수주잔고", an.jo(F["lb"]["total"]), "조 원",
-                   rv.period_label(F["lb"]["period"]) + (f" · 매출 {F['yrs']:.1f}년 치" if F["yrs"] else "")))
-    kp.append(("매출액", an.jo(F["revl"]), "조 원", f"{F['yl']}년 · {F['y0']}년의 {F['revl'] / F['rev0']:.2f}배"))
-    kp.append(("영업이익률", an.pct(F["ml"]), "%", f"{F['yl']}년 · {F['y0']}년 {an.pct(F['m0'])}%"))
-    if F["pf"]:
-        p, r = F["pf"][-1]
-        kp.append(("PF 보증", an.jo(r["amount"]), "조 원", rv.period_label(p) + (f" · 자본의 {F['pf_x']:.1f}배" if F["pf_x"] else "")))
-    else:
-        cfo = v.a(F["yl"], "operating_cashflow")
-        kp.append(("영업활동현금흐름", an.jo(cfo, 2), "조 원", f"{F['yl']}년"))
-    kpis = "".join(f'<div class="cv-k"><p class="cv-l">{esc(a)}</p><p class="cv-v">{esc(b)}<small>{esc(c)}</small></p>'
-                   f'<p class="cv-s">{esc(e)}</p></div>' for a, b, c, e in kp[:4])
+    v, R = F["v"], F["R"]
+    b = R["bridge_10y"]
+    kp = [("매출", f"{F['revl'] / F['rev0']:.2f}", "배", f"{F['y0']}→{F['yl']}년 · {an.jo(F['rev0'])}조 → {an.jo(F['revl'])}조 원"),
+          ("영업이익률", an.pct(F["ml"]), "%", f"{F['yl']}년 · {F['y0']}년 {an.pct(F['m0'])}%")]
+    w = F["est_worst"]
+    if w and w["current"] is not None:
+        kp.append(("원가 추정 변경", an.jo(w["current"], 2), "조 원", f"{w['year']}년 그해 이익에 준 영향(회사 공시)"))
+    if F["neg_start"]:
+        s = window_sum(F, "operating_cashflow", F["neg_start"], F["yl"])
+        kp.append(("영업활동현금흐름", an.jo(s, 2), "조 원", f"{F['neg_start']}~{F['yl']}년 합계 · 이익은 흑자"))
+    kpis = "".join(f'<div class="cv-k"><p class="cv-l">{esc(a)}</p><p class="cv-v">{esc(b_)}<small>{esc(c)}</small></p>'
+                   f'<p class="cv-s">{esc(e)}</p></div>' for a, b_, c, e in kp[:4])
     lf = ctx.get("latest_filing")
-    val = ctx.get("valuation") or {}
-    seg = F["biz"].get("segments") or {}
     meta = [("대상", f"{cfg['name']} ({cfg['stock_code']}) · 연결재무제표 · {cfg.get('business', '')}"),
-            ("기준 공시", (f"{lf['report_nm'].strip()} · {d.fmt_date(lf['rcept_dt'])} 접수" if lf else "–")
-             + (f" / {seg['report']}" if seg.get("report") else "")),
-            ("주가", f"{an.price_when(val)} 종가 ({val.get('source', '')})" if val.get("as_of") else "–"),
-            ("자료", "OpenDART 전자공시 · 사업·반기·분기보고서 " + f"{F['y0']}년~"),
-            ("작성", "HSC-Class01 · OpenDART 재무분석 에이전트 (GitHub Actions가 매월 1일 다시 만듦)"),
-            ("대시보드", cfg.get("dashboard_url", ""))]
+            ("분석 기간", f"{F['y0']}~{F['yl']}년 사업보고서 10개 · 이후 반기·분기는 따로 표시"),
+            ("기준 공시", (f"{lf['report_nm'].strip()} · {d.fmt_date(lf['rcept_dt'])} 접수" if lf else "–")),
+            ("조사 기준일", f"연표·미래사업 조사 {F['RC'].get('as_of', '–')} · 숫자는 매월 1일 자동 갱신"),
+            ("작성", "HSC-Class01 · OpenDART 재무분석 에이전트(GitHub Actions)"),
+            ("재무제표 대시보드", cfg.get("dashboard_url", ""))]
     meta_html = "".join(f"<div><dt>{esc(k)}</dt><dd>{link(x, x) if x.startswith('http') else esc(x)}</dd></div>" for k, x in meta)
+    rq = "".join(f"<li>{esc(q['q'])}</li>" for q in (F["RC"].get("questions") or []))
     return (f'<section class="cover"><div class="cv-top"><span>HSC-Class01 · KTG_Hyundai</span><span>{esc(edition(ctx))}</span></div>'
-            f'<div class="cv-main"><p class="cv-eyebrow">Company analysis report</p>'
+            f'<div class="cv-main"><p class="cv-eyebrow">Business analysis report · {F["y0"]}–{F["yl"]}</p>'
             f'<h1>{esc(cfg["name"])}&nbsp;<br><span>기업분석 보고서</span></h1>'
-            f'<p class="cv-sub">사업보고서로 읽는 돈 버는 구조 · 일감 · 재무 체력</p></div>'
-            f'<p class="cv-thesis">{rich(thesis(F))}</p>{cover_chart(F)}<div class="cv-kpis">{kpis}</div>'
+            f'<p class="cv-sub">10개년 종합 사업분석 — 건설사는 어떻게 돈을 벌고, 무엇이 현대건설의 10년을 움직였나</p></div>'
+            f'<div class="cv-rq"><p>연구 질문</p><ol>{rq}</ol></div>'
+            f'<p class="cv-thesis">{rich(cover_thesis(F))}</p>{cover_chart(F)}<div class="cv-kpis">{kpis}</div>'
             f'<dl class="cv-meta">{meta_html}</dl><p class="cv-note">{esc(DISCLAIMER)}</p></section>')
 
 
 # ---------------------------------------------------------------------------
 # 요약
 # ---------------------------------------------------------------------------
-def findings(ctx, F):
-    v, vd, out = F["v"], F["vd"], []
-    lb, yrs = F["lb"], F["yrs"]
-    if lb and yrs:
-        body = f"수주잔고는 {rv.period_label(lb['period'])} **{an.jo(lb['total'])}조 원**으로 최근 1년 매출의 {yrs:.1f}년 치입니다."
-        if F["lb_prev"]:
-            diff = lb["total"] - F["lb_prev"]["total"]
-            body += f" 1년 전보다 {an.jo(abs(diff))}조 원 {'늘었' if diff >= 0 else '줄었'}습니다."
-        oy = F["oy"]
-        if oy:
-            o = F["orders"][oy]["total"]
-            if o >= max(x["total"] for x in F["orders"].values()):
-                body += f" {oy}년 신규 수주(현대건설 단독) {an.jo(o)}조 원은 {min(F['orders'])}년 이후 가장 많습니다."
-            else:
-                prev = F["orders"].get(str(int(oy) - 1))
-                if prev:
-                    body += f" {oy}년 신규 수주(현대건설 단독)는 {an.jo(o)}조 원으로 전년보다 {an.signed((o / prev['total'] - 1) * 100, 0)}%입니다."
-        title = "일감은 넉넉합니다" if yrs >= 2.5 else ("일감은 보통 수준입니다" if yrs >= 1.5 else "일감이 줄었습니다")
-        out.append((title, body, "3장"))
-    mult = F["revl"] / F["rev0"]
-    body = (f"매출은 {F['y0']}년의 {mult:.2f}배({an.jo(F['revl'])}조 원)가 됐지만, 영업이익률은 "
-            f"{an.pct(F['m0'])}% → **{an.pct(F['ml'])}%**입니다.")
-    if F["worst_cost"]:
-        wy, wc = F["worst_cost"]
-        wop = v.a(wy, "operating_profit")
-        if wc >= 100 and wop is not None and wop < 0:
-            body += f" 원가율이 가장 높았던 {wy}년({an.pct(wc)}%)에는 원가가 매출보다 커서 영업손실 {an.jo(-wop, 2)}조 원을 냈고,"
-        elif wop is not None and wop < 0:
-            body += f" 원가율이 가장 높았던 {wy}년({an.pct(wc)}%)에는 영업손실 {an.jo(-wop, 2)}조 원을 냈고,"
-        else:
-            body += f" 원가율이 가장 높았던 해는 {wy}년({an.pct(wc)}%)이고,"
-        body += f" {F['yl']}년 원가율은 {an.pct(v.a(F['yl'], 'cost_ratio_pct'))}%입니다."
-    out.append(("매출은 커졌지만 남는 돈은 줄었습니다" if F["ml"] is not None and F["m0"] and F["ml"] < F["m0"]
-                else "매출과 함께 이익률도 지켰습니다", body, "4장"))
-    streak = vd.get("streak") or 0
-    if streak >= 2:
-        start = F["yl"] - streak + 1
-        total = sum(v.a(t, "operating_cashflow") or 0 for t in range(start, F["yl"] + 1))
-        body = f"영업활동현금흐름은 {start}년부터 **{streak}년 연속 마이너스**(합계 {an.jo(total, 2)}조 원)입니다."
-        ra, rb = v.a(start - 1, "receivables_total"), v.a(F["yl"], "receivables_total")
-        if ra and rb:
-            body += (f" 공사는 했지만 아직 받지 못한 돈(매출채권+미청구공사)이 {start - 1}년 말 {an.jo(ra)}조 원에서 "
-                     f"{F['yl']}년 말 {an.jo(rb)}조 원으로 {rb / ra:.1f}배가 됐습니다.")
-        out.append(("이익이 현금으로 들어오지 않습니다", body, "5장"))
-    else:
-        cfo = v.a(F["yl"], "operating_cashflow")
-        out.append(("현금은 들어오고 있습니다" if cfo and cfo > 0 else "현금흐름이 마이너스로 돌아섰습니다",
-                    f"{F['yl']}년 영업활동현금흐름은 {an.jo(cfo, 2)}조 원입니다.", "5장"))
-    if F["pf"]:
-        p, r = F["pf"][-1]
-        p0, r0 = F["pf"][0]
-        body = (f"시행사·재건축 조합이 빌린 PF 대출에 선 보증이 {rv.period_label(p)} **{an.jo(r['amount'])}조 원**"
-                + (f"으로 자본총계의 {F['pf_x']:.1f}배입니다." if F["pf_x"] else "입니다."))
-        if p0 != p:
-            body += f" 같은 기준으로 볼 수 있는 {rv.period_label(p0)}({an.jo(r0['amount'])}조 원)보다 {ratio_word(r['amount'] / r0['amount'])}."
-        body += " 재무제표 본문에는 빚으로 잡히지 않지만, 사업장이 잘못되면 건설사가 대신 갚아야 합니다."
-        out.append(("재무제표 밖의 위험, PF 보증", body, "5장"))
-    step = F["steps"].get("debt")
-    if step:
-        tone = step["verdict"][0]
-        title = {"good": "당장 갚을 힘은 있습니다", "warn": "빚 부담을 지켜봐야 합니다", "crit": "빚 부담이 큽니다"}.get(tone, "빚 부담")
-        nums = []
-        if vd.get("coverage") is not None:
-            nums.append(f"이자보상배율 {an.pct(vd['coverage'])}배")
-        if vd.get("net_debt") is not None:
-            nums.append(f"순차입금 {an.jo(vd['net_debt'], 2)}조 원" + (f"(EBITDA의 {vd['nd_ebitda']:.1f}배)" if vd.get("nd_ebitda") else ""))
-        out.append((title, step["answer"] + (" 최근 4개 분기 " + ", ".join(nums) + "입니다." if nums else ""), "5장"))
-    val = ctx.get("valuation") or {}
-    if val.get("market_cap"):
-        body = (f"주가 {val['price']:,.0f}원({val['as_of']} 기준), 시가총액 {an.jo(val['market_cap'], 2)}조 원입니다. "
-                + (f"PBR {val['pbr_x']:.2f}배" if val.get("pbr_x") else "")
-                + (f", PER {val['per_x']:.1f}배(최근 4개 분기 이익 기준)" if val.get("per_x") else "") + ". "
-                + "배수는 좋고 나쁨이 아니라 시장의 기대를 보여 주는 참고 값입니다.")
-        out.append(("시장의 평가", body, "7장"))
+def answers(ctx, F):
+    """연구 질문 4개에 대한 짧은 답(숫자는 매월 다시 계산)."""
+    v, R = F["v"], F["R"]
+    s = R["sens"]
+    out = []
+    med = F["margin_med"]
+    seg_l = F["seg"].get(F["yl"])
+    share = None
+    if seg_l and seg_l["rev"].get("total"):
+        share = {k: (seg_l["rev"].get(k) or 0) / seg_l["rev"]["total"] * 100 for k in SEG}
+    out.append(("RQ1", "건설사는 어떻게 돈을 버나",
+                "공사를 먼저 따내고(수주) 몇 년에 걸쳐 **진행한 만큼 매출**로 잡고, **계약금액과 실제 원가의 차이**로 이익을 남기며, "
+                "공사비를 청구해 **현금을 회수**합니다. 이익률이 낮아(현대건설 10년 영업이익률 중앙값 "
+                f"{pct(med)}) 원가가 조금만 어긋나도 이익이 사라지고, 현금은 대금 회수 시점에 따라 이익과 다르게 움직입니다."
+                + (f" {F['yl']}년 매출은 건축/주택 {share['building']:.0f}%, 플랜트/전력 {share['plant']:.0f}%입니다 [공시]." if share else ""),
+                "2·3·4장"))
+    if s.get("cost_1pp") and s.get("revenue_10pct") is not None and s.get("op"):
+        ratio = s["cost_1pp"] / s["revenue_10pct"] if s["revenue_10pct"] else None
+        out.append(("RQ2", "가장 중요한 재무적 역량",
+                    "**원가를 정확히 예측하고 지키는 힘**과 **이익을 현금으로 바꾸는 힘**입니다. "
+                    f"{s['year']}년 기준 원가율 1%p는 영업이익 {eok(s['cost_1pp'])} 원으로 그해 영업이익의 "
+                    f"{s['cost_1pp'] / s['op'] * 100:.0f}%이고, 매출이 10% 늘 때 더해지는 이익({eok(s['revenue_10pct'])} 원)의 "
+                    + (f"{ratio:.1f}배입니다 [계산]." if ratio else "여러 배입니다 [계산]."), "5·6장"))
+    w = F["est_worst"]
+    ent = F["ent"].get(w["year"]) if w else None
+    rate = s.get("rate_1pp")
+    txt = ""
+    if w:
+        txt = (f"가장 큰 요인은 **진행 중인 공사의 원가 추정 변경**입니다. 회사가 공시한 '그해 손익에 준 영향'은 {w['year']}년 "
+               f"{jo(w['current'])} 원, {F['y0']}~{F['yl']}년 합계 {jo(F['est_sum'])} 원입니다 [공시·계산].")
+    if ent and ent.get("hec_op") is not None:
+        txt += f" {w['year']}년 손실의 중심은 현대엔지니어링(영업손실 {jo(ent['hec_op'])} 원)의 해외 플랜트였습니다 [공시]."
+    worst_wc = max(R["cash"], key=lambda r: r["d_receivables"] or 0, default=None)
+    if worst_wc and worst_wc.get("d_receivables"):
+        txt += f" 현금 쪽에서는 받을 돈(매출채권+계약자산) 증가가 컸습니다({worst_wc['year']}년 {sjo(worst_wc['d_receivables'])} 원) [계산]."
+    if rate is not None:
+        txt += f" 금리의 직접 영향은 1%p당 연 {eok(abs(rate))} 원으로 작았습니다 [공시]."
+    out.append(("RQ3", "10년 실적을 움직인 요인과 크기", txt, "6·7장"))
+    sums = R["alloc_sums"]
+    if len(sums) == 2:
+        a1, a2 = sums
+        out.append(("RQ4", "번 돈의 쓰임과 미래 투자",
+                    f"{a1['start']}~{a1['end']}년 영업으로 번 현금({jo(a1['cfo'])} 원)은 예금·대여금·배당·설비에 쓰였고, "
+                    f"{a2['start']}년부터 영업 현금이 마이너스({jo(a2['cfo'])} 원)가 되자 예금을 꺼내고({sjo(a2['deposits'])} 원) "
+                    f"빌려서({sjo(a2['borrow'])} 원) 메웠습니다 [계산]. 원전·SMR 같은 미래사업은 대부분 설계·본계약 전 단계이고, "
+                    "회사가 직접 넣는 투자는 아직 작습니다(수소 2033년까지 약 240억 원 계획 [공시], 2026년 전환사채 5,000억 원 [보도]).",
+                    "8·9장"))
     return out
 
 
-def summary_page(ctx, F):
-    cards = "".join(f'<article class="r-find"><p class="r-fno">{i:02d}</p><p class="r-h">{esc(t)}</p><p>{rich(b)}</p>'
-                    f'<p class="r-fref">→ {esc(ref)}</p></article>' for i, (t, b, ref) in enumerate(findings(ctx, F), 1))
-    icon = {"good": "✓", "warn": "!", "crit": "✕", "info": "i"}
+def hypothesis_rows(ctx, F):
+    """가설 H1~H5의 판정과 근거(숫자는 매월 다시 계산, 판정 규칙은 부록 A)."""
+    v, R = F["v"], F["R"]
     rows = []
-    for s in F["a"].get("steps", []):
-        tone, word = s["verdict"]
-        rows.append([esc(f"{s['no']} {s['ko']}"), f'<span class="r-chip {tone}">{icon[tone]} {esc(word)}</span>', rich(s["answer"])])
-    guide = rtable(["단계", "판정", "한 줄 답"], rows, "r-guide")
+    b = R["bridge_10y"]
+    hs = {h["id"]: h.get("short") or h["text"] for h in F["RC"].get("hypotheses", [])}
+    if b:
+        ok = b["volume"] > 0 and b["d_op"] < b["volume"]
+        rows.append(("H1", hs.get("H1"), "지지" if ok else "기각",
+                     f"{b['start']}→{b['end']}년 매출 {b['rev1'] / b['rev0']:.2f}배, 영업이익 {sjo(b['d_op'])}. "
+                     f"규모 효과 {sjo(b['volume'])} vs 원가율 효과 {sjo(b['cost'])} [계산]", "6-1"))
+    sh = bridge_shares(F)
+    if sh.get("cost") is not None:
+        rows.append(("H2", hs.get("H2"), "지지" if sh["cost"] >= 50 else "부분 지지",
+                     f"연도별 영업이익 변화의 크기 중 원가율 효과가 {sh['cost']:.0f}%, 매출 규모 효과는 {sh['volume']:.0f}% [계산]. "
+                     f"원가 추정 변경 10년 합계 {jo(F['est_sum'])} [공시]", "6-1·6-2"))
+    if F["neg_start"]:
+        s_op = window_sum(F, "operating_profit", F["neg_start"], F["yl"])
+        s_cf = window_sum(F, "operating_cashflow", F["neg_start"], F["yl"])
+        rows.append(("H3", hs.get("H3"), "지지" if s_cf is not None and s_op is not None and s_cf < s_op else "부분 지지",
+                     f"{F['neg_start']}~{F['yl']}년 영업이익 합계 {jo(s_op)}인데 영업활동현금흐름 합계 {jo(s_cf)} — 차이는 받을 돈 증가 등 운전자본 [계산]",
+                     "6-4"))
+    w = F["est_worst"]
+    pf_txt = ""
+    if F["pf"]:
+        p, r = F["pf"][-1]
+        pf_txt = f" PF 보증 {jo(r['amount'])}" + (f"(자본의 {F['pf_x']:.1f}배)" if F["pf_x"] else "") + "는 아직 손실로 이어지지 않아 영향 크기는 확인되지 않음 [공시]"
+    if w:
+        rows.append(("H4", hs.get("H4"), "부분 지지",
+                     f"대형 프로젝트 위험은 {w['year']}년 원가 추정 변경 {josa(jo(w['current']), '으로')} 현실화 [공시].{pf_txt}", "6-2·8-4"))
+    pe = R["peers"]
+    common = [y for y in F["years"] if y >= 2022 and pe.get(y) and pe[y]["median"] is not None and pe.get(2021, {}).get("median") is not None
+              and pe[y]["median"] < pe[2021]["median"]]
+    rows.append(("H5", hs.get("H5"), "부분 지지",
+                 f"동종사 영업이익률 중앙값도 2021년 {pct(pe.get(2021, {}).get('median'))} → {F['yl']}년 {pct(pe.get(F['yl'], {}).get('median'))}로 낮아져 "
+                 "원가 상승에 약한 구조는 건설업 공통 [계산]. 다른 산업과의 비교는 이 보고서 범위 밖이라 '더 중요하다'는 검증하지 못함 [해석]",
+                 "2-4"))
+    return rows
+
+
+def summary_page(ctx, F):
+    cards = "".join(f'<article class="r-find"><p class="r-fno">{esc(no)}</p><p class="r-h">{esc(t)}</p><p>{tagify(b)}</p>'
+                    f'<p class="r-fref">→ {esc(ref)}</p></article>' for no, t, b, ref in answers(ctx, F))
+    chip = {"지지": "good", "부분 지지": "warn", "기각": "crit", "판단 보류": "info"}
+    hrows = [[f"<b>{esc(h)}</b>", esc(text or ""), f'<span class="r-chip {chip.get(vd, "info")}">{esc(vd)}</span>',
+              tagify(why), esc(ref)] for h, text, vd, why, ref in hypothesis_rows(ctx, F)]
+    hyp = rtable(["가설", "내용", "판정", "근거", "장"], hrows, "r-hyp")
+    ppf = past_present_future(ctx, F)
+    ppf_html = "".join(f'<div class="ppf"><p class="r-h">{esc(t)}</p><p>{tagify(b)}</p></div>' for t, b in ppf)
     return (f'<section class="r-chap r-summary" id="summary"><header class="r-head"><span class="r-num">요약</span>'
-            f'<div class="r-tt"><p>Executive summary</p><h2>한 장으로 보는 {esc(ctx["company"]["name"])}</h2></div></header>'
-            f'<p class="r-lead">{rich(thesis(F))}</p><div class="r-finds">{cards}</div>'
-            + sub("", "교수님 가이드 6단계 판정", guide,
-                  "재무제표·재무비율 실무가이드의 분석 순서(매출 성장 → 이익률 → 현금흐름 → 차입 부담 → 투자수익률 → 주가 수준)와 "
-                  "정해진 판정 규칙(부록 B)을 따릅니다. 대시보드의 같은 판정과 매월 함께 바뀝니다.")
-            + '</section>')
+            f'<div class="r-tt"><p>Executive summary</p><h2>연구 질문에 대한 답</h2></div></header>'
+            f'<p class="r-lead">연구 질문 네 개에 대한 답, 가설 다섯 개의 판정, 과거·현재·미래의 평가를 한 쪽에 모았습니다. 숫자는 매월 다시 계산합니다.</p>'
+            f'<div class="r-finds">{cards}</div>'
+            + sub("", "가설 검증 결과", hyp, "1장의 문제의식을 다섯 가설로 나눠 현대건설 자료로 확인했습니다. 판정 규칙과 한계는 부록 A.", keep=True)
+            + f'<div class="r-ppf">{ppf_html}</div>'
+            + '<p class="r-src">교수님 가이드 6단계 판정과 재무비율 10가지 관점은 5-5, 판정 규칙은 부록 A에 있습니다.</p></section>')
+
+
+def past_present_future(ctx, F):
+    v, R = F["v"], F["R"]
+    b = R["bridge_10y"]
+    past = ""
+    if b:
+        past = (f"10년 동안 매출은 늘었지만 이익률은 {pct(F['m0'])}에서 {pct(F['ml'])}로 내려갔습니다. "
+                f"원가율이 {b['cost_ratio0']:.1f}%에서 {b['cost_ratio1']:.1f}%로 오른 것이 핵심이고, "
+                f"{F['est_worst']['year'] if F['est_worst'] else ''}년 해외 플랜트 손실이 정점이었습니다 [계산].")
+    bal = F["bal"]
+    present = ""
+    if bal:
+        nd = bal["values"].get("net_debt")
+        present = (f"{an.when_label(bal)} 부채비율 {pct(bal['ratios'].get('debt_to_equity_pct'), 0)}, "
+                   + (f"순현금 {jo(-nd)}" if nd is not None and nd < 0 else f"순차입금 {jo(nd)}")
+                   + ". 영업 현금이 마이너스인 해가 이어져 예금과 차입으로 메우는 중이고, 투자 지출 자체는 크지 않습니다 [계산].")
+    future = ("수주잔고는 3년 넘는 일감이지만 이익률이 회사 목표(2030년 8% 이상 [보도])에 다가가려면 원가 관리가 먼저입니다. "
+              "원전·SMR은 아직 설계·본계약 전 단계라 매출·이익 기여는 확인되지 않았습니다 [해석].")
+    return [("과거 — 얼마나 벌었고 왜 변했나", past), ("현재 — 번 돈은 어디로, 부담은 적절한가", present),
+            ("미래 — 투자의 가치와 위험", future)]
 
 
 # ---------------------------------------------------------------------------
-# 1장 돈 버는 구조
+# 1장 문제의식과 분석 방법
 # ---------------------------------------------------------------------------
-def segment_headline(F):
-    seg = F["biz"].get("segments") or {}
-    rows = seg.get("rows") or []
-    if not rows:
-        return "사업부문별 매출"
-    tot = sum((r["domestic"] or [0])[0] + (r["overseas"] or [0])[0] for r in rows)
-    top = max(rows, key=lambda r: (r["domestic"] or [0])[0] + (r["overseas"] or [0])[0])
-    share = ((top["domestic"] or [0])[0] + (top["overseas"] or [0])[0]) / tot * 100 if tot else 0
-    return f"매출의 {share:.0f}%는 {top['segment'].replace('/', '·')}"
+def ch1_method(ctx, F):
+    RC = F["RC"]
+    quote = f'<blockquote class="r-quote">{esc(RC.get("user_view", ""))}</blockquote>'
+    hyps = rtable(["가설", "검증하는 내용"], [[f"<b>{esc(h['id'])}</b>", esc(h["text"])] for h in RC.get("hypotheses", [])], "r-h2")
+    qs = rtable(["질문", "내용", "답하는 장"], [[f"<b>{esc(q['id'])}</b>", esc(q["q"]), esc(q["where"])] for q in RC.get("questions", [])], "r-q3")
+    dr = F["dr"]
+    n_docs = len({r.get("receipt") for r in (dr.get("segments") or {}).values() if r.get("receipt")})
+    scope_items = [
+        f"기본 기간은 **{F['y0']}~{F['yl']}년 10개 사업연도**(연결재무제표)입니다. 그 뒤의 반기·분기는 연간 결산 전이라 따로 표시합니다.",
+        "숫자는 OpenDART 재무제표 API와 사업보고서 원문(주석·본문)에서 읽었습니다. 부문 손익·원가 추정 변경·현대엔지니어링 실적은 "
+        f"연간 사업보고서 {n_docs}건의 주석을 직접 읽은 값이고, 부문 매출 합계가 연결 매출과 맞을 때만 씁니다 [공시].",
+        "**연결과 별도**를 구분합니다. 연결 = 현대건설 + 종속회사(현대엔지니어링 등), 별도 = 현대건설 본사 단독입니다.",
+        "**정정공시**는 가장 최근 정정본을 씁니다. 2013~2016년은 2017년 6월 재작성본(회계 추정 수정), 2024년은 2025년 10월 정정본"
+        "(수주잔고 기재 추가, 숫자 재작성 없음)입니다 [공시].",
+        "**잠정실적과 확정치**를 섞지 않습니다. 예: 2024년 영업손실은 잠정 1.22조 원(2025.1) → 감사 후 확정 1.26조 원(사업보고서) [공시·보도].",
+        "**회계정책 변경**: 2026년 1분기부터 투자부동산 공정가치모형(2025년 말 자본 +0.32조 원 소급)과 토지 재평가모형(+0.36조 원)을 적용해 "
+        "2026년 자본·부채비율은 그 전과 기준이 다릅니다 [공시].",
+    ]
+    methods = rtable(["방법", "알 수 있는 것", "한계"], [
+        ["<b>회계 항등식 분해</b>", "영업이익 변화를 매출 규모·원가율·판관비율 효과로, 연결 이익을 본사·현대엔지니어링·기타로 정확히 나눔(나머지 0)", "왜 원가율이 올랐는지는 따로 찾아야 함"],
+        ["<b>공시 주석 인용</b>", "회사가 직접 계산한 원가 추정 변경 효과, 부문 손익, 금리·환율 민감도", "회사가 정한 범위·방식 그대로(프로젝트별 손익은 비공개)"],
+        ["<b>동종사 같은 기간 비교</b>", "같은 해 다른 건설사도 비슷했는지 → 업계 공통 요인과 회사 고유 요인 구분", "사업 구성·회계 처리가 회사마다 다름(삼성물산은 비건설 포함)"],
+        ["<b>외부 지표 시계열</b>", "금리·자재값·수주 통계가 언제 어떻게 움직였는지와 실적의 시점 비교", "연간 10개 관측치로는 인과를 증명할 수 없어 상관계수를 내지 않음"],
+        ["<b>민감도·시나리오</b>", "원가율·금리가 바뀌면 이익이 얼마나 변하는지, 이익률 가정별 3년 결과", "가정에 따라 결과가 달라짐 — 예측이 아님"],
+    ], "r-method")
+    legend_html = ('<p class="r-evleg">' + " ".join(f"{ev(k)} {esc(t)}" for k, t in (
+        ("공시", "사업보고서·감사보고서에 적힌 사실"), ("계산", "공시 숫자로 이 보고서가 계산"), ("가정", "가정을 둔 계산"),
+        ("보도", "언론·통계·기관 자료"), ("해석", "분석자의 판단"))) + "</p>")
+    cmp_rows = [[f"<b>{esc(a)}</b>", esc(b), esc(c)] for a, b, c in RC.get("report_vs_analysis", [])]
+    cmp_ = rtable(["", "법정 사업보고서", "이 사업분석 보고서"], cmp_rows, "r-vs")
+    what = bullets(["상장회사가 **자본시장법 제159조**에 따라 1년 동안의 사업과 재무 상태를 투자자에게 알리는 공식 연간 보고서입니다.",
+                    "사업연도가 끝나고 **90일 안에** 금융위원회와 한국거래소에 내고 전자공시시스템(DART)에 공개됩니다. 반기·분기보고서는 **45일 안에** 냅니다(제160조).",
+                    "회계법인의 **감사보고서**가 붙어, 재무제표 숫자를 외부에서 한 번 확인받은 자료입니다. 장별 구성과 이 보고서가 읽는 곳은 부록 B."])
+    what_box = box("사업보고서란?", what + f'<p class="r-src">출처: {rv.ref("law159")}</p>', "plain")
+    body = (sub("1-1", "문제의식", quote + para("이 문장을 출발점 가설로 삼되, 결론은 자료가 말하는 대로 씁니다. 가설을 다섯 개로 나누면 다음과 같습니다.") + hyps, keep=True)
+            + sub("1-2", "연구 질문", qs)
+            + sub("1-3", "분석 범위와 자료 관리", bullets(scope_items, "small"))
+            + sub("1-4", "분석 방법", methods + legend_html, keep=True)
+            + sub("1-5", "법정 사업보고서와 이 보고서의 차이", what_box + cmp_, keep=True))
+    return chapter("01", "Question & method", "문제의식과 분석 방법",
+                   "숫자가 '얼마인가'보다 '왜 그렇게 됐는가'를 묻는 보고서입니다. 그래서 회계식으로 정확히 나눌 수 있는 것, 회사가 공시한 것, "
+                   "분석자가 해석한 것을 구분해 적습니다.", body, "ch1")
 
 
-def ch1_structure(ctx, F):
+# ---------------------------------------------------------------------------
+# 2장 건설업이 돈을 버는 구조
+# ---------------------------------------------------------------------------
+TIMING_ROWS = [("수주·계약", "수주잔고가 늘어남(재무제표 밖)", "선수금이 들어오기도 함", "Ⅱ 수주상황"),
+               ("공사 진행", "진행률만큼 매출과 원가를 인식", "자재·인건비·외주비가 먼저 나감", "Ⅲ 손익계산서"),
+               ("기성 청구", "청구액 < 진행분 → 계약자산(미청구공사) · 청구액 > 진행분 → 계약부채(초과청구공사)", "청구 뒤 회수까지 몇 달", "Ⅲ 재무상태표·건설계약 주석"),
+               ("원가 추정 변경", "남은 공사의 손실이 예상되면 그해 한꺼번에 비용(공사손실충당부채)", "현금은 공사 기간에 걸쳐 나감", "Ⅲ 건설계약 주석"),
+               ("준공·정산", "하자보수충당부채, 공사 정산", "유보금 회수, 정산금 수령", "Ⅲ 충당부채 주석")]
+
+
+def ch2_industry(ctx, F):
+    RC, R = F["RC"], F["R"]
     steps = rv._flow_steps(ctx, F["v"])
     flow = rv.flow_html(steps)
+    timing = rtable(["시점", "회계(손익·재무상태)", "현금", "사업보고서"],
+                    [[f"<b>{esc(a)}</b>", esc(b), esc(c), esc(e)] for a, b, c, e in TIMING_ROWS], "r-timing")
     poc_rows = [["올해까지 쓴 원가", num("450억 원"), num("450억 원")],
                 ["총예정원가(끝날 때까지 들 원가)", num("900억 원"), num("1,050억 원")],
                 ["진행률 = 쓴 원가 ÷ 총예정원가", num("50.0%"), num("42.9%")],
                 ["올해 매출 = 계약금액 1,000억 원 × 진행률", num("500억 원"), num("429억 원")],
                 ["올해 이익", num("50억 원"), num("−50억 원", -1)]]
     poc = (rtable(["계약금액 1,000억 원짜리 공사", "처음 예상", "원가 추정이 늘면"], poc_rows, "r-poc")
-           + bullets(["공사 전체가 손해로 예상되면 앞으로 생길 손실(이 예에서 50억 원)까지 **그해에 한꺼번에** 비용으로 잡습니다. "
-                      "2024년 연결 적자도 자회사 해외 현장에서 앞으로 들 비용을 한꺼번에 반영하면서 생겼습니다(4장).",
-                      "진행률로 잡은 매출보다 청구한 돈이 적으면 **미청구공사**(받을 돈), 많으면 **초과청구공사**(미리 받은 돈)가 생깁니다(5장)."], "small"))
-    body = (sub("1-1", "돈이 도는 여섯 단계", flow,
+           + bullets(["원가 추정이 늘면 진행률이 낮아져 그해 매출이 줄고, 공사 전체가 손해로 예상되면 앞으로 생길 손실까지 **그해에 한꺼번에** 비용으로 잡습니다.",
+                      "그래서 건설사의 이익은 '공사를 잘했나'뿐 아니라 '처음 견적과 원가 추정이 얼마나 정확했나'에 달려 있습니다. "
+                      "이 효과를 회사가 직접 계산해 공시한 숫자가 6장의 '원가 추정 변경 효과'입니다."], "small"))
+    seg_rows = R["segments"]
+    window_rows = [r for r in seg_rows if r["year"] in F["years"]]
+
+    def seg_med(key):
+        return median(r["margin"].get(key) for r in window_rows)
+
+    cards = []
+    for t in RC.get("business_types", []):
+        m = seg_med(t["seg"]) if t.get("seg") in SEG else None
+        hy = (f'현대건설 {SEG_KO[t["seg"]]} 부문 매출총이익률 10년 중앙값 <b>{pct(m)}</b> {ev("계산")}' if m is not None else "")
+        rows = "".join(f"<div><dt>{esc(k)}</dt><dd>{esc(t.get(f, ''))}</dd></div>" for k, f in (
+            ("매출", "revenue"), ("원가", "cost"), ("이익을 정하는 것", "driver"), ("주요 위험", "risk"), ("현금", "cash"), ("민감한 외부 변수", "sens")))
+        cards.append(f'<article class="bt"><p class="r-h">{esc(t["type"])}<span> {esc(t.get("ex", ""))}</span></p><dl>{rows}</dl>'
+                     + (f'<p class="bt-hy">{hy}</p>' if hy else "") + "</article>")
+    types = f'<div class="bts">{"".join(cards)}</div>'
+    # 동종사 비교
+    pe = R["peers"]
+    years = F["years"]
+    own = [pe[y]["own"] for y in years]
+    med = [pe[y]["median"] for y in years]
+
+    def ptips(i):
+        y = years[i]
+        rows = [["현대건설", pct(own[i]), "var(--s1)"], ["동종사 중앙값", pct(med[i]), "var(--s3)"]]
+        rows += [[n, pct(x), None] for n, x in sorted(pe[y]["peers"].items(), key=lambda kv: -kv[1])]
+        return f"{y}년 영업이익률", rows, "중앙값은 삼성물산(상사·바이오 등 포함) 제외"
+    chart = d.multi_line_chart(xlabels(years), [{"name": "현대건설", "values": own, "color": "--s1"},
+                                               {"name": "동종사 중앙값", "values": med, "color": "--s3", "dash": True}],
+                               ticks_fmt=lambda t: an._m(f"{t:g}%"), tips=ptips, height=170, end_fmt=lambda x: pct(x))
+    names = sorted({n for y in years for n in pe[y]["peers"]})
+    prow = []
+    for n in names:
+        prow.append([esc(n)] + [num(pct(pe[y]["peers"].get(n), 1) if pe[y]["peers"].get(n) is not None else "–", pe[y]["peers"].get(n)) for y in years])
+    prow.append(["<b>현대건설</b>"] + [num(pct(x), x) for x in own])
+    ptable = rtable(["영업이익률"] + [str(y) for y in years], prow, "r-peers10")
+    lows = peer_gap_years(F)
+    run = 0
+    for y in reversed(years):
+        if y in lows:
+            run += 1
+        else:
+            break
+    pfig = fig("fig-peer-margin", "현대건설과 동종사의 영업이익률", "연결 기준 · 점선 = 동종사 중앙값(삼성물산 제외)", chart,
+                    legend_html=d.legend([("현대건설", "--s1", "box"), ("동종사 중앙값", "--s3", "box")]),
+                    note=(f"현대건설 영업이익률은 최근 {run}년 연속 동종사 중앙값보다 낮았습니다 [계산]." if run >= 2 else None))
+    features = [
+        f"**낮은 이익률, 큰 매출**: 매출 100원에서 남는 영업이익이 몇 원 수준(현대건설 10년 중앙값 {pct(F['margin_med'])})이라 원가 몇 %p가 이익 전체를 좌우합니다 [계산].",
+        "**고정가격 장기 계약**: 계약할 때 정한 금액으로 몇 년씩 짓습니다. 그 사이 자재값·인건비가 오르면 대부분 건설사가 떠안고, "
+        "계약 변경 협상이 늦어지면 손실이 됩니다(2024년 원가 추정 변경 사유 [공시]).",
+        "**운전자본 집약**: 공사를 먼저 하고 나중에 받기 때문에 매출이 빨리 늘수록 받을 돈(매출채권·계약자산)이 쌓여 현금이 먼저 나갑니다.",
+        "**재무제표 밖의 의무**: 시행사·조합의 PF 대출 보증, 책임준공 약정은 부채에 잡히지 않지만 분양이 막히면 건설사의 빚이 됩니다 [공시: Ⅺ장].",
+        "**정책·금리 민감**: 주택은 금리·대출 규제, 공공은 SOC 예산, 해외는 유가와 지정학에 따라 일감과 대금 회수가 달라집니다.",
+        "**업계 공통과 회사 고유의 구분**: 2022~2024년에는 동종사 대부분의 이익률이 함께 떨어졌지만(공통), 큰 손실은 회사마다 다른 해·다른 현장에서 "
+        "났습니다(대우 2016·2025, GS 2023, 현대 2024 [보도·계산]).",
+    ]
+    body = (sub("2-1", "돈이 도는 여섯 단계", flow,
                 "카드의 숫자는 가장 최근 공시 기준이며 매월 다시 계산합니다. 카드 맨 아래 작은 글씨는 그 숫자가 사업보고서의 어디에 있는지입니다.")
-            + sub("1-2", "공사비가 매출이 되는 방법: 진행기준", poc,
-                  "건설사는 공사가 끝날 때가 아니라 **진행한 만큼** 매출을 잡습니다(K-IFRS 1115호). 진행률은 보통 ‘지금까지 쓴 원가 ÷ 총예정원가’로 잽니다.")
-            + sub("1-3", "누가, 어떻게 공사를 맡기나", rv.buyers_html(ctx) + rv.market_html(ctx),
-                  "공사를 따내는 기준은 발주처마다 다릅니다. 공공은 점수, 재건축은 조합원 투표, 민간·해외는 실적과 신뢰로 정해집니다.")
-            + sub("1-4", segment_headline(F), rv.segments_fig(ctx)))
-    return chapter("01", "Business model", "건설사는 이렇게 돈을 법니다",
+            + sub("2-2", "회계와 현금의 시간차", timing, "건설사의 이익과 현금이 같은 해에 같은 방향으로 움직이지 않는 이유입니다.", keep=True)
+            + sub("2-3", "공사비가 매출이 되는 방법: 진행기준", poc,
+                  "건설사는 공사가 끝날 때가 아니라 **진행한 만큼** 매출을 잡습니다(K-IFRS 1115호). 진행률은 보통 '지금까지 쓴 원가 ÷ 총예정원가'입니다.", keep=True)
+            + sub("2-4", "사업 유형마다 돈 버는 방식이 다릅니다", types,
+                  "일반적인 구조를 정리하고(분석자 정리), 현대건설에 해당하는 부문의 실제 이익률을 붙였습니다. 같은 회사 안에서도 사업 유형에 따라 "
+                  "이익률이 몇 배씩 다릅니다.")
+            + sub("2-5", "한국 대형 건설사의 구조적 특징", bullets(features) + pfig + ptable,
+                  "삼성물산은 건설 외 상사·패션·리조트·바이오 등을 함께 연결해 중앙값에서 뺐고, DL이앤씨(2021년 분할)·IPARK현대산업개발(2018년 분할)은 "
+                  "그 전 연도가 없습니다. 사업 구성이 달라 단순 비교에는 한계가 있습니다."))
+    return chapter("02", "How builders make money", "건설업은 이렇게 돈을 법니다",
                    "건설사는 물건을 먼저 만들어 파는 회사가 아닙니다. **공사를 먼저 따내고(수주), 몇 년에 걸쳐 지으면서 진행한 만큼 매출로 잡고, "
-                   "공사비를 청구해 현금을 회수하는 수주산업**입니다. 그래서 돈이 들어오는 길은 여섯 단계가 한 바퀴로 이어지고, "
-                   "단계마다 사업보고서에서 확인할 숫자가 있습니다.", body, "ch1")
+                   "공사비를 청구해 현금을 회수하는 수주산업**입니다. 이익은 계약금액과 실제 원가의 차이에서, 현금은 청구와 회수의 시점에서 결정됩니다.",
+                   body, "ch2")
 
 
 # ---------------------------------------------------------------------------
-# 2장 사업보고서
+# 3장 그래서 사업보고서를 읽는다
 # ---------------------------------------------------------------------------
-READ_ITEMS = [("수주잔고 · 공사별 진행", "Ⅱ 사업의 내용 > 매출 및 수주상황", "회사별 국내·해외 계약잔액, 공사별 계약금액·완성·잔액"),
-              ("신규 수주", "Ⅱ 사업의 내용 > 사업의 개요(지배회사 현황)", "현대건설 단독 한 해 수주실적 문장"),
-              ("사업부문별 매출 · 국내 건설시장 · 원자재 가격", "Ⅱ 사업의 내용", "가장 최근 사업보고서의 표"),
-              ("재무제표(손익·재무상태·현금흐름)", "Ⅲ 재무에 관한 사항", "OpenDART 재무제표 API + 2010~2015년 원문 표"),
-              ("단독 매출·영업이익", "Ⅲ 재무에 관한 사항 > 요약재무정보(별도)", "직원 1인당 생산성 계산용"),
-              ("직원 수 · 평균 급여", "Ⅷ 임원 및 직원 등에 관한 사항", "직원 현황 합계"),
-              ("PF 보증", "Ⅺ 그 밖에 투자자 보호 > 우발부채 등(채무보증현황)", "보증금액 기준 신용보강 문장")]
-
-
-def ch2_report(ctx, F):
-    what = bullets(["상장회사가 **자본시장법 제159조**에 따라 1년 동안의 사업과 재무 상태를 투자자에게 알리는 공식 연간 보고서입니다.",
-                    "사업연도가 끝나고 **90일 안에** 금융위원회와 한국거래소에 내고, 전자공시시스템(DART)에 공개됩니다. "
-                    "6개월 치는 반기보고서, 3·9개월 치는 분기보고서로 **45일 안에** 냅니다(제160조).",
-                    "회계법인의 **감사보고서**가 함께 붙어, 재무제표 숫자를 외부에서 한 번 확인받은 자료입니다.",
-                    "건설업만의 정의가 따로 있지는 않지만, 건설사 보고서는 **수주잔고·공사별 진행률·미청구공사·PF 보증**이 핵심입니다."])
-    what_box = box("사업보고서란?", what + f'<p class="r-src">출처: {rv.ref("law159")}</p>')
-    chap = "".join(f'<li class="{"on" if on else ""}"><span class="cn">{esc(no)}</span><span><b>{esc(t)}</b> {esc(w)}</span></li>'
-                   for no, t, w, on in rv.CHAPTERS)
-    lf = ctx.get("latest_filing")
-    chap_box = box("사업보고서 한 권의 구조", f'<ol class="r-chapters">{chap}</ol>'
-                   f'<p class="r-src">진하게 표시한 장을 이 보고서가 자동으로 읽습니다'
-                   + (f" · 최근 보고서: {dart_link(lf['rcept_no'], lf['report_nm'].strip())}" if lf else "") + "</p>")
-    rows = [[f'<b>{i}</b> {esc(a)}', esc(b), f"<b>{esc(c)}</b>", esc(e)] for i, (a, b, c, e) in enumerate(rv.why_rows(ctx, F["v"]), 1)]
-    why = rtable(["돈 버는 단계", "사업보고서의 어디", "현대건설 지금", "이렇게 읽습니다"], rows, "r-why")
-    body = (f'<div class="r-2 r-ch2">{what_box}{chap_box}</div>'
-            + sub("2-1", "돈 버는 단계별로 사업보고서에서 볼 곳", why,
-                  "1장의 단계마다 보고서의 어느 장을 봐야 하는지와, 그 자리에서 매월 자동으로 읽어 온 현대건설의 지금 숫자입니다.")
-            + f'<p class="r-src">특히 볼 곳: Ⅱ장 수주상황 표, Ⅲ장 주석 ‘건설계약’(2016년부터 매출 5% 이상 공사는 공사별 진행률·미청구공사 공개, '
-              f'{rv.ref("crowe")}), Ⅺ장 PF 보증. 자동으로 읽는 위치는 부록 B.</p>')
-    return chapter("02", "Why the annual report", "그래서 사업보고서를 읽습니다",
-                   "재무제표(사업보고서 Ⅲ장)는 1장에서 본 순환의 **결과**만 보여 줍니다. 결과를 만든 **원인**, 즉 얼마나 따냈고 공사가 어디까지 왔고 "
-                   "어떤 보증을 섰는지는 Ⅱ장(사업의 내용)과 Ⅺ장(우발부채 등)에 있습니다. 그래서 건설사를 분석할 때는 재무제표 숫자 하나를 보더라도 "
-                   "사업보고서 전체에서 그 원인을 함께 찾아야 합니다.", body, "ch2")
-
-
-# ---------------------------------------------------------------------------
-# 3장 일감
-# ---------------------------------------------------------------------------
-def tiles_html(items):
-    return ('<div class="vtiles">' + "".join(f'<div class="vt"><p class="vt-l">{esc(a)}</p><p class="vt-v">{esc(b)}<small>{esc(c)}</small></p>'
-                                             f'<p class="vt-d">{esc(e)}</p></div>' for a, b, c, e in items) + "</div>")
-
-
-def orders_points(ctx, F):
-    pts = []
-    lb, prev = F["lb"], F["lb_prev"]
-    if lb and prev:
-        diff = lb["total"] - prev["total"]
-        share_now = lb["overseas"] / lb["total"] * 100 if lb.get("overseas") and lb["total"] else None
-        share_prev = prev["overseas"] / prev["total"] * 100 if prev.get("overseas") and prev["total"] else None
-        text = (f"{rv.period_label(lb['period'])} 수주잔고는 1년 전({an.jo(prev['total'])}조 원)보다 **{an.jo(abs(diff))}조 원 "
-                f"{'늘었' if diff >= 0 else '줄었'}습니다**.")
-        if share_now is not None and share_prev is not None:
-            text += (f" 해외 비중은 {share_prev:.0f}% → {share_now:.0f}%"
-                     f"(해외 잔고 {an.jo(prev['overseas'])}조 → {an.jo(lb['overseas'])}조 원)입니다.")
-        pts.append(text)
-    big_new = [r for r in F["projects"] if r["contract"] >= T and r["done"] / r["contract"] < 0.15]
-    if big_new:
-        names = ", ".join(f"{r['name']}({an.jo(r['contract'], 2)}조 원, 진행률 {r['done'] / r['contract'] * 100:.0f}%)" for r in big_new[:4])
-        pts.append(f"아직 대부분 남은 큰 공사(진행률 15% 미만): {names}. 앞으로 몇 년 동안 매출이 될 일감입니다.")
-    ending = [r for r in F["projects"] if r["contract"] and r["done"] / r["contract"] >= 0.55]
-    if ending:
-        names = ", ".join(f"{r['name']} {r['done'] / r['contract'] * 100:.0f}%" for r in ending[:4])
-        pts.append(f"끝나 가는 공사(진행률 55% 이상): {names}. 이 공사들의 매출은 줄어들고, 새 공사가 그 자리를 채워야 합니다.")
-    pts.append("잔고가 이익을 보장하지는 않습니다. 같은 잔고라도 원가가 예상보다 늘면 손실이 됩니다(4장의 원가율). "
-               "그래서 수주잔고는 공사별 진행률·원가율과 함께 봐야 합니다.")
-    return pts
-
-
-def ch3_orders(ctx, F):
-    body = (tiles_html(rv.orders_tiles(ctx))
-            + sub("3-1", "일감은 얼마나 쌓였나", rv.backlog_fig(ctx))
-            + f'<div class="r-2">{rv.work_years_fig(ctx)}{rv.orders_fig(ctx)}</div>'
-            + sub("3-2", "어떤 공사가 남았나", rv.projects_fig(ctx))
-            + sub("3-3", "일감을 읽는 법", bullets(orders_points(ctx, F))))
-    return chapter("03", "Orders & backlog", "일감: 수주와 수주잔고",
-                   "수주잔고는 계약은 했지만 아직 짓지 않은 공사 금액, 곧 **앞으로 매출이 될 일감**입니다. 사업보고서 Ⅱ장 ‘수주상황’ 표에 "
-                   "회사별·공사별로 나옵니다. 신규 수주는 한 해 동안 새로 따낸 공사입니다.", body, "ch3")
+def ch3_report(ctx, F):
+    RC, R, v = F["RC"], F["R"], F["v"]
+    yl = F["yl"]
+    bal = F["bal"]
+    lb, yrs = F["lb"], F["yrs"]
+    est = F["est"].get(yl) or {}
+    rec = v.a(yl, "receivables_total")
+    reg = (F["dr"].get("regions") or {}).get(str(yl), {}).get("revenue") or {}
+    ovs = (1 - reg["domestic"] / (reg["total"] - (reg.get("adjust") or 0))) * 100 if reg.get("total") and reg.get("domestic") else None
+    sens = R["sens"]
+    big = max(F["projects"], key=lambda r: r["contract"], default=None)
+    rows = [
+        ("수주부터 완공까지 길다", "몇 년 뒤 매출이 될 일감이 얼마나 있는지가 미래를 정함", "Ⅱ 매출 및 수주상황",
+         f"수주잔고 {jo(lb['total'], 1)} 원 · 매출 {yrs:.1f}년 치" if lb and yrs else "–"),
+        ("대규모 자금이 묶인다", "공사를 먼저 하고 나중에 받아 운전자금이 필요", "Ⅲ 재무상태표 · 건설계약 주석",
+         f"받을 돈 {jo(rec, 1)} 원(매출의 {rec / v.a(yl, 'revenue') * 100:.0f}%)" if rec and v.a(yl, "revenue") else "–"),
+        ("공정과 대금 회수에 시차", "진행률 매출과 청구액의 차이가 계약자산·계약부채로 쌓임", "Ⅲ 건설계약 주석",
+         f"계약자산 {jo(v.a(yl, 'contract_assets'), 1)} 원 · 미리 받은 돈 {jo(v.a(yl, 'advances_total'), 1)} 원"),
+        ("이익과 현금이 다르다", "흑자여도 현금은 마이너스일 수 있음", "Ⅲ 현금흐름표",
+         f"{yl}년 영업이익 {jo(v.a(yl, 'operating_profit'))} · 영업활동현금흐름 {jo(v.a(yl, 'operating_cashflow'))}"),
+        ("원가·공기·계약 변경이 이익을 바꾼다", "원가 추정이 바뀌면 그해 이익이 한꺼번에 변함", "Ⅲ 건설계약 주석(추정 변경)",
+         f"{yl}년 원가 추정 변경 효과 {jo(est.get('current'))}" + (f" · 공사손실충당부채 {jo(est.get('loss_prov'))}" if est.get("loss_prov") else "")),
+        ("PF·보증 같은 우발채무", "재무제표 밖의 의무가 빚이 될 수 있음", "Ⅺ 우발부채 등(채무보증)",
+         (f"PF 보증 {jo(F['pf'][-1][1]['amount'], 1)} 원" + (f" · 자본의 {F['pf_x']:.1f}배" if F["pf_x"] else "")) if F["pf"] else "–"),
+        ("국내외 경제·정책에 노출", "환율·금리·지정학이 매출과 이익을 흔듦", "Ⅱ 위험관리 · Ⅲ 영업부문(지역별) 주석",
+         (f"해외 매출 {ovs:.0f}%" if ovs is not None else "") + (f" · 환율 10% 상승 시 세전 {seok(sens.get('fx_10pct'))} 원" if sens.get("fx_10pct") else "")),
+        ("현장 하나가 회사 전체를 흔든다", "대형 공사 한 건의 손실이 연간 이익을 넘을 수 있음", "Ⅲ 건설계약 주석(매출 5% 이상 공사)",
+         f"가장 큰 진행 공사: {big['name']} {jo(big['contract'], 1)} 원" if big else "–"),
+    ]
+    feat = rtable(["건설업의 특성", "왜 중요한가", "사업보고서의 어디", f"현대건설 지금"],
+                  [[f"<b>{esc(a)}</b>", esc(b), esc(c), f"<b>{esc(e)}</b>"] for a, b, c, e in rows], "r-feat")
+    stake = rtable(["누가", "무엇을 위해 읽나", "주로 보는 곳"],
+                   [[f"<b>{esc(s['who'])}</b>", esc(s["use"]), esc(s["where"])] for s in RC.get("stakeholders", [])], "r-stake")
+    body = (sub("3-1", "건설업의 특성 여덟 가지와 사업보고서에서 확인하는 곳", feat,
+                "2장의 특성 때문에 재무제표(Ⅲ장) 숫자 하나만 보면 오해하기 쉽습니다. 오른쪽 칸은 매월 자동으로 읽은 현대건설의 지금 숫자입니다.", keep=True)
+            + sub("3-2", "이해관계자에게 주는 가치", stake, keep=True))
+    return chapter("03", "Why the annual report", "그래서 사업보고서를 읽습니다",
+                   "재무제표는 2장에서 본 순환의 **결과**만 보여 줍니다. 결과를 만든 **원인**, 즉 얼마나 따냈고 공사가 어디까지 왔고 원가 추정이 어떻게 바뀌었고 "
+                   "어떤 보증을 섰는지는 Ⅱ장(사업의 내용)·Ⅲ장 주석·Ⅺ장(우발부채)에 흩어져 있습니다. 그래서 건설사는 사업보고서 전체를 함께 읽어야 합니다.",
+                   body, "ch3")
 
 
 # ---------------------------------------------------------------------------
-# 4장 이익의 질
+# 4장 현대건설은 어디서 돈을 버나
 # ---------------------------------------------------------------------------
-def materials_table(ctx):
-    mt = (rv.biz_of(ctx).get("materials") or {})
-    items = mt.get("items") or []
-    if not items:
-        return ""
-    year = mt.get("year")
-    labels = [f"{year - i}년" for i in range(len(mt.get("periods") or []))][::-1]
+def tick_pct(t):
+    return an._m(f"{t:g}%")
+
+
+def seg_legend(keys=SEG):
+    return d.legend([(SEG_KO[k], SEG_COLOR[k], "box") for k in keys])
+
+
+def seg_sum(F, key, k, years):
+    vals = [(F["seg"].get(y) or {}).get(key, {}).get(k) for y in years]
+    vals = [x for x in vals if x is not None]
+    return sum(vals) if vals else None
+
+
+def ch4_business(ctx, F):
+    R, v, years, seg = F["R"], F["v"], F["years"], F["seg"]
+    yl = F["yl"]
+    have = [y for y in years if y in seg]
+    if not have:
+        return chapter("04", "Where the money comes from", "현대건설은 어디서 돈을 버나", "사업보고서 주석(영업부문)을 읽지 못해 이 장을 비웠습니다.", "", "ch4")
+
+    def rtips(i):
+        y = have[i]
+        r = seg[y]
+        rows = [[SEG_KO[k], won(r["rev"].get(k)), f"var({SEG_COLOR[k]})"] for k in SEG]
+        rows += [["연결조정(내부거래)", won(r["rev"].get("adjust")), None], ["연결 매출", won(r["rev"].get("total")), None]]
+        return f"{y}년 부문별 매출", rows, None
+    groups = [[{"values": [max((seg[y]["rev"].get(k) or 0), 0) / T for y in have], "color": SEG_COLOR[k]} for k in SEG]]
+    fig_rev = fig("fig-seg-rev", "부문별 매출", "연결 · 막대 위 숫자 = 연결 매출(부문 간 거래 제외 후)",
+                       d.stack_chart(xlabels(have), groups, ticks_fmt=d.tick_jo, tips=rtips, height=165,
+                                     labels={(0, i): an.jo(seg[y]["rev"]["total"]) for i, y in enumerate(have)}),
+                       legend_html=seg_legend())
+
+    def mtips(i):
+        y = have[i]
+        r = seg[y]
+        rows = [[SEG_KO[k], pct(r["margin"].get(k)), f"var({SEG_COLOR[k]})"] for k in ("building", "civil", "plant")]
+        rows.append(["전체", pct(r["margin"].get("total")), None])
+        return f"{y}년 매출총이익률", rows, "매출총이익 ÷ 매출"
+    series = [{"name": SEG_KO[k], "values": [seg[y]["margin"].get(k) for y in have], "color": SEG_COLOR[k]} for k in ("building", "civil", "plant")]
+    fig_m = fig("fig-seg-margin", "부문별 매출총이익률", "매출총이익 ÷ 매출 · 연결",
+                     d.multi_line_chart(xlabels(have), series, ticks_fmt=tick_pct, tips=mtips, height=165, end_fmt=lambda x: pct(x)),
+                     legend_html=seg_legend(("building", "civil", "plant")))
+    early = [y for y in have if y <= 2021]
+    late = [y for y in have if y >= 2022]
+    tot_gp = seg_sum(F, "gp", "total", have) or 0
+    est_by = {}
+    for y in years:
+        e = F["est"].get(y)
+        if e:
+            for k, x in e["by_seg"].items():
+                if x is not None:
+                    est_by[k] = est_by.get(k, 0) + x
     rows = []
-    for it in items:
-        vals = list(reversed(it["values"]))
-        chg = (vals[-1] / vals[0] - 1) * 100 if vals and vals[0] and vals[-1] is not None else None
-        rows.append([esc(it["name"])] + [num(f"{x:,.0f}" if x is not None else "–") for x in vals]
-                    + [num(f"{an.signed(chg, 1)}%" if chg is not None else "–", chg), esc(it.get("unit", ""))])
-    note = (f"출처: {rv.dart(mt['receipt'], mt['report'])} Ⅱ장 ‘주요 원재료 가격변동추이’. 고정된 계약금액으로 몇 년씩 짓는 공사에서는 "
-            "자재값이 오르면 원가율이 바로 오릅니다.")
-    return rtable(["원자재"] + labels + [f"{labels[0][:4]}→{labels[-1][:4]}", "단위"], rows, "r-mat") + f'<p class="r-src">{note}</p>'
+    for k in SEG:
+        gp = seg_sum(F, "gp", k, have)
+        me = median(seg[y]["margin"].get(k) for y in early)
+        ml_ = median(seg[y]["margin"].get(k) for y in late)
+        rows.append([f'<b>{esc(SEG_KO[k])}</b>', num(jo(seg_sum(F, "rev", k, have), 1)), num(jo(gp, 2), gp),
+                     num(pct(gp / tot_gp * 100, 0) if gp is not None and tot_gp else "–"), num(pct(me), me), num(pct(ml_), ml_),
+                     num(jo(est_by.get(k), 2) if k in est_by else "–", est_by.get(k))])
+    tbl = rtable(["부문", f"매출 합계({have[0]}~{have[-1]})", "매출총이익 합계", "이익 비중", f"이익률 중앙값 {early[0]}~{early[-1]}" if early else "이전",
+                  f"이익률 중앙값 {late[0]}~{late[-1]}" if late else "이후", "원가 추정 변경 합계"], rows, "r-segsum")
+    best = max(SEG, key=lambda k: seg_sum(F, "gp", k, have) or 0)
+    worst_est = min(est_by, key=lambda k: est_by[k]) if est_by else None
+    seg_points = [
+        f"10년 매출총이익의 **{(seg_sum(F, 'gp', best, have) or 0) / tot_gp * 100:.0f}%를 {josa(SEG_KO[best], '이')}** 벌었습니다 [계산]." if tot_gp else "",
+        (f"원가 추정 변경으로 줄어든 이익은 **{SEG_KO.get(worst_est, worst_est)}**에서 가장 컸습니다({jo(est_by[worst_est])} 원) [공시·계산]." if worst_est else ""),
+        "건축/주택은 매출의 절반을 넘는 이익 창출원이지만, 2022년 이후 공사비 급등으로 이익률이 크게 낮아졌습니다. 플랜트/전력은 매출 규모에 비해 이익이 작고 "
+        "손실이 한 해에 몰리는 부문입니다 [계산·해석].",
+    ]
+    # 지역
+    regs = F["dr"].get("regions") or {}
+    ry = [y for y in years if str(y) in regs]
+    fig_r = ""
+    if ry:
+        def gtips(i):
+            y = ry[i]
+            r = regs[str(y)]["revenue"]
+            base = (r.get("total") or 0) - (r.get("adjust") or 0)
+            rows = [[REGION_KO[k], f"{won(r.get(k))} · {(r.get(k) or 0) / base * 100:.0f}%" if base else won(r.get(k)), f"var({REGION_COLOR[k]})"]
+                    for k in ("domestic", "asia", "mideast", "other")]
+            return f"{y}년 지역별 매출", rows, None
+        groups = [[{"values": [max(regs[str(y)]["revenue"].get(k) or 0, 0) / T for y in ry], "color": REGION_COLOR[k]}
+                   for k in ("domestic", "asia", "mideast", "other")]]
+        r_last = regs[str(ry[-1])]["revenue"]
+        base = (r_last.get("total") or 0) - (r_last.get("adjust") or 0)
+        r_first = regs[str(ry[0])]["revenue"]
+        base0 = (r_first.get("total") or 0) - (r_first.get("adjust") or 0)
+        note = (f"해외 매출 비중은 {ry[0]}년 {(1 - r_first['domestic'] / base0) * 100:.0f}% → {ry[-1]}년 {(1 - r_last['domestic'] / base) * 100:.0f}%입니다. "
+                "2023~2024년 '기타'(미주 등)가 커진 것은 현대엔지니어링의 미국 그룹사 공장 공사 때문입니다 [공시]." if base and base0 else None)
+        fig_r = fig("fig-region", "지역별 매출", "연결 · 영업부문 주석의 지역별 분석(내부거래 제거 전)",
+                         d.stack_chart(xlabels(ry), groups, ticks_fmt=d.tick_jo, tips=gtips, height=150),
+                         legend_html=d.legend([(REGION_KO[k], REGION_COLOR[k], "box") for k in ("domestic", "asia", "mideast", "other")]), note=note)
+    # 본사 · 현대엔지니어링 · 기타
+    ent = [F["ent"][y] for y in years if y in F["ent"]]
+    ent = [r for r in ent if r.get("parent_op") is not None and r.get("hec_op") is not None]
+    fig_e, ent_points = "", []
+    if ent:
+        ey = [r["year"] for r in ent]
+        comps = [{"name": "현대건설 본사", "values": [r["parent_op"] / T for r in ent], "color": "--s1"},
+                 {"name": "현대엔지니어링", "values": [r["hec_op"] / T for r in ent], "color": "--s2"},
+                 {"name": "그 밖의 종속회사·조정", "values": [(r["rest_op"] or 0) / T for r in ent], "color": "--s3"}]
+
+        def etips(i):
+            r = ent[i]
+            return (f"{r['year']}년 영업이익 나누기", [["현대건설 본사(별도)", won(r["parent_op"]), "var(--s1)"],
+                                                    ["현대엔지니어링(내부거래 제거 전)", won(r["hec_op"]), "var(--s2)"],
+                                                    ["그 밖의 종속회사·연결조정", won(r["rest_op"]), "var(--s3)"],
+                                                    ["연결 영업이익", won(r["cons_op"]), None]], None)
+        fig_e = fig("fig-entity", "연결 영업이익을 회사별로 나누면", "가로 막대 표시 = 연결 영업이익 · 막대 = 회사별 기여(조 원)",
+                         rc.diverging_stack(xlabels(ey), comps, tips=etips, net=[r["cons_op"] / T for r in ent], height=170,
+                                            net_labels={i: an.jo(r["cons_op"], 2) for i, r in enumerate(ent)}),
+                         legend_html=d.legend([(c["name"], c["color"], "box") for c in comps]))
+        w = min(ent, key=lambda r: r["cons_op"])
+        last = ent[-1]
+        ent_points = [
+            f"현대엔지니어링은 현대건설의 유효지분이 40.47%인데도 '실질 지배'로 연결 대상입니다 [공시]. 그래서 매출·이익은 100% 합쳐지고, "
+            "순이익 중 다른 주주 몫은 '비지배지분'으로 따로 나뉩니다.",
+            (f"{w['year']}년 연결 영업손실 {jo(w['cons_op'])} 중 {josa(jo(w['hec_op']), '이')} 현대엔지니어링, {josa(jo(w['parent_op']), '이')} 본사였습니다 [공시]. "
+             + (f"순손실 {jo(w['cons_ni'])} 가운데 {josa(jo(w['nci_ni']), '을')} 비지배지분이 나눠 가져 지배주주 몫은 {jo(w['owners_ni'])}였습니다 [계산]."
+                if w.get("nci_ni") is not None else "")),
+            (f"{last['year']}년 현대엔지니어링 영업활동현금흐름은 {jo(last['hec_cfo'])}로, 연결 영업활동현금흐름({jo(last['cons_cfo'])})보다 작았습니다. "
+             "본사·기타에서 들어온 현금을 현대엔지니어링의 유출이 상쇄했다는 뜻입니다 [공시·계산]." if last.get("hec_cfo") is not None else ""),
+        ]
+    # 이익·현금·위험 매트릭스
+    mat = []
+    cash_txt = {"building": "분양·기성 대금으로 회수 — 주택 경기에 따라 늦어짐", "civil": "공공 발주처라 회수가 비교적 안정적",
+                "plant": "선수금이 있지만 마일스톤 지연 시 계약자산이 쌓임", "other": "임대·개발 등 — 규모 작음"}
+    risk_txt = {"building": "공사비 상승을 계약금액에 반영하기 어려움, PF·책임준공", "civil": "낮은 낙찰률, 공기 지연",
+                "plant": "고정가격 EPC의 원가·공기 초과(2024년)", "other": "개발사업 분양"}
+    for k in SEG:
+        gp = seg_sum(F, "gp", k, have)
+        mat.append([f"<b>{esc(SEG_KO[k])}</b>", esc(f"{gp / tot_gp * 100:.0f}%" if gp is not None and tot_gp else "–"),
+                    esc(f"{pct(median(seg[y]['margin'].get(k) for y in early))} → {pct(median(seg[y]['margin'].get(k) for y in late))}"),
+                    esc(cash_txt[k]), esc(jo(est_by.get(k), 2) if k in est_by else "–"), esc(risk_txt[k])])
+    matrix = rtable(["부문", "이익을 버나(10년 매출총이익 비중) [계산]", "이익률 변화 [계산]", "현금은 [해석]", "원가 추정 변경 합계(위험이 실제로 난 크기) [공시]",
+                     "주요 위험 [해석]"], mat, "r-matrix")
+    body = f'<div class="r-2">{fig_rev}{fig_m}</div>' + tbl + bullets(seg_points)
+    body = sub("4-1", "부문별 매출과 이익", body, "영업부문 주석(연결)의 부문별 매출액·매출총이익입니다. 부문별 영업이익은 공시되지 않아 매출총이익(매출 − 매출원가)까지만 나눕니다.")
+    if fig_r:
+        body += sub("4-2", "국내와 해외", fig_r, keep=True)
+    if fig_e:
+        body += sub("4-3", "본사와 현대엔지니어링", fig_e + bullets(ent_points),
+                    "연결 영업이익 = 현대건설 본사(별도 재무제표) + 현대엔지니어링(비지배지분 주석, 내부거래 제거 전) + 나머지(다른 종속회사와 연결조정, 차이로 계산).")
+    body += sub("4-4", "어떤 사업이 이익·현금·위험을 만드나", matrix, keep=True)
+    body += sub("4-5", "일감: 수주잔고", rv.backlog_fig(ctx) + f'<div class="r-2">{rv.work_years_fig(ctx)}{rv.orders_fig(ctx)}</div>')
+    share = {k: (seg[yl]["rev"].get(k) or 0) / seg[yl]["rev"]["total"] * 100 for k in SEG} if yl in seg else None
+    lead = (f"{yl}년 매출의 {share['building']:.0f}%는 건축/주택, {share['plant']:.0f}%는 플랜트/전력, {share['civil']:.0f}%는 토목입니다 [공시]. "
+            "어디서 매출을 올리는지보다 **어디서 이익이 남고, 어디서 손실 위험이 터지는지**를 나눠 봅니다." if share else "")
+    return chapter("04", "Where the money comes from", "현대건설은 어디서 돈을 버나", lead, body, "ch4")
 
 
-def acts_table(F):
+# ---------------------------------------------------------------------------
+# 5장 성장에 중요한 재무항목
+# ---------------------------------------------------------------------------
+# 다섯 기준: ① 생존·사업 지속 ② 이익·현금 창출 ③ 장기 성장 설명력 ④ 건설업 특수성 ⑤ 위험 조기 경보
+# ● 그 기준을 직접 재고 현대건설 자료로 확인됨 · ◐ 간접적이거나 조건부 · ○ 관련이 약함 (분석자 판단, 근거 칸 참고)
+ITEMS = [
+    ("영업이익·영업이익률(원가율)", "●●●●●", 1), ("영업활동현금흐름", "●●◐●●", 1), ("매출채권·계약자산(받을 돈)", "◐●○●●", 1),
+    ("공사손실충당부채·우발채무(PF 보증)", "●◐○●●", 1), ("신규 수주·수주잔고", "◐◐●●◐", 2), ("순차입금·이자 부담", "●◐○◐◐", 2),
+    ("ROIC·ROE(자본 효율)", "○●●○○", 2), ("잉여현금흐름(FCF)", "◐●◐◐◐", 2), ("매출총이익·매출총이익률", "○●◐●●", 2),
+    ("매출액·매출 성장률", "○◐◐○○", 3), ("당기순이익", "○◐◐○○", 3), ("현금 및 현금성자산", "●○○◐○", 3),
+    ("부채비율·유동비율", "◐○○◐○", 3),
+]
+
+
+def item_evidence(ctx, F):
+    v, R, years = F["v"], F["R"], F["years"]
+    y0, yl = F["y0"], F["yl"]
+    ev_ = {}
+    b = R["bridge_10y"]
+    ev_["영업이익·영업이익률(원가율)"] = f"{pct(F['m0'])} → {pct(F['ml'])}; 10년 영업이익 변화 {sjo(b['d_op']) if b else '–'} 중 원가율 효과 {sjo(b['cost']) if b else '–'}"
+    s_cf = window_sum(F, "operating_cashflow", F["neg_start"], yl) if F["neg_start"] else None
+    ev_["영업활동현금흐름"] = (f"{F['neg_start']}~{yl}년 {len(range(F['neg_start'], yl + 1))}년 연속 마이너스, 합계 {jo(s_cf)}" if F["neg_start"] else
+                          f"{yl}년 {jo(v.a(yl, 'operating_cashflow'))}")
+    r0, r1 = v.a(2021, "receivables_total"), v.a(yl, "receivables_total")
+    rev0, rev1 = v.a(2021, "revenue"), v.a(yl, "revenue")
+    ev_["매출채권·계약자산(받을 돈)"] = (f"2021→{yl}년 {jo(r0, 1)} → {jo(r1, 1)}({r1 / r0:.1f}배) — 같은 기간 매출은 {rev1 / rev0:.1f}배"
+                                    if r0 and r1 and rev0 and rev1 else "–")
+    lp = [(y, F["est"][y]["loss_prov"]) for y in years if y in F["est"] and F["est"][y].get("loss_prov") is not None]
+    pf_txt = f"; PF 보증 {jo(F['pf'][-1][1]['amount'], 1)}(자본의 {F['pf_x']:.1f}배)" if F["pf"] and F["pf_x"] else ""
+    ev_["공사손실충당부채·우발채무(PF 보증)"] = (f"공사손실충당부채 최대 {jo(max(lp, key=lambda x: x[1])[1])}({max(lp, key=lambda x: x[1])[0]}년)" if lp else "–") + pf_txt
+    lb, yrs = F["lb"], F["yrs"]
+    ev_["신규 수주·수주잔고"] = (f"잔고 {jo(lb['total'], 1)}(매출 {yrs:.1f}년 치) — 잔고가 커진 기간에도 이익률은 하락" if lb and yrs else "–")
+    bal = F["bal"]
+    cov = F["vd"].get("coverage")
+    ev_["순차입금·이자 부담"] = (f"{nd_text(v.a(2022, 'net_debt'))}(2022년 말) → {nd_text(bal['values']['net_debt'])}({an.when_label(bal)}); "
+                            f"이자보상배율 {cov:.1f}배" if bal and bal["values"].get("net_debt") is not None and v.a(2022, "net_debt") is not None and cov is not None else "–")
+    ev_["ROIC·ROE(자본 효율)"] = f"ROIC {pct(v.a(y0, 'roic_pct'))}({y0}) → {pct(v.a(yl, 'roic_pct'))}({yl})"
+    fcf = window_sum(F, "fcf", F["neg_start"], yl) if F["neg_start"] else None
+    ev_["잉여현금흐름(FCF)"] = f"{F['neg_start']}~{yl}년 합계 {jo(fcf)}" if fcf is not None else "–"
+    sb = [F["seg"][y]["margin"].get("building") for y in years if y in F["seg"]]
+    ev_["매출총이익·매출총이익률"] = f"건축/주택 매출총이익률 최고 {pct(max(x for x in sb if x is not None))} → 최저 {pct(min(x for x in sb if x is not None))}" if sb else "–"
+    ev_["매출액·매출 성장률"] = f"10년 {F['revl'] / F['rev0']:.2f}배 — 2024년 매출 +{v.a(2024, 'revenue_growth_pct'):.0f}%에 영업손실" if v.a(2024, "revenue_growth_pct") else "–"
+    ev_["당기순이익"] = "환율 평가손익(2017·2018)·비지배지분 몫(2024) 때문에 영업이익과 다르게 움직임"
+    ev_["현금 및 현금성자산"] = (f"{an.when_label(bal)} {jo(bal['values'].get('cash'), 1)} — 하지만 영업 현금 유출을 예금·차입으로 메운 결과" if bal else "–")
+    ev_["부채비율·유동비율"] = (f"부채비율 {pct(bal['ratios'].get('debt_to_equity_pct'), 0)}이지만 차입금은 부채의 "
+                         f"{bal['values']['borrowings_total'] / bal['values']['liabilities'] * 100:.0f}% — 나머지는 공사 관련 부채" if bal and bal["values"].get("borrowings_total") else "–")
+    return ev_
+
+
+def relation_cards(ctx, F):
+    v, R, years = F["v"], F["R"], F["years"]
+    yl = F["yl"]
+    cards = []
+    br = {b["end"]: b for b in R["bridges"]}
+    b24 = br.get(2024)
+    if b24:
+        cards.append(("매출이 늘었는데 영업이익이 줄어드는 이유는?",
+                      f"2024년 매출 +{(b24['rev1'] / b24['rev0'] - 1) * 100:.1f}%로 규모 효과는 {sjo(b24['volume'])}였지만 원가율이 "
+                      f"{b24['cost_ratio0']:.1f}% → {b24['cost_ratio1']:.1f}%로 올라 {sjo(b24['cost'])}를 잃었습니다 [계산].",
+                      "매출은 진행률로 늘어도, 원가 추정이 바뀌면 그해 이익이 한꺼번에 줄어듭니다."))
+    c23 = F["cash"].get(2023)
+    if c23 and c23.get("d_receivables") is not None:
+        cards.append(("영업이익이 늘었는데 영업현금흐름이 나빠지는 이유는?",
+                      f"2023년 영업이익 {jo(c23['op'])}로 늘었지만, 받을 돈(매출채권+계약자산)이 {sjo(c23['d_receivables'])} 늘어 "
+                      f"영업활동현금흐름은 {jo(c23['cfo'])}였습니다 [계산].",
+                      "매출이 빨리 늘면 공사를 먼저 하고 나중에 받는 만큼 현금이 먼저 나갑니다."))
+    lb = F["lb"]
+    bk = [r for r in (F["biz"].get("backlog") or []) if r["month"] == 12 and not r.get("flag")]
+    if len(bk) >= 2:
+        first = next((r for r in bk if r["year"] >= F["y0"]), bk[0])
+        last = bk[-1]
+        cards.append(("수주잔고가 늘면 미래 이익도 늘까?",
+                      f"수주잔고는 {first['year']}년 말 {jo(first['total'], 1)} → {last['year']}년 말 {jo(last['total'], 1)}로 늘었지만, "
+                      f"같은 기간 영업이익률은 {pct(v.a(first['year'], 'operating_margin_pct'))} → {pct(v.a(last['year'], 'operating_margin_pct'))}로 낮아졌습니다 [공시·계산].",
+                      "잔고는 매출의 양을 보장할 뿐 이익을 보장하지 않습니다. 잔고 속 공사의 예상 이익률과 원가 추정 변경을 함께 봐야 합니다."))
+    bal = F["bal"]
+    if bal:
+        liab = bal["values"].get("liabilities")
+        bor = bal["values"].get("borrowings_total")
+        adv = bal["values"].get("advances_total")
+        cards.append(("부채가 늘어도 성장에 유리한 경우가 있을까?",
+                      f"{an.when_label(bal)} 부채 {jo(liab, 1)} 중 이자가 붙는 차입금은 {jo(bor, 1)}({bor / liab * 100:.0f}%)이고, "
+                      f"발주처에게 미리 받은 돈(계약부채·선수금)이 {jo(adv, 1)}입니다 [공시·계산].",
+                      "미리 받은 돈은 공사로 갚는 '좋은 부채'에 가깝습니다. 부채비율 하나보다 부채의 구성을 봐야 합니다."))
+    if bal:
+        nd0 = v.a(2022, "net_debt")
+        cards.append(("현금이 많으면 재무가 건전하다고 할 수 있나?",
+                      f"{an.when_label(bal)} 현금은 {jo(bal['values'].get('cash'), 1)}이지만 2022년 말 {nd_text(nd0)}에서 {nd_text(bal['values'].get('net_debt'))}로 바뀌었고, PF 보증"
+                      + (f"({jo(F['pf'][-1][1]['amount'], 1)})" if F["pf"] else "") + "이 따로 있습니다 [공시·계산].",
+                      "현금 잔액은 '얼마나 버는가'가 아니라 '얼마나 남았나'입니다. 현금을 만드는 속도와 재무제표 밖 의무를 함께 봐야 합니다."))
+    return cards
+
+
+def ch5_items(ctx, F):
+    R = F["R"]
+    evd = item_evidence(ctx, F)
+    marks_cls = {"●": "m-full", "◐": "m-half", "○": "m-none"}
     rows = []
-    for act in F["a"].get("acts", []):
-        why_text, srcs = act["why"]
-        links = " · ".join(link(an.SOURCES[s][1], an.SOURCES[s][0]) for s in srcs if s in an.SOURCES)
-        facts_line = " · ".join(esc(f) for f in act["facts"])
-        rows.append([f'<b>{esc(act["years"])}</b>', f'<b>{esc(act["title"])}</b><span class="r-facts">{facts_line}</span>',
-                     esc(why_text) + (f'<span class="r-src">출처: {links}</span>' if links else "")])
-    return rtable(["시기", "장면과 숫자", "배경"], rows, "r-acts") if rows else ""
-
-
-def ch4_profit(ctx, F):
-    v10 = F["v10"]
-    step = F["steps"].get("profit") or {}
-    notes = F["a"].get("notes") or {}
-    body = (sub("4-1", "원가가 이익을 정합니다", d.per100_fig(v10, notes))
-            + sub("4-2", "네 가지 이익률로 본 10년", d.margins_fig(v10))
-            + box("가이드 순서로 본 이익률", bullets(step.get("more", [])), "cols")
-            + sub("4-3", "원가를 흔드는 자재값", materials_table(ctx))
-            + sub("4-4", f"{F['y0']}년부터의 흐름, 다섯 장면", acts_table(F),
-                  "숫자는 재무제표에서 자동으로 계산하고, 배경 설명은 언론 보도에서 가져왔습니다."))
-    lead = [step.get("answer", ""), step.get("lead", "")]
-    return chapter("04", "Quality of earnings", "이익의 질: 원가율과 수익성", lead, body, "ch4")
-
-
-# ---------------------------------------------------------------------------
-# 5장 현금과 재무 체력
-# ---------------------------------------------------------------------------
-def ch5_cash(ctx, F):
-    v10, years = F["v10"], F["years10"]
-    a = F["a"]
-    cash_step, debt_step = F["steps"].get("cash") or {}, F["steps"].get("debt") or {}
-    f_cash, f_rec = d.cash_figs(v10, F["vd"], a.get("notes") or {})
-    f_cov, f_nd, _, _ = d.debt_figs(v10)
-    sig = [s for s in a.get("signals", []) if s["year"] in years]
-    pf_box = box("PF 보증이란?", bullets(["아파트·오피스를 짓는 시행사나 재건축 조합은 땅을 사고 공사비를 대려고 은행에서 큰돈을 빌립니다(PF 대출).",
-                                          "건설사는 공사를 따내는 조건으로 ‘사업이 잘못되면 대신 갚거나 책임지고 완공하겠다’는 약속(보증·책임준공)을 섭니다.",
-                                          "지금은 빚이 아니어서 재무상태표의 부채에는 없지만, 분양이 안 되면 건설사의 빚이 됩니다. 그래서 사업보고서 Ⅺ장의 "
-                                          "‘채무보증현황’을 따로 봐야 합니다."]))
-    body = (f'<div class="r-2">{f_cash}{f_rec}</div>'
-            + sub("5-1", "현금흐름 신호등", d.signal_table(sig) if sig else "",
-                  "현금흐름표의 세 칸(영업·투자·재무)이 들어왔는지(▲) 나갔는지(▼)만 봐도 회사의 상태가 보입니다.")
-            + box("가이드 순서로 본 현금흐름", bullets(cash_step.get("more", [])))
-            + sub("5-2", "부채는 무엇으로 이뤄졌나", st.bs_chart(v10, years))
-            + sub("5-3", "재무제표 밖의 위험: PF 보증", f'<div class="r-2 r-pf">{rv.pf_fig(ctx)}{pf_box}</div>')
-            + sub("5-4", "빚을 감당할 힘", f'<div class="r-2">{f_cov}{f_nd}</div>'
-                  + box("가이드 순서로 본 차입 부담", f'<p><b>{rich(debt_step.get("answer", ""))}</b></p>'
-                        + bullets([debt_step.get("lead", "")] + debt_step.get("more", [])))))
-    lead = [cash_step.get("answer", ""), cash_step.get("lead", "")]
-    return chapter("05", "Cash & financial strength", "현금과 재무 체력", lead, body, "ch5")
-
-
-# ---------------------------------------------------------------------------
-# 6장 재무비율 10가지 관점
-# ---------------------------------------------------------------------------
-def ch6_lenses(ctx, F):
-    L, years = F["L"], F["years10"]
+    for name, marks, tier in ITEMS:
+        cells = [f'<span class="{marks_cls[m]}">{m}</span>' for m in marks]
+        rows.append([f"<b>{esc(name)}</b>"] + cells + [esc(evd.get(name, "")), f'<span class="tier t{tier}">{tier}순위</span>'])
+    table = rtable(["재무항목", "①<br>생존", "②<br>이익·현금", "③<br>장기 성장", "④<br>건설업 특수성", "⑤<br>조기 경보", "현대건설에서 확인한 근거 [계산]", "묶음"],
+                   rows, "r-items")
+    rule = ("● 그 기준을 직접 보여 주고 현대건설 자료로 확인됨 · ◐ 간접적이거나 조건이 붙음 · ○ 관련이 약함. 점수를 더하지 않고 "
+            "1순위(다섯 기준 대부분 ●), 2순위, 3순위로 묶었습니다. 표시는 분석자의 판단이며 근거 칸의 숫자로 확인할 수 있습니다 [해석].")
+    purpose = rtable(["누구의 목적", "먼저 볼 항목", "이유"], [
+        ["<b>살아남기(채권자·신용평가)</b>", "현금·순차입금·우발채무·유동성", "당장 갚을 수 있는지, 재무제표 밖 의무가 빚이 될지"],
+        ["<b>장기 가치(주주)</b>", "원가율·영업이익률, ROIC, 잉여현금흐름", "벌어들인 이익이 자본비용보다 높고 현금으로 남는지"],
+        ["<b>끝까지 짓는 회사(발주처·조합)</b>", "부채비율·유동비율, 신용등급, 수주잔고", "공사 중에 회사가 흔들리지 않을지"],
+        ["<b>손익 관리(경영진)</b>", "원가 추정 변경, 공사별 진행률·계약자산", "어느 현장에서 원가가 새는지 일찍 알기"],
+    ], "r-purpose")
+    rel = "".join(f'<article class="qa"><p class="r-h">Q. {esc(q)}</p><p>{tagify(a)}</p><p class="qa-a">→ {tagify(c)}</p></article>'
+                  for q, a, c in relation_cards(ctx, F))
     icon = {"good": "✓", "warn": "!", "crit": "✕", "info": "i"}
-    rows = []
+    w = R["warning"]
+    wrows = []
+    for r in w["rows"]:
+        fmt = (lambda x: pct(x, 1)) if "%" in r["name"] else (lambda x: "–" if x is None else an._m(f"{x:,.2f}"))
+        mark = {True: '<span class="r-chip crit">✕ 미리 나빠짐</span>', False: '<span class="r-chip info">아님</span>',
+                None: '<span class="r-chip info">방향 판단 없음</span>'}[r["warned"]]
+        wrows.append([esc(r["name"]), num(fmt(r["base"]), r["base"]), num(fmt(r["pre2"]), r["pre2"]), num(fmt(r["pre1"]), r["pre1"]),
+                      num(fmt(r["event"]), r["event"]), mark])
+    ey = w["event_year"]
+    warn = rtable(["지표", f"평상시({w['base'][0]}~{w['base'][1]} 평균)", f"{ey - 2}년", f"{ey - 1}년", f"{ey}년(손실)", "손실 2년 전부터 나빠졌나"], wrows, "r-warn")
+    L, years10 = F["L"], F["years10"]
+    lrows = []
     for lens in L:
         m = lens["head"] if lens["id"] != "price" else lens["metrics_data"][0]
-        others = [x for x in lens["metrics_data"] if x is not m][:2]
-        extra = " · ".join(f"{x['label']} {ln.with_unit(x['latest'], x['unit'])}" for x in others if x["latest"] is not None)
         rank = f" ({m['rank']}위)" if m.get("rank") else ""
-        rows.append([f'<b>{lens["no"]} {esc(lens["ko"])}</b><span class="r-q">{esc(lens["q"])}</span>',
-                     f'{esc(m["label"])}<span class="r-q">{esc(extra)}</span>',
-                     num(ln.with_unit(m["latest"], m["unit"]), m["latest"]),
-                     f'<span class="r-chip {m["tone"]}">{icon[m["tone"]]} {esc(m["word"])}{esc(rank)}</span>',
-                     num(ln.with_unit(m["median"], m["unit"]), m["median"])])
-    table = rtable(["관점 · 질문", "대표 지표 · 함께 본 지표", f"{years[-1]}년", f"{len(years)}년 중 위치(좋은 순)", "중앙값"], rows, "r-lens")
+        lrows.append([f'<b>{lens["no"]} {esc(lens["ko"])}</b>', esc(m["label"]), num(ln.with_unit(m["latest"], m["unit"]), m["latest"]),
+                      f'<span class="r-chip {m["tone"]}">{icon[m["tone"]]} {esc(m["word"])}{esc(rank)}</span>',
+                      num(ln.with_unit(m["median"], m["unit"]), m["median"])])
+    lens_tbl = rtable(["관점", "대표 지표", f"{years10[-1]}년", f"{len(years10)}년 중 위치(좋은 순)", "중앙값"], lrows, "r-lens")
     dupont = next((x for x in L if x["id"] == "dupont"), None)
     dp = ""
     if dupont:
-        heads, drows = st.dupont_rows(dupont, years)
+        heads, drows = st.dupont_rows(dupont, years10)
         dp = rtable(heads, [[esc(r[0])] + [num(c[0], c[1]) for c in r[1:]] for r in drows], "r-dupont") + \
-            f'<p class="r-src">{rich(st.dupont_note(dupont, years))}</p>'
-    body = (table
-            + sub("6-1", "10년 위치표", st.heatmap(L, years),
-                  "여러 관점의 대표 지표를 한 표에 놓고, 같은 줄 안에서 상대적으로 좋은 해는 초록, 나쁜 해는 빨강으로 칠했습니다. "
-                  "한 해의 색이 대부분 빨갛다면 여러 관점에서 동시에 나빠진 해입니다.", keep=True)
-            + sub("6-2", "종합 분석: ROE를 셋으로 나누면 (듀퐁 분해)", dp,
-                  "ROE = 순이익률(얼마나 남기나) × 총자산회전율(얼마나 빨리 돌리나) × 재무레버리지(빚을 얼마나 쓰나).", keep=True))
-    return chapter("06", "10 lenses", "재무비율 10가지 관점",
-                   f"재무비율은 하나만 보면 오해하기 쉽습니다. 수익성·안정성·유동성·활동성·성장성·생산성·현금흐름·시장가치에 종합 분석(듀퐁)과 "
-                   f"주가 반영을 더한 10가지 관점으로 나눠, **최근 {len(years)}년({years[0]}~{years[-1]}) 안에서 지금이 어디쯤인지** 봤습니다. "
-                   "높을수록 좋은 지표와 낮을수록 좋은 지표를 구분하고, PER처럼 해석이 갈리는 지표는 ‘참고’로 둡니다. "
-                   "관점별 차트는 대시보드에 있습니다.", body, "ch6")
+            f'<p class="r-src">{rich(st.dupont_note(dupont, years10))}</p>'
+    grows = []
+    for s_ in F["a"].get("steps", []):
+        tone, word = s_["verdict"]
+        grows.append([esc(f"{s_['no']} {s_['ko']}"), f'<span class="r-chip {tone}">{icon[tone]} {esc(word)}</span>', rich(s_["answer"])])
+    guide = rtable(["단계", "판정", "한 줄 답"], grows, "r-guide")
+    body = (sub("5-1", "열세 개 재무항목의 중요도", table + f'<p class="r-src">{tagify(rule)}</p>',
+                "지시한 열세 개 항목을 다섯 기준으로 평가했습니다. 모든 기업에 맞는 절대 순위는 없어서, 아래에 목적별 순위를 따로 적었습니다.", keep=True)
+            + sub("5-2", "목적에 따라 달라지는 순위", purpose, "누가 무엇을 위해 보느냐에 따라 먼저 볼 항목이 달라집니다. 분석자의 정리입니다 [해석].", keep=True)
+            + sub("5-3", "재무항목은 서로 연결되어 있습니다", f'<div class="qas">{rel}</div>')
+            + sub("5-4", f"검증: {ey}년 손실 전에 먼저 나빠진 지표는?", warn,
+                  f"{ey}년 손실 2년 전({ey - 2}·{ey - 1}년) 값이 평상시보다 나빴는지 봤습니다. 사례가 하나뿐이라 '이 지표가 경보다'라는 결론은 이 사건에 한정됩니다 [해석].",
+                  keep=True)
+            + sub("5-5", "교수님 가이드: 6단계 판정과 재무비율 10가지 관점", guide
+                  + f'<p class="r-subnote r-g2">아래 표는 수익성·안정성·유동성·활동성·성장성·생산성·현금흐름·시장가치에 종합 분석(듀퐁)과 주가 반영을 더한 '
+                  f'10가지 관점의 대표 지표가 최근 {len(years10)}년 안에서 어디쯤인지입니다. 관점별 그래프는 재무제표 대시보드에 있습니다.</p>'
+                  + lens_tbl + dp,
+                  "재무제표·재무비율 실무가이드의 분석 순서(매출 성장 → 이익률 → 현금흐름 → 차입 부담 → 투자수익률 → 주가 수준)와 정해진 판정 규칙(부록 A)을 "
+                  "따릅니다. 대시보드의 같은 판정과 매월 함께 바뀝니다."))
+    lead = ("매출·이익·현금·부채 지표는 따로 보면 서로 다른 말을 합니다. 현대건설 자료로 확인하면 **원가율(영업이익률)과 영업활동현금흐름, "
+            "그리고 재무제표 밖의 우발채무**가 생존과 성장 모두에 가장 중요했습니다 [해석].")
+    return chapter("05", "What matters for growth", "성장에 중요한 재무항목", lead, body, "ch5")
 
 
 # ---------------------------------------------------------------------------
-# 7장 시장의 평가
+# 6장 무엇이 실적을 움직였나
 # ---------------------------------------------------------------------------
+def bridge_fig(F):
+    R = F["R"]
+    br = R["bridges"]
+    ys = [b["end"] for b in br]
+    comps = [{"name": "매출 규모 효과", "values": [b["volume"] / T for b in br], "color": "--s3"},
+             {"name": "원가율 효과", "values": [b["cost"] / T for b in br], "color": "--s2"},
+             {"name": "판관비율 효과", "values": [b["sga"] / T for b in br], "color": "--s4"}]
+
+    def tips(i):
+        b = br[i]
+        return (f"{b['end']}년 영업이익 변화 {sjo(b['d_op'])}", [["매출 규모 효과", sjo(b["volume"]), "var(--s3)"],
+                                                           ["원가율 효과", sjo(b["cost"]), "var(--s2)"], ["판관비율 효과", sjo(b["sga"]), "var(--s4)"]],
+                f"원가율 {b['cost_ratio0']:.1f}% → {b['cost_ratio1']:.1f}% · 판관비율 {b['sga_ratio0']:.1f}% → {b['sga_ratio1']:.1f}%")
+    chart = rc.diverging_stack(xlabels(ys), comps, tips=tips, net=[b["d_op"] / T for b in br], height=190,
+                               net_labels={i: an.signed(b["d_op"] / T, 2) for i, b in enumerate(br)})
+    rows = [[str(b["end"]), num(sjo(b["d_op"]), b["d_op"]), num(sjo(b["volume"]), b["volume"]), num(sjo(b["cost"]), b["cost"]),
+             num(sjo(b["sga"]), b["sga"]), num(f"{b['cost_ratio1']:.1f}%")] for b in br]
+    b10 = R["bridge_10y"]
+    if b10:
+        rows.append([f"<b>{b10['start']}→{b10['end']}</b>", num(sjo(b10["d_op"]), b10["d_op"]), num(sjo(b10["volume"]), b10["volume"]),
+                     num(sjo(b10["cost"]), b10["cost"]), num(sjo(b10["sga"]), b10["sga"]), num(f"{b10['cost_ratio1']:.1f}%")])
+    tbl = rtable(["연도", "영업이익 변화", "매출 규모 효과", "원가율 효과", "판관비율 효과", "원가율"], rows, "r-bridge")
+    out = fig("fig-bridge", "영업이익은 왜 변했나: 세 가지 효과", "전년 대비 · 가로 막대 표시와 숫자 = 영업이익 변화(조 원) · 세 효과의 합과 같음",
+              chart, legend_html=d.legend([(c["name"], c["color"], "box") for c in comps]))
+    return out, tbl
+
+
+def estimate_fig(F):
+    est = [F["est"][y] for y in F["years"] if y in F["est"]]
+    ys = [r["year"] for r in est]
+    comps = [{"name": SEG_KO[k], "values": [(r["by_seg"].get(k) or 0) / T for r in est], "color": SEG_COLOR[k]} for k in ("building", "civil", "plant")]
+
+    def tips(i):
+        r = est[i]
+        rows = [[SEG_KO[k], won(r["by_seg"].get(k)), f"var({SEG_COLOR[k]})"] for k in ("building", "civil", "plant")]
+        rows += [["합계(연결)", won(r["current"]), None], ["현대건설 본사(별도)", won(r["parent"]), None], ["미래 손익 영향", won(r["future"]), None]]
+        return f"{r['year']}년 원가 추정 변경이 그해 세전이익에 준 영향", rows, f"매출 대비 {pct(r['pct_rev'], 1)}"
+    chart = rc.diverging_stack(xlabels(ys), comps, tips=tips, net=[r["current"] / T for r in est], height=180,
+                               net_labels={i: an.signed(r["current"] / T, 2) for i, r in enumerate(est)})
+    note = None
+    if F["est_calm"] is not None:
+        note = (f"{ys[0]}~2021년 평균은 {josa(jo(F['est_calm']), '이었')}습니다. 원가 추정은 해마다 조금씩 나빠지는 것이 보통이고, "
+                "문제는 그 크기가 평상시보다 커지는 해입니다 [계산].")
+    return fig("fig-estimate", "진행 중인 공사의 원가 추정이 바뀌어 그해 이익에 준 영향", "회사 공시(건설계약 주석) · 연결 · 부문별 · 가로 표시 = 합계",
+                    chart, legend_html=seg_legend(("building", "civil", "plant")), note=note)
+
+
+def materials_fig(F):
+    mats = F["dr"].get("materials") or {}
+    keys = [k for k in ("봉강류(철근)", "강판류(후판)", "레미콘", "시멘트") if k in mats]
+    years = F["years"]
+    base_y = str(years[0])
+    series = []
+    colors = ["--s2", "--s3", "--s1", "--s4"]
+    for k, c in zip(keys, colors):
+        vals = mats[k]["values"]
+        b = vals.get(base_y)
+        series.append({"name": k.replace("봉강류", "").replace("강판류", "").strip("()") or k, "values":
+                       [vals.get(str(y)) / b * 100 if b and vals.get(str(y)) else None for y in years], "color": c})
+    if not series:
+        return ""
+
+    def tips(i):
+        y = years[i]
+        return f"{y}년 자재 가격({years[0]}년 = 100)", [[s["name"], "–" if s["values"][i] is None else f"{s['values'][i]:.0f}", f"var({s['color']})"] for s in series], \
+            "사업보고서 '주요 원자재 가격변동추이'(회사 구매 기준가)"
+    return fig("fig-materials", "주요 자재 가격", f"{years[0]}년 = 100 · 회사 사업보고서 원재료 가격표",
+                    d.multi_line_chart(xlabels(years), series, ticks_fmt=lambda t: an._m(f"{t:g}"), tips=tips, height=150,
+                                       end_fmt=lambda x: f"{x:.0f}"),
+                    legend_html=d.legend([(s["name"], s["color"], "box") for s in series]))
+
+
+def rate_fig(F):
+    v, years = F["v"], F["years"]
+    br = (F["RC"].get("macro") or {}).get("base_rate") or {}
+    base = [br.get(str(y)) for y in years]
+    imp = [v.a(y, "borrowing_rate_pct") for y in years]
+
+    def tips(i):
+        y = years[i]
+        return f"{y}년", [["기준금리(연말)", pct(base[i], 2), "var(--s3)"], ["현대건설 평균 차입 이자율(계산)", pct(imp[i], 2), "var(--s2)"],
+                          ["이자비용", won(v.a(y, "interest_expense")), None]], "차입 이자율 = 이자비용 ÷ 평균 차입금"
+    return fig("fig-rate", "금리와 현대건설의 차입 이자율", "기준금리: 한국은행 · 차입 이자율: 이자비용 ÷ 평균 차입금(계산)",
+                    d.multi_line_chart(xlabels(years), [{"name": "기준금리", "values": base, "color": "--s3", "dash": True},
+                                                        {"name": "차입 이자율", "values": imp, "color": "--s2"}],
+                                       ticks_fmt=tick_pct, tips=tips, height=150, end_fmt=lambda x: pct(x, 1)),
+                    legend_html=d.legend([("기준금리(연말)", "--s3", "box"), ("평균 차입 이자율", "--s2", "box")]))
+
+
+def cash_fig(F):
+    v, years = F["v"], F["years"]
+    op = [v.a(y, "operating_profit") for y in years]
+    cf = [v.a(y, "operating_cashflow") for y in years]
+
+    def tips(i):
+        y = years[i]
+        c = F["cash"].get(y) or {}
+        return f"{y}년", [["영업이익", won(op[i]), "var(--s1)"], ["영업활동현금흐름", won(cf[i]), "var(--s2)"],
+                          ["받을 돈 증감", won(c.get("d_receivables")), None], ["미리 받은 돈 증감", won(c.get("d_advances")), None]], None
+    return fig("fig-cash", "이익과 현금", "연결 · 조 원", d.column_chart(xlabels(years), [{"values": d.in_jo(op), "color": "--s1"},
+                                                                                       {"values": d.in_jo(cf), "color": "--s2"}],
+                                                                       ticks_fmt=d.tick_jo, tips=tips, height=170, neg_zone=True),
+                    legend_html=d.legend([("영업이익", "--s1", "box"), ("영업활동현금흐름", "--s2", "box")]))
+
+
+def factor_rows(ctx, F):
+    v, R, years = F["v"], F["R"], F["years"]
+    mats = F["dr"].get("materials") or {}
+
+    def chg(name, a, b):
+        m = mats.get(name, {}).get("values", {})
+        x, y = m.get(str(a)), m.get(str(b))
+        return (y / x - 1) * 100 if x and y else None
+    seg = F["seg"]
+    bgm = lambda y: (seg.get(y) or {}).get("margin", {}).get("building")
+    est = F["est"]
+    sens = R["sens"]
+    ib = rs.interest_bridge(v, 2021, F["yl"])
+    pf0 = (F["biz"].get("pf") or {}).get("2022.12", {}).get("amount")
+    rows = []
+    rows.append(("공사비(자재·인건비)", "계약금액이 고정된 공사에서 원가가 오르면 → 원가 추정 상향 → 매출총이익 감소",
+                 f"레미콘 {pct(chg('레미콘', 2020, 2024), 0)}, 시멘트 {pct(chg('시멘트', 2020, 2024), 0)}(2020→2024) [공시]; "
+                 f"건축/주택 매출총이익률 {pct(bgm(2021))} → {pct(bgm(2024))} [계산]",
+                 f"건축/주택 원가 추정 변경 2022~2024년 합계 {jo(sum((est.get(y, {}).get('by_seg', {}).get('building') or 0) for y in (2022, 2023, 2024)))} [공시]",
+                 "높음", "구조적(계약 구조) + 일시적(물가 급등기)"))
+    hec24 = (F["ent"].get(2024) or {}).get("hec_op")
+    rows.append(("해외 프로젝트 수행(설계변경·공기·협력사)", "발주처 설계변경·공기 연장 → 협력사 재동원·간접비 → 원가 초과",
+                 f"플랜트/전력 매출총이익률 2024년 {pct((seg.get(2024) or {}).get('margin', {}).get('plant'))} [계산]",
+                 f"플랜트/전력 원가 추정 변경 2024년 {jo((est.get(2024) or {}).get('by_seg', {}).get('plant'))}, 현대엔지니어링 영업손실 {jo(hec24)} [공시]",
+                 "높음", "회사 고유(현장별) — 고정가격 EPC는 반복 가능"))
+    c23 = F["cash"].get(2023) or {}
+    rows.append(("운전자본(대금 회수)", "공사 진행 > 청구·회수 → 계약자산·매출채권 증가 → 영업 현금 유출",
+                 f"받을 돈 2023년 {sjo(c23.get('d_receivables'))} [계산]",
+                 f"영업활동현금흐름 {F['neg_start']}~{F['yl']}년 합계 {jo(window_sum(F, 'operating_cashflow', F['neg_start'], F['yl']) if F['neg_start'] else None)} [공시]",
+                 "현금에 높음", "구조적(매출 급증기·분양 부진기에 반복)"))
+    rows.append(("금리", "① 차입 이자 → 금융비용(직접) ② 주택 분양·PF 시장 → 대금 회수·보증 위험(간접)",
+                 (f"이자비용 {eok(ib['int0'])} → {eok(ib['int1'])}(2021→{F['yl']}): 차입 규모 효과 {seok(ib['volume_effect'])}, 금리 효과 {seok(ib['rate_effect'])} [계산]" if ib else "–"),
+                 f"회사 공시 민감도: 변동금리 차입 이자율 1%p 상승 시 세전이익 {seok(sens.get('rate_1pp'))} [공시]; 간접 영향은 크기 미확인",
+                 "직접 낮음 · 간접 미확인", "경기적"))
+    rows.append(("주택 경기·PF 환경", "미분양·PF 경색 → 공사대금 지연, 보증·책임준공 부담",
+                 (f"PF 보증 {jo(pf0, 1)}(2022년 말) → {jo(F['pf'][-1][1]['amount'], 1)}({rv.period_label(F['pf'][-1][0])}) [공시]" if F["pf"] and pf0 else "–"),
+                 "손실로 확인된 금액 없음 — 보증 규모(노출)만 확인 [공시]", "미확인(노출 큼)", "경기적"))
+    reg = F["dr"].get("regions") or {}
+    me = [(y, (reg.get(str(y)) or {}).get("revenue", {}).get("mideast")) for y in years]
+    rows.append(("해외 발주·유가·지정학", "유가·발주처 투자 → 해외 수주·매출 구성; 전쟁 → 현장 안전·공기",
+                 f"중동·아프리카 매출 {jo(me[0][1], 1)}({me[0][0]}) → {jo(me[-1][1], 1)}({me[-1][0]}) [공시]; 2026년 이란 전쟁 [보도]",
+                 "손익 영향은 공시 전(미확인)", "매출 구성에 높음 · 손익 미확인", "경기적·지정학"))
+    rows.append(("환율", "외화 자산·부채 환산 → 영업외손익(순이익)",
+                 "2017년 원/달러 −137원 → 순이익 −49%, 2018년 환 평가이익 약 2,900억 원 [공시]",
+                 f"회사 공시 민감도: 원화 환율 10% 상승 시 세전이익 {seok(sens.get('fx_10pct'))} [공시]", "순이익에 중간", "변동성(일시적)"))
+    rows.append(("안전·품질 사고와 규제", "사고 → 재시공·영업정지·수주 제한",
+                 "서울-세종 고속도로 교량 붕괴(2025, 현대엔지니어링) [공시]; GTX-A 철근 누락(2026) [보도]; 중대재해처벌법(2022) [보도]",
+                 "손실 금액 공시 없음(미확인)", "미확인", "회사 고유·규제"))
+    rows.append(("팬데믹", "현장 중단·착공 지연 → 매출 감소·비용 선반영", "2020년 해외 공사 중단·선제적 비용 반영 [공시]",
+                 f"원가 추정 변경 2019 {jo((est.get(2019) or {}).get('current'))} → 2020 {jo((est.get(2020) or {}).get('current'))}; 코로나 몫은 미공시 [공시]",
+                 "중간", "일시적"))
+    return rows
+
+
+def ch6_drivers(ctx, F):
+    R, v, years = F["R"], F["v"], F["years"]
+    fig_b, tbl_b = bridge_fig(F)
+    sh = bridge_shares(F)
+    b10 = R["bridge_10y"]
+    pts = []
+    if b10:
+        pts.append(f"{b10['start']}→{b10['end']}년 영업이익 {sjo(b10['d_op'])}: 매출이 {b10['rev1'] / b10['rev0']:.2f}배가 되며 생긴 규모 효과 {sjo(b10['volume'])}를 "
+                   f"원가율 상승({b10['cost_ratio0']:.1f}% → {b10['cost_ratio1']:.1f}%) 효과 {sjo(b10['cost'])}가 모두 삼켰습니다 [계산].")
+    if sh.get("cost") is not None:
+        pts.append(f"해마다의 영업이익 변화를 크기로 보면 **원가율 효과가 {sh['cost']:.0f}%**, 판관비율 {sh['sga']:.0f}%, 매출 규모 {sh['volume']:.0f}%입니다 [계산].")
+    pts.append("즉 현대건설의 이익을 움직인 것은 '얼마나 많이 지었나'가 아니라 '얼마에 지었나'였습니다 [해석].")
+    # 6-2 원가 추정 변경
+    fig_e = estimate_fig(F)
+    est_rows = []
+    for y in [y for y in years if y >= 2021 and y in F["est"]]:
+        r = F["est"][y]
+        est_rows.append([str(y), num(jo(r["current"]), r["current"]), num(jo(r["by_seg"].get("building")), r["by_seg"].get("building")),
+                         num(jo(r["by_seg"].get("plant")), r["by_seg"].get("plant")), num(jo(r["by_seg"].get("civil")), r["by_seg"].get("civil")),
+                         num(jo(r["parent"]), r["parent"]), num(jo(r["others"]), r["others"]), num(jo(r["loss_prov"]), r["loss_prov"]),
+                         num(pct(r["pct_rev"]), r["pct_rev"])])
+    est_tbl = rtable(["연도", "합계(연결)", "건축/주택", "플랜트/전력", "토목", "현대건설 본사", "본사 외(자회사)", "공사손실충당부채", "매출 대비"], est_rows, "r-est")
+    ev24 = (F["RC"].get("events") or {}).get("2024", {})
+    reason = box("회사가 공시한 2024년 원가 추정 변경 사유", f'<p>{tagify(ev24.get("detail", ""))}</p>', "warn") if ev24.get("detail") else ""
+    w = F["est_worst"]
+    est_pts = []
+    if w and F["est_calm"]:
+        est_pts.append(f"{w['year']}년 효과 {josa(jo(w['current']), '은')} 평상시({years[0]}~2021년 평균 {jo(F['est_calm'])})의 {w['current'] / F['est_calm']:.0f}배였고, "
+                       f"매출의 {abs(w['pct_rev']):.1f}%에 해당합니다 [계산].")
+        if w.get("others") is not None:
+            est_pts.append(f"그중 본사 외(현대엔지니어링 등)가 {jo(w['others'])}, 본사가 {jo(w['parent'])}였습니다 [공시·계산]. "
+                           "본사는 다른 공사의 이익으로 상당 부분을 메웠지만, 현대엔지니어링은 그러지 못해 영업손실이 됐습니다.")
+    est_pts.append("경고는 미리 있었습니다: 2022·2023년 효과가 평상시의 2~4배로 커졌고, 건축/주택에서도 마이너스가 커졌습니다(5-4 검증) [계산].")
+    # 6-3 외부 요인
+    frows = [[f"<b>{esc(a)}</b>", esc(b), tagify(c), tagify(e), f'<span class="r-chip {"crit" if g.startswith("높음") else ("warn" if ("중간" in g or "현금" in g or "매출" in g) else "info")}">{esc(g)}</span>', esc(h)]
+             for a, b, c, e, g, h in factor_rows(ctx, F)]
+    ftbl = rtable(["요인", "영향 경로", "현대건설 자료에서 보이는 것", "정량 근거", "관련성 [해석]", "성격 [해석]"], frows, "r-factor")
+    fig_m, fig_r = materials_fig(F), rate_fig(F)
+    # 6-4 현금
+    fig_c = cash_fig(F)
+    crow = []
+    for y in years:
+        c = F["cash"].get(y) or {}
+        crow.append([str(y), num(jo(c.get("op")), c.get("op")), num(jo(c.get("ebitda")), c.get("ebitda")), num(jo(c.get("generated")), c.get("generated")),
+                     num(jo(c.get("wc_gap")), c.get("wc_gap")), num(jo(c.get("cfo")), c.get("cfo")), num(sjo(c.get("d_receivables")), c.get("d_receivables")),
+                     num(sjo(c.get("d_advances")), c.get("d_advances"))])
+    ctbl = rtable(["연도", "영업이익", "EBITDA", "영업에서 창출된 현금", "차이(운전자본 등)", "영업활동현금흐름", "받을 돈 증감", "미리 받은 돈 증감"], crow, "r-cash")
+    cash_pts = []
+    if F["neg_start"]:
+        s_op = window_sum(F, "operating_profit", F["neg_start"], F["yl"])
+        s_cf = window_sum(F, "operating_cashflow", F["neg_start"], F["yl"])
+        s_rec = sum((F["cash"].get(y) or {}).get("d_receivables") or 0 for y in range(F["neg_start"], F["yl"] + 1))
+        cash_pts.append(f"{F['neg_start']}~{F['yl']}년 영업이익 합계 {jo(s_op)}인데 영업활동현금흐름 합계는 {jo(s_cf)}입니다. 같은 기간 받을 돈(매출채권+계약자산)이 "
+                        f"{sjo(s_rec)} 늘었습니다 [계산].")
+    cash_pts.append("2024년은 손실(비용)이 대부분 현금이 아직 나가지 않은 원가 추정·충당부채여서 현금 차이가 오히려 플러스였고, 2025년에는 그 비용이 현금으로 "
+                    "나가면서 다시 마이너스가 됐습니다 [해석].")
+    cash_pts.append("공사미수금을 유동화 회사에 넘기는 이체약정(재매입 약정 포함)과 채권 팩토링 한도가 공시돼 있습니다 [공시: Ⅲ 약정사항 주석]. "
+                    "처리 방식에 따라 영업활동현금흐름이 실제 회수보다 좋아 보일 수 있어 함께 봐야 합니다 [해석].")
+    # 6-5 결론
+    concl = rtable(["요인", "확인된 과거 영향", "수익성", "현금", "재무 건전성", "미래 성장", "성격"], conclusion_rows(ctx, F), "r-concl")
+    body = (sub("6-1", "영업이익 변화 나누기: 규모 · 원가율 · 판관비율", fig_b + tbl_b + bullets(pts),
+                "영업이익 = 매출 × (1 − 원가율 − 판관비율)이므로 영업이익 변화는 세 효과로 정확히 나뉩니다(나머지 0, 부록 A). "
+                "규모 효과는 전년 이익률을 유지했을 때 매출 변화로 생기는 이익입니다.")
+            + sub("6-2", "원가는 어디서 새었나: 회사가 공시한 원가 추정 변경", fig_e + est_tbl + reason + bullets(est_pts),
+                  "건설계약 주석은 '전기말 진행 중이던 공사의 총계약수익·총계약원가 추정이 바뀌어 그해와 미래의 손익(세전)에 준 영향'을 부문별로 공시합니다. "
+                  "공사별 손익은 공개되지 않아 이것이 원가 문제의 크기를 재는 가장 직접적인 공식 숫자입니다.")
+            + sub("6-3", "외부 요인: 경로와 확인된 크기", ftbl + f'<div class="r-2">{fig_m}{fig_r}</div>',
+                  "아래 요인이 모두 중요하다고 미리 정하지 않고, 현대건설 자료에서 영향이 확인되는지로 '관련성'을 매겼습니다. 연간 10개 값으로는 인과를 증명할 수 없어 "
+                  "상관계수 대신 영향 경로와 회사가 공시한 민감도를 씁니다 [해석].")
+            + sub("6-4", "이익은 왜 현금이 되지 않았나", fig_c + ctbl + bullets(cash_pts),
+                  "EBITDA(영업이익+감가상각비)와 '영업에서 창출된 현금'(이자·세금 전)의 차이가 운전자본 변화 등입니다. 받을 돈·미리 받은 돈은 재무상태표 증감입니다.")
+            + sub("6-5", "결론: 어떤 요인이 얼마나 중요했나", concl,
+                  "‘확인된 과거 영향’은 위의 공시·계산 숫자이고, 수익성·현금·재무 건전성·미래 성장 칸의 크기 평가는 그 숫자를 바탕으로 한 분석자의 판단입니다 [해석].",
+                  keep=True))
+    lead = ("10년 실적의 변화를 회계식으로 나누면 **원가율**이 대부분을 설명합니다. 원가율을 끌어올린 것은 진행 중 공사의 원가 추정 변경이었고, "
+            "그 뒤에는 자재값 급등(국내 주택)과 해외 플랜트 현장의 공기·설계 변경이 있었습니다. 금리의 직접 영향은 작았습니다.")
+    return chapter("06", "What moved the results", "무엇이 실적을 움직였나", lead, body, "ch6")
+
+
+def conclusion_rows(ctx, F):
+    R, years = F["R"], F["years"]
+    b10 = R["bridge_10y"]
+    w = F["est_worst"]
+    s = R["sens"]
+    s_cf = window_sum(F, "operating_cashflow", F["neg_start"], F["yl"]) if F["neg_start"] else None
+    hec = F["ent"].get(2024) or {}
+    hec_l = F["ent"].get(F["yl"]) or {}
+    rows = [
+        ["<b>원가율(원가 추정 변경)</b>", esc(f"10년 영업이익 {sjo(b10['cost'])} (원가율 효과) · 최대 {w['year']}년 {jo(w['current'])}" if b10 and w else "–"),
+         "매우 큼", "간접(나중에 유출)", "자본 감소(손실)", "목표 이익률(8%)의 전제", "구조적"],
+        ["<b>해외 플랜트·현대엔지니어링</b>", esc(f"2024년 현대엔지니어링 영업손실 {jo(hec.get('hec_op'))}" if hec.get("hec_op") is not None else "–"),
+         "큼(한 해 집중)", esc(f"현금 유출({F['yl']}년 {jo(hec_l.get('hec_cfo'), 1)})" if (hec_l.get("hec_cfo") or 0) < 0 else "간접"),
+         "비지배지분이 일부 흡수", "원전·에너지 EPC에도 같은 위험", "회사 고유·반복 가능"],
+        ["<b>운전자본(대금 회수)</b>", esc(f"영업활동현금흐름 {F['neg_start']}~{F['yl']}년 합계 {jo(s_cf)}" if s_cf is not None else "–"),
+         "없음", "매우 큼", "순현금 감소·차입 증가", "투자 여력 제한", "구조적"],
+        ["<b>공사비(자재·인건비)</b>", "건축/주택 이익률 하락(2022~2024)", "큼", "간접", "간접", "신규 계약에 물가 반영 필요", "일시적+구조적"],
+        ["<b>주택 경기·PF</b>", esc("손실 확인 없음 · 보증 노출 " + (jo(F['pf'][-1][1]['amount'], 1) if F["pf"] else "")), "미확인", "대금 지연 가능", "우발채무", "정비사업 수주 경쟁력", "경기적"],
+        ["<b>금리</b>", esc(f"직접: 1%p당 세전 {seok(s.get('rate_1pp'))}(회사 공시)"), "작음", "작음", "작음", "PF·분양 경로로 간접", "경기적"],
+        ["<b>환율</b>", esc(f"10%당 세전 {seok(s.get('fx_10pct'))}(회사 공시)"), "순이익만", "작음", "작음", "해외 비중만큼", "일시적"],
+    ]
+    return rows
+
+
+# ---------------------------------------------------------------------------
+# 7장 10년 연표: 실적과 사건을 나란히
+# ---------------------------------------------------------------------------
+AMOUNT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*조(?:\s*(\d[\d,]*)\s*억)?\s*원|(\d[\d,]*)\s*억\s*원")
+
+
+def amounts_in(text):
+    """문장 속 금액(원)과 '약'이 붙었는지. '1조 893억원' · '8,597억원' · '약 1.2조원'."""
+    out = []
+    for m in AMOUNT_RE.finditer(text or ""):
+        if m.group(1):
+            x = float(m.group(1)) * T + (float(m.group(2).replace(",", "")) * EOK if m.group(2) else 0)
+        else:
+            x = float(m.group(3).replace(",", "")) * EOK
+        out.append((x, "약" in text[max(0, m.start() - 3):m.start()]))
+    return out
+
+
+def mdna_pick(F, y, limit=2):
+    """그해 사업보고서 경영진단(Ⅳ장)에서 연결 실적을 설명하는 문장. 금액이 있는 문장은 그 금액이 연결 매출·영업이익·순이익과
+    1% 안(‘약’이 붙은 어림수는 6% 안)에서 맞을 때만 씁니다(부문·별도 숫자나 고치기 전 숫자를 연결 실적으로 옮기지 않게)."""
+    m = (F["dr"].get("mdna") or {}).get(str(y)) or {}
+    v = F["v"]
+    targets = [abs(x) for x in (v.a(y, "operating_profit"), v.a(y, "revenue"), v.a(y, "net_income")) if x]
+    out = []
+    for s in m.get("sentences") or []:
+        amts = amounts_in(s)
+        ok = (any(abs(a - t) / t <= (0.06 if rough else 0.01) for a, rough in amts for t in targets) if amts
+              else bool(re.search(r"기인|영향|따라|반영", s)))
+        if ok:
+            out.append(s if len(s) <= 170 else s[:168].rstrip() + "…")
+        if len(out) >= limit:
+            break
+    return out, m.get("receipt")
+
+
+def change_kind(peers, y):
+    """현대건설 영업이익률 변화가 동종사 중앙값과 같은 방향·비슷한 크기였는지(규칙은 부록 A)."""
+    a, b = peers.get(y - 1), peers.get(y)
+    if not a or not b or None in (a.get("own"), b.get("own"), a.get("median"), b.get("median")) or min(a["n"], b["n"]) < 2:
+        return None
+    d_own, d_med = b["own"] - a["own"], b["median"] - a["median"]
+    way = "개선" if d_own > 0 else "하락"
+    if abs(d_own) < 0.5:
+        tone, word = "info", "큰 변화 없음"
+    elif d_own * d_med > 0 and abs(d_med) >= abs(d_own) * 0.5:
+        tone, word = ("good" if d_own > 0 else "warn"), f"업계 공통 {way}"
+    else:
+        tone, word = ("good" if d_own > 0 else "crit"), f"회사 고유 {way}"
+    return {"d_own": d_own, "d_med": d_med, "tone": tone, "word": word}
+
+
+def year_numbers(F, y):
+    v = F["v"]
+    e = (F["est"].get(y) or {}).get("current")
+    pe = F["R"]["peers"].get(y) or {}
+    return [("매출", jo(v.a(y, "revenue"), 1)), ("영업이익", jo(v.a(y, "operating_profit"))),
+            ("영업이익률", pct(v.a(y, "operating_margin_pct"))), ("동종사 중앙값", pct(pe.get("median"))),
+            ("영업활동현금흐름", jo(v.a(y, "operating_cashflow"))), ("원가 추정 변경", jo(e))]
+
+
+def half_after(ctx, F):
+    """마지막 사업연도 뒤에 나온 반기보고서(있으면)."""
+    return next((r for r in reversed(ctx.get("halves") or []) if r["kind"] == "H1" and r["year"] > F["yl"]), None)
+
+
+def year_card(F, label, numbers, ev_, kind=None, mdna=(), todo=None):
+    nums = "".join(f"<div><dt>{esc(a)}</dt><dd>{esc(b)}</dd></div>" for a, b in numbers)
+    chip_html = f'<span class="r-chip {kind["tone"]}">{esc(kind["word"])}</span>' if kind else ""
+    def row(label, html_, cls=""):
+        return f'<p class="yr {cls}"><span class="lab">{esc(label)}</span><span>{html_}</span></p>'
+    lines = []
+    if todo:
+        lines.append(f'<p class="yc-todo">{tagify(todo)}</p>')
+    if ev_.get("company"):
+        lines.append(row("회사", tagify(ev_["company"])))
+    ind = (ev_.get("industry") or []) + (ev_.get("policy") or [])
+    if ind:
+        lines.append(row("업계·정책", "<br>".join(tagify(x) for x in ind)))
+    if ev_.get("peers"):
+        lines.append(row("동종사", tagify(ev_["peers"])))
+    if ev_.get("own"):
+        lines.append(row("고유 요인", tagify(ev_["own"])))
+    if mdna:
+        lines.append(row("회사 설명", " ".join(f"“{esc(s)}”" for s in mdna) + f" {ev('공시: 경영진단')}", "yc-md"))
+    if ev_.get("interp"):
+        lines.append(row("해석", f'{tagify(ev_["interp"])} {ev("해석")}', "yc-in"))
+    srcs = src_links(F, ev_.get("sources") or [])
+    if srcs:
+        lines.append(f'<p class="r-src">출처: {srcs}</p>')
+    return (f'<article class="yc"><div class="yc-l"><p class="yc-y">{esc(label)}</p>{chip_html}<dl class="yc-n">{nums}</dl></div>'
+            f'<div class="yc-r">{"".join(lines)}</div></article>')
+
+
+def ch7_timeline(ctx, F):
+    R, RC, v, years = F["R"], F["RC"], F["v"], F["years"]
+    events = RC.get("events") or {}
+    peers = dict(rs.peer_years(ctx, [years[0] - 1]))
+    peers.update(R["peers"])
+    rows, cards = [], []
+    for y in years:
+        ev_ = events.get(str(y))
+        todo = None
+        if not ev_ and events.get(f"{y}H1"):
+            ev_, todo = events[f"{y}H1"], f"{y}년 사건은 상반기까지만 조사했습니다(조사 기준일 {RC.get('as_of', '–')})."
+        if not ev_:
+            ev_, todo = {}, (f"{y}년의 사건·정책·경쟁사 사건은 아직 조사하지 않았습니다(조사 전). 숫자와 회사 설명 문장만 자동으로 채웠습니다 — "
+                             "조사 내용은 config/research.json의 events에 더합니다.")
+        kind = change_kind(peers, y)
+        md, _ = mdna_pick(F, y)
+        est = (F["est"].get(y) or {}).get("current")
+        chip_html = f'<span class="r-chip {kind["tone"]}">{esc(kind["word"])}</span>' if kind else '<span class="r-chip info">비교 불가</span>'
+        delta = (f"{an.signed(kind['d_own'], 1)} / {an.signed(kind['d_med'], 1)}" if kind else "–")
+        rows.append([f"<b>{y}</b>", num(pct(v.a(y, "operating_margin_pct")), v.a(y, "operating_margin_pct")), num(delta), chip_html,
+                     num(jo(est), est), tagify(ev_.get("interp") or "조사 전")])
+        cards.append(year_card(F, f"{y}", year_numbers(F, y), ev_, kind, md, todo))
+    h = half_after(ctx, F)
+    if h:
+        key = f"{h['year']}H1"
+        val = h["values"]
+        rev, op = val.get("revenue"), val.get("operating_profit")
+        nums = [("매출", jo(rev, 1)), ("영업이익", jo(op)), ("영업이익률", pct(op / rev * 100 if rev and op is not None else None)),
+                ("영업활동현금흐름", jo(val.get("operating_cashflow")))]
+        ev_ = events.get(key) or {}
+        todo = None if ev_ else f"{h['year']}년 상반기 사건은 아직 조사하지 않았습니다(조사 전)."
+        cards.append(year_card(F, f"{h['year']} 상반기", nums, ev_, None, (), todo))
+        rows.append([f"<b>{h['year']} 상반기</b>", num(pct(op / rev * 100 if rev and op is not None else None)), num("–"),
+                     '<span class="r-chip info">반기</span>', num("–"), tagify(ev_.get("interp") or "조사 전")])
+    table = rtable(["연도", "영업이익률", "변화(현대 / 동종사, %p)", "변화의 성격 [계산]", "원가 추정 변경", "그해를 한 줄로 [해석]"], rows, "r-tl")
+    counts = {}
+    for y in years:
+        k = change_kind(peers, y)
+        if k:
+            counts[k["word"]] = counts.get(k["word"], 0) + 1
+    common = counts.get("업계 공통 하락", 0) + counts.get("업계 공통 개선", 0)
+    own_ = counts.get("회사 고유 하락", 0) + counts.get("회사 고유 개선", 0)
+    lead = (f"해마다 숫자(자동 계산)와 그해 회사·업계·정책 사건(조사)을 나란히 놓았습니다. 영업이익률이 동종사와 같은 방향으로 움직인 해(업계 공통)는 "
+            f"{common}번, 다르게 움직인 해(회사 고유)는 {own_}번이었습니다 [계산]. 업계 공통이면 금리·자재값·정책 같은 외부 요인, 회사 고유면 "
+            "특정 현장·자회사의 요인을 먼저 의심합니다.")
+    body = (sub("7-1", "10년 연결표", table,
+                "‘변화의 성격’은 영업이익률 변화가 동종사 중앙값 변화와 같은 방향이고 크기가 절반 이상이면 업계 공통, 아니면 회사 고유로 나눈 기계적 판정입니다(부록 A). "
+                "인과를 증명하는 것이 아니라 어디부터 볼지 정하는 표입니다.", keep=True)
+            + sub("7-2", "연도별 기록", "".join(cards),
+                  f"왼쪽 숫자는 매월 다시 계산하고, 오른쪽 사건은 {RC.get('as_of', '–')}까지의 조사입니다. ‘회사 설명’은 그해 사업보고서 경영진단 문장을 자동으로 옮겼습니다."))
+    return chapter("07", "Ten-year timeline", "10년 연표: 실적과 사건", lead, body, "ch7")
+
+
+# ---------------------------------------------------------------------------
+# 8장 현재: 번 돈을 어디에 썼나
+# ---------------------------------------------------------------------------
+ALLOC_GROUPS = [("영업활동현금흐름", ("cfo",), "--s1"),
+                ("투자(설비·지분·금융자산, 순)", ("capex", "equity_net", "fin_net", "asset_sale"), "--s4"),
+                ("예금·대여금(순)", ("deposits", "loans"), "--s3"),
+                ("차입·사채(순)", ("borrow",), "--s2"),
+                ("배당·리스·기타", ("dividends", "lease", "equity_tx", "other"), "--spark")]
+
+
+def alloc_fig(F):
+    rows = F["R"]["alloc"]
+    if not rows:
+        return ""
+    ys = [r["year"] for r in rows]
+    comps = [{"name": n, "values": [sum(r.get(k) or 0 for k in ks) / T for r in rows], "color": c} for n, ks, c in ALLOC_GROUPS]
+    names = dict(rs.ALLOC)
+
+    def tips(i):
+        r = rows[i]
+        tr = [[names[k], sjo(r.get(k)), None] for k, _ in rs.ALLOC if r.get(k)]
+        tr.append(["현금및현금성자산 증감", sjo(r.get("cash_change")), None])
+        return f"{r['year']}년 현금의 원천(+)과 사용(−)", tr, "연결 현금흐름표"
+    net = [r["cash_change"] / T if r.get("cash_change") is not None else None for r in rows]
+    chart = rc.diverging_stack(xlabels(ys), comps, tips=tips, net=net, height=190,
+                               net_labels={i: an.signed(x, 2) for i, x in enumerate(net) if x is not None})
+    return fig("fig-alloc", "현금은 어디서 와서 어디로 갔나", "연결 현금흐름표 · 0 위 = 들어온 돈, 0 아래 = 쓴 돈 · 가로 표시와 숫자 = 현금 증감(조 원)",
+               chart, legend_html=d.legend([(n, c, "box") for n, _, c in ALLOC_GROUPS]),
+               note="‘예금·대여금’이 0 위에 있으면 쌓아 둔 예금을 꺼내 쓰거나 빌려준 돈을 돌려받은 해, 0 아래면 예금을 쌓은 해입니다 [계산].")
+
+
+def alloc_table(F):
+    sums = F["R"]["alloc_sums"]
+    if not sums:
+        return ""
+    heads = ["원천(+) · 사용(−)"] + [f"{s['start']}~{s['end']}년 합계({s['years']}년)" for s in sums]
+    rows = [[esc(name)] + [num(sjo(s.get(k)), s.get(k)) for s in sums] for k, name in rs.ALLOC]
+    rows.append(["<b>현금및현금성자산 증감</b>"] + [num(sjo(s.get("cash_change")), s.get("cash_change")) for s in sums])
+    return rtable(heads, rows, "r-alloc")
+
+
+def spend_table(F):
+    sums = F["R"]["alloc_sums"]
+    rnd = F["dr"].get("rnd") or {}
+
+    def rnd_sum(s):
+        vals = [(rnd.get(str(y)) or {}).get("total") for y in range(s["start"], s["end"] + 1)]
+        vals = [x for x in vals if x is not None]
+        return sum(vals) if vals else None
+    items = [("연구개발비", "비용(매출원가·판관비에 포함)", "미래 경쟁력", [rnd_sum(s) for s in sums]),
+             ("설비·무형자산·투자부동산", "자산(투자활동)", "투자", [-s["capex"] for s in sums]),
+             ("지분 투자(순)", "자산(투자활동)", "투자", [-s["equity_net"] for s in sums]),
+             ("대여금·보증금(순)", "자산(투자활동)", "사업 지원(조합·시행사 대여 등)", [-s["loans"] for s in sums]),
+             ("배당금", "자본(재무활동)", "주주환원", [-s["dividends"] for s in sums]),
+             ("리스부채 상환", "부채(재무활동)", "임차료 성격", [-s["lease"] for s in sums])]
+    rows = []
+    for name, acc, kind, vals in items:
+        cells = []
+        for s, x in zip(sums, vals):
+            r = window_sum(F, "revenue", s["start"], s["end"])
+            share = x / r * 100 if x is not None and r else None
+            cells.append(num(f"{jo(x)} · 매출의 {an._m(f'{share:.1f}' if abs(share) >= 0.1 else f'{share:.2f}')}%" if share is not None else "–", x))
+        rows.append([f"<b>{esc(name)}</b>", esc(acc), esc(kind)] + cells)
+    return rtable(["어디에", "회계 처리", "성격"] + [f"{s['start']}~{s['end']}년 쓴 돈(−는 회수)" for s in sums], rows, "r-spend")
+
+
+def dividend_table(F):
+    div = F["dr"].get("dividends") or {}
+    ys = [y for y in F["years"] if str(y) in div]
+    if not ys:
+        return ""
+    g = lambda y, k: (div.get(str(y)) or {}).get(k)
+    rows = [["주당 배당금(원)"] + [num(f"{g(y, 'dps'):,}" if g(y, "dps") else "–") for y in ys],
+            ["배당 총액(억 원)"] + [num(eok(g(y, "total"))) for y in ys],
+            ["배당성향(%)"] + [num(pct(g(y, "payout_pct"), 1) if g(y, "payout_pct") is not None else "손실") for y in ys]]
+    return rtable(["사업연도"] + [str(y) for y in ys], rows, "r-div")
+
+
+def interest_table(F):
+    v, years = F["v"], F["years"]
+    rows = [["이자비용(억 원)"] + [num(eok(v.a(y, "interest_expense"))) for y in years],
+            ["평균 차입 이자율(%)"] + [num(pct(v.a(y, "borrowing_rate_pct"), 2)) for y in years],
+            ["이자보상배율(배)"] + [num(an._m(f"{v.a(y, 'operating_profit') / v.a(y, 'interest_expense'):.1f}") if v.a(y, "interest_expense") else "–",
+                                    v.a(y, "operating_profit")) for y in years],
+            ["순차입금(조 원, −는 순현금)"] + [num(jo(v.a(y, "net_debt")), v.a(y, "net_debt")) for y in years]]
+    return rtable(["연결"] + [str(y) for y in years], rows, "r-int")
+
+
+def ch8_allocation(ctx, F):
+    R, v, years = F["R"], F["v"], F["years"]
+    sums = R["alloc_sums"]
+    pts = []
+    if len(sums) == 2:
+        a1, a2 = sums
+        pts.append(f"**{a1['start']}~{a1['end']}년**: 영업으로 {jo(a1['cfo'])}를 벌어 예금에 {jo(-a1['deposits'])}, 대여금에 {jo(-a1['loans'])}, "
+                   f"설비 등에 {jo(-a1['capex'])}, 배당에 {jo(-a1['dividends'])}를 썼습니다 [계산].")
+        pts.append(f"**{a2['start']}~{a2['end']}년**: 영업에서 {jo(-a2['cfo'])}가 빠져나가자 예금에서 {jo(a2['deposits'])}를 꺼내고, 대여금 {jo(a2['loans'])}를 "
+                   f"돌려받고, {jo(a2['borrow'])}를 빌렸습니다. 그 와중에도 설비 등 투자({jo(-a2['capex'])})와 배당({jo(-a2['dividends'])})은 이어졌습니다 [계산].")
+        pts.append("앞 6년 동안 쌓은 예금이 뒤 4년의 영업 현금 유출을 버티는 완충이 됐습니다. 현금이 부족해진 이유는 ‘많이 투자해서’가 아니라 "
+                   "‘영업에서 현금이 들어오지 않아서’입니다 [해석].")
+    # 2024년 손실은 투자 때문이었나
+    ey = R["warning"]["event_year"]
+    a_e = next((r for r in R["alloc"] if r["year"] == ey), None)
+    capex_avg = (sum(-r["capex"] for r in R["alloc"]) / len(R["alloc"])) if R["alloc"] else None
+    rnd = (F["dr"].get("rnd") or {}).get(str(ey)) or {}
+    e_e = F["est"].get(ey) or {}
+    check = ""
+    if a_e and e_e.get("current") is not None:
+        check = box(f"검증: {ey}년 손실은 투자 때문이었나?", para(
+            f"아닙니다. {ey}년 설비·무형자산 투자는 {jo(-a_e['capex'])}(10년 평균 {jo(capex_avg)}), 연구개발비는 {jo(rnd.get('total'))}로 평소 수준이었습니다 [공시·계산]. "
+            f"같은 해 진행 중인 공사의 원가 추정 변경 효과가 {jo(e_e['current'])}였고 영업손실은 {jo(v.a(ey, 'operating_profit'))}였습니다. "
+            "손실은 새 투자가 아니라 이미 수주한 공사의 원가 초과에서 나왔습니다 [해석]."), "warn")
+    ib = R["interest_span"]
+    ic = rs.interest_bridge(v, 2021, F["yl"]) if F["yl"] > 2021 else None
+    int_pts = []
+    if ib:
+        txt = (f"이자비용은 {ib['start']}년 {eok(ib['int0'])} → {ib['end']}년 {josa(eok(ib['int1']), '으로')} {seok(ib['d_int'])} 늘었습니다. 10년 전체로는 차입 규모 효과가 "
+               f"{seok(ib['volume_effect'])}, 금리 효과가 {seok(ib['rate_effect'])}입니다 [계산].")
+        if ic:
+            txt += (f" 금리가 오른 2021→{ic['end']}년만 보면 금리 효과 {seok(ic['rate_effect'])}, 차입 규모 효과 {josa(seok(ic['volume_effect']), '으로')} "
+                    + ("금리 쪽이 조금 더 컸습니다" if ic["rate_effect"] > ic["volume_effect"] else "빌린 양 쪽이 더 컸습니다") + " [계산].")
+        txt += (f" 다만 이자비용 자체가 {ib['end']}년 영업이익({jo(v.a(ib['end'], 'operating_profit'))})의 "
+                f"{ib['int1'] / v.a(ib['end'], 'operating_profit') * 100:.0f}% 수준이라, 원가 추정 변경에 비하면 실적에 준 영향은 작았습니다 [계산·해석]."
+                if v.a(ib["end"], "operating_profit") and v.a(ib["end"], "operating_profit") > 0 else "")
+        int_pts.append(txt)
+    cov = F["vd"].get("coverage")
+    if cov is not None:
+        int_pts.append(f"최근 4개 분기 이자보상배율은 {cov:.1f}배입니다. 1배를 넘어 영업이익으로 이자를 낼 수 있지만, 영업 현금이 마이너스인 동안에는 "
+                       "이자를 현금으로 내기 위해 예금이나 차입이 필요합니다 [계산·해석].")
+    if F["pf"]:
+        p, r = F["pf"][-1]
+        int_pts.append(f"PF 보증은 {rv.period_label(p)} {jo(r['amount'], 1)}" + (f"(자본의 {F['pf_x']:.1f}배)" if F["pf_x"] else "")
+                       + "로 차입금보다 큽니다. 재무상태표에는 없지만 분양이 막히면 빚이 될 수 있는 금액입니다 [공시].")
+    eval_pts = [
+        "**예금 완충**: 2016~2021년의 보수적 현금 관리(예금 적립)는 이후 영업 현금 유출을 버티게 해 결과적으로 적절했습니다 [해석].",
+        "**투자 규모**: 설비 투자와 연구개발비는 매출의 1% 안팎으로, 성장 투자가 재무를 압박한 상황은 아닙니다. 반대로 미래사업에 회사 돈을 크게 넣고 있지도 않습니다 [계산·해석].",
+        "**주주환원**: 손실이 난 해에도 배당을 유지하고 다음 해 늘렸습니다. 주주에게는 신호지만, 영업 현금이 마이너스인 동안 배당은 예금 인출과 차입으로 낸 셈입니다 [계산·해석].",
+        "**재무 부담**: 이자 부담은 아직 감당할 수준이지만 순현금이 순차입금으로 바뀌는 추세입니다. 영업 현금이 플러스로 돌아서야 부담이 멈춥니다 [해석].",
+    ]
+    body = (sub("8-1", "현금의 원천과 사용", alloc_fig(F) + alloc_table(F) + bullets(pts),
+                "현금흐름표의 영업·투자·재무 칸을 성격별로 다시 묶었습니다. 모든 칸을 더하면 그해 현금 증감과 같습니다.")
+            + sub("8-2", "어디에 썼나: 비용과 투자", spend_table(F) + check,
+                  "연구개발비는 현금흐름표의 투자가 아니라 비용(손익계산서)으로 처리되므로 사업보고서 Ⅱ장 연구개발 활동에서 따로 읽었습니다 [공시].")
+            + sub("8-3", "주주에게 돌려준 돈: 배당", dividend_table(F), "사업보고서 ‘배당에 관한 사항’ · 연결 지배주주 순이익 기준 배당성향 [공시].", keep=True)
+            + sub("8-4", "재무 부담과 재무제표 밖의 의무", interest_table(F) + bullets(int_pts)
+                  + f'<div class="r-2">{rv.pf_fig(ctx)}{st.bs_chart(F["v10"], F["years10"])}</div>')
+            + sub("8-5", "평가: 자본배분은 적절했나", bullets(eval_pts), keep=True))
+    lead = ("RQ4의 앞부분, **번 돈을 어디에 쓰고 있나**입니다. 10년 현금흐름표를 원천과 사용으로 나누면, 영업 현금이 플러스였던 시기와 마이너스로 바뀐 "
+            "시기의 쓰임이 뚜렷하게 다릅니다.")
+    return chapter("08", "Capital allocation", "현재: 번 돈을 어디에 썼나", lead, body, "ch8")
+
+
+# ---------------------------------------------------------------------------
+# 9장 미래: 성장사업과 시나리오
+# ---------------------------------------------------------------------------
+def growth_table(F):
+    RC = F["RC"]
+    stages = RC.get("stages") or []
+    rows = []
+    for g in RC.get("growth") or []:
+        st_name = stages[g["stage"] - 1] if 0 < g["stage"] <= len(stages) else "–"
+        rows.append([f'<b>{esc(g["name"])}</b><span class="r-q">{esc(g["area"])} · {g["stage"]}단계 {esc(st_name)}</span>',
+                     tagify(g["status"]) + f'<span class="r-q">{tagify(g["amount"])}</span>',
+                     esc(g["form"]) + f'<span class="r-q">{esc(g["cash"])}</span>',
+                     esc(g["profit"]) + f'<span class="r-q">위험: {esc(g["risk"])}</span>',
+                     src_links(F, g.get("src") or [])])
+    return rtable(["사업 · 단계", "지금 상태 · 금액", "사업 형태 · 현금이 들어오는 때", "이익 · 위험", "출처"], rows, "r-grow")
+
+
+def roic_fig(F):
+    v, years = F["v"], F["years"]
+    roic = [v.a(y, "roic_pct") for y in years]
+    br = [v.a(y, "borrowing_rate_pct") for y in years]
+
+    def tips(i):
+        y = years[i]
+        return f"{y}년", [["ROIC", pct(roic[i]), "var(--s1)"], ["평균 차입 이자율", pct(br[i], 2), "var(--s2)"]], "ROIC = 세후 영업이익 ÷ 평균 투하자본"
+    return fig("fig-roic", "투자한 돈으로 얼마나 버나: ROIC와 차입 이자율", "연결 · ROIC = 세후 영업이익 ÷ 평균(자본 + 순차입금) · 차입 이자율 = 이자비용 ÷ 평균 차입금",
+               d.multi_line_chart(xlabels(years), [{"name": "ROIC", "values": roic, "color": "--s1"},
+                                                   {"name": "차입 이자율", "values": br, "color": "--s2", "dash": True}],
+                                  ticks_fmt=tick_pct, tips=tips, height=150, end_fmt=lambda x: pct(x)),
+               legend_html=d.legend([("ROIC", "--s1", "box"), ("평균 차입 이자율", "--s2", "box")]))
+
+
+def fcf_fig_r(F):
+    v, years = F["v"], F["years"]
+    fcf = [v.a(y, "fcf") for y in years]
+
+    def tips(i):
+        y = years[i]
+        return f"{y}년", [["FCF", won(fcf[i]), "var(--s2)"], ["영업활동현금흐름", won(v.a(y, "operating_cashflow")), None],
+                          ["설비투자", won(v.a(y, "capex")), None]], "FCF = 영업활동현금흐름 − 설비투자"
+    return fig("fig-fcf-r", "잉여현금흐름(FCF)", "연결 · 영업활동현금흐름 − 설비투자 · 조 원",
+               d.column_chart(xlabels(years), [{"values": d.in_jo(fcf), "color": "--s2"}], ticks_fmt=d.tick_jo, tips=tips, height=150, neg_zone=True))
+
+
+def scenario_table(F):
+    sc = F["R"]["scenarios"]
+    rows = []
+    for c in sc["cases"]:
+        rows.append([f"<b>{esc(c['name'])}</b>", tagify(c["why"] + " [가정]"), num(" → ".join(an._m(f"{m:.1f}%") for m in c["margins"])),
+                     num(jo(c["op_sum"]), c["op_sum"]), num(jo(c["ni_sum"]), c["ni_sum"]), num(jo(c["equity_end"], 1)), num(pct(c["de_end"], 0))])
+    return rtable(["시나리오", "가정", "1~3년 차 영업이익률", "3년 누적 영업이익", f"세후(세율 {sc['tax'] * 100:.0f}% 가정)", "3년 뒤 자본", "3년 뒤 부채비율"],
+                  rows, "r-scen")
+
+
+def epc_grid(F):
+    med = F["R"]["bases"]["base"]
+    cols = [(-5.0, "−5%(손실 공사)"), (0.0, "0%(남는 것 없음)"), (med, f"{med:.1f}%(10년 중앙값)"), (8.0, "8%(회사 2030 목표)")]
+    build_years = 8
+    rows = []
+    for size in (5, 10, 15):
+        cells = []
+        for m, _ in cols:
+            tot = size * T * m / 100
+            cells.append(num(f"{jo(tot)} · 연 {eok(tot / build_years)}", tot))
+        rows.append([f"<b>{size}조 원</b>"] + cells)
+    return rtable(["가상의 현대건설 몫 계약 [가정]"] + [esc(lab) for _, lab in cols], rows, "r-grid"), build_years
+
+
+def stress_table(F):
+    pj = [r for r in F["projects"] if r.get("region") == "해외" and r.get("remain")]
+    bal = F["bal"]
+    if not pj or not bal:
+        return "", None
+    rem = sum(r["remain"] for r in pj)
+    eq = bal["values"]["equity"]
+    opl = F["opl"]
+    rows = []
+    for rate in (3, 5, 10):
+        loss = rem * rate / 100
+        rows.append([f"<b>남은 공사의 원가가 {rate}% 더 들면</b>", num(jo(-loss), -loss), num(pct(loss / eq * 100)),
+                     num(f"{loss / opl:.1f}배" if opl and opl > 0 else "–")])
+    return rtable(["가정 [가정]", "추가 손실", f"자본({an.when_label(bal)}) 대비", f"{F['yl']}년 영업이익 대비"], rows, "r-stress"), (pj, rem)
+
+
 def peers_table(ctx):
     rows_, year = d.peer_table_rows(ctx)
     rows = []
@@ -578,179 +1673,498 @@ def peers_table(ctx):
     return (f'<p class="r-p">{rich(summary)}</p>' if summary else "") + table + (f'<p class="r-src">{foot}</p>' if foot else "")
 
 
-def ch7_market(ctx, F):
-    step = F["steps"].get("valuation") or {}
+def ch9_future(ctx, F):
+    R, RC, v = F["R"], F["RC"], F["v"]
+    growth = RC.get("growth") or []
+    stages = RC.get("stages") or []
+    ladder = rc.stage_ladder(stages, growth) if growth and stages else ""
+    by_stage = {}
+    for g in growth:
+        by_stage[g["stage"]] = by_stage.get(g["stage"], 0) + 1
+    early = sum(n for s, n in by_stage.items() if s <= 2)
+    building = by_stage.get(4, 0)
+    done = by_stage.get(5, 0)
+    grow_pts = [
+        f"조사한 미래사업 {len(growth)}건 중 **{early}건은 본계약 전(1~2단계: 구상·사전업무·설계)**이고, 시공 중인 것은 {building}건입니다. "
+        + (f"대금 회수·운영 단계(5단계)에 이른 사업은 {done}건입니다 [보도·공시]." if done else "대금 회수·운영 단계(5단계)에 이른 사업은 아직 없습니다 [보도·공시]."),
+        "대형 원전(불가리아·미국 페르미)과 SMR(팰리세이즈)은 **EPC 본계약 전**이라 재무제표에 매출·이익으로 나타나지 않았고, 계약 금액도 확정되지 않았습니다. "
+        "보도된 사업비는 사업 전체 금액이지 현대건설의 매출이 아닙니다 [보도·해석].",
+        "사업 형태는 대부분 **지분을 넣지 않는 EPC(설계·조달·시공)**입니다. 자본 부담은 작지만, 고정가격 EPC는 2024년 손실과 같은 유형의 원가 초과 위험을 "
+        "그대로 집니다 [해석].",
+        "회사가 직접 돈을 넣는 사업은 작습니다: 수소 투자 계획 2033년까지 약 240억 원 [공시], 미국 태양광(LUCY) 지분 투자(지분율 비공개) [공시], "
+        "2026년 5,000억 원 전환사채 발행 결정(원전·SMR 등 에너지 투자 재원) [보도].",
+    ]
+    # ROIC · FCF
+    years = F["years"]
+    below = [y for y in years if v.a(y, "roic_pct") is not None and v.a(y, "borrowing_rate_pct") is not None and v.a(y, "roic_pct") < v.a(y, "borrowing_rate_pct")]
+    fcf_s = window_sum(F, "fcf", F["neg_start"], F["yl"]) if F["neg_start"] else None
+    roic_pts = [
+        f"ROIC는 {years[0]}년 {pct(v.a(years[0], 'roic_pct'))}에서 {F['yl']}년 {pct(v.a(F['yl'], 'roic_pct'))}로 낮아졌습니다 [계산]."
+        + (f" 차입 이자율보다 낮았던 해는 {', '.join(map(str, below))}년입니다." if below else ""),
+        "차입 이자율은 투자에 드는 비용의 최소선입니다. 주주가 요구하는 수익률(자본비용)은 이보다 높으므로, ROIC가 차입 이자율 근처라면 가치를 거의 "
+        "만들지 못하고 있다는 뜻입니다 [해석].",
+        (f"FCF는 {F['neg_start']}~{F['yl']}년 합계 {jo(fcf_s)}입니다. 미래사업에 투자할 돈을 영업이 아니라 예금·차입·사채에서 마련해야 하는 상황입니다 [계산·해석]."
+         if fcf_s is not None else ""),
+    ]
+    sc = R["scenarios"]
+    scen_note = (f"매출은 최근 4개 분기 {jo(sc['revenue'], 1)}가 3년 동안 유지된다고 놓았습니다(수주잔고가 3년 치 넘게 있어 매출 규모의 근거가 됨). "
+                 "영업이익률만 바꾸고, 영업외손익·배당·비지배지분 몫은 빼고, 부채는 지금 그대로라고 가정한 산수입니다. 예측이 아닙니다 [가정].")
+    base = next((c for c in sc["cases"] if c["name"] == "기준"), None)
+    bad = next((c for c in sc["cases"] if c["name"] == "비관"), None)
+    scen_pts = []
+    if base and bad:
+        scen_pts.append(f"{sc['shock_year']}년 같은 해가 한 번 더 오면 3년 누적 영업이익은 기준({jo(base['op_sum'])})의 {bad['op_sum'] / base['op_sum'] * 100:.0f}% 수준으로 줄어듭니다. "
+                        "같은 일감에서 이익률 몇 %p가 3년 결과를 몇 배로 가릅니다 [가정·계산].")
+    grid, by = epc_grid(F)
+    grid_note = (f"원전 EPC 계약 금액은 확정되지 않았으므로 가상의 계약 규모로 계산했습니다. 공사 기간 {by}년에 고르게 나눈다고 가정합니다 [가정]. "
+                 f"비교: {F['yl']}년 연결 영업이익 {jo(F['opl'])} [공시].")
+    stress, info = stress_table(F)
+    stress_note = ""
+    if info:
+        pj, rem = info
+        w = F["est_worst"]
+        stress_note = (f"진행 중인 해외 큰 공사 {len(pj)}건(사업보고서 ‘수주상황’ 표의 상위 공사)의 남은 공사 금액 {jo(rem, 1)}에 원가 초과율을 곱한 근사치입니다 [가정]. "
+                       + (f"비교: {w['year']}년 원가 추정 변경 효과는 그해 매출의 {abs(w['pct_rev']):.1f}%였습니다 [계산]." if w and w.get("pct_rev") else ""))
     price = next((x for x in F["L"] if x["id"] == "price"), None)
     direction = ""
     if price:
         _, _, same, total = st.price_direction(price, F["years10"])
         if total:
-            direction = (f"계산할 수 있는 {total}년 중 **{same}년**은 연말 주가와 영업이익이 같은 방향으로 움직였습니다. "
-                         "주가는 실적이 나오기 전에 기대를 먼저 반영하기 때문에, 방향이 반대인 해는 시장이 다음 해 실적을 미리 본 경우가 많습니다.")
-    body = (d.valuation_tiles(ctx)
-            + st.price_fig(ctx, F["years10"][0], fid="fig-price-report")
-            + (f'<p class="r-p">{rich(direction)}</p>' if direction else "")
-            + sub("7-1", "경쟁사와 비교", peers_table(ctx)))
-    more = step.get("more", [])
-    lead = [step.get("answer", "") + (" " + more[0] if more else "")]
-    return chapter("07", "Market view", "시장의 평가와 경쟁사", lead, body, "ch7")
+            direction = (f"계산할 수 있는 {total}년 중 **{same}년**은 연말 주가와 영업이익이 같은 방향으로 움직였습니다. 주가는 실적보다 기대를 먼저 반영하므로, "
+                         "원전 기대처럼 실적에 아직 없는 이야기가 주가에 먼저 들어가 있을 수 있습니다 [계산·해석].")
+    body = (sub("9-1", "미래사업은 어디까지 왔나", ladder + growth_table(F) + bullets(grow_pts),
+                f"구상 → 설계 → 본계약 → 시공 → 회수의 다섯 단계 중 어디에 있는지입니다. 3단계(본계약)부터 수주잔고, 4단계부터 매출, 5단계부터 현금이 됩니다. "
+                f"단계와 상태는 {RC.get('as_of', '–')}까지 공개된 공시·보도로 조사했습니다.")
+            + sub("9-2", "투자의 가치: ROIC와 잉여현금흐름", f'<div class="r-2">{roic_fig(F)}{fcf_fig_r(F)}</div>' + bullets(roic_pts))
+            + sub("9-3", "시나리오: 이익률이 바뀌면 3년 뒤는", scenario_table(F) + para(scen_note, "r-src") + bullets(scen_pts), keep=True)
+            + sub("9-4", "원전 EPC를 따내면: 가상의 계산", grid + para(grid_note, "r-src")
+                  + bullets(["같은 10조 원 계약이라도 이익률이 −5%면 0.5조 원 손실, 8%면 0.8조 원 이익입니다. 미래사업의 가치는 ‘따내는가’보다 ‘어떤 조건으로 따내는가’"
+                             "(원가 상승을 누가 떠안는지)에 달려 있습니다 [해석]."]), keep=True)
+            + sub("9-5", "실패하면: 진행 중인 해외 공사의 원가 스트레스", (stress + para(stress_note, "r-src")) if stress else "", keep=True)
+            + sub("9-6", "시장의 평가와 경쟁사", d.valuation_tiles(ctx) + st.price_fig(ctx, F["years10"][0], fid="fig-price-report")
+                  + para(direction) + peers_table(ctx)))
+    lead = ("RQ4의 뒷부분, **지금의 투자는 어떤 가치와 위험을 갖는가**입니다. 확인된 사실(공시)과 계약 전의 기대(보도), 가정을 둔 계산을 나눠 적습니다.")
+    return chapter("09", "Growth & scenarios", "미래: 성장사업과 시나리오", lead, body, "ch9")
 
 
 # ---------------------------------------------------------------------------
-# 8장 종합 의견
+# 10장 종합 평가
 # ---------------------------------------------------------------------------
-def opinion_lists(ctx, F):
-    v, vd = F["v"], F["vd"]
-    lb, yrs = F["lb"], F["yrs"]
+def refined_view(F):
+    R = F["R"]
+    b, sh, w = R["bridge_10y"], bridge_shares(F), F["est_worst"]
+    out = []
+    if b:
+        out.append(f"**‘매출만으로는 성장을 판단할 수 없다’는 생각은 맞았습니다.** {b['start']}→{b['end']}년 매출은 {b['rev1'] / b['rev0']:.2f}배가 됐지만 "
+                   f"영업이익은 {sjo(b['d_op'])} 변했습니다 [계산].")
+    if sh.get("cost") is not None and w:
+        out.append(f"**다만 세 요소의 무게는 같지 않았습니다.** 이익을 움직인 것은 대부분 원가였고(해마다의 영업이익 변화 중 원가율 효과 {sh['cost']:.0f}%), "
+                   f"정점은 {w['year']}년 원가 추정 변경 {josa(jo(w['current']), '이었')}습니다 [공시·계산].")
+    if F["neg_start"]:
+        s_op = window_sum(F, "operating_profit", F["neg_start"], F["yl"])
+        s_cf = window_sum(F, "operating_cashflow", F["neg_start"], F["yl"])
+        out.append(f"**현금은 이익과 따로 움직였습니다.** {F['neg_start']}~{F['yl']}년 영업이익 합계 {jo(s_op)}에도 영업활동현금흐름은 {jo(s_cf)}였습니다 [계산].")
+    if F["pf"]:
+        out.append("**재무적 위험**은 대형 프로젝트 손실로 한 번 현실화됐고, PF 보증은 노출" + (f"(자본의 {F['pf_x']:.1f}배)" if F["pf_x"] else "")
+                   + "은 크지만 아직 손실로 확인되지 않았습니다 [공시].")
+    out.append("**‘건설업에서 더 중요하다’**는 동종사도 같은 구조임을 확인했을 뿐, 다른 산업과 비교하지 않아 검증하지 못했습니다 [해석].")
+    return out
+
+
+def strength_risk(ctx, F):
+    v, vd, bal = F["v"], F["vd"], F["bal"]
     good, risk = [], []
+    lb, yrs = F["lb"], F["yrs"]
     if lb and yrs and yrs >= 2.5:
-        good.append(f"**일감**: 수주잔고 {an.jo(lb['total'])}조 원으로 매출 {yrs:.1f}년 치를 확보했습니다.")
-    oy = F["oy"]
-    if oy and F["orders"][oy]["total"] >= max(x["total"] for x in F["orders"].values()):
-        good.append(f"**수주력**: {oy}년 신규 수주 {an.jo(F['orders'][oy]['total'])}조 원(현대건설 단독)은 {min(F['orders'])}년 이후 가장 많습니다.")
+        good.append(f"**일감**: 수주잔고 {jo(lb['total'], 1)}, 매출 {yrs:.1f}년 치 [공시·계산].")
     rank = ctx["company"].get("rank") or {}
     if rank.get("own") and rank["own"] <= 3:
-        good.append(f"**체급**: {rank.get('year')}년 시공능력평가 {rank['own']}위로, 공공공사·정비사업 입찰에서 실적과 신인도가 유리하게 작용합니다.")
-    if F["steps"].get("debt", {}).get("verdict", ("",))[0] == "good":
-        good.append(f"**상환능력**: 최근 4개 분기 이자보상배율 {an.pct(vd.get('coverage'))}배"
-                    + (f", 순차입금/EBITDA {vd['nd_ebitda']:.1f}배" if vd.get("nd_ebitda") else "") + "로 이자 부담은 감당할 수 있습니다.")
-    bal = F["bal"]
+        good.append(f"**체급**: {rank.get('year')}년 시공능력평가 {rank['own']}위 — 공공공사·정비사업 입찰과 보증에 유리 [보도].")
+    sep_ok = [r for r in F["R"]["entity"] if r.get("parent_op") is not None and r["parent_op"] > 0]
+    if sep_ok:
+        good.append(f"**본사 체력**: 현대건설 본사(별도)는 {len(F['R']['entity'])}년 중 {len(sep_ok)}년 영업이익 흑자였습니다 [공시].")
     if bal and (bal["ratios"].get("current_ratio_pct") or 0) > 100:
-        good.append(f"**유동성**: {an.when_label(bal)} 유동비율 {an.pct(bal['ratios']['current_ratio_pct'], 0)}%로, 1년 안에 갚을 빚보다 1년 안에 돈이 될 자산이 많습니다.")
-    seg = F["biz"].get("segments") or {}
-    if seg.get("rows"):
-        tot = sum((r["domestic"] or [0])[0] + (r["overseas"] or [0])[0] for r in seg["rows"])
-        ovs = sum((r["overseas"] or [0])[0] for r in seg["rows"])
-        parts = sorted(((r["segment"], ((r["domestic"] or [0])[0] + (r["overseas"] or [0])[0]) / tot * 100) for r in seg["rows"]), key=lambda x: -x[1])
-        good.append(f"**사업 구성**: {seg['year']}년 매출은 " + ", ".join(f"{n} {s:.0f}%" for n, s in parts[:3])
-                    + f"이고 해외가 {ovs / tot * 100:.0f}%입니다. 주택 경기 하나에만 기대지 않습니다.")
-    margin_lens = next((x for x in F["L"] if x["id"] == "profitability"), None)
-    if margin_lens:
-        m = margin_lens["head"]
-        if m["latest"] is not None and m["median"] is not None and m["latest"] < m["median"]:
-            risk.append(f"**낮은 이익률**: {m['latest_year']}년 영업이익률 {ln.with_unit(m['latest'], '%')}로 최근 10년 중앙값({ln.with_unit(m['median'], '%')})보다 낮습니다.")
-    streak = vd.get("streak") or 0
-    if streak >= 2:
-        rec = bal["values"].get("receivables_total") if bal else None
-        risk.append(f"**현금 회수**: 영업활동현금흐름이 {streak}년 연속 마이너스이고"
-                    + (f", {an.when_label(bal)} 받을 돈(매출채권+미청구공사)이 {an.jo(rec)}조 원입니다." if rec else "입니다."))
+        good.append(f"**유동성**: {an.when_label(bal)} 유동비율 {pct(bal['ratios']['current_ratio_pct'], 0)} [계산].")
+    if vd.get("coverage") and vd["coverage"] > 3:
+        good.append(f"**이자 감당**: 최근 4개 분기 이자보상배율 {vd['coverage']:.1f}배 [계산].")
+    run = 0
+    lows = peer_gap_years(F)
+    for y in reversed(F["years"]):
+        if y in lows:
+            run += 1
+        else:
+            break
+    if run >= 2:
+        risk.append(f"**낮은 이익률**: 영업이익률이 {run}년 연속 동종사 중앙값보다 낮았습니다 [계산].")
+    if (vd.get("streak") or 0) >= 2:
+        risk.append(f"**현금 회수**: 영업활동현금흐름 {vd['streak']}년 연속 마이너스" + (f", 받을 돈 {jo(bal['values'].get('receivables_total'), 1)}" if bal else "") + " [공시].")
+    big = [r for r in F["projects"] if r.get("region") == "해외" and r["contract"] >= T and r["done"] / r["contract"] < 0.10]
+    if big:
+        risk.append("**해외 고정가격 EPC**: " + ", ".join(r["name"] for r in big[:3]) + f" 등 {jo(sum(r['contract'] for r in big), 1)}가 진행률 10% 미만입니다 [공시].")
     if F["pf"]:
-        p, r = F["pf"][-1]
-        risk.append(f"**PF 보증**: {rv.period_label(p)} {an.jo(r['amount'])}조 원" + (f"으로 자본총계의 {F['pf_x']:.1f}배" if F["pf_x"] else "")
-                    + "입니다. 부동산 경기가 꺾이면 우발채무가 빚이 될 수 있습니다.")
-    early = [r for r in F["projects"] if r["region"] == "해외" and r["contract"] >= T and r["done"] / r["contract"] < 0.10]
-    if early:
-        risk.append(f"**해외 대형 공사의 원가**: " + ", ".join(f"{r['name']}" for r in early[:3])
-                    + f" 등 {an.jo(sum(r['contract'] for r in early), 1)}조 원이 진행률 10% 미만입니다. 2024년처럼 원가 추정이 바뀌면 손실이 한꺼번에 반영됩니다.")
-    debt_now = bal["ratios"].get("debt_to_equity_pct") if bal else None
-    lows = [(t, v.a(t, "debt_to_equity_pct")) for t in v.years if v.a(t, "debt_to_equity_pct") is not None]
-    if debt_now and lows:
-        lt, lowv = min(lows, key=lambda x: x[1])
-        if debt_now > lowv * 1.25:
-            risk.append(f"**늘어난 빚**: 부채비율이 {lt}년 말 {an.pct(lowv, 0)}%에서 {an.when_label(bal)} {an.pct(debt_now, 0)}%로 올랐습니다. "
-                        "모자란 현금을 빌려서 메우고 있기 때문입니다.")
+        risk.append(f"**PF 보증**: {jo(F['pf'][-1][1]['amount'], 1)}" + (f", 자본의 {F['pf_x']:.1f}배" if F["pf_x"] else "") + " [공시].")
+    risk.append("**미래사업의 불확실성**: 원전·SMR은 본계약 전이며 계약 조건(위험 분담)이 정해지지 않았습니다 [보도].")
     return good, risk
 
 
 def watch_rows(ctx, F):
     v, bal = F["v"], F["bal"]
-    rows = []
-    if F["lb"]:
-        lb = F["lb"]
-        share = lb["overseas"] / lb["total"] * 100 if lb.get("overseas") else None
-        rows.append(["수주잔고와 해외 비중", f"{an.jo(lb['total'])}조 원" + (f" · 해외 {share:.0f}%" if share is not None else ""),
-                     "Ⅱ 매출 및 수주상황", "잔고가 유지되면서 새 공사의 원가율이 낮게 유지되는지"])
-    rows.append(["원가율", f"{F['yl']}년 {an.pct(v.a(F['yl'], 'cost_ratio_pct'))}%", "Ⅲ 손익계산서 · 주석 ‘건설계약’",
-                 "낮아질수록 좋음. 원가 추정 변경(손실 반영)이 있는지"])
-    cfo_h = None
-    h1 = next((h for h in reversed(ctx["halves"]) if h["kind"] == "H1"), None)
-    if h1 and h1["year"] > F["yl"]:
-        cfo_h = h1["values"].get("operating_cashflow")
-    rows.append(["영업활동현금흐름", f"{F['yl']}년 {an.jo(v.a(F['yl'], 'operating_cashflow'), 2)}조 원"
-                 + (f" · {h1['year']}년 상반기 {an.jo(cfo_h, 2)}조 원" if cfo_h is not None else ""),
-                 "Ⅲ 현금흐름표", "플러스로 돌아서는지"])
+    yl = F["yl"]
+    rows = [["원가 추정 변경 효과", f"{yl}년 {jo((F['est'].get(yl) or {}).get('current'))}", "Ⅲ 건설계약 주석", "마이너스가 평상시(2016~2021 평균) 수준으로 줄어드는지"],
+            ["현대엔지니어링 영업이익", f"{yl}년 {jo((F['ent'].get(yl) or {}).get('hec_op'))}", "Ⅲ 종속기업(비지배지분) 주석", "흑자가 이어지는지"],
+            ["원가율", f"{yl}년 {pct(v.a(yl, 'cost_ratio_pct'))}", "Ⅲ 손익계산서 · 영업부문 주석", "낮아질수록 좋음(부문별 매출총이익률)"],
+            ["영업활동현금흐름", f"{yl}년 {jo(v.a(yl, 'operating_cashflow'))}", "Ⅲ 현금흐름표", "플러스로 돌아서는지"]]
     if bal and bal["values"].get("receivables_total"):
-        rows.append(["받을 돈(매출채권+미청구공사)", f"{an.when_label(bal)} {an.jo(bal['values']['receivables_total'])}조 원",
-                     "Ⅲ 재무상태표 · 주석 ‘건설계약’", "매출보다 느리게 늘거나 줄어드는지"])
+        rows.append(["받을 돈(매출채권+계약자산)", f"{an.when_label(bal)} {jo(bal['values']['receivables_total'], 1)}", "Ⅲ 재무상태표", "매출보다 느리게 늘거나 줄어드는지"])
     if F["pf"]:
         p, r = F["pf"][-1]
-        rows.append(["PF 보증", f"{rv.period_label(p)} {an.jo(r['amount'])}조 원", "Ⅺ 우발부채 등(채무보증현황)", "자본 대비 배수가 줄어드는지"])
+        rows.append(["PF 보증", f"{rv.period_label(p)} {jo(r['amount'], 1)}", "Ⅺ 우발부채 등", "자본 대비 배수가 줄어드는지"])
+    rows.append(["원전·SMR 본계약", "미체결(조사 기준일)", "주요사항보고·Ⅱ 수주상황", "계약 금액과 위험 분담 조건"])
     return [[esc(a), f"<b>{esc(b)}</b>", esc(c), esc(e)] for a, b, c, e in rows]
 
 
-def ch8_opinion(ctx, F):
-    good, risk = opinion_lists(ctx, F)
-    cols = (f'<div class="r-2">{box("강점", bullets(good), "good")}{box("약점과 위험", bullets(risk), "crit")}</div>')
+def ch10_conclusion(ctx, F):
+    RC, R, v = F["RC"], F["R"], F["v"]
+    quote = f'<blockquote class="r-quote small">{esc(RC.get("user_view", ""))}</blockquote>'
+    rewrite = ("**고쳐 쓴 문장**: 건설사의 성장은 매출이 아니라 ① 원가를 정확히 추정해 이익을 남기고 ② 그 이익을 제때 현금으로 회수하며 "
+               "③ 재무제표 밖의 의무까지 통제할 때 이어진다. 현대건설의 지난 10년에서는 **①이 가장 컸고, ②가 그다음**이었다 [해석].")
+    ppf_rows = []
+    b = R["bridge_10y"]
+    bal = F["bal"]
+    if b:
+        ppf_rows.append(["<b>과거</b>", "얼마나 벌었고 왜 변했나", '<span class="r-chip warn">매출 성장 · 이익률 하락</span>',
+                         tagify(f"매출 {b['rev1'] / b['rev0']:.2f}배, 영업이익률 {pct(F['m0'])} → {pct(F['ml'])}; 원가율 효과 {sjo(b['cost'])} [계산]")])
+    if bal:
+        nd = bal["values"].get("net_debt")
+        ppf_rows.append(["<b>현재</b>", "번 돈은 어디로, 부담은 적절한가", '<span class="r-chip warn">현금 부족을 예금·차입으로 메움</span>',
+                         tagify(f"영업 현금 {F['streak']}년 연속 마이너스, {an.when_label(bal)} " + (f"순차입금 {jo(nd)}" if nd is not None and nd > 0 else f"순현금 {jo(-nd) if nd is not None else '–'}")
+                                + f", 부채비율 {pct(bal['ratios'].get('debt_to_equity_pct'), 0)} [계산]")])
+    ppf_rows.append(["<b>미래</b>", "지금의 투자는 가치를 만들까", '<span class="r-chip info">일감은 충분 · 전환 사업은 초기</span>',
+                     tagify(f"잔고 {jo(F['lb']['total'], 1)}(매출 {F['yrs']:.1f}년 치) [공시·계산]; 원전·SMR은 본계약 전 [보도]; 목표 이익률 8%는 지난 10년 최고치("
+                            f"{pct(max(v.a(y, 'operating_margin_pct') for y in F['years']))})보다 높음 [계산]" if F["lb"] and F["yrs"] else "–")])
+    ppf = rtable(["시점", "질문", "평가", "핵심 근거"], ppf_rows, "r-ppf2")
+    good, risk = strength_risk(ctx, F)
+    cols = f'<div class="r-2">{box("강점", bullets(good), "good")}{box("약점과 위험", bullets(risk), "crit")}</div>'
+    best = max(F["years"], key=lambda y: v.a(y, "operating_margin_pct") or -99)
+    roe_best = max(F["years"], key=lambda y: v.a(y, "roe_pct") or -99)
+    cagr = ((40 * T / F["revl"]) ** (1 / (2030 - F["yl"])) - 1) * 100 if F["revl"] and 2030 > F["yl"] else None
+    strat = [
+        "**회사가 밝힌 2030년 목표**: 매출 40조 원, 영업이익률 8% 이상, ROE 12% 이상(2025년 3월 CEO 인베스터데이) [보도].",
+        (f"**매출 목표**는 {F['yl']}년 {jo(F['revl'], 1)}에서 해마다 {cagr:.1f}% 늘면 닿는 숫자로, 수주잔고({F['yrs']:.1f}년 치)를 보면 무리한 규모는 아닙니다 [계산·해석]."
+         if cagr is not None and F["yrs"] else ""),
+        f"**수익성 목표**: 지난 10년 영업이익률 최고치는 {best}년 {pct(v.a(best, 'operating_margin_pct'))}, ROE 최고치는 {roe_best}년 {pct(v.a(roe_best, 'roe_pct'))}였습니다. "
+        "두 목표 모두 과거 어느 해보다 높아, 원가 추정·계약 조건 관리 방식이 바뀌어야 가능한 숫자입니다 [계산·해석].",
+        "**에너지 전환(원전·SMR·신재생)**: 방향은 일감의 질을 바꿀 수 있지만, 지금은 대부분 설계·사전업무 단계입니다. 본계약에서 원가 상승을 발주처와 나누는 "
+        "조건을 확보하는지가 2024년 같은 손실을 피하는 열쇠입니다 [해석].",
+        "**자본 전략**: 회사 돈을 크게 넣지 않는 EPC 중심이라 재무 부담은 작지만, 영업 현금이 마이너스인 동안 투자 재원은 사채·전환사채에 기대게 됩니다 [보도·해석].",
+    ]
     watch = rtable(["다음 공시에서 볼 숫자", "지금", "사업보고서의 어디", "좋아지는 신호"], watch_rows(ctx, F), "r-watch")
-    closing = (f"{ctx['company']['name']}의 지금을 한 문장으로 줄이면 ‘일감은 충분하지만, 그 일감을 이익과 현금으로 바꾸는 힘을 다시 증명해야 하는 회사’입니다. "
-               if F["yrs"] and F["yrs"] >= 2.5 and (F["vd"].get("streak") or 0) >= 2 else "")
-    closing += ("이 보고서의 숫자와 문장은 새 공시가 나올 때마다 자동으로 다시 계산되므로, 다음 분기에 위 다섯 숫자가 어느 쪽으로 움직였는지 "
-                "확인하는 것이 가장 좋은 다음 단계입니다.")
-    body = (cols + sub("8-1", "다음 공시에서 확인할 숫자", watch)
-            + f'<p class="r-lead r-close">{rich(closing)}</p>')
-    return chapter("08", "Conclusion", "종합 의견",
-                   "1~7장에서 본 숫자를 강점과 위험으로 나누고, 다음 공시에서 확인할 숫자를 정리했습니다. "
-                   "강점과 위험은 미리 정한 조건(일감 2.5년 치 이상, 10년 중앙값과 비교 등)에 맞을 때만 자동으로 나타납니다.", body, "ch8")
+    body = (sub("10-1", "처음 생각은 맞았나", quote + bullets(refined_view(F)) + box("", para(rewrite), "plain"), keep=True)
+            + sub("10-2", "과거 · 현재 · 미래 평가", ppf, keep=True)
+            + sub("10-3", "강점과 위험", cols, "미리 정한 조건(일감 2.5년 치 이상, 동종사 중앙값과 비교 등)에 맞을 때만 자동으로 나타납니다.")
+            + sub("10-4", "회사 전략에 대한 평가", bullets(strat), keep=True)
+            + sub("10-5", "다음 공시에서 확인할 숫자", watch, keep=True)
+            + para("이 보고서의 숫자와 문장은 새 공시가 나올 때마다 자동으로 다시 계산됩니다. 연표와 미래사업 단계는 사람이 조사해 고치는 부분이라, "
+                   "조사 기준일 뒤의 사건은 ‘조사 전’으로 표시됩니다.", "r-lead r-close"))
+    lead = "1장의 문제의식으로 돌아가, 자료가 무엇을 확인했고 무엇을 확인하지 못했는지 정리합니다."
+    return chapter("10", "Conclusion", "종합 평가", lead, body, "ch10")
 
 
 # ---------------------------------------------------------------------------
 # 부록
 # ---------------------------------------------------------------------------
-GLOSSARY = [
-    ("수주 · 신규 수주", "발주처와 공사 계약을 맺는 것. 신규 수주는 한 해 동안 새로 맺은 계약 금액입니다."),
-    ("수주잔고", "계약은 했지만 아직 짓지 않은 공사 금액. 앞으로 매출이 될 일감입니다."),
-    ("진행기준", "공사가 끝날 때가 아니라 진행한 만큼(보통 쓴 원가 ÷ 총예정원가) 매출을 잡는 회계 방법입니다."),
-    ("원가율", "매출원가 ÷ 매출액. 100%를 넘으면 원가만으로 매출보다 많이 쓴 것입니다."),
-    ("미청구공사", "공사는 했지만 아직 청구하지 못한 금액(계약자산). 늘어나면 현금이 늦게 들어옵니다."),
-    ("초과청구공사 · 선수금", "공사보다 먼저 받은 돈(계약부채). 돈 대신 공사로 갚는 부채입니다."),
-    ("PF 보증", "시행사·조합의 프로젝트파이낸싱 대출에 건설사가 선 보증이나 신용보강. 재무상태표 밖의 우발채무입니다."),
-    ("영업활동현금흐름(CFO)", "본업으로 실제 들어오고 나간 현금. 이익과 달리 회계상 추정이 들어가지 않습니다."),
-    ("FCF(잉여현금흐름)", "영업활동현금흐름 − 설비투자(CAPEX). 투자를 하고도 남는 현금입니다."),
-    ("이자보상배율", "영업이익 ÷ 이자비용. 1배 미만이면 영업이익으로 이자도 못 냅니다."),
-    ("순차입금", "이자가 붙는 차입금 − 현금. 마이너스면 빚보다 현금이 많은 순현금 상태입니다."),
-    ("EBITDA", "영업이익 + 감가상각비. 설비가 적은 건설사는 영업이익과 큰 차이가 없습니다."),
-    ("ROE · ROIC", "ROE = 순이익 ÷ 평균 자본, ROIC = 세후 영업이익 ÷ 평균 투하자본(자본 + 순차입금)."),
-    ("PER · PBR", "PER = 시가총액 ÷ 순이익, PBR = 시가총액 ÷ 순자산. 시장이 회사를 이익·장부가치의 몇 배로 보는지입니다."),
-    ("시공능력평가", "국토교통부가 매년 실적·재무·기술·신인도로 매기는 건설사 체급. 입찰 자격과 보증에 쓰입니다."),
-    ("종합심사낙찰제", "300억 원 이상 공공공사에서 공사수행능력과 입찰금액을 합산해 낙찰자를 정하는 방식입니다."),
+FORMULAS = [
+    ("영업이익 변화 나누기(6-1)", "ΔOP = (R₁ − R₀) × m₀ + (−Δ원가율 × R₁) + (−Δ판관비율 × R₁) + 기타", "R = 매출, m₀ = 전년 영업이익률. 기타는 현대건설에서 0"),
+    ("회사별 나누기(4-3)", "연결 영업이익 = 본사(별도) + 현대엔지니어링 + 나머지", "현대엔지니어링은 비지배지분 주석의 요약 재무정보(내부거래 제거 전), 나머지는 차이"),
+    ("이자비용 나누기(8-4)", "ΔI = (r₁ − r₀) × D₁ + r₀ × (D₁ − D₀)", "r = 이자비용 ÷ 평균 차입금, D = 평균 차입금. 앞은 금리 효과, 뒤는 차입 규모 효과"),
+    ("민감도(요약 RQ2)", "원가율 1%p = 매출 × 1% · 매출 10% = 매출 × 10% × 영업이익률", "금리 1%p·환율 10%는 회사가 위험관리 주석에 공시한 숫자"),
+    ("시나리오(9-3)", "영업이익 = 최근 4개 분기 매출 × 가정 이익률 · 자본 = 지금 자본 + 영업이익 × (1 − 24%)", "영업외손익·배당·비지배지분은 빼고, 부채는 그대로"),
+    ("조기 경보(5-4)", "사건 2년 전과 1년 전 값이 모두 평상시(2016~2020 평균)보다 나쁜 쪽이면 ‘미리 나빠짐’", "사례가 하나라 일반화하지 않음"),
+    ("변화의 성격(7-1)", "|Δ현대| < 0.5%p → 큰 변화 없음 · 같은 방향이고 |Δ동종사| ≥ |Δ현대| × 0.5 → 업계 공통 · 그 밖 → 회사 고유", "영업이익률, 동종사는 삼성물산 제외 중앙값"),
+    ("가설 판정(요약)", "H1: 규모 효과 > 0이고 영업이익 변화 < 규모 효과 → 지지 · H2: 원가율 효과 비중 ≥ 50% → 지지 · H3: 영업활동현금흐름 합계 < 영업이익 합계 → 지지",
+     "H4는 PF 손실이 확인되지 않아, H5는 다른 산업과 비교하지 않아 ‘부분 지지’로 둠"),
+    ("중요도 표시(5-1)", "● 그 기준을 직접 보여 주고 현대건설 자료로 확인 · ◐ 간접·조건부 · ○ 관련 약함", "분석자 판단 — 근거 칸의 숫자로 확인"),
 ]
-
-DISCLAIMER = ("대학 교양 수업 과제로 공시 숫자를 자동 정리한 교육용 자료이며, 특정 주식의 매수·매도를 권하는 투자 조언이 아닙니다. "
+READ_ITEMS = [("재무제표(손익·재무상태·현금흐름)", "Ⅲ 재무에 관한 사항", "OpenDART 재무제표 API(연결) · 2010~2015년은 원문 표"),
+              ("부문별 매출·매출총이익 · 지역별 매출", "Ⅲ 연결재무제표 주석 ‘영업부문’", "부문 합계가 연결 매출과 0.5% 안에서 맞을 때만 사용"),
+              ("원가 추정 변경 효과 · 공사손실충당부채", "Ⅲ 주석 ‘건설계약’(추정총계약원가 변경)", "연결·별도 표를 장 제목으로 구분"),
+              ("현대엔지니어링 요약 실적", "Ⅲ 주석 ‘종속기업’(비지배지분 요약 재무정보)", "매출·영업이익·순이익·영업활동현금흐름"),
+              ("금리·환율 민감도", "Ⅲ 주석 ‘위험관리’", "회사가 계산한 세전이익 영향"),
+              ("현금흐름 세부(예금·대여금·배당·차입)", "Ⅲ 연결 현금흐름표(API 세부 계정)", "부호 규칙을 해마다 확인"),
+              ("수주잔고 · 공사별 진행 · 신규 수주", "Ⅱ 사업의 내용 > 매출 및 수주상황", "회사별 계약잔액 합계, 공사별 계약금액·완성·잔액"),
+              ("자재 가격 · 국내 건설시장 · 연구개발비 · 배당", "Ⅱ 사업의 내용 · Ⅲ 배당에 관한 사항", "표와 문장"),
+              ("경영진단 문장", "Ⅳ 이사의 경영진단 및 분석의견", "연결 실적과 금액이 맞는 문장만"),
+              ("PF 보증", "Ⅺ 그 밖에 투자자 보호 > 우발부채 등", "보증금액 기준 신용보강 문장"),
+              ("단독 매출·영업이익 · 직원 수", "Ⅲ 요약재무정보(별도) · Ⅷ 임원 및 직원", "본사 실적, 1인당 생산성")]
+AUTO_ROWS = [("재무제표 숫자 · 비율 · 그래프 · 숫자로 쓴 문장", "매월 1일 자동", "새 공시가 없으면 같은 숫자"),
+             ("주석에서 읽는 숫자(부문 · 원가 추정 변경 · 현대엔지니어링 · 민감도 · 현금흐름 세부)", "새 사업보고서가 나오면 자동", "읽은 값은 data/financials/drivers.json에 쌓임"),
+             ("가설 판정 · 변화의 성격 · 조기 경보 · 시나리오 · 강점과 위험", "매월 자동(규칙은 부록 A)", "숫자가 바뀌면 판정도 바뀜"),
+             ("연도별 사건 · 정책 · 경쟁사 사건 · 미래사업 단계 · 사업 유형 설명", "사람이 config/research.json을 고침", "조사 기준일 뒤의 새 연도는 ‘조사 전’ 표시"),
+             ("중요도 표시(●◐○) · 해석 문장", "사람이 판단", "근거 숫자는 자동")]
+GLOSSARY = [
+    ("수주 · 수주잔고", "발주처와 공사 계약을 맺는 것, 그리고 계약했지만 아직 짓지 않은 금액(앞으로 매출이 될 일감)."),
+    ("진행기준", "공사가 끝날 때가 아니라 진행한 만큼(보통 쓴 원가 ÷ 총예정원가) 매출을 잡는 방법(K-IFRS 1115호)."),
+    ("원가 추정 변경", "진행 중인 공사의 총예정원가·계약금액 추정을 바꾼 것. 바뀐 만큼 그해 손익이 한꺼번에 변합니다."),
+    ("공사손실충당부채", "끝까지 지으면 손실이 날 공사의 앞으로의 손실을 미리 비용으로 잡아 둔 부채."),
+    ("원가율 · 판관비율", "매출원가 ÷ 매출, 판매비와관리비 ÷ 매출. 영업이익률 = 1 − 원가율 − 판관비율."),
+    ("계약자산(미청구공사)", "공사는 했지만 아직 청구하지 못한 금액. 늘면 현금이 늦게 들어옵니다."),
+    ("계약부채(초과청구) · 선수금", "공사보다 먼저 받은 돈. 돈 대신 공사로 갚는 부채입니다."),
+    ("연결 · 별도", "연결 = 현대건설 + 종속회사(현대엔지니어링 등), 별도 = 현대건설 본사 단독."),
+    ("비지배지분", "연결 종속회사의 다른 주주 몫. 현대엔지니어링 손익의 약 60%가 여기에 갑니다(유효지분 40.47%)."),
+    ("PF 보증 · 책임준공", "시행사·조합의 프로젝트파이낸싱 대출에 선 보증, 그리고 끝까지 짓겠다는 약정. 재무제표 밖의 의무입니다."),
+    ("EPC · ESC · EWA", "설계·조달·시공 일괄 계약, 그 전 단계의 설계(조기업무) 계약, 사전업무착수계약."),
+    ("영업활동현금흐름 · FCF", "본업으로 실제 들어오고 나간 현금, 그리고 거기서 설비투자를 뺀 잉여현금흐름."),
+    ("EBITDA", "영업이익 + 감가상각비. 설비가 적은 건설사는 영업이익과 차이가 작습니다."),
+    ("ROE · ROIC", "순이익 ÷ 평균 자본, 세후 영업이익 ÷ 평균 투하자본(자본 + 순차입금)."),
+    ("이자보상배율 · 순차입금", "영업이익 ÷ 이자비용, 이자가 붙는 차입금 − 현금(마이너스면 순현금)."),
+    ("PER · PBR", "시가총액 ÷ 순이익, 시가총액 ÷ 순자산. 시장이 회사를 이익·장부가치의 몇 배로 보는지."),
+    ("시공능력평가", "국토교통부가 해마다 실적·재무·기술·신인도로 매기는 건설사 체급."),
+]
+DISCLAIMER = ("대학 수업 과제로 공시 숫자를 자동 정리하고 사건을 조사한 교육용 자료이며, 특정 주식의 매수·매도를 권하는 투자 조언이 아닙니다. "
               "숫자는 공시 원문과 다를 수 있으니 중요한 판단에는 DART 원문을 확인하세요.")
 LIMITS = [
-    "모든 재무 숫자는 연결재무제표 기준이고, 당기순이익은 비지배지분 몫을 포함합니다. 생산성(직원 1인당)만 현대건설 단독 숫자입니다.",
-    "2015년 이후 연간·2016년 이후 분기는 OpenDART 재무제표 API, 2010~2015년은 공시 원문(XBRL) 표에서 읽었습니다.",
-    "수주잔고는 2014년부터 사업보고서 ‘수주상황’ 표의 회사별 계약잔액 합계입니다(연결기준 숫자는 문장에 있는 해만). "
-    "앞뒤 보고서와 15% 넘게 어긋나는 보고서(표에 넣은 공사 범위가 다른 경우)는 그래프에서 뺐습니다.",
-    "신규 수주는 현대건설 단독 수주실적이라 현대엔지니어링 등 자회사 수주가 빠져 있고, 보고서에 같은 문장이 없는 해는 비웠습니다.",
-    "PF 보증은 정비사업 PF까지 포함하도록 바뀐 공시 기준(2023년 사업보고서부터)이라 그 전 숫자와 비교하지 않습니다.",
-    "10가지 관점의 판정은 절대 기준이 아니라 최근 10년 안에서의 상대 위치이고, 가이드 6단계 판정은 아래의 단순 규칙을 따릅니다.",
-    "주가는 달마다 마지막 거래일 종가(아직 끝나지 않은 달은 받은 날까지의 마지막 종가, 네이버 금융·실패하면 Yahoo Finance)이고 2021년 이전은 수정주가입니다.",
+    "재무 숫자는 연결재무제표 기준이고 당기순이익은 비지배지분 몫을 포함합니다. ‘본사’는 현대건설 별도재무제표입니다.",
+    "부문별 영업이익은 공시되지 않아 매출총이익까지만 나눴습니다. 공사별 손익도 공시되지 않습니다.",
+    "현대엔지니어링 숫자는 비지배지분 주석의 요약 재무정보(내부거래 제거 전)라 연결 숫자와 단순 합이 맞지 않으며, 그 차이는 ‘나머지’에 들어갑니다.",
+    "연간 관측치가 10개뿐이라 외부 요인(금리·유가·정책)과 실적의 상관계수를 내지 않았습니다. 인과는 회계 항등식과 회사 공시로 확인되는 것만 ‘확인’이라 적었습니다.",
+    "동종사 비교는 사업 구성이 달라 한계가 있습니다. 삼성물산은 비건설 사업을 함께 연결해 중앙값에서 뺐습니다.",
+    "PF 보증은 2023년 사업보고서부터 정비사업 PF를 포함하는 기준이라 그 전과 비교하지 않습니다.",
+    "2026년 1분기부터 투자부동산·토지 회계정책이 바뀌어 자본·부채비율은 그 전과 기준이 다릅니다.",
+    "주가는 달마다 마지막 거래일 종가(네이버 금융, 실패하면 Yahoo Finance)이고 2021년 이전은 수정주가입니다.",
 ]
 
 
 def appendix(ctx, F):
-    gl = "".join(f"<div><dt>{esc(a)}</dt><dd>{esc(b)}</dd></div>" for a, b in GLOSSARY)
+    formulas = rtable(["계산", "공식 · 규칙", "설명"], [[f"<b>{esc(a)}</b>", esc(b), esc(c)] for a, b, c in FORMULAS], "r-formula")
     rules = bullets(F["a"].get("rules", []), "small")
-    refs = [link(url, name) for name, url in rv.REFS.values()] + [link(url, name) for name, url in an.SOURCES.values()]
-    reports = []
-    lf = ctx.get("latest_filing")
-    if lf:
-        reports.append(dart_link(lf["rcept_no"], f"{lf['report_nm'].strip()} ({d.fmt_date(lf['rcept_dt'])} 접수)"))
-    seg = F["biz"].get("segments") or {}
-    if seg.get("receipt") and (not lf or seg["receipt"] != lf["rcept_no"]):
-        reports.append(dart_link(seg["receipt"], seg["report"]))
-    cfg = ctx["company"]
     read = rtable(["자동으로 읽는 숫자", "사업보고서의 위치", "방법"], [[esc(a), esc(b), esc(c)] for a, b, c in READ_ITEMS], "r-read")
-    body = (sub("A", "용어 풀이", f'<dl class="r-gloss">{gl}</dl>')
-            + sub("B", "자료와 한계", '<p class="r-subnote">OpenDART에서 매월 새 보고서 원문(ZIP)을 받아 아래 위치의 표와 문장을 읽습니다. '
-                  '형식이 낯선 보고서는 건너뛰고 지난번에 읽은 숫자를 씁니다.</p>' + read + bullets(LIMITS + [DISCLAIMER], "small")
-                  + '<p class="r-subnote r-rules-h"><b>가이드 6단계 판정 규칙</b></p>' + rules)
-            + sub("C", "출처", bullets(["공시: " + " · ".join(reports) + " · OpenDART(opendart.fss.or.kr)" if reports else "",
-                                        "제도·업계 설명과 시기별 배경: " + " · ".join(refs),
-                                        f"이 보고서를 만드는 코드와 데이터: {link(cfg.get('repo_url', ''), cfg.get('repo_url', ''))} · "
-                                        f"재무제표 대시보드: {link(cfg.get('dashboard_url', ''), cfg.get('dashboard_url', ''))}"], "small src", raw=True)))
-    return chapter("부록", "Appendix", "용어 · 자료와 한계 · 출처", "", body, "appendix")
+    chap = "".join(f'<li class="{"on" if on else ""}"><span class="cn">{esc(no)}</span><span><b>{esc(t)}</b> {esc(w)}</span></li>'
+                   for no, t, w, on in rv.CHAPTERS)
+    lf = ctx.get("latest_filing")
+    chap_box = box("사업보고서 한 권의 구조", f'<ol class="r-chapters">{chap}</ol>'
+                   f'<p class="r-src">진하게 표시한 장을 이 보고서가 자동으로 읽습니다'
+                   + (f" · 최근 보고서: {dart_link(lf['rcept_no'], lf['report_nm'].strip())}" if lf else "") + "</p>", "r-chbox")
+    auto = rtable(["내용", "갱신", "비고"], [[esc(a), f"<b>{esc(b)}</b>", esc(c)] for a, b, c in AUTO_ROWS], "r-auto")
+    gl = "".join(f"<div><dt>{esc(a)}</dt><dd>{esc(b)}</dd></div>" for a, b in GLOSSARY)
+    srcs = F["RC"].get("sources") or {}
+    src_items = [link(u, n) for n, u in srcs.values()]
+    refs = [link(url, name) for name, url in rv.REFS.values()] + [link(url, name) for name, url in an.SOURCES.values()]
+    cfg = ctx["company"]
+    body = (sub("A", "방법과 공식", formulas + '<p class="r-subnote r-rules-h"><b>교수님 가이드 6단계 판정 규칙</b></p>' + rules)
+            + sub("B", "자료 · 한계 · 자동 갱신 범위", chap_box + read + auto + bullets(LIMITS + [DISCLAIMER], "small"),
+                  "OpenDART에서 매월 새 보고서 원문(ZIP)을 받아 아래 위치의 표와 문장을 읽습니다. 형식이 낯선 보고서는 건너뛰고 지난번에 읽은 숫자를 씁니다.")
+            + sub("C", "용어 풀이", f'<dl class="r-gloss">{gl}</dl>')
+            + sub("D", "출처", bullets([("공시 원문: " + dart_link(lf["rcept_no"], f"{lf['report_nm'].strip()} ({d.fmt_date(lf['rcept_dt'])} 접수)")
+                                         + " · OpenDART(opendart.fss.or.kr)") if lf else "",
+                                        f"연표·미래사업 조사({F['RC'].get('as_of', '–')}): " + " · ".join(src_items),
+                                        "제도·업계 설명: " + " · ".join(refs),
+                                        f"코드와 데이터: {link(cfg.get('repo_url', ''), cfg.get('repo_url', ''))} · 재무제표 대시보드: "
+                                        f"{link(cfg.get('dashboard_url', ''), cfg.get('dashboard_url', ''))}"], "small src", raw=True)))
+    return chapter("부록", "Appendix", "방법 · 자료와 한계 · 용어 · 출처", "", body, "appendix")
+
+
+# ---------------------------------------------------------------------------
+# 인쇄용 CSS (이전 보고서의 PRINT_CSS 뒤에 덧붙임)
+# ---------------------------------------------------------------------------
+REPORT_CSS = """
+/* 근거 표시 배지 */
+.ev{display:inline-block;margin:0 .2mm 0 .6mm;padding:0 1.1mm;border-radius:.8mm;font-size:6.2pt;font-weight:700;line-height:1.55;vertical-align:.25mm;white-space:nowrap;letter-spacing:0}
+.ev-d{background:#dceee8;color:#0b5d4f}
+.ev-c{background:#e3e5f7;color:#3a439a}
+.ev-a{background:#fbecc9;color:#7a4d06}
+.ev-n{background:#ecebe6;color:#55584f}
+.ev-h{background:#f6e1ec;color:#8a2f5f}
+.r-evleg{margin:2.5mm 0 0;font-size:7.6pt;color:var(--ink-2);line-height:2.1}
+
+/* 표지 (297mm 안에 들어가게) */
+.cover{padding:16mm 18mm 12mm}
+.cv-main{margin-top:12mm}
+.cover h1{font-size:40pt}
+.cover h1 span{font-size:26pt}
+.cv-sub{margin-top:4mm;font-size:10.5pt;max-width:168mm}
+.cv-rq{margin-top:6mm;max-width:170mm;padding:2.4mm 4mm;border:1px solid var(--forest-line);border-radius:1.5mm}
+.cv-rq p{margin:0;font-size:6.8pt;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--forest-soft)}
+.cv-rq ol{margin:1mm 0 0;padding-left:5mm;font-size:8.3pt;line-height:1.55}
+.cv-thesis{margin-top:6mm;font-size:9.8pt;line-height:1.7}
+.cv-chart{padding-top:5mm}
+.cv-bars{height:20mm}
+.cv-kpis{margin-top:4mm}
+.cv-k{padding:3.5mm 3.5mm 3.5mm 0}
+.cv-v{font-size:19pt}
+.cv-meta{margin-top:4.5mm}
+.cv-meta>div{padding:1.7mm 3mm}
+.cv-meta dd{font-size:7.5pt}
+.cv-m{position:relative;height:4.2mm;margin-top:1.2mm}
+.cv-m span{position:absolute;top:0;transform:translateX(-50%);font-size:6.3pt;font-weight:600;color:var(--forest-soft);white-space:nowrap}
+
+/* 요약 */
+.r-summary .r-find p{font-size:7.9pt;line-height:1.5}
+.r-summary .r-finds{gap:2.6mm}
+.r-summary .r-hyp td,.r-summary .r-hyp th{font-size:7.3pt;padding:.9mm 1.5mm;line-height:1.45}
+.r-summary .r-sec{margin-top:5mm}
+.r-summary .r-ppf{margin-top:4mm}
+.r-summary .ppf{padding:2.2mm 3mm}
+.r-summary .ppf p{font-size:7.5pt;line-height:1.5}
+.r-ppf{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3mm;margin-top:5mm;break-inside:avoid}
+.ppf{padding:2.6mm 3.2mm;border-top:3px solid var(--forest);background:var(--tint)}
+.ppf .r-h{margin:0;font-size:8.8pt;font-weight:700}
+.ppf p{margin:.8mm 0 0;font-size:7.9pt;line-height:1.55}
+.r-hyp td,.r-hyp th{font-size:7.6pt;padding:1.1mm 1.7mm}
+.r-hyp td:nth-child(2){width:23%}
+.r-hyp td:nth-child(3),.r-hyp td:nth-child(5){white-space:nowrap}
+
+/* 1장 */
+.r-quote{margin:1mm 0 3mm;padding:3mm 4.5mm;border-left:3px solid var(--data);background:var(--tint-g);font-size:9.3pt;line-height:1.75;color:var(--ink)}
+.r-quote.small{font-size:8.2pt;padding:2.4mm 4mm}
+.r-h2 th,.r-q3 th{width:9%}
+.r-q3 td:last-child{white-space:nowrap}
+.r-method th{width:19%}
+.r-method td,.r-method th{font-size:7.8pt}
+.r-vs th{width:15%}
+.r-vs td,.r-vs th{font-size:7.8pt}
+
+/* 2장 */
+.r-timing th{width:14%}
+.r-timing td,.r-timing th{font-size:7.8pt}
+.bts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3mm}
+.bt{padding:2.4mm 3.2mm;border:1px solid var(--line);border-radius:2mm;break-inside:avoid;background:#fff}
+.bt .r-h{margin:0 0 1.2mm;font-size:9pt;font-weight:700}
+.bt .r-h span{font-size:7pt;font-weight:500;color:var(--muted)}
+.bt dl{margin:0;display:grid;grid-template-columns:15mm minmax(0,1fr);gap:.5mm 2mm;font-size:7.2pt;line-height:1.45}
+.bt dl>div{display:contents}
+.bt dt{font-weight:600;color:var(--ink-2)}
+.bt dd{margin:0}
+.bt-hy{margin:1.4mm 0 0;padding-top:1.2mm;border-top:1px dashed var(--line);font-size:7.2pt;color:var(--data)}
+.r-peers10 td,.r-peers10 th{font-size:7pt;padding:.9mm 1.2mm}
+.r-peers10 tbody tr:last-child th,.r-peers10 tbody tr:last-child td{background:var(--self)}
+
+/* 3장 */
+.r-feat td,.r-feat th{font-size:7.6pt;padding:1.1mm 1.7mm}
+.r-feat th{width:17%}
+.r-feat td:last-child{width:27%}
+.r-stake th{width:15%}
+.r-stake td,.r-stake th{font-size:7.8pt}
+
+/* 4장 */
+.r-segsum td,.r-segsum th{font-size:7.5pt;padding:1mm 1.6mm}
+.r-matrix td,.r-matrix th{font-size:7.4pt;padding:1.1mm 1.6mm}
+.r-matrix th{width:11%}
+
+/* 5장 */
+.r-items{table-layout:fixed}
+.r-items td,.r-items th{font-size:7.3pt;padding:.9mm 1.3mm;vertical-align:middle;line-height:1.4}
+.r-items thead th{font-size:6.9pt;line-height:1.3;vertical-align:bottom}
+.r-items thead th:nth-child(1){width:19%}
+.r-items thead th:nth-child(n+2):nth-child(-n+6){width:7%;text-align:center}
+.r-items thead th:nth-child(7){width:37%}
+.r-items thead th:nth-child(8){width:9%;text-align:center}
+.r-items td:nth-child(n+2):nth-child(-n+6){text-align:center;font-size:9pt;line-height:1}
+.r-items td:last-child{text-align:center}
+.r-g2{margin-top:4mm}
+.m-full{color:var(--data)}
+.m-half{color:var(--data);opacity:.8}
+.m-none{color:var(--axis)}
+.tier{display:inline-block;padding:.2mm 1.8mm;border-radius:9mm;font-size:7pt;font-weight:700;white-space:nowrap}
+.tier.t1{background:var(--forest);color:#fff}
+.tier.t2{background:var(--thead);color:var(--ink)}
+.tier.t3{background:var(--hover);color:var(--ink-2)}
+.r-purpose th{width:24%}
+.r-purpose td,.r-purpose th{font-size:7.8pt}
+.qas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3mm}
+.qa{padding:2.4mm 3.2mm;border:1px solid var(--line);border-radius:2mm;break-inside:avoid}
+.qa .r-h{margin:0;font-size:8.6pt;font-weight:700}
+.qa p{margin:.8mm 0 0;font-size:7.8pt;line-height:1.55}
+.qa .qa-a{color:var(--data);font-weight:600}
+.r-warn td,.r-warn th{font-size:7.6pt}
+
+/* 6장 */
+.r-bridge td,.r-bridge th,.r-est td,.r-est th,.r-cash td,.r-cash th{font-size:7.4pt;padding:.9mm 1.5mm}
+.r-bridge tbody tr:last-child th,.r-bridge tbody tr:last-child td{border-top:1.5px solid var(--axis);font-weight:700}
+.r-factor td,.r-factor th{font-size:7.2pt;padding:1mm 1.4mm;line-height:1.45}
+.r-factor th{width:12%}
+.r-factor td:nth-child(2){width:19%}
+.r-factor td:nth-child(5){white-space:nowrap}
+.r-concl td,.r-concl th{font-size:7.4pt;padding:1mm 1.5mm}
+.r-concl th{width:16%}
+
+/* 6장·8장: +와 −를 함께 쌓는 막대 */
+.dv .bar.stk.neg{box-shadow:inset 0 -1px 0 var(--sheet)}
+.dv .bar.stk.neg.bot{border-radius:0 0 4px 4px}
+.netbar{position:absolute;left:calc(50% - var(--bw) / 2 - 3px);width:calc(var(--bw) + 6px);height:0;border-top:2px solid var(--ink);pointer-events:none}
+
+/* 7장 연표 */
+.r-tl td,.r-tl th{font-size:7.5pt;padding:1mm 1.5mm;vertical-align:middle}
+.r-tl th{white-space:nowrap}
+.r-tl td:nth-child(3),.r-tl td:nth-child(4){white-space:nowrap}
+.yc{display:grid;grid-template-columns:30mm minmax(0,1fr);gap:4.5mm;padding:2.8mm 0 2.4mm;border-top:1px solid var(--line);break-inside:avoid}
+.yc-y{margin:0;font-size:16pt;font-weight:700;letter-spacing:-.03em;line-height:1.1;color:var(--forest)}
+.yc-l .r-chip{margin-top:1.2mm;font-size:6.7pt}
+.yc-n{margin:1.6mm 0 0;display:grid;gap:.35mm}
+.yc-n>div{display:flex;justify-content:space-between;gap:1.5mm;font-size:6.8pt;line-height:1.35}
+.yc-n dt{color:var(--muted)}
+.yc-n dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.yc-r p{margin:0 0 .9mm;font-size:7.8pt;line-height:1.55}
+.yc-r .yr{display:grid;grid-template-columns:14mm minmax(0,1fr);gap:2mm}
+.yc-r .lab{font-size:7pt;font-weight:700;color:var(--ink-2);padding-top:.25mm}
+.yc-r .yc-in,.yc-r .yc-in .lab{color:var(--data)}
+.yc-r .yc-md{color:var(--ink-2)}
+.yc-todo{padding:1mm 2mm;border-radius:1mm;background:var(--warn-bg);font-size:7.5pt}
+
+/* 8장 */
+.r-alloc td,.r-alloc th{font-size:7.5pt;padding:.9mm 1.8mm}
+.r-alloc tbody tr:last-child th,.r-alloc tbody tr:last-child td{border-top:1.5px solid var(--axis);font-weight:700}
+.r-spend td,.r-spend th{font-size:7.5pt;padding:1mm 1.6mm}
+.r-div td,.r-div th,.r-int td,.r-int th{font-size:7.1pt;padding:.9mm 1.1mm}
+.r-div th,.r-int th{white-space:nowrap}
+
+/* 9장: 미래사업 단계 */
+table.ladder{width:100%;table-layout:fixed;border-collapse:collapse;margin-top:1mm;font-size:7.6pt;break-inside:avoid}
+.ladder thead th:nth-child(n+2){width:13.4%}
+.ladder th{overflow-wrap:anywhere}
+.ladder th,.ladder td{padding:.9mm 1.4mm;border-bottom:1px solid var(--grid);text-align:left;vertical-align:middle}
+.ladder thead th{background:var(--thead);font-size:6.8pt;font-weight:600;color:var(--ink-2);text-align:center;line-height:1.3}
+.ladder thead th:first-child{text-align:left;width:33%}
+.ladder .sn{display:inline-grid;place-items:center;width:3.6mm;height:3.6mm;margin-right:1mm;border-radius:50%;background:var(--data);color:#fff;font-size:6.1pt;font-weight:700;vertical-align:.2mm}
+.ladder tbody th b{display:block;font-size:7.6pt;font-weight:700;line-height:1.3}
+.ladder tbody th span{display:block;font-size:6.5pt;color:var(--muted);line-height:1.3}
+.ladder td{position:relative;height:6.2mm;padding:0}
+.ladder td i{position:absolute;left:0;right:0;top:50%;height:1.8mm;margin-top:-.9mm}
+.ladder td.done i{background:color-mix(in srgb,var(--s1) 42%,#fff)}
+.ladder td.now i{right:50%;background:color-mix(in srgb,var(--s1) 42%,#fff)}
+.ladder td.now:first-of-type i{display:none}
+.ladder td.now::after{content:"";position:absolute;left:50%;top:50%;width:3.6mm;height:3.6mm;margin:-1.8mm 0 0 -1.8mm;border-radius:50%;background:var(--s1);box-shadow:0 0 0 1.2px #fff}
+.ladder td.todo i{height:0;margin-top:0;border-top:1px dashed var(--axis)}
+.r-grow td,.r-grow th{font-size:7.1pt;padding:1mm 1.4mm;line-height:1.45}
+.r-grow th{width:21%}
+.r-grow td:last-child{width:13%;font-size:6.5pt}
+.r-scen td,.r-scen th{font-size:7.4pt;padding:1mm 1.5mm}
+.r-scen td:nth-child(2){width:33%}
+.r-grid td,.r-grid th,.r-stress td,.r-stress th{font-size:7.5pt}
+.r-peers td,.r-peers th{font-size:7.8pt}
+
+/* 10장 */
+.r-ppf2{table-layout:fixed}
+.r-ppf2 td,.r-ppf2 th{font-size:7.7pt}
+.r-ppf2 thead th:nth-child(1){width:8%}
+.r-ppf2 thead th:nth-child(2){width:20%}
+.r-ppf2 thead th:nth-child(3){width:24%}
+.r-ppf2 thead th:nth-child(4){width:48%}
+.r-ppf2 .r-chip{white-space:normal}
+
+/* 쪽 나눔: 소제목과 설명을 한 덩어리로, 바로 뒤 내용과 같은 쪽에 */
+.r-hn{break-inside:avoid;break-after:avoid}
+.r-sec>.r-hn>h3{margin:0 0 2mm;font-size:11.5pt;letter-spacing:-.015em}
+.r-sec>.r-hn>h3 .k{display:inline-block;min-width:9mm;margin-right:1.5mm;color:var(--data);font-weight:700}
+.r-chbox{margin:0 0 3mm;padding:2.6mm 3.6mm}
+.r-chbox .r-chapters{grid-template-columns:repeat(2,minmax(0,1fr));gap:.6mm 4mm}
+
+/* 부록 */
+.r-formula td,.r-formula th{font-size:7.3pt;padding:1mm 1.6mm}
+.r-formula th{width:17%}
+.r-formula td:nth-child(2){width:46%}
+.r-auto td,.r-auto th{font-size:7.5pt}
+.r-auto th{width:44%}
+"""
 
 
 # ---------------------------------------------------------------------------
@@ -912,7 +2326,7 @@ span.r-src{display:block}
 .r-doc .heat td{font-size:7.2pt;padding:1mm .8mm}
 .r-doc .heat th small{margin-left:1mm;font-size:6.4pt}
 .r-doc .sig td.lab{min-width:0}
-.r-doc .vtiles{grid-template-columns:repeat(4,minmax(0,1fr));margin:3mm 0 4mm;border-radius:2mm}
+.r-doc .vtiles{grid-template-columns:repeat(4,minmax(0,1fr));margin:3mm 0 4mm;border-radius:2mm;break-inside:avoid}
 .r-doc .vtiles:has(.vt:nth-child(6)){grid-template-columns:repeat(3,minmax(0,1fr))}
 .r-doc .vt{padding:2mm 3mm}
 .r-doc .vt-l{font-size:7.4pt}
@@ -985,12 +2399,13 @@ def build_html(ctx):
     F = facts(ctx)
     title = f"{cfg['name']} 기업분석 보고서"
     parts = [cover(ctx, F), summary_page(ctx, F)]
-    for build in (ch1_structure, ch2_report, ch3_orders, ch4_profit, ch5_cash, ch6_lenses, ch7_market, ch8_opinion, appendix):
+    for build in (ch1_method, ch2_industry, ch3_report, ch4_business, ch5_items, ch6_drivers, ch7_timeline, ch8_allocation,
+                  ch9_future, ch10_conclusion, appendix):
         try:
             parts.append(build(ctx, F))
         except Exception as exc:     # 한 장이 실패해도 나머지 장으로 보고서를 만듭니다
             print(f"::warning::기업분석 보고서 {build.__name__} 생략: {type(exc).__name__}: {exc}")
-    css = (PRINT_CSS.replace("__TITLE__", css_text(title)).replace("__EDITION__", css_text(edition(ctx)))
+    css = ((PRINT_CSS + REPORT_CSS).replace("__TITLE__", css_text(title)).replace("__EDITION__", css_text(edition(ctx)))
            .replace("__FONTS__", FONT_STACK))
     body = number_figures("".join(parts))
     return ("<!doctype html>\n<html lang=\"ko\" data-theme=\"light\"><head><meta charset=\"utf-8\">"
@@ -1041,7 +2456,7 @@ def find_chrome():
         if Path(path).exists():
             return path
     for base in (Path.home() / ".cache" / "ms-playwright", Path("/opt/pw-browsers")):     # Playwright가 받아 둔 Chromium
-        found = sorted(base.glob("chromium-*/chrome-linux/chrome")) if base.exists() else []
+        found = sorted(base.glob("chromium-*/chrome-linux*/chrome")) if base.exists() else []
         if found:
             return str(found[-1])
     return None

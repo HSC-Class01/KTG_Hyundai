@@ -20,11 +20,13 @@ import business  # noqa: E402
 import company_report  # noqa: E402
 import dart_agent as agent  # noqa: E402
 import dashboard  # noqa: E402
+import drivers  # noqa: E402
 import financials as fin  # noqa: E402
 import legacy  # noqa: E402
 import lenses  # noqa: E402
 import market  # noqa: E402
 import notes  # noqa: E402
+import research  # noqa: E402
 import statements  # noqa: E402
 
 
@@ -351,19 +353,74 @@ class RealData(unittest.TestCase):
         self.assertIn('location.replace("../dashboard/"+h)', page)
 
     def test_company_report_html(self):
+        import re
         html = company_report.build_html(self.ctx)
-        for cid in ("summary", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7", "ch8", "appendix"):
-            self.assertIn(f'<section class="r-chap', html.split(f'id="{cid}"')[0][-120:] + f'<section class="r-chap')
-            self.assertIn(f'id="{cid}"', html)
-        nums = [int(n) for n in __import__("re").findall(r'<span class="fig-no">그림 (\d+)</span>', html)]
+        chapters = ("summary", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7", "ch8", "ch9", "ch10", "appendix")
+        found = re.findall(r'<section class="r-chap[^"]*" id="([^"]+)"', html)
+        self.assertEqual(found, list(chapters))                   # 장이 모두, 이 순서로 (한 장이 실패하면 빠짐)
+        nums = [int(n) for n in re.findall(r'<span class="fig-no">그림 (\d+)</span>', html)]
         self.assertEqual(nums, list(range(1, len(nums) + 1)))      # 그림 번호는 1부터 빠짐없이
-        self.assertGreaterEqual(len(nums), 12)
+        self.assertGreaterEqual(len(nums), 18)
         self.assertNotIn("<h3>", html.split("<body>")[1].split('class="r-sec')[0])     # 표지·요약 제목만 책갈피에
         body = html.split("<body>")[1]
         self.assertNotIn("None", body)
-        self.assertIsNone(__import__("re").search(r"(?<![\w-])(nan|inf)(?![\w-])", body, __import__("re").I))
+        self.assertIsNone(re.search(r"(?<![\w-])(nan|inf)(?![\w-])", body, re.I))
         self.assertEqual(html, company_report.build_html(self.ctx))     # 같은 자료면 같은 글자(해시 비교로 PDF 재인쇄 판단)
         self.assertIn("2026년 10월판", html)
+        # 근거 표시는 모두 배지로 바뀌고 [공시] 같은 글자가 그대로 남지 않습니다
+        text = re.sub(r"<[^>]+>", " ", body)
+        self.assertIsNone(re.search(r"\[(공시|계산|가정|보도|해석)[^\]]{0,30}\]", text))
+        for cls in ("ev-d", "ev-c", "ev-a", "ev-n", "ev-h"):
+            self.assertIn(f'class="ev {cls}"', body)
+        # 숫자 뒤 조사(…조가/…억으로)가 받침에 맞는지
+        bad = []
+        for m in re.finditer(r"\d(조|억|원|배|%)(이|가|을|를|은|는|으로|로)(?=[\s.,)])", text):
+            final = m.group(1) in ("억", "원")
+            ok = {"이": final, "가": not final, "을": final, "를": not final, "은": final, "는": not final,
+                  "으로": final, "로": not final}[m.group(2)]
+            if not ok:
+                bad.append(text[max(0, m.start() - 20):m.end()])
+        self.assertEqual(bad, [])
+        self.assertEqual(html.count('class="yc"'), 10 + (1 if company_report.half_after(self.ctx, company_report.facts(self.ctx)) else 0))
+
+    def test_research_identities(self):
+        """원인 분해는 회계 항등식이라 나머지 없이 맞아야 합니다."""
+        if self.ctx["archives"] < self.ctx["filing_count"]:
+            self.skipTest("공시 원문 ZIP을 아직 다 받지 않았습니다(첫 실행 전)")
+        R = research.build(self.ctx)
+        self.assertEqual(len(R["years"]), 10)
+        for b in R["bridges"] + [R["bridge_10y"]]:
+            self.assertAlmostEqual(b["volume"] + b["cost"] + b["sga"] + b["other"], b["d_op"], delta=1)
+            self.assertLess(abs(b["other"]), 1e9)                 # 현대건설은 영업이익 = 매출총이익 − 판관비 (기타 영업손익 없음)
+        split = [r for r in R["entity"] if r["rest_op"] is not None]
+        self.assertGreaterEqual(len(split), 9)
+        for r in split:
+            self.assertEqual(r["parent_op"] + r["hec_op"] + r["rest_op"], r["cons_op"])
+        for r in R["alloc"]:
+            self.assertAlmostEqual(sum(r[k] for k, _ in research.ALLOC), r["cash_change"], delta=1)
+            self.assertLess(abs(r["other"]), 0.3e12)              # 분류하지 못한 현금 움직임은 작아야 함
+        self.assertEqual(len(R["estimates"]), 10)
+        for e in R["estimates"]:
+            parts = [x for x in e["by_seg"].values() if x is not None]
+            self.assertLess(abs(sum(parts) - e["current"]), max(abs(e["current"]) * 0.01, 2e9), e["year"])
+        dr = self.ctx["drivers"]
+        for y in R["years"]:
+            seg = dr["segments"][str(y)]
+            rev = next(r for r in self.ctx["annual"] if r["year"] == y)["values"]["revenue"]
+            self.assertLess(abs(seg["revenue"]["total"] - rev) / rev, 0.005, y)
+        self.assertEqual(dr["errors"], 0 if isinstance(dr["errors"], int) else [])
+
+    def test_timeline_marks_unresearched_years(self):
+        """조사하지 않은 연도는 '조사 전'으로 표시하고 숫자·회사 설명만 자동으로 채웁니다."""
+        original = company_report.load_research
+        company_report.load_research = lambda path=None: {k: v for k, v in original().items() if k != "events"}
+        try:
+            F = company_report.facts(self.ctx)
+            html = company_report.ch7_timeline(self.ctx, F)
+        finally:
+            company_report.load_research = original
+        self.assertGreaterEqual(html.count("조사 전"), 10)
+        self.assertIn("회사 설명", html)
 
 
     def test_dupont_identity(self):
@@ -553,14 +610,16 @@ class NoteParsing(unittest.TestCase):
 
 class CompanyReportPrinting(unittest.TestCase):
     """PDF 인쇄 단계: Chrome·한글 글꼴이 없으면 건너뛰고, 내용이 같으면 다시 인쇄하지 않습니다(Chrome 없이 확인)."""
+    _ctx = None
 
     def ctx(self):
-        cfg = agent.company_config()
-        status = {"checked_at": "2026-10-12T09:17:00+09:00", "mode": "offline", "errors": [], "new_filings": []}
-        ctx, _ = agent.make_context(cfg, date(2026, 10, 12), status, log=[])
-        if not ctx["annual"]:
+        if CompanyReportPrinting._ctx is None:
+            cfg = agent.company_config()
+            status = {"checked_at": "2026-10-12T09:17:00+09:00", "mode": "offline", "errors": [], "new_filings": []}
+            CompanyReportPrinting._ctx, _ = agent.make_context(cfg, date(2026, 10, 12), status, log=[])
+        if not CompanyReportPrinting._ctx["annual"]:
             self.skipTest("아직 수집된 자료가 없습니다")
-        return ctx
+        return CompanyReportPrinting._ctx
 
     def test_skips_without_chrome_and_keeps_old_pdf(self):
         ctx = self.ctx()
@@ -601,6 +660,98 @@ class CompanyReportPrinting(unittest.TestCase):
         data = pdf.read_bytes()
         self.assertTrue(data.startswith(b"%PDF"))
         self.assertGreater(len(data), 100_000)
+
+
+SEG_TABLE = ("<TABLE><TR><TD>구분</TD><TD>건축/주택</TD><TD>토목</TD><TD>플랜트/전력</TD><TD>기타</TD><TD>연결조정</TD><TD>합계</TD></TR>"
+             "<TR><TD>매출액</TD><TD>500</TD><TD>100</TD><TD>300</TD><TD>50</TD><TD>(20)</TD><TD>930</TD></TR>"
+             "<TR><TD>매출총이익</TD><TD>50</TD><TD>5</TD><TD>(10)</TD><TD>8</TD><TD>(1)</TD><TD>52</TD></TR></TABLE>")
+EST_TABLE = ("<TABLE><TR><TD>구분</TD><TD>총계약수익의 변동</TD><TD>추정총계약원가의 변동</TD><TD>당기손익에 미치는 영향</TD>"
+             "<TD>미래손익에 미치는 영향</TD><TD>공사손실충당부채</TD></TR>"
+             "<TR><TD>건축/주택</TD><TD>100</TD><TD>130</TD><TD>(20)</TD><TD>(10)</TD><TD>5</TD></TR>"
+             "<TR><TD>토목</TD><TD>50</TD><TD>60</TD><TD>(7)</TD><TD>(3)</TD><TD>1</TD></TR>"
+             "<TR><TD>플랜트/전력</TD><TD>80</TD><TD>120</TD><TD>(30)</TD><TD>(10)</TD><TD>9</TD></TR>"
+             "<TR><TD>합계</TD><TD>230</TD><TD>310</TD><TD>(57)</TD><TD>(23)</TD><TD>15</TD></TR></TABLE>")
+DRIVER_XML = ("<DOCUMENT><TITLE>III. 재무에 관한 사항</TITLE><TITLE>3. 연결재무제표 주석</TITLE>"
+              f"<P>40. 영업부문 (2) 당기 부문별 정보 (단위:백만원)</P>{SEG_TABLE}"
+              f"<P>(5) 추정의 변경: 당기 중 진행중인 공사의 추정총계약원가 변동 (단위:백만원)</P>{EST_TABLE}"
+              f"<TITLE>5. 재무제표 주석</TITLE><P>35. 영업부문 당기 (단위:백만원)</P>{SEG_TABLE}"
+              f"<TITLE>6. 배당에 관한 사항</TITLE><P>당기 (단위:백만원)</P>{SEG_TABLE}</DOCUMENT>")
+
+
+class DriverParsing(unittest.TestCase):
+    """사업보고서 주석 읽기 (작은 예시 문서): 연결/별도 구분, 부문 표, 원가 추정 변경 표의 두 서식."""
+
+    def test_scope_follows_titles(self):
+        doc = drivers.Doc(DRIVER_XML)
+        scopes = [doc.scope(pos) for pos, _ in doc.tables]
+        self.assertEqual(scopes, ["consolidated", "consolidated", "separate", None])   # 재무제표 밖(배당 절) 표는 쓰지 않음
+        self.assertEqual(drivers.Doc("<TITLE>40. 영업부문 - 별도</TITLE><TABLE></TABLE>").scope(30), "separate")
+        self.assertEqual(drivers.Doc("<TITLE>40. 영업부문 (연결)</TITLE><TABLE></TABLE>").scope(30), "consolidated")
+
+    def test_segment_table(self):
+        got = drivers.parse_segment_tables(drivers.Doc(DRIVER_XML))
+        self.assertEqual(set(got), {("consolidated", "current"), ("separate", "current")})
+        c = got[("consolidated", "current")]
+        self.assertEqual(c["revenue"]["building"], 500 * 1_000_000)
+        self.assertEqual(c["revenue"]["adjust"], -20 * 1_000_000)          # 부문 합 + 연결조정 = 합계
+        self.assertEqual(c["revenue"]["total"], 930 * 1_000_000)
+        self.assertEqual(c["gross_profit"]["plant"], -10 * 1_000_000)
+
+    def test_estimate_tables_both_layouts(self):
+        got = drivers.parse_estimate_tables(drivers.Doc(DRIVER_XML))[("consolidated", "current")]   # 줄 = 부문
+        self.assertEqual(got["total"]["pl_current"], -57 * 1_000_000)
+        self.assertEqual(got["plant"]["loss_prov"], 9 * 1_000_000)
+        self.assertEqual(got["building"]["pl_future"], -10 * 1_000_000)
+        rows = [["구분", "건축/주택", "토목", "플랜트/전력", "합계"],                                  # 줄 = 항목 (XBRL 서식)
+                ["총계약수익의 변동", "100", "50", "80", "230"], ["추정총계약원가의 변동", "130", "60", "120", "310"],
+                ["당기손익에 미치는 영향", "(20)", "(7)", "(30)", "(57)"], ["미래손익에 미치는 영향", "(10)", "(3)", "(10)", "(23)"]]
+        t = drivers._est_from_rows(rows)
+        self.assertEqual(t["total"]["pl_current"], -57)
+        self.assertEqual(t["civil"]["cost_change"], 60)
+
+
+class FakeView:
+    def __init__(self, values):
+        self.values = values
+
+    def a(self, year, key):
+        return self.values.get(key)
+
+
+class ReportWording(unittest.TestCase):
+    """기업분석 보고서 문장 규칙: 조사, 경영진단 문장 고르기, 업계 공통/회사 고유 판정, 표 머리글의 근거 표시."""
+
+    def test_josa(self):
+        j = company_report.josa
+        self.assertEqual([j("−1.24조", "이"), j("1,221억", "으로"), j("건축/주택", "이"), j("기타", "이"), j("3.5%", "으로"),
+                          j("8", "으로"), j("3", "으로"), j("노출", "은"), j("0.94조", "을")],
+                         ["−1.24조가", "1,221억으로", "건축/주택이", "기타가", "3.5%로", "8로", "3으로", "노출은", "0.94조를"])
+
+    def test_mdna_sentences_must_match_consolidated_numbers(self):
+        F = {"v": FakeView({"operating_profit": 574_902_000_000, "revenue": 21_239_082_000_000, "net_income": 470_900_000_000}),
+             "dr": {"mdna": {"2022": {"receipt": "x", "sentences": [
+                 "영업이익은 원가율이 상승한 영향에 전년대비 22.8% 감소한 5,820억원을 기록하였습니다.",          # 1.2% 차이 → 버림
+                 "매출액은 전년대비 2조 1,837억원 증가한 12조 5,012억원을 기록하였으며, 이는 대형 현장 매출 증가에 기인합니다.",  # 부문 숫자
+                 "영업이익은 연결자회사의 손실 반영에 따라 약 0.6조원을 기록하였습니다.",                       # '약' → 6% 안
+                 "환율 상승에 따른 환관련 평가이익 영향으로 순이익이 늘었습니다."]}}}}                          # 금액 없음 + 이유
+        picked, receipt = company_report.mdna_pick(F, 2022)
+        self.assertEqual(receipt, "x")
+        self.assertEqual(len(picked), 2)
+        self.assertIn("약 0.6조원", picked[0])
+        self.assertIn("환율", picked[1])
+
+    def test_change_kind(self):
+        peers = {2021: {"own": 4.2, "median": 8.3, "n": 4}, 2022: {"own": 2.7, "median": 5.6, "n": 4},
+                 2023: {"own": 2.6, "median": 4.4, "n": 4}, 2024: {"own": -3.9, "median": 3.5, "n": 4}}
+        kind = company_report.change_kind
+        self.assertEqual(kind(peers, 2022)["word"], "업계 공통 하락")     # −1.5%p vs 동종사 −2.7%p
+        self.assertEqual(kind(peers, 2023)["word"], "큰 변화 없음")
+        self.assertEqual(kind(peers, 2024)["word"], "회사 고유 하락")     # −6.5%p vs −0.9%p
+        self.assertIsNone(kind(peers, 2021))                              # 전년 자료 없음
+
+    def test_table_head_tags(self):
+        self.assertIn('class="ev ev-c"', company_report.head_tags("근거 [계산]"))
+        self.assertEqual(company_report.head_tags("[abc]"), "[abc]")
 
 
 class Packaging(unittest.TestCase):

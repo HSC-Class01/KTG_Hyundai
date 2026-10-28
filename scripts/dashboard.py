@@ -873,7 +873,7 @@ def returns_fig(v, vd):
 
 
 def valuation_tiles(ctx):
-    """현재 주가 기준 시장가치 숫자 6칸 (대시보드 ‘시장가치’ 관점과 기업분석 보고서 7장이 함께 씀)."""
+    """현재 주가 기준 시장가치 숫자 6칸 (대시보드 ‘시장가치’ 관점과 기업분석 보고서 9장이 함께 씀)."""
     val = ctx.get("valuation") or {}
     if not val.get("market_cap"):
         return ('<div class="card empty"><h3>주가 자료 대기 중</h3><p>주가는 GitHub Actions가 매월 실행될 때 네이버 금융(실패하면 Yahoo Finance)에서 '

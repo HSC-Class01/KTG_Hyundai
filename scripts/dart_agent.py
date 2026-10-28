@@ -579,6 +579,22 @@ def write_csv(path, rows):
     write_text(path, "﻿" + buf.getvalue())
 
 
+def write_analysis_tables(ctx):
+    """기업분석 보고서의 원인 분석 표를 CSV로도 남깁니다(data/financials/analysis/, 금액 단위 억 원)."""
+    import research
+    try:
+        tables = research.csv_tables(research.build(ctx))
+    except Exception as exc:
+        print(f"::warning::분석 표 CSV 생략: {type(exc).__name__}: {exc}")
+        return
+    for name, (head, rows) in tables.items():
+        buf = io.StringIO()
+        writer = csv.writer(buf, lineterminator="\n")
+        writer.writerow(head)
+        writer.writerows(rows)
+        write_text(DATA / "analysis" / f"{name}.csv", "\ufeff" + buf.getvalue())
+
+
 def make_context(cfg, today, status, log=None):
     """저장된 원자료로 표·비율·자동 해설을 계산합니다. 파일은 쓰지 않습니다. 반환: (ctx, periods)"""
     import analysis
@@ -614,8 +630,36 @@ def make_context(cfg, today, status, log=None):
     keys = list(fresh) + [k for k in saved if k not in fresh]     # 순서를 고정해야 매달 JSON 차이가 생기지 않습니다
     ctx["business"] = {k: (fresh.get(k) if fresh.get(k) else saved.get(k)) for k in keys}
     ctx["business"]["errors"] = fresh.get("errors") or []
+    ctx["drivers"] = collect_drivers(latest, annual)
     ctx["analysis"] = analysis.analyze(ctx)
     return ctx, periods
+
+
+def merge_years(fresh, saved):
+    """{항목: {연도: 값}} 두 개를 합칩니다. 이번에 읽은 해(fresh)가 우선이고, 원문 ZIP이 없어 못 읽은 해는 저장된 값(saved)을 씁니다."""
+    out = {}
+    for key in list(fresh) + [k for k in saved if k not in fresh]:
+        f, s = fresh.get(key), saved.get(key)
+        if isinstance(f, dict) and isinstance(s, dict) and all(str(k)[:2] in ("19", "20") for k in list(f) + list(s)):
+            merged = {**s, **f}
+            out[key] = dict(sorted(merged.items()))
+        elif isinstance(f, dict) and isinstance(s, dict):
+            out[key] = {**s, **f}
+        else:
+            out[key] = f if f not in (None, {}, []) or key == "errors" else s
+    return out
+
+
+def collect_drivers(latest, annual):
+    """사업보고서 주석(부문 손익·원가 추정 변경·현대엔지니어링·연구개발비·배당·민감도)과 현금흐름표 세부를 읽습니다."""
+    import drivers
+    saved = load_json(DATA / "drivers.json", {}) or {}
+    api_rev = {r["year"]: r["values"]["revenue"] for r in annual if r["values"].get("revenue")}
+    try:
+        fresh = drivers.collect(latest, RAW, api_revenue=api_rev, load_json=lambda path: load_json(path, {}))
+    except Exception as exc:    # 주석을 못 읽어도 나머지 화면과 보고서는 만듭니다
+        fresh = {"errors": [f"사업보고서 주석 읽기 실패: {type(exc).__name__}: {exc}"]}
+    return merge_years(fresh, saved)
 
 
 def step_summary(ctx):
@@ -660,6 +704,8 @@ def build(cfg, today, status, online):
                                          "annual": annual, "half_year": halves, "quarterly": quarters,
                                          "peers": peers, "analysis": ctx["analysis"]["plain"]})
     write_json(DATA / "business.json", {k: v for k, v in ctx["business"].items()})
+    write_json(DATA / "drivers.json", ctx["drivers"])
+    write_analysis_tables(ctx)
     write_text(ROOT / "dashboard" / "index.html", dashboard.render(ctx))
     write_text(ROOT / "statements" / "index.html", statements.redirect_page(ctx))   # 예전 주소 → 대시보드
     dashboard.update_readme(ROOT / "README.md", ctx)
@@ -689,9 +735,12 @@ def build_site():
             shutil.copy2(src, site / name)
     out = site / "data" / "financials"
     out.mkdir(parents=True)
-    for name in ("annual.csv", "half_year.csv", "quarterly.csv", "dashboard.json", "business.json", "status.json", "filings.json"):
+    for name in ("annual.csv", "half_year.csv", "quarterly.csv", "dashboard.json", "business.json", "drivers.json", "status.json",
+                 "filings.json"):
         if (DATA / name).exists():
             shutil.copy2(DATA / name, out / name)
+    if (DATA / "analysis").is_dir():
+        shutil.copytree(DATA / "analysis", out / "analysis")
     (site / ".nojekyll").write_text("")
     print("_site 조립 완료")
 
