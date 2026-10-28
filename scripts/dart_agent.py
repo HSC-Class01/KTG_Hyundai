@@ -300,11 +300,69 @@ def collect(cfg, today, budget_minutes):
             if doc.get("status") == "000":
                 write_json(RAW / "peers" / f"{peer['stock_code']}_{year}.json", doc)
                 break
+        collect_peer_history(dart, peer, info, today, status)
 
     # 시장가치 계산용: 주식수(OpenDART)와 월말 주가(네이버 금융 → 실패 시 Yahoo Finance)
     collect_market(dart, cfg, codes, latest, today, status)
     status["api_calls"] = dart.calls
     return status
+
+
+PEER_HISTORY_YEARS = 10      # 기업분석 보고서의 '같은 시기 경쟁사' 비교용
+
+
+def collect_peer_history(dart, peer, info, today, status):
+    """동종기업의 최근 10개 사업연도 연결재무제표(사업보고서)를 한 번씩만 받아 둡니다.
+    회사가 분할·신설된 해(company.json의 history_from) 이전은 묻지 않고, 자료가 없다는 답도 기록해 다시 묻지 않습니다."""
+    first = max(today.year - 1 - PEER_HISTORY_YEARS, API_FIRST_YEAR, int(peer.get("history_from") or 0))
+    index_path = RAW / "peers" / "history_status.json"
+    index = load_json(index_path, {}) or {}
+    changed = False
+    for year in range(first, today.year - 1):
+        path = RAW / "peers" / f"{peer['stock_code']}_{year}.json"
+        key = f"{peer['stock_code']}_{year}"
+        if path.exists() or index.get(key) == "no-data":
+            continue
+        if dart.deadline and time.monotonic() > dart.deadline:
+            status["notes"].append("수집 시간 제한으로 일부 동종기업 과거 자료는 다음 실행에서 받습니다.")
+            break
+        try:
+            doc = dart.json("fnlttSinglAcntAll.json", {"corp_code": info["corp_code"], "bsns_year": str(year),
+                                                       "reprt_code": "11011", "fs_div": "CFS"})
+        except ApiError as exc:
+            status["errors"].append(f"{peer['name']} {year}년(과거 자료): {exc}")
+            break
+        if doc.get("status") == "000":
+            write_json(path, doc)
+        elif doc.get("status") == "013":      # 조회된 자료 없음
+            index[key] = "no-data"
+            changed = True
+    if changed:
+        write_json(index_path, dict(sorted(index.items())))
+
+
+def peer_history(cfg):
+    """{종목코드: {연도: {매출액·영업이익·순이익·부채비율·영업이익률…}}} — 저장해 둔 동종기업 사업보고서에서."""
+    out = {}
+    for peer in cfg.get("peers", []):
+        years = {}
+        for path in sorted((RAW / "peers").glob(f"{peer['stock_code']}_*.json")):
+            try:
+                year = int(path.stem.split("_")[1])
+            except (IndexError, ValueError):
+                continue
+            doc = load_json(path, {}) or {}
+            got = fin.extract(doc.get("list", []), 12, "current")
+            v = fin.add_derived(got["values"])
+            if v.get("revenue") is None:
+                continue
+            years[year] = {k: v.get(k) for k in ("revenue", "operating_profit", "net_income", "liabilities", "equity",
+                                                 "operating_cashflow", "cost_of_sales")}
+            years[year].update(operating_margin_pct=fin.ratio(v.get("operating_profit"), v.get("revenue")),
+                               cost_ratio_pct=fin.ratio(v.get("cost_of_sales"), v.get("revenue")),
+                               debt_to_equity_pct=fin.ratio(v.get("liabilities"), v.get("equity")))
+        out[peer["stock_code"]] = years
+    return out
 
 
 def collect_market(dart, cfg, codes, latest, today, status):
@@ -537,7 +595,8 @@ def make_context(cfg, today, status, log=None):
     market.apply_annual(annual, prices.get("monthly", {}), shares)
     latest_filing = max(latest.values(), key=lambda f: f["rcept_no"]) if latest else None
     ctx = {"company": cfg, "today": today.isoformat(), "next_run": fin.next_run_date(today).isoformat(),
-           "annual": annual, "halves": halves, "quarters": quarters, "peers": peer_rows(cfg), "status": status,
+           "annual": annual, "halves": halves, "quarters": quarters, "peers": peer_rows(cfg),
+           "peer_history": peer_history(cfg), "status": status,
            "log": log if log is not None else load_json(DATA / "update_log.json", []),
            "latest_filing": latest_filing, "filing_count": len(latest), "legacy": legacy_report, "notes": notes_report,
            "archives": sum(1 for f in latest.values() if (RAW / f"{f['rcept_no']}.zip").exists()),
