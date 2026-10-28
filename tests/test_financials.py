@@ -365,6 +365,7 @@ class RealData(unittest.TestCase):
         body = html.split("<body>")[1]
         self.assertNotIn("None", body)
         self.assertIsNone(re.search(r"(?<![\w-])(nan|inf)(?![\w-])", body, re.I))
+        self.assertIsNone(re.search(r"&lt;/?(span|a|b|p|br)\b", body))     # 태그가 글자로 새어 나오지 않음
         self.assertEqual(html, company_report.build_html(self.ctx))     # 같은 자료면 같은 글자(해시 비교로 PDF 재인쇄 판단)
         self.assertIn("2026년 10월판", html)
         # 근거 표시는 모두 배지로 바뀌고 [공시] 같은 글자가 그대로 남지 않습니다
