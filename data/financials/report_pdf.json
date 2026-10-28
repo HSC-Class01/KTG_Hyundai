@@ -1,8 +1,8 @@
 {
  "pdf": "reports/hyundai-company-report.pdf",
- "source_sha256": "a86eea8b51bbd8d74a53cb59d41d80a5755419ed3d14d941636fee415fe7cb61",
+ "source_sha256": "bd69911a996d142de1b3d2d4df716270bc07db2d409b250458550b92dbbaf6e7",
  "pages": 38,
- "bytes": 2503690,
+ "bytes": 2503864,
  "edition": "2026년 10월판",
  "printed_with": "chrome-headless-shell"
 }
