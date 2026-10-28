@@ -1302,7 +1302,7 @@ def change_kind(peers, y):
     a, b = peers.get(y - 1), peers.get(y)
     if not a or not b or None in (a.get("own"), b.get("own"), a.get("median"), b.get("median")) or min(a["n"], b["n"]) < 2:
         return None
-    d_own, d_med = b["own"] - a["own"], b["median"] - a["median"]
+    d_own, d_med = round(b["own"] - a["own"], 1), round(b["median"] - a["median"], 1)    # 표에 적는 숫자(소수 1자리)로 판정
     way = "개선" if d_own > 0 else "하락"
     if abs(d_own) < 0.5:
         tone, word = "info", "큰 변화 없음"
@@ -1373,7 +1373,7 @@ def ch7_timeline(ctx, F):
         md, _ = mdna_pick(F, y)
         est = (F["est"].get(y) or {}).get("current")
         chip_html = f'<span class="r-chip {kind["tone"]}">{esc(kind["word"])}</span>' if kind else '<span class="r-chip info">비교 불가</span>'
-        delta = (f"{an.signed(kind['d_own'], 1)} / {an.signed(kind['d_med'], 1)}" if kind else "–")
+        delta = (" / ".join("0.0" if abs(x) < 0.05 else an.signed(x, 1) for x in (kind["d_own"], kind["d_med"])) if kind else "–")
         rows.append([f"<b>{y}</b>", num(pct(v.a(y, "operating_margin_pct")), v.a(y, "operating_margin_pct")), num(delta), chip_html,
                      num(jo(est), est), tagify(ev_.get("interp") or "조사 전")])
         cards.append(year_card(F, f"{y}", year_numbers(F, y), ev_, kind, md, todo))
