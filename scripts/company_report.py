@@ -2125,7 +2125,7 @@ REPORT_CSS = """
 /* 9장: 미래사업 단계 */
 table.ladder{width:100%;table-layout:fixed;border-collapse:collapse;margin-top:1mm;font-size:7.6pt;break-inside:avoid}
 .ladder thead th:nth-child(n+2){width:13.4%}
-.ladder th{overflow-wrap:anywhere}
+.ladder th{white-space:normal;overflow-wrap:anywhere}
 .ladder th,.ladder td{padding:.9mm 1.4mm;border-bottom:1px solid var(--grid);text-align:left;vertical-align:middle}
 .ladder thead th{background:var(--thead);font-size:6.8pt;font-weight:600;color:var(--ink-2);text-align:center;line-height:1.3}
 .ladder thead th:first-child{text-align:left;width:33%}
