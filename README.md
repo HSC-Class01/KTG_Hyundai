@@ -12,6 +12,7 @@
 - **기업분석 보고서(PDF)**: [reports/hyundai-company-report.pdf](reports/hyundai-company-report.pdf) · 웹 주소 https://hsc-class01.github.io/KTG_Hyundai/reports/hyundai-company-report.pdf
 - **자동 실행 기록**: [Actions → Financial Agent](https://github.com/HSC-Class01/KTG_Hyundai/actions/workflows/financial-agent.yml)
 - **데이터(CSV)**: [연간](data/financials/annual.csv) · [반기](data/financials/half_year.csv) · [분기](data/financials/quarterly.csv)
+- **AI 윤리 수료증**: [Global MOOC on the Ethics of AI (UNESCO × LG AI Research, Coursera) · 2026.08.31 수료](assets/certificates/coursera-ai-ethics-certificate.pdf) · [Coursera에서 확인](https://coursera.org/verify/77CQYAQ1QY9S)
 
 ## 이번 달 요약 (자동 작성)
 
@@ -189,6 +190,7 @@ statements/index.html      예전 주소 → 대시보드로 이동
 reports/hyundai-company-report.pdf  자동 생성되는 기업분석 보고서
 reports/archive/           이전 판 기업분석 보고서(2026년 10월 첫 판, 18쪽)
 tests/test_financials.py   계산 규칙 테스트
+assets/certificates/       AI 윤리 수료증(Coursera · UNESCO × LG AI Research)
 .github/workflows/financial-agent.yml  매월 1일 자동 실행
 ```
 

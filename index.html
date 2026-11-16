@@ -1146,6 +1146,34 @@
     }
 
 
+    /* 자격증 카드: 수료증 링크 */
+
+    .qualification-card .cert-detail {
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .cert-links {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .cert-links a {
+      color: var(--main);
+      background: var(--white);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .cert-links a:hover {
+      background: var(--main);
+      color: var(--white);
+    }
+
+
   </style>
 
 </head>
@@ -1749,6 +1777,31 @@
             Coursera<br>
             AI 윤리 과정 수료
           </p>
+
+          <p class="cert-detail">
+            Global MOOC on the Ethics of AI<br>
+            UNESCO × LG AI Research · 2026.08.31
+          </p>
+
+          <div class="cert-links">
+
+            <a
+              class="tag"
+              href="assets/certificates/coursera-ai-ethics-certificate.pdf"
+              target="_blank"
+              rel="noopener">
+              수료증 PDF ↗
+            </a>
+
+            <a
+              class="tag"
+              href="https://coursera.org/verify/77CQYAQ1QY9S"
+              target="_blank"
+              rel="noopener">
+              Coursera 인증 확인 ↗
+            </a>
+
+          </div>
 
         </div>
 
