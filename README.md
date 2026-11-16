@@ -2,6 +2,8 @@
 
 [📄 기업분석 보고서 PDF 바로가기](reports/hyundai-company-report.pdf)
 
+[👤 권태근 포트폴리오 바로가기](https://hsc-class01.github.io/KTG_Hyundai/portfolio/)
+
 # 현대건설 OpenDART 재무분석 에이전트
 
 금융감독원 전자공시(DART)에서 **현대건설(000720)** 의 사업·반기·분기보고서를 **2010년부터** 모아 주요 재무 숫자와 재무비율을 계산하고, 사업보고서 본문과 주석(수주잔고·PF 보증·부문 손익·원가 추정 변경·현대엔지니어링 실적)까지 읽어 **재무제표 대시보드**와 **기업분석 보고서(PDF)** 를 만드는 Python 에이전트입니다. GitHub Actions가 **매월 1일 오전 9시 17분(한국시간)** 에 자동으로 실행해, 새 보고서가 나왔으면 숫자와 분석 문장까지 다시 씁니다.
@@ -180,6 +182,8 @@ config/research.json       기업분석 보고서의 조사 내용: 연구 질�
 data/financials/           annual.csv · half_year.csv · quarterly.csv · dashboard.json · business.json · drivers.json · status.json · report_pdf.json
 data/financials/analysis/  원인 분해 표 CSV(영업이익 변화 · 부문 · 회사별 · 원가 추정 변경 · 현금 · 자본배분)
 data/financials/raw/       공시 원문 ZIP, 재무제표 API 응답(JSON), market/ 주가·주식수
+portfolio/index.html       개인 포트폴리오(자격 · 실무 결과물), 그림은 portfolio/img/
+projects/spaghetti-construction-sequence.html  스파게티 교량 시공 순서 3D 시뮬레이션(포트폴리오에서 연결)
 dashboard/index.html       자동 생성되는 재무제표 대시보드
 statements/index.html      예전 주소 → 대시보드로 이동
 reports/hyundai-company-report.pdf  자동 생성되는 기업분석 보고서
